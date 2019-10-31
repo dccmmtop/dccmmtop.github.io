@@ -491,6 +491,183 @@ end</code></pre>
 
 
   
+    <article id="post-以太坊客户端Geth命令用法-参数详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">以太坊客户端Geth命令用法-参数详解</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options/" target="_blank" rel="noopener">转载</a></h2><p>Geth 在以太坊智能合约开发中最常用的工具（必备开发工具），一个多用途的命令行工具。<br>熟悉 Geth 可以让我们有更好的效率，大家可收藏起来作为 Geth 命令用法手册。 本文主要是对 geth help 的翻译，基于最新的 geth 1.7.3-stable 版本。</p>
+<p>如果你还不知道 geth 是什么，请先阅读<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">入门篇：以太坊是什么</a>。<br>更多 geth 实战使用方法请参考<a href="https://learnblockchain.cn/2017/12/01/geth_cmd_short/" target="_blank" rel="noopener">Geth 控制台使用实战及 Web3.js 使用</a><br>以下开始正文。</p>
+<h2 id="命令用法"><a href="#命令用法" class="headerlink" title="命令用法"></a>命令用法</h2><pre><code>geth [选项] 命令 [命令选项] [参数…]</code></pre><h3 id="版本："><a href="#版本：" class="headerlink" title="版本："></a>版本：</h3><pre><code>1.7.3-stable</code></pre><h3 id="命令"><a href="#命令" class="headerlink" title="命令:"></a>命令:</h3><pre><code>account    管理账户
+attach     启动交互式JavaScript环境（连接到节点）
+bug        上报bug Issues
+console    启动交互式JavaScript环境
+copydb     从文件夹创建本地链
+dump       Dump（分析）一个特定的块存储
+dumpconfig 显示配置值
+export     导出区块链到文件
+import     导入一个区块链文件
+init       启动并初始化一个新的创世纪块
+js         执行指定的JavaScript文件(多个)
+license    显示许可信息
+makecache  生成ethash验证缓存(用于测试)
+makedag    生成ethash 挖矿DAG(用于测试)
+monitor    监控和可视化节点指标
+removedb   删除区块链和状态数据库
+version    打印版本号
+wallet     管理Ethereum预售钱包
+help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETHEREUM-选项"><a href="#ETHEREUM-选项" class="headerlink" title="ETHEREUM 选项:"></a>ETHEREUM 选项:</h3><pre><code>--config value          TOML 配置文件
+--datadir “xxx”         数据库和keystore密钥的数据目录
+--keystore              keystore存放目录(默认在datadir内)
+--nousb                 禁用监控和管理USB硬件钱包
+--networkid value       网络标识符(整型, 1=Frontier, 2=Morden (弃用), 3=Ropsten, 4=Rinkeby) (默认: 1)
+--testnet               Ropsten网络:预先配置的POW(proof-of-work)测试网络
+--rinkeby               Rinkeby网络: 预先配置的POA(proof-of-authority)测试网络
+--syncmode &quot;fast&quot;       同步模式 (&quot;fast&quot;, &quot;full&quot;, or &quot;light&quot;)
+--ethstats value        上报ethstats service  URL (nodename:secret@host:port)
+--identity value        自定义节点名
+--lightserv value       允许LES请求时间最大百分比(0 – 90)(默认值:0)
+--lightpeers value      最大LES client peers数量(默认值:20)
+--lightkdf              在KDF强度消费时降低key-derivation RAM&amp;CPU使用</code></pre><h3 id="开发者（模式）选项"><a href="#开发者（模式）选项" class="headerlink" title="开发者（模式）选项:"></a>开发者（模式）选项:</h3><pre><code>--dev               使用POA共识网络，默认预分配一个开发者账户并且会自动开启挖矿。
+--dev.period value  开发者模式下挖矿周期 (0 = 仅在交易时) (默认: 0)</code></pre><h3 id="ETHASH-选项"><a href="#ETHASH-选项" class="headerlink" title="ETHASH 选项:"></a>ETHASH 选项:</h3><pre><code>--ethash.cachedir                        ethash验证缓存目录(默认 = datadir目录内)
+--ethash.cachesinmem value               在内存保存的最近的ethash缓存个数  (每个缓存16MB ) (默认: 2)
+--ethash.cachesondisk value              在磁盘保存的最近的ethash缓存个数 (每个缓存16MB) (默认: 3)
+--ethash.dagdir &quot;&quot;                       存ethash DAGs目录 (默认 = 用户hom目录)
+--ethash.dagsinmem value                 在内存保存的最近的ethash DAGs 个数 (每个1GB以上) (默认: 1)
+--ethash.dagsondisk value                在磁盘保存的最近的ethash DAGs 个数 (每个1GB以上) (默认: 2)</code></pre><h3 id="交易池选项"><a href="#交易池选项" class="headerlink" title="交易池选项:"></a>交易池选项:</h3><pre><code>--txpool.nolocals            为本地提交交易禁用价格豁免
+--txpool.journal value       本地交易的磁盘日志：用于节点重启 (默认: &quot;transactions.rlp&quot;)
+--txpool.rejournal value     重新生成本地交易日志的时间间隔 (默认: 1小时)
+--txpool.pricelimit value    加入交易池的最小的gas价格限制(默认: 1)
+--txpool.pricebump value     价格波动百分比（相对之前已有交易） (默认: 10)
+--txpool.accountslots value  每个帐户保证可执行的最少交易槽数量  (默认: 16)
+--txpool.globalslots value   所有帐户可执行的最大交易槽数量 (默认: 4096)
+--txpool.accountqueue value  每个帐户允许的最多非可执行交易槽数量 (默认: 64)
+--txpool.globalqueue value   所有帐户非可执行交易最大槽数量  (默认: 1024)
+--txpool.lifetime value      非可执行交易最大入队时间(默认: 3小时)</code></pre><h3 id="性能调优的选项"><a href="#性能调优的选项" class="headerlink" title="性能调优的选项:"></a>性能调优的选项:</h3><pre><code>--cache value                分配给内部缓存的内存MB数量，缓存值(最低16 mb /数据库强制要求)(默认:128)
+--trie-cache-gens value      保持在内存中产生的trie node数量(默认:120)</code></pre><h3 id="帐户选项"><a href="#帐户选项" class="headerlink" title="帐户选项:"></a>帐户选项:</h3><pre><code>--unlock value              需解锁账户用逗号分隔
+--password value            用于非交互式密码输入的密码文件</code></pre><h3 id="API-和控制台选项"><a href="#API-和控制台选项" class="headerlink" title="API 和控制台选项:"></a>API 和控制台选项:</h3><pre><code>--rpc                       启用HTTP-RPC服务器
+--rpcaddr value             HTTP-RPC服务器接口地址(默认值:“localhost”)
+--rpcport value             HTTP-RPC服务器监听端口(默认值:8545)
+--rpcapi value              基于HTTP-RPC接口提供的API
+--ws                        启用WS-RPC服务器
+--wsaddr value              WS-RPC服务器监听接口地址(默认值:“localhost”)
+--wsport value              WS-RPC服务器监听端口(默认值:8546)
+--wsapi  value              基于WS-RPC的接口提供的API
+--wsorigins value           websockets请求允许的源
+--ipcdisable                禁用IPC-RPC服务器
+--ipcpath                   包含在datadir里的IPC socket/pipe文件名(转义过的显式路径)
+--rpccorsdomain value       允许跨域请求的域名列表(逗号分隔)(浏览器强制)
+--jspath loadScript         JavaScript加载脚本的根路径(默认值:“.”)
+--exec value                执行JavaScript语句(只能结合console/attach使用)
+--preload value             预加载到控制台的JavaScript文件列表(逗号分隔)</code></pre><h3 id="网络选项"><a href="#网络选项" class="headerlink" title="网络选项:"></a>网络选项:</h3><pre><code>--bootnodes value    用于P2P发现引导的enode urls(逗号分隔)(对于light servers用v4+v5代替)
+--bootnodesv4 value  用于P2P v4发现引导的enode urls(逗号分隔) (light server, 全节点)
+--bootnodesv5 value  用于P2P v5发现引导的enode urls(逗号分隔) (light server, 轻节点)
+--port value         网卡监听端口(默认值:30303)
+--maxpeers value     最大的网络节点数量(如果设置为0，网络将被禁用)(默认值:25)
+--maxpendpeers value    最大尝试连接的数量(如果设置为0，则将使用默认值)(默认值:0)
+--nat value             NAT端口映射机制 (any|none|upnp|pmp|extip:&lt;IP&gt;) (默认: “any”)
+--nodiscover            禁用节点发现机制(手动添加节点)
+--v5disc                启用实验性的RLPx V5(Topic发现)机制
+--nodekey value         P2P节点密钥文件
+--nodekeyhex value      十六进制的P2P节点密钥(用于测试)</code></pre><h3 id="矿工选项"><a href="#矿工选项" class="headerlink" title="矿工选项:"></a>矿工选项:</h3><pre><code>--mine                  打开挖矿
+--minerthreads value    挖矿使用的CPU线程数量(默认值:8)
+--etherbase value       挖矿奖励地址(默认=第一个创建的帐户)(默认值:“0”)
+--targetgaslimit value  目标gas限制：设置最低gas限制（低于这个不会被挖？） (默认值:“4712388”)
+--gasprice value        挖矿接受交易的最低gas价格
+--extradata value       矿工设置的额外块数据(默认=client version)</code></pre><h3 id="GAS-价格选项"><a href="#GAS-价格选项" class="headerlink" title="GAS 价格选项:"></a>GAS 价格选项:</h3><pre><code>--gpoblocks value      用于检查gas价格的最近块的个数  (默认: 10)
+--gpopercentile value  建议gas价参考最近交易的gas价的百分位数，(默认: 50)</code></pre><h3 id="虚拟机的选项"><a href="#虚拟机的选项" class="headerlink" title="虚拟机的选项:"></a>虚拟机的选项:</h3><pre><code>--vmdebug        记录VM及合约调试信息</code></pre><h3 id="日志和调试选项"><a href="#日志和调试选项" class="headerlink" title="日志和调试选项:"></a>日志和调试选项:</h3><pre><code>--metrics            启用metrics收集和报告
+--fakepow            禁用proof-of-work验证
+--verbosity value    日志详细度:0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail (default: 3)
+--vmodule value      每个模块详细度:以 &lt;pattern&gt;=&lt;level&gt;的逗号分隔列表 (比如 eth/*=6,p2p=5)
+--backtrace value    请求特定日志记录堆栈跟踪 (比如 “block.go:271”)
+--debug                     突出显示调用位置日志(文件名及行号)
+--pprof                     启用pprof HTTP服务器
+--pprofaddr value           pprof HTTP服务器监听接口(默认值:127.0.0.1)
+--pprofport value           pprof HTTP服务器监听端口(默认值:6060)
+--memprofilerate value      按指定频率打开memory profiling    (默认:524288)
+--blockprofilerate value    按指定频率打开block profiling    (默认值:0)
+--cpuprofile value          将CPU profile写入指定文件
+--trace value               将execution trace写入指定文件</code></pre><h3 id="WHISPER-实验选项"><a href="#WHISPER-实验选项" class="headerlink" title="WHISPER 实验选项:"></a>WHISPER 实验选项:</h3><pre><code>--shh                        启用Whisper
+--shh.maxmessagesize value   可接受的最大的消息大小 (默认值: 1048576)
+--shh.pow value              可接受的最小的POW (默认值: 0.2)</code></pre><h3 id="弃用选项："><a href="#弃用选项：" class="headerlink" title="弃用选项："></a>弃用选项：</h3><pre><code>--fast     开启快速同步
+--light    启用轻客户端模式</code></pre><h3 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项:"></a>其他选项:</h3><pre><code>–help, -h    显示帮助</code></pre><h3 id="版权："><a href="#版权：" class="headerlink" title="版权："></a>版权：</h3><pre><code>Copyright 2013-2017 The go-ethereum Authors</code></pre><h2 id="翻译说明"><a href="#翻译说明" class="headerlink" title="翻译说明"></a>翻译说明</h2><p>有些参数翻译可能有不准确的地方，请大家指正。<br>原文会尽量随 geth 升级保持更新，原始链接：<a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options" target="_blank" rel="noopener">https://learnblockchain.cn/2017/11/29/geth_cmd_options/</a></p>
+<ul>
+<li><strong>本文作者：</strong> Tiny 熊</li>
+<li><strong>本文链接：</strong> <a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options/" target="_blank" rel="noopener">https://learnblockchain.cn/2017/11/29/geth_cmd_options/</a></li>
+<li><strong>版权声明：</strong> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank" rel="noopener">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">contract</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">geth</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-修改postgres的登录密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -855,183 +1032,6 @@ function initCheck() {
 
 
   
-    <article id="post-以太坊客户端Geth命令用法-参数详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">以太坊客户端Geth命令用法-参数详解</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options/" target="_blank" rel="noopener">转载</a></h2><p>Geth 在以太坊智能合约开发中最常用的工具（必备开发工具），一个多用途的命令行工具。<br>熟悉 Geth 可以让我们有更好的效率，大家可收藏起来作为 Geth 命令用法手册。 本文主要是对 geth help 的翻译，基于最新的 geth 1.7.3-stable 版本。</p>
-<p>如果你还不知道 geth 是什么，请先阅读<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">入门篇：以太坊是什么</a>。<br>更多 geth 实战使用方法请参考<a href="https://learnblockchain.cn/2017/12/01/geth_cmd_short/" target="_blank" rel="noopener">Geth 控制台使用实战及 Web3.js 使用</a><br>以下开始正文。</p>
-<h2 id="命令用法"><a href="#命令用法" class="headerlink" title="命令用法"></a>命令用法</h2><pre><code>geth [选项] 命令 [命令选项] [参数…]</code></pre><h3 id="版本："><a href="#版本：" class="headerlink" title="版本："></a>版本：</h3><pre><code>1.7.3-stable</code></pre><h3 id="命令"><a href="#命令" class="headerlink" title="命令:"></a>命令:</h3><pre><code>account    管理账户
-attach     启动交互式JavaScript环境（连接到节点）
-bug        上报bug Issues
-console    启动交互式JavaScript环境
-copydb     从文件夹创建本地链
-dump       Dump（分析）一个特定的块存储
-dumpconfig 显示配置值
-export     导出区块链到文件
-import     导入一个区块链文件
-init       启动并初始化一个新的创世纪块
-js         执行指定的JavaScript文件(多个)
-license    显示许可信息
-makecache  生成ethash验证缓存(用于测试)
-makedag    生成ethash 挖矿DAG(用于测试)
-monitor    监控和可视化节点指标
-removedb   删除区块链和状态数据库
-version    打印版本号
-wallet     管理Ethereum预售钱包
-help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETHEREUM-选项"><a href="#ETHEREUM-选项" class="headerlink" title="ETHEREUM 选项:"></a>ETHEREUM 选项:</h3><pre><code>--config value          TOML 配置文件
---datadir “xxx”         数据库和keystore密钥的数据目录
---keystore              keystore存放目录(默认在datadir内)
---nousb                 禁用监控和管理USB硬件钱包
---networkid value       网络标识符(整型, 1=Frontier, 2=Morden (弃用), 3=Ropsten, 4=Rinkeby) (默认: 1)
---testnet               Ropsten网络:预先配置的POW(proof-of-work)测试网络
---rinkeby               Rinkeby网络: 预先配置的POA(proof-of-authority)测试网络
---syncmode &quot;fast&quot;       同步模式 (&quot;fast&quot;, &quot;full&quot;, or &quot;light&quot;)
---ethstats value        上报ethstats service  URL (nodename:secret@host:port)
---identity value        自定义节点名
---lightserv value       允许LES请求时间最大百分比(0 – 90)(默认值:0)
---lightpeers value      最大LES client peers数量(默认值:20)
---lightkdf              在KDF强度消费时降低key-derivation RAM&amp;CPU使用</code></pre><h3 id="开发者（模式）选项"><a href="#开发者（模式）选项" class="headerlink" title="开发者（模式）选项:"></a>开发者（模式）选项:</h3><pre><code>--dev               使用POA共识网络，默认预分配一个开发者账户并且会自动开启挖矿。
---dev.period value  开发者模式下挖矿周期 (0 = 仅在交易时) (默认: 0)</code></pre><h3 id="ETHASH-选项"><a href="#ETHASH-选项" class="headerlink" title="ETHASH 选项:"></a>ETHASH 选项:</h3><pre><code>--ethash.cachedir                        ethash验证缓存目录(默认 = datadir目录内)
---ethash.cachesinmem value               在内存保存的最近的ethash缓存个数  (每个缓存16MB ) (默认: 2)
---ethash.cachesondisk value              在磁盘保存的最近的ethash缓存个数 (每个缓存16MB) (默认: 3)
---ethash.dagdir &quot;&quot;                       存ethash DAGs目录 (默认 = 用户hom目录)
---ethash.dagsinmem value                 在内存保存的最近的ethash DAGs 个数 (每个1GB以上) (默认: 1)
---ethash.dagsondisk value                在磁盘保存的最近的ethash DAGs 个数 (每个1GB以上) (默认: 2)</code></pre><h3 id="交易池选项"><a href="#交易池选项" class="headerlink" title="交易池选项:"></a>交易池选项:</h3><pre><code>--txpool.nolocals            为本地提交交易禁用价格豁免
---txpool.journal value       本地交易的磁盘日志：用于节点重启 (默认: &quot;transactions.rlp&quot;)
---txpool.rejournal value     重新生成本地交易日志的时间间隔 (默认: 1小时)
---txpool.pricelimit value    加入交易池的最小的gas价格限制(默认: 1)
---txpool.pricebump value     价格波动百分比（相对之前已有交易） (默认: 10)
---txpool.accountslots value  每个帐户保证可执行的最少交易槽数量  (默认: 16)
---txpool.globalslots value   所有帐户可执行的最大交易槽数量 (默认: 4096)
---txpool.accountqueue value  每个帐户允许的最多非可执行交易槽数量 (默认: 64)
---txpool.globalqueue value   所有帐户非可执行交易最大槽数量  (默认: 1024)
---txpool.lifetime value      非可执行交易最大入队时间(默认: 3小时)</code></pre><h3 id="性能调优的选项"><a href="#性能调优的选项" class="headerlink" title="性能调优的选项:"></a>性能调优的选项:</h3><pre><code>--cache value                分配给内部缓存的内存MB数量，缓存值(最低16 mb /数据库强制要求)(默认:128)
---trie-cache-gens value      保持在内存中产生的trie node数量(默认:120)</code></pre><h3 id="帐户选项"><a href="#帐户选项" class="headerlink" title="帐户选项:"></a>帐户选项:</h3><pre><code>--unlock value              需解锁账户用逗号分隔
---password value            用于非交互式密码输入的密码文件</code></pre><h3 id="API-和控制台选项"><a href="#API-和控制台选项" class="headerlink" title="API 和控制台选项:"></a>API 和控制台选项:</h3><pre><code>--rpc                       启用HTTP-RPC服务器
---rpcaddr value             HTTP-RPC服务器接口地址(默认值:“localhost”)
---rpcport value             HTTP-RPC服务器监听端口(默认值:8545)
---rpcapi value              基于HTTP-RPC接口提供的API
---ws                        启用WS-RPC服务器
---wsaddr value              WS-RPC服务器监听接口地址(默认值:“localhost”)
---wsport value              WS-RPC服务器监听端口(默认值:8546)
---wsapi  value              基于WS-RPC的接口提供的API
---wsorigins value           websockets请求允许的源
---ipcdisable                禁用IPC-RPC服务器
---ipcpath                   包含在datadir里的IPC socket/pipe文件名(转义过的显式路径)
---rpccorsdomain value       允许跨域请求的域名列表(逗号分隔)(浏览器强制)
---jspath loadScript         JavaScript加载脚本的根路径(默认值:“.”)
---exec value                执行JavaScript语句(只能结合console/attach使用)
---preload value             预加载到控制台的JavaScript文件列表(逗号分隔)</code></pre><h3 id="网络选项"><a href="#网络选项" class="headerlink" title="网络选项:"></a>网络选项:</h3><pre><code>--bootnodes value    用于P2P发现引导的enode urls(逗号分隔)(对于light servers用v4+v5代替)
---bootnodesv4 value  用于P2P v4发现引导的enode urls(逗号分隔) (light server, 全节点)
---bootnodesv5 value  用于P2P v5发现引导的enode urls(逗号分隔) (light server, 轻节点)
---port value         网卡监听端口(默认值:30303)
---maxpeers value     最大的网络节点数量(如果设置为0，网络将被禁用)(默认值:25)
---maxpendpeers value    最大尝试连接的数量(如果设置为0，则将使用默认值)(默认值:0)
---nat value             NAT端口映射机制 (any|none|upnp|pmp|extip:&lt;IP&gt;) (默认: “any”)
---nodiscover            禁用节点发现机制(手动添加节点)
---v5disc                启用实验性的RLPx V5(Topic发现)机制
---nodekey value         P2P节点密钥文件
---nodekeyhex value      十六进制的P2P节点密钥(用于测试)</code></pre><h3 id="矿工选项"><a href="#矿工选项" class="headerlink" title="矿工选项:"></a>矿工选项:</h3><pre><code>--mine                  打开挖矿
---minerthreads value    挖矿使用的CPU线程数量(默认值:8)
---etherbase value       挖矿奖励地址(默认=第一个创建的帐户)(默认值:“0”)
---targetgaslimit value  目标gas限制：设置最低gas限制（低于这个不会被挖？） (默认值:“4712388”)
---gasprice value        挖矿接受交易的最低gas价格
---extradata value       矿工设置的额外块数据(默认=client version)</code></pre><h3 id="GAS-价格选项"><a href="#GAS-价格选项" class="headerlink" title="GAS 价格选项:"></a>GAS 价格选项:</h3><pre><code>--gpoblocks value      用于检查gas价格的最近块的个数  (默认: 10)
---gpopercentile value  建议gas价参考最近交易的gas价的百分位数，(默认: 50)</code></pre><h3 id="虚拟机的选项"><a href="#虚拟机的选项" class="headerlink" title="虚拟机的选项:"></a>虚拟机的选项:</h3><pre><code>--vmdebug        记录VM及合约调试信息</code></pre><h3 id="日志和调试选项"><a href="#日志和调试选项" class="headerlink" title="日志和调试选项:"></a>日志和调试选项:</h3><pre><code>--metrics            启用metrics收集和报告
---fakepow            禁用proof-of-work验证
---verbosity value    日志详细度:0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail (default: 3)
---vmodule value      每个模块详细度:以 &lt;pattern&gt;=&lt;level&gt;的逗号分隔列表 (比如 eth/*=6,p2p=5)
---backtrace value    请求特定日志记录堆栈跟踪 (比如 “block.go:271”)
---debug                     突出显示调用位置日志(文件名及行号)
---pprof                     启用pprof HTTP服务器
---pprofaddr value           pprof HTTP服务器监听接口(默认值:127.0.0.1)
---pprofport value           pprof HTTP服务器监听端口(默认值:6060)
---memprofilerate value      按指定频率打开memory profiling    (默认:524288)
---blockprofilerate value    按指定频率打开block profiling    (默认值:0)
---cpuprofile value          将CPU profile写入指定文件
---trace value               将execution trace写入指定文件</code></pre><h3 id="WHISPER-实验选项"><a href="#WHISPER-实验选项" class="headerlink" title="WHISPER 实验选项:"></a>WHISPER 实验选项:</h3><pre><code>--shh                        启用Whisper
---shh.maxmessagesize value   可接受的最大的消息大小 (默认值: 1048576)
---shh.pow value              可接受的最小的POW (默认值: 0.2)</code></pre><h3 id="弃用选项："><a href="#弃用选项：" class="headerlink" title="弃用选项："></a>弃用选项：</h3><pre><code>--fast     开启快速同步
---light    启用轻客户端模式</code></pre><h3 id="其他选项"><a href="#其他选项" class="headerlink" title="其他选项:"></a>其他选项:</h3><pre><code>–help, -h    显示帮助</code></pre><h3 id="版权："><a href="#版权：" class="headerlink" title="版权："></a>版权：</h3><pre><code>Copyright 2013-2017 The go-ethereum Authors</code></pre><h2 id="翻译说明"><a href="#翻译说明" class="headerlink" title="翻译说明"></a>翻译说明</h2><p>有些参数翻译可能有不准确的地方，请大家指正。<br>原文会尽量随 geth 升级保持更新，原始链接：<a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options" target="_blank" rel="noopener">https://learnblockchain.cn/2017/11/29/geth_cmd_options/</a></p>
-<ul>
-<li><strong>本文作者：</strong> Tiny 熊</li>
-<li><strong>本文链接：</strong> <a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options/" target="_blank" rel="noopener">https://learnblockchain.cn/2017/11/29/geth_cmd_options/</a></li>
-<li><strong>版权声明：</strong> 本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/deed.zh" target="_blank" rel="noopener">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">contract</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">geth</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-如何创建自己的ruby_gem包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1354,6 +1354,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1370,15 +1374,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">css</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1386,11 +1382,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">分页</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1422,10 +1422,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
@@ -1438,11 +1434,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1462,11 +1458,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
+                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
+                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1474,11 +1470,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">ctags</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
+                <a href="javascript:void(0)" class="js-tag color1">ctags</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1486,11 +1482,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1566,11 +1566,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1579,6 +1575,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1594,15 +1598,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1611,6 +1611,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">validates</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1623,6 +1627,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1714,6 +1722,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">yakuake</a>
               </li>
              
@@ -1722,15 +1734,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+                <a href="javascript:void(0)" class="js-tag color4">web</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">xpath</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">web</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1742,11 +1750,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1826,10 +1834,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1838,11 +1842,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1850,11 +1850,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">curl</a>
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>
