@@ -133,194 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-参数路由与路由冲突解决与筛选路由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/">参数路由与路由冲突解决与筛选路由</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.012Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="参数路由与路由冲突解决与筛选路由"><a href="#参数路由与路由冲突解决与筛选路由" class="headerlink" title="参数路由与路由冲突解决与筛选路由"></a>参数路由与路由冲突解决与筛选路由</h3><p>有时候我需要写一个页面能向show edit 那样可以接受参数的路由,弄了好久不知道怎样解决,今天恍然大悟</p>
-<p>我们执行 <code>rake routes</code> 就会看到如下</p>
-<pre><code class="ruby">                     wechat_nodes GET      /wechat/nodes(.:format)                                  wechat/nodes#index
-                                  POST     /wechat/nodes(.:format)                                  wechat/nodes#create
-                  new_wechat_node GET      /wechat/nodes/new(.:format)                              wechat/nodes#new
-                 edit_wechat_node GET      /wechat/nodes/:id/edit(.:format)                         wechat/nodes#edit
-                      wechat_node GET      /wechat/nodes/:id(.:format)                              wechat/nodes#show
-                                  PATCH    /wechat/nodes/:id(.:format)                              wechat/nodes#update
-                                  PUT      /wechat/nodes/:id(.:format)                              wechat/nodes#update
-                                  DELETE   /wechat/nodes/:id(.:format)                              wechat/nodes#destroy
-</code></pre>
-<p>这是使用resources 生成一些路由,我们可以模仿写出自己的路由</p>
-<p>我们看最后一列的内容,  对于show 来说 他的格式为<code>/wechat/nodes/:id</code> 再看edit 他的格式是<code>/wechat/nodes/:id/edit</code> </p>
-<p>加入我们要想写一个/wechat/node/edit/34/topic/23 类似的路由,我们可以直接这样写</p>
-<pre><code class="ruby">resources nodes do 
-  collection do 
-    get &#39;edit/:id/topic/:node_id&#39;, to: &#39;nodes#topic&#39; , as: &#39;topic_edit&#39;
-  end
-end</code></pre>
-<p>这里为什么会有一个<code>as</code>呢,因为没有<code>as</code>和其后面的名称的话,这样是没有前面的路由信息的.</p>
-<h3 id="筛选路由-路由冲突的解决方案"><a href="#筛选路由-路由冲突的解决方案" class="headerlink" title="筛选路由-路由冲突的解决方案"></a>筛选路由-路由冲突的解决方案</h3><p>Rails项目有一个Article模型,对应ArticlesController控制器,其路由设置如下:</p>
-<pre><code class="ruby">resources :articles do
-end</code></pre>
-<p>这样它的CRUD路径就都自动创建出来了 ;)</p>
-<p>现在我想再添加一个对Article模型搜索的页面,那么首先要在控制器中添加对应的search方法:</p>
-<pre><code class="ruby">def search   
-  render text:&quot;hello search!!!&quot;
-end</code></pre>
-<p>然后在Article默认路由集合后面添加一行新路由:</p>
-<p><code>get &quot;articles/search&quot;,to:&quot;articles#search&quot;</code>1</p>
-<p>现在我们访问一下articles/search页面,咦?怎么出错了:</p>
-<p><img src="http://img.blog.csdn.net/20170310112802687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXlkbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>仔细看出错信息,原来Article之前的show路由恰恰可以匹配新的search路由,只不过原来的:id变成了search这个字符串哦.这就是为什么报Couldn’t find Article with id=search的原因了!</p>
-<p>下面给出解决,我们只需要先禁用默认的show路由:</p>
-<pre><code class="ruby">resources :articles,except:[:show] do    
-  resources :comments
-end</code></pre>
-<p>然后再生成一条筛选路由即可,所谓筛选路由就是对该路由内容进行细粒度匹配的方法:</p>
-<pre><code class="ruby">get &quot;articles/:id&quot;,to:&quot;articles#show&quot;,constraints:{id:/\d+/}</code></pre>
-<p>路由都是从上之下依次匹配的,如果上面一条被匹配则路由匹配结束!这里只匹配id为数字的articles/xxx路径,所以search就会默认被忽略从而被后面search正确的路由所匹配!</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-处理Gradle中的这个文件下载慢的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">处理Gradle中的这个文件下载慢的问题</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.012Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用阿里云的国内镜像仓库地址，就可以快速的下载需要的文件修改项目根目录下的文件</p>
-<pre><code class="text">build.gradle ：buildscript {
-    repositories {
-        maven{ url &#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;}
-    }
-}
-
-allprojects {
-    repositories {
-        maven{ url &#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;}
-    }
-}</code></pre>
-<p>然后选择重新构建</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">android</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-maven常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1286,6 +1098,247 @@ LANGUAGE &quot;plpgsql&quot;;</code></pre>
 
 
   
+    <article id="post-postgresql中文模糊查询性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">postgresql中文模糊查询性能优化</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2019-03-24T02:05:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文记录中文模糊查询优化的方向是 <strong>使模式匹配使用索引</strong></p>
+<p>有一张 2 千万多的 user 表，其中需要按照 users.chinese_name 字段进行模糊查找。</p>
+<h3 id="启用-pg-trgm-扩展"><a href="#启用-pg-trgm-扩展" class="headerlink" title="启用 pg_trgm 扩展"></a>启用 pg_trgm 扩展</h3><p>pg_trgm 模块提供函数和操作符测定字母，数字，文本基于三元模型匹配的相似性， 还有支持快速搜索相似字符串的索引操作符类。</p>
+<p>这里提到了一个三元模型，其实很简单。打个比方 foo 的三元模型的集合为{“ f”,” fo”,”foo”,”oo “}, foo|bar 的三元模型的集合为{“ f”,” fo”,”foo”,”oo “,” b”,” ba”,”bar”,”ar “}。也就是说将字符串拆解成三个字符一组，每个字符串被认为有两个空格前缀和一个空格后缀。</p>
+<p>Postgres 使用 trigram 将字符串分解成更小的单元便于有效地索引它们。pg_trgm 模块支持 GIST 或 GIN 索引，从 9.1 开始，这些索引支持 LIKE/ILIKE 查询。</p>
+<p>要使用 pg_trgm 模块，首先要启用该扩展，然后使用 gin_trgm_ops 创建索引</p>
+<pre><code class="sql">CREATE EXTENSION pg_trgm;</code></pre>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><p>在字段上创建 GIN 类型的索引可以处理包含多个键的值，如数组等. 与 GIST 类似， GIN支持用户定义的索引策略，可以通过定义GIN索引的特定操作符类型实现不同的功能。 PostgreSQL的标准中发布了用于一维数组的GIN操作符类， 比如它支持 包含操作符 ‘@&gt;’、被包含操作符 ‘&lt;@’、相等操作符 ‘=’、重叠操作符 ‘&amp;&amp;’,等等。</p>
+<p>但是这种索引对中文不起作用，需要把中文转换成字节（ASCII码），然后使用函数索引</p>
+<pre><code class="sql">create or replace function textsend_i (text) returns bytea as
+$$
+
+  select textsend($1);
+
+$$
+language sql strict immutable;
+CREATE INDEX trgm_idx_users_chinese_name ON users USING GIN(text(textsend_i(chinese_name)) gin_trgm_ops);</code></pre>
+<h3 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h3><pre><code class="sql">SELECT chinese_name FROM users WHERE text(textsend_i(chinese_name)) ~ ltrim(text(textsend_i(&#39;深圳&#39;)), &#39;\x&#39;);</code></pre>
+<h3 id="再优化"><a href="#再优化" class="headerlink" title="再优化"></a>再优化</h3><p>添加 GIN 索引后，查询性能提升很多。如上所说，GIN 不支持中文，在查询的时候，先把 chinese_name 字段转化为 bytea，然后进行匹配。这里也耽误了不少时间，我们可以在users 表上在添加一个 chinese_name_bytea 字段，存储 chinese_name 的字节形式，然后直接在该字段上进行创建 GIN 索引。也算是一种空间换取时间的方式。</p>
+<pre><code class="sql">ALTER TABLE users;
+ADD COLUMN chinese_name_bytea VARCHAR;
+UPDATE users SET chinese_name_bytes = textsend(chinese_name);
+CREATE INDEX trgm_idx_users_chinese_name_bytea ON users USING GIN(chinese_name_bytea gin_trgm_ops);</code></pre>
+<p>查询时：</p>
+<pre><code class="sql">SELECT chinese_name FROM users WHERE chinese_name_bytea ~ ltrim(text(textsend_i(&#39;深圳&#39;)), &#39;\x&#39;);</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">模糊查询</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">postgesql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pg_trgm</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-网页全屏背景图实现方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">网页全屏背景图实现方式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-03-23T14:31:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>原文： <a href="https://molunerfinn.com/FullScreenBackground(css)" target="_blank" rel="noopener">https://molunerfinn.com/FullScreenBackground(css)</a></p>
+</blockquote>
+<p>全屏背景的意思就是背景图占满整个浏览器视窗，在没有 body 其他内容的时候不出现滚动条。就算有滚动条的时候，背景也是固定的，不跟随滚动。<br>对于这类的全屏背景图片的实现，我们需要注意的是，有五种情况：</p>
+<ul>
+<li>图片很小重复铺满整个视窗</li>
+<li>被浏览器视窗大小截断</li>
+<li>宽度占满浏览器视窗而高度被截断</li>
+<li>根据浏览器视窗大小长宽按比例缩放</li>
+<li>根据图片与浏览器视窗的相对大小进行缩放或者截断</li>
+</ul>
+<p>为此我准备了三张图片作为代表。一张是小图，100px*100px；一张是横向的背景图，1920px*1080px；一张纵向背景图,2062px*3000px。这三张背景图基本上涵盖了我们需要做全屏背景图的需要了。</p>
+<h3 id="1-图片很小重复铺满整个视窗"><a href="#1-图片很小重复铺满整个视窗" class="headerlink" title="1. 图片很小重复铺满整个视窗"></a>1. 图片很小重复铺满整个视窗</h3><p>这种情况下，图片一般都是比较简单的，能做到边缘接触后也看不出痕迹的。比如类似羊皮纸背景，你不需要做一张特别大的羊皮纸，只需要做一小张，边缘接触的时候看不出边界就行，然后让它们重复铺满整个浏览器就好了。这样能很大的程度上减轻浏览器以及服务器端的负担。对于用户来说，实际上他只加载了一张很小的图片就实现了全屏背景。<br>这种情况是最简单的：</p>
+<pre><code class="css">body {
+  background: url(&#39;xxx.jpg&#39;); //图片地址和格式依自己存放的图片而定。这边都是以 jpg 格式为例。下同。
+}</code></pre>
+<p>当然以上的这种简易写法在 PC 端的高版本浏览器里一般没有问题，但是在低版本浏览器以及某些手机的浏览器里就会出现问题。究其原因一般是浏览器解析的时候，若 body 没有设置高度，那么浏览器将会 body 的高度解析成 body 内部子元素所占的高度。也就是当子元素的高度不够的情况下，你页面的背景也就只能填充子元素，而剩下的部分就是默认的白色背景色了。</p>
+<p>这要如何解决呢？解决办法也很简单。</p>
+<pre><code class="css">html,
+body {
+  height: 100%;
+}</code></pre>
+<p>只需将 html 和 body 的高度设为 100%就行。这样的话背景就能完整填充了。</p>
+<h3 id="2-被浏览器视窗大小截断"><a href="#2-被浏览器视窗大小截断" class="headerlink" title="2. 被浏览器视窗大小截断"></a>2. 被浏览器视窗大小截断</h3><p>注意：如果你的背景图片的分辨率比普通的屏幕尺寸大(例如 14 寸笔记本通常的分辨率是 1366*768)，那么这种方法设置的全屏背景将会被浏览器视窗截掉大于浏览器视窗的其他部分。</p>
+<pre><code class="css">body {
+  background: url(&#39;xxx.jpg&#39;);
+}</code></pre>
+<p>实现的方法和第一种是一样的，但是效果却不一样。</p>
+<p><strong>注意：这种情况下，当你的浏览器的宽度比你的图片还宽，高度也高过你的图片，那么这样的情况同样会出现第一种情况，就是浏览器将会将这张图复制平铺。</strong></p>
+<h3 id="3-宽度占满浏览器视窗而高度被截断"><a href="#3-宽度占满浏览器视窗而高度被截断" class="headerlink" title="3. 宽度占满浏览器视窗而高度被截断"></a>3. 宽度占满浏览器视窗而高度被截断</h3><p>这种方式很好理解，这种图一般是长图，也就是高度大于宽度的图。通常在 PC 端浏览的时候你只能看到这张图片的上半部分（多余浏览器高度的部分就会被截断），而在手机端浏览的时候，由于手机屏幕是竖持，所以能够将这展示出这张背景图的大部分内容。而如果背景图设计合适的话，这种方式的背景图是能够全平台适应的，从宽屏的 PC，到窄屏的手机。</p>
+<p>下面说一下这种背景图片的实现方式。</p>
+<p>在 body 下新建一行标签。</p>
+<pre><code class="css">&lt;img id=&quot;background&quot; src=&quot;background.jpg&quot;&gt;</code></pre>
+<p>然后在 CSS 内我们选中这个 ID 叫做 background 的元素。</p>
+<pre><code class="css">#background {
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+}</code></pre>
+<p>原理分析一下，最关键还是这个 position: fixed;，这句话将 img 这个行脱离了文档流，独立出来，然后通过 z-index: -1 将背景图下沉。由于它不属于 body 里，并且它的高度高于浏览器的高度，所以就会占满整个屏幕。</p>
+<p>注意：不过需要注意的是这种方法将会在屏幕的高宽比&gt;图片的高宽比的时候（比如屏幕高宽比为 2:1，若图片为 3:2），那么背景将会宽度占满宽度，而高度不够，就会留白。不过一般情况下只要选图比例恰当就不会出现这种情况。</p>
+<h3 id="4-根据浏览器视窗大小长宽按比例缩放"><a href="#4-根据浏览器视窗大小长宽按比例缩放" class="headerlink" title="4. 根据浏览器视窗大小长宽按比例缩放"></a>4. 根据浏览器视窗大小长宽按比例缩放</h3><p>这种方式的背景图推荐为 PC 或者手机端单独准备的背景图。<br>同样在 body 下新建一行标签。</p>
+<pre><code class="css">&lt;img id=&quot;background&quot; src=&quot;background.jpg&quot;&gt;</code></pre>
+<p>在 CSS 内我们选中这个 ID 叫做 background 的元素。</p>
+<pre><code class="css">#background {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+}</code></pre>
+<p>实际上，这种方法的原理就是将图片的四周粘死在浏览器的四边，浏览器视窗怎么变化图片也怎么变化。所以最好是宽屏对应宽图，手机端就配长图。这样的话比例也不会失真太多。不过缺点就是需要分别给手机和 PC 配图。</p>
+<h3 id="5-根据图片与浏览器视窗的相对大小进行缩放或者截断"><a href="#5-根据图片与浏览器视窗的相对大小进行缩放或者截断" class="headerlink" title="5. 根据图片与浏览器视窗的相对大小进行缩放或者截断"></a>5. 根据图片与浏览器视窗的相对大小进行缩放或者截断</h3><p>这种方法是适配程度最高的。也就是不管是长图宽图，它都能适配整个屏幕。<br>这里需要用到 background-size 属性的 cover 值。</p>
+<p>实现方法如下：</p>
+<pre><code class="css">body,
+html {
+  height: 100%;
+}
+body{
+  background: url(&#39;xxx.jpg&#39;) no-repeat fixed;
+  background-size：cover;
+}</code></pre>
+<p>它实现的效果是：当浏览器的视窗比例和背景图片的长宽比差不多的情况下，那么整张图会自动计算比例贴合整个屏幕。当视窗长宽比&gt;图片长宽比的时候，会自动抛去图片右侧的部分使剩下的部分的长宽比契合屏幕的长宽比。同样，当视窗的长宽比&lt;图片长宽比的时候，也就是屏幕宽度太宽而高度太小的时候，将会自动抛去图片底部的部分使剩下的部分的长宽比契合屏幕的长宽比。也就是这种做法将会能够最好的契合各种设备都能显示出背景图。当然如果背景图里有些重要的消息，需要实时呈现出来的话，还是用上面的方法来展示。如果背景图并不是很重要的话，只是作为一个衬底，那么这种方法将是适配的最好方法。不需要 JS 也能做到全平台适配。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">css</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
@@ -1334,11 +1387,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1388,19 +1436,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1420,15 +1468,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1456,19 +1504,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1488,15 +1536,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1508,27 +1556,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1537,6 +1569,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1580,6 +1624,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1592,15 +1652,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1612,14 +1664,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1628,15 +1672,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1652,11 +1692,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1672,11 +1720,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1700,15 +1748,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1736,10 +1784,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1748,15 +1792,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1772,6 +1816,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1784,10 +1832,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1796,11 +1840,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1816,6 +1860,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1824,11 +1872,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1885,6 +1933,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

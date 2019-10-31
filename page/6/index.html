@@ -133,19 +133,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-linux下满速下载百度网盘的方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-linux管道传递参数xargs用法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/linux%E4%B8%8B%E6%BB%A1%E9%80%9F%E4%B8%8B%E8%BD%BD%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E7%9A%84%E6%96%B9%E6%B3%95/">linux下满速下载百度网盘的方法</a>
+      <a class="article-title" href="/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/">linux管道传递参数xargs用法</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/linux%E4%B8%8B%E6%BB%A1%E9%80%9F%E4%B8%8B%E8%BD%BD%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E7%9A%84%E6%96%B9%E6%B3%95/" class="archive-article-date">
+        <a href="/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -153,14 +153,39 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>百度网盘更新后，在liunx下无法下载大文件，非要安装客户端，你倒是开发出来一个linux的客户端呀！</p>
-<ol>
-<li>google浏览器安装Tampermonkey插件，<a href="https://link.zhihu.com/?target=http%3A//tampermonkey.net/">地址</a></li>
-<li>安装EX-百度云盘 <a href="https://greasyfork.org/zh-CN/scripts/39854-ex-%E7%99%BE%E5%BA%A6%E4%BA%91%E7%9B%98%E5%8E%BB%E5%8A%A0%E8%BD%BD%E6%8F%90%E7%A4%BA%E7%89%88" target="_blank" rel="noopener">地址</a></li>
-<li>不要在自己账号内使用，必须在没有登录的状态下使用</li>
-<li>复制直链，在命令行用axel工具下载</li>
-</ol>
-<p><img src="http://ogbkru1bq.bkt.clouddn.com/%E9%80%89%E5%8C%BA_084.png" alt=""></p>
+        <h2 id="linux-管道传递参数xargs-用法"><a href="#linux-管道传递参数xargs-用法" class="headerlink" title="linux 管道传递参数xargs 用法"></a>linux 管道传递参数xargs 用法</h2><p hidden>sfdfagjkjfguhf847289bcf874bf88964451-jdfh-0=448fj5</p>
+
+<p>linux 下结合find 和 rm 删除大量文件</p>
+<p>例：删除/home/raven下，包括子目录里所有名为abc.txt的文件：</p>
+<p><code>find /home/raven -name abc.txt | xargs rm -rf</code></p>
+<p><strong>简介</strong><br>之所以能用到这个命令，关键是由于很多命令不支持|管道来传递参数，而日常工作中有有这个必要，所以就有了xargs命令，例如：</p>
+<p>这个命令是错误的<br><code>find /sbin -perm +700 |ls -l</code></p>
+<p>这样才是正确的<br><code>find /sbin -perm +700 |xargs ls -l</code><br>xargs 可以读入 stdin 的资料，并且以空白字元或断行字元作为分辨，将 stdin 的资料分隔成为 arguments 。 因为是以空白字元作为分隔，所以，如果有一些档名或者是其他意义的名词内含有空白字元的时候， xargs 可能就会误判了,如果需要处理特殊字符，需要使用-0参数进行处理。<br><strong>选项解释</strong><br>-0 ：当sdtin含有特殊字元时候，将其当成一般字符，想/‘空格等<br>$ echo “/ /  “|xargs echo<br>/ /<br>$ echo “/ /  “|xargs -0 echo<br>/ /<br>-a file 从文件中读入作为sdtin</p>
+<p>$ cat 1.txt<br>aaa  bbb ccc ddd<br>a    b<br>$ xargs -a 1.txt echo<br>aaa bbb ccc ddd a b<br>-e flag ，注意有的时候可能会是-E，flag必须是一个以空格分隔的标志，当xargs分析到含有flag这个标志的时候就停止。</p>
+<p>$ xargs -E ‘ddd’  -a 1.txt echo<br>aaa bbb ccc</p>
+<p>$ cat 1.txt |xargs -E ‘ddd’ echo<br>aaa bbb ccc</p>
+<p>-n num 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。</p>
+<p>$ cat 1.txt |xargs -n 2 echo<br>aaa bbb<br>ccc ddd<br>a b<br>-p 操作具有可交互性，每次执行comand都交互式提示用户选择，当每次执行一个argument的时候询问一次用户</p>
+<p>$ cat 1.txt |xargs -p echo<br>echo aaa bbb ccc ddd a b ?…y<br>aaa bbb ccc ddd a b<br>$ cat 1.txt |xargs -p echo<br>echo aaa bbb ccc ddd a b ?…n<br>-t 表示先打印命令，然后再执行。</p>
+<p>$ cat 1.txt |xargs -t echo<br>echo aaa bbb ccc ddd a b<br>aaa bbb ccc ddd a b<br>-i 或者是-I，这得看linux支持了，将xargs的每项名称，一般是一行一行赋值给{}，可以用{}代替。</p>
+<p>$ ls<br>1.txt  2.txt  3.txt  log.xml<br>$ ls *.txt |xargs -t -i mv {} {}.bak<br>mv 1.txt 1.txt.bak<br>mv 2.txt 2.txt.bak<br>mv 3.txt 3.txt.bak<br>$ ls<br>1.txt.bak  2.txt.bak  3.txt.bak  log.xml</p>
+<p>注意，-I 必须指定替换字符　－i 是否指定替换字符-可选<br>find . | xargs -I {} cp {} $D_PATH<br>与<br>find . | xargs -i cp {} $D_PATH</p>
+<p>注意：cshell和tcshell中，需要将{}用单引号、双引号或反斜杠，否则不认识。bash可以不用。<br>find /shell -maxdepth 2 -name a -print | xargs -t -i sed -i ‘1 i\111’ ‘{}‘<br>-r  no-run-if-empty 如果没有要处理的参数传递给xargsxargs 默认是带 空参数运行一次，如果你希望无参数时，停止 xargs，直接退出，使用 -r 选项即可，其可以防止xargs 后面命令带空参数运行报错。</p>
+<p>$ echo “”|xargs -t mv<br>mv<br>mv: missing file operand<br>Try `mv –help’ for more information.<br>$ echo “”|xargs -t -r mv         #直接退出<br>-s num xargs后面那个命令的最大命令行字符数(含空格)<br>$ cat 1.txt.bak |xargs  -s 9 echo<br>aaa<br>bbb<br>ccc<br>ddd<br>a b<br>$ cat 1.txt.bak |xargs  -s 4 echo<br>xargs: can not fit single argument within argument list size limit      #length(echo)=4<br>$ cat 1.txt.bak |xargs  -s 8 echo<br>xargs: argument line too long      #length(echo)=4,length(aaa)=3,length(null)=1,total_length=8<br>-L  从标准输入一次读取num行送给Command命令 ，-l和-L功能一样</p>
+<p>$ cat 1.txt.bak<br>aaa bbb ccc ddd<br>a b<br>ccc<br>dsds<br>$ cat 1.txt.bak |xargs  -L 4 echo<br>aaa bbb ccc ddd a b ccc dsds<br>$ cat 1.txt.bak |xargs  -L 1 echo<br>aaa bbb ccc ddd<br>a b<br>ccc<br>dsds<br>-d delim 分隔符，默认的xargs分隔符是回车，argument的分隔符是空格，这里修改的是xargs的分隔符</p>
+<p>$ cat 1.txt.bak<br>aaa@ bbb ccc@ ddd<br>a b</p>
+<p>$ cat 1.txt.bak |xargs  -d ‘@’ echo<br>aaa  bbb ccc  ddd<br>a b</p>
+<p>-x exit的意思，如果有任何 Command 行大于 -s Size 标志指定的字节数，停止运行 xargs 命令，-L -I -n 默认打开-x参数，主要是配合-s使用<br>-P 修改最大的进程数，默认是1，为0时候为as many as it can 。</p>
+<p><strong>xargs和find</strong><br>在 使用find命令的-exec选项处理匹配到的文件时， find命令将所有匹配到的文件一起传递给exec执行。但有些系统对能够传递给exec的命令长度有限制，这样在find命令运行几分钟之后，就会出现 溢出错误。错误信息通常是“参数列太长”或“参数列溢出”。这就是xargs命令的用处所在，特别是与find命令一起使用。find命令把匹配到的文件 传递给xargs命令，而xargs命令每次只获取一部分文件而不是全部，不像-exec选项那样。这样它可以先处理最先获取的一部分文件，然后是下一 批，并如此继续下去。</p>
+<p>在有些系统中，使用-exec选项会 为处理每一个匹配到的文件而发起一个相应的进程，并非将匹配到的文件全部作为参数一次执行；这样在有些情况下就会出现进程过多，系统性能下降的问题，因而 效率不高；而使用xargs命令则只有一个进程。另外，在使用xargs命令时，究竟是一次获取所有的参数，还是分批取得参数，以及每一次获取参数的数目 都会根据该命令的选项及系统内核中相应的可调参数来确定。</p>
+<p>管 道是把一个命令的输出传递给另一个命令作为输入，比如：command1 | command2但是command2仅仅把输出的内容作为输入参数。find . -name “install.log” -print打印出的是install.log这个字符串，如果仅仅使用管道，那么command2能够使用的仅仅是install.log这个字符串， 不能把它当作文件来进行处理。</p>
+<p>当然这个command2除了xargs。xargs就是为了能够对find搜索到的文件进行操作而编写的。它能把管道传来的字符串当作文件交给其后的命令执行。<br>举个例子：<br>$find . -name “install.log” -print | cat<br>./install.log                                                 #显示从管道传来的内容，仅仅作为字符串来处理<br>$find . -name “install.log” -print | xargs cat<br>aaaaaa                                                      #将管道传来的内容作为文件，交给cat执行。也就是说，该命令执行的是如果存在install.log，那么就打印出这个文件的内容。<br>来看看xargs命令是如何同find命令一起使用的，并给出一些例子。</p>
+<p>1、在当前目录下查找所有用户具有读、写和执行权限的文件，并收回相应的写权限：</p>
+<p># find . -perm -7 -print | xargs chmod o-w<br>2、查找系统中的每一个普通文件，然后使用xargs命令来测试它们分别属于哪类文件</p>
+<p># find . -type f -print | xargs file</p>
+<p>./liyao: empty</p>
+<p>3、尝试用rm 删除太多的文件，你可能得到一个错误信息：/bin/rm Argument list too long. 用xargs 去避免这个问题<br>$find ~ -name ‘*.log’ -print0 | xargs -i -0 rm -f {}</p>
+<p>4、查找所有的jpg 文件，并且压缩它<br># find / -name *.jpg -type f -print | xargs tar -cvzf images.tar.gz<br>5、拷贝所有的图片文件到一个外部的硬盘驱动<br># ls *.jpg | xargs -n1 -i cp {} /external-hard-drive/directory</p>
 
       
 
@@ -173,70 +198,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/linux%E4%B8%8B%E6%BB%A1%E9%80%9F%E4%B8%8B%E8%BD%BD%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E7%9A%84%E6%96%B9%E6%B3%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-linux更改非root账户密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/linux%E6%9B%B4%E6%94%B9%E9%9D%9Eroot%E8%B4%A6%E6%88%B7%E5%AF%86%E7%A0%81/">linux更改非root账户密码</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/linux%E6%9B%B4%E6%94%B9%E9%9D%9Eroot%E8%B4%A6%E6%88%B7%E5%AF%86%E7%A0%81/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="linux更改非root账户密码"><a href="#linux更改非root账户密码" class="headerlink" title="linux更改非root账户密码"></a>linux更改非root账户密码</h2><p>在root用户下，使用<code>passwd username</code>命令，然后输入新的密码。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/linux%E6%9B%B4%E6%94%B9%E9%9D%9Eroot%E8%B4%A6%E6%88%B7%E5%AF%86%E7%A0%81/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/">展开全文 >></a>
         </p>
       
 
@@ -307,101 +269,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-linux管道传递参数xargs用法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/">linux管道传递参数xargs用法</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="linux-管道传递参数xargs-用法"><a href="#linux-管道传递参数xargs-用法" class="headerlink" title="linux 管道传递参数xargs 用法"></a>linux 管道传递参数xargs 用法</h2><p hidden>sfdfagjkjfguhf847289bcf874bf88964451-jdfh-0=448fj5</p>
-
-<p>linux 下结合find 和 rm 删除大量文件</p>
-<p>例：删除/home/raven下，包括子目录里所有名为abc.txt的文件：</p>
-<p><code>find /home/raven -name abc.txt | xargs rm -rf</code></p>
-<p><strong>简介</strong><br>之所以能用到这个命令，关键是由于很多命令不支持|管道来传递参数，而日常工作中有有这个必要，所以就有了xargs命令，例如：</p>
-<p>这个命令是错误的<br><code>find /sbin -perm +700 |ls -l</code></p>
-<p>这样才是正确的<br><code>find /sbin -perm +700 |xargs ls -l</code><br>xargs 可以读入 stdin 的资料，并且以空白字元或断行字元作为分辨，将 stdin 的资料分隔成为 arguments 。 因为是以空白字元作为分隔，所以，如果有一些档名或者是其他意义的名词内含有空白字元的时候， xargs 可能就会误判了,如果需要处理特殊字符，需要使用-0参数进行处理。<br><strong>选项解释</strong><br>-0 ：当sdtin含有特殊字元时候，将其当成一般字符，想/‘空格等<br>$ echo “/ /  “|xargs echo<br>/ /<br>$ echo “/ /  “|xargs -0 echo<br>/ /<br>-a file 从文件中读入作为sdtin</p>
-<p>$ cat 1.txt<br>aaa  bbb ccc ddd<br>a    b<br>$ xargs -a 1.txt echo<br>aaa bbb ccc ddd a b<br>-e flag ，注意有的时候可能会是-E，flag必须是一个以空格分隔的标志，当xargs分析到含有flag这个标志的时候就停止。</p>
-<p>$ xargs -E ‘ddd’  -a 1.txt echo<br>aaa bbb ccc</p>
-<p>$ cat 1.txt |xargs -E ‘ddd’ echo<br>aaa bbb ccc</p>
-<p>-n num 后面加次数，表示命令在执行的时候一次用的argument的个数，默认是用所有的。</p>
-<p>$ cat 1.txt |xargs -n 2 echo<br>aaa bbb<br>ccc ddd<br>a b<br>-p 操作具有可交互性，每次执行comand都交互式提示用户选择，当每次执行一个argument的时候询问一次用户</p>
-<p>$ cat 1.txt |xargs -p echo<br>echo aaa bbb ccc ddd a b ?…y<br>aaa bbb ccc ddd a b<br>$ cat 1.txt |xargs -p echo<br>echo aaa bbb ccc ddd a b ?…n<br>-t 表示先打印命令，然后再执行。</p>
-<p>$ cat 1.txt |xargs -t echo<br>echo aaa bbb ccc ddd a b<br>aaa bbb ccc ddd a b<br>-i 或者是-I，这得看linux支持了，将xargs的每项名称，一般是一行一行赋值给{}，可以用{}代替。</p>
-<p>$ ls<br>1.txt  2.txt  3.txt  log.xml<br>$ ls *.txt |xargs -t -i mv {} {}.bak<br>mv 1.txt 1.txt.bak<br>mv 2.txt 2.txt.bak<br>mv 3.txt 3.txt.bak<br>$ ls<br>1.txt.bak  2.txt.bak  3.txt.bak  log.xml</p>
-<p>注意，-I 必须指定替换字符　－i 是否指定替换字符-可选<br>find . | xargs -I {} cp {} $D_PATH<br>与<br>find . | xargs -i cp {} $D_PATH</p>
-<p>注意：cshell和tcshell中，需要将{}用单引号、双引号或反斜杠，否则不认识。bash可以不用。<br>find /shell -maxdepth 2 -name a -print | xargs -t -i sed -i ‘1 i\111’ ‘{}‘<br>-r  no-run-if-empty 如果没有要处理的参数传递给xargsxargs 默认是带 空参数运行一次，如果你希望无参数时，停止 xargs，直接退出，使用 -r 选项即可，其可以防止xargs 后面命令带空参数运行报错。</p>
-<p>$ echo “”|xargs -t mv<br>mv<br>mv: missing file operand<br>Try `mv –help’ for more information.<br>$ echo “”|xargs -t -r mv         #直接退出<br>-s num xargs后面那个命令的最大命令行字符数(含空格)<br>$ cat 1.txt.bak |xargs  -s 9 echo<br>aaa<br>bbb<br>ccc<br>ddd<br>a b<br>$ cat 1.txt.bak |xargs  -s 4 echo<br>xargs: can not fit single argument within argument list size limit      #length(echo)=4<br>$ cat 1.txt.bak |xargs  -s 8 echo<br>xargs: argument line too long      #length(echo)=4,length(aaa)=3,length(null)=1,total_length=8<br>-L  从标准输入一次读取num行送给Command命令 ，-l和-L功能一样</p>
-<p>$ cat 1.txt.bak<br>aaa bbb ccc ddd<br>a b<br>ccc<br>dsds<br>$ cat 1.txt.bak |xargs  -L 4 echo<br>aaa bbb ccc ddd a b ccc dsds<br>$ cat 1.txt.bak |xargs  -L 1 echo<br>aaa bbb ccc ddd<br>a b<br>ccc<br>dsds<br>-d delim 分隔符，默认的xargs分隔符是回车，argument的分隔符是空格，这里修改的是xargs的分隔符</p>
-<p>$ cat 1.txt.bak<br>aaa@ bbb ccc@ ddd<br>a b</p>
-<p>$ cat 1.txt.bak |xargs  -d ‘@’ echo<br>aaa  bbb ccc  ddd<br>a b</p>
-<p>-x exit的意思，如果有任何 Command 行大于 -s Size 标志指定的字节数，停止运行 xargs 命令，-L -I -n 默认打开-x参数，主要是配合-s使用<br>-P 修改最大的进程数，默认是1，为0时候为as many as it can 。</p>
-<p><strong>xargs和find</strong><br>在 使用find命令的-exec选项处理匹配到的文件时， find命令将所有匹配到的文件一起传递给exec执行。但有些系统对能够传递给exec的命令长度有限制，这样在find命令运行几分钟之后，就会出现 溢出错误。错误信息通常是“参数列太长”或“参数列溢出”。这就是xargs命令的用处所在，特别是与find命令一起使用。find命令把匹配到的文件 传递给xargs命令，而xargs命令每次只获取一部分文件而不是全部，不像-exec选项那样。这样它可以先处理最先获取的一部分文件，然后是下一 批，并如此继续下去。</p>
-<p>在有些系统中，使用-exec选项会 为处理每一个匹配到的文件而发起一个相应的进程，并非将匹配到的文件全部作为参数一次执行；这样在有些情况下就会出现进程过多，系统性能下降的问题，因而 效率不高；而使用xargs命令则只有一个进程。另外，在使用xargs命令时，究竟是一次获取所有的参数，还是分批取得参数，以及每一次获取参数的数目 都会根据该命令的选项及系统内核中相应的可调参数来确定。</p>
-<p>管 道是把一个命令的输出传递给另一个命令作为输入，比如：command1 | command2但是command2仅仅把输出的内容作为输入参数。find . -name “install.log” -print打印出的是install.log这个字符串，如果仅仅使用管道，那么command2能够使用的仅仅是install.log这个字符串， 不能把它当作文件来进行处理。</p>
-<p>当然这个command2除了xargs。xargs就是为了能够对find搜索到的文件进行操作而编写的。它能把管道传来的字符串当作文件交给其后的命令执行。<br>举个例子：<br>$find . -name “install.log” -print | cat<br>./install.log                                                 #显示从管道传来的内容，仅仅作为字符串来处理<br>$find . -name “install.log” -print | xargs cat<br>aaaaaa                                                      #将管道传来的内容作为文件，交给cat执行。也就是说，该命令执行的是如果存在install.log，那么就打印出这个文件的内容。<br>来看看xargs命令是如何同find命令一起使用的，并给出一些例子。</p>
-<p>1、在当前目录下查找所有用户具有读、写和执行权限的文件，并收回相应的写权限：</p>
-<p># find . -perm -7 -print | xargs chmod o-w<br>2、查找系统中的每一个普通文件，然后使用xargs命令来测试它们分别属于哪类文件</p>
-<p># find . -type f -print | xargs file</p>
-<p>./liyao: empty</p>
-<p>3、尝试用rm 删除太多的文件，你可能得到一个错误信息：/bin/rm Argument list too long. 用xargs 去避免这个问题<br>$find ~ -name ‘*.log’ -print0 | xargs -i -0 rm -f {}</p>
-<p>4、查找所有的jpg 文件，并且压缩它<br># find / -name *.jpg -type f -print | xargs tar -cvzf images.tar.gz<br>5、拷贝所有的图片文件到一个外部的硬盘驱动<br># ls *.jpg | xargs -n1 -i cp {} /external-hard-drive/directory</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/">展开全文 >></a>
         </p>
       
 
@@ -920,6 +787,153 @@ end</code></pre>
 
 
   
+    <article id="post-crontab" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/crontab/">crontab</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/crontab/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h3><p>Ubuntu安装crontab</p>
+<p><code>apt-get install crontab</code></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/crontab/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-css定制响应式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">css定制响应式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="示例-不同屏幕下使用文本居中"><a href="#示例-不同屏幕下使用文本居中" class="headerlink" title="示例 不同屏幕下使用文本居中"></a>示例 不同屏幕下使用文本居中</h2><pre><code class="css">@media (max-width: 767px) {
+  .text-center-xs {
+  text-align: center;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .text-center-sm {
+  text-align: center;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .text-center-md {
+  text-align: center;
+  }
+}
+@media (min-width: 1200px) {
+  .text-center-lg {
+  text-align: center;
+  }
+}
+</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
@@ -968,11 +982,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1022,19 +1031,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1054,15 +1063,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1090,19 +1099,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1122,15 +1131,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1142,27 +1151,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1171,6 +1164,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1214,6 +1219,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1226,15 +1247,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1246,14 +1259,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1262,15 +1267,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1286,11 +1287,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1306,11 +1315,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1334,15 +1343,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1370,10 +1379,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1382,15 +1387,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1406,6 +1411,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1418,10 +1427,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1430,11 +1435,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1450,6 +1455,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1458,11 +1467,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1519,6 +1528,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

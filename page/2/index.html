@@ -133,19 +133,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Ubuntu下sublime无法输入中文问题完美解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-vim脚本_生成图片外链" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/">Ubuntu下sublime无法输入中文问题完美解决</a>
+      <a class="article-title" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">vim脚本_生成图片外链</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/" class="archive-article-date">
+        <a href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -153,15 +153,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Ubuntu下sublime无法输入中文问题完美解决"><a href="#Ubuntu下sublime无法输入中文问题完美解决" class="headerlink" title="Ubuntu下sublime无法输入中文问题完美解决"></a>Ubuntu下sublime无法输入中文问题完美解决</h2><ol>
-<li>从官网<a href="https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2" target="_blank" rel="noopener">下载</a>压缩包</li>
-<li>解压到<code>/opt/</code>目录下</li>
-<li>将解压后的文件夹重命名为<code>sublime_text</code></li>
-<li>在终端执行<code>git clone https://github.com/lyfeyaj/sublime-text-imfix.git</code></li>
-<li>进入<code>sublime-text-imfix/src/</code> 执行 <code>sudo cp subl /opt/bin/</code></li>
-<li>进入<code>sublime-text/</code>下 执行 <code>./sublime-imfix</code></li>
-<li>大功告成，，仔细看一下<code>sublime-imfix</code>的代码，就知道为什么这么做了</li>
-</ol>
+        <p>vim脚本将选中的图片本机地址转换为器牛云的外链</p>
+<pre><code class="vim">function! qiniu#get_file_url_from_qiniu()
+    &quot; Why is this not a built-in Vim script function?!
+    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
+    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return &#39;&#39;
+    endif
+    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    &quot; 得到选中的文本
+    let re = join(lines,&quot;\n&quot;)
+    &quot; 执行系统命令
+    let  re1 = system(&quot;qiniu &quot; . re)
+    &quot; url 处理
+    let tmpq = split(re1,&quot;\n&quot;)[-1]
+    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
+    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;) 
+    &quot; 替换文本
+    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
+endfunction</code></pre>
 
       
 
@@ -174,466 +187,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Solidity的event事件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/">Solidity的event事件</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="本文属于转载内容，转载来源"><a href="#本文属于转载内容，转载来源" class="headerlink" title="本文属于转载内容，转载来源"></a>本文属于转载内容，<a href="http://me.tryblockchain.org/blockchain-solidity-event.html" target="_blank" rel="noopener">转载来源</a></h3><p>在介绍事件前，我们先明确事件，日志这两个概念。事件发生后被记录到区块链上成为了日志。总的来说，事件强调功能，一种行为；日志强调存储，内容。</p>
-<p>事件是以太坊 EVM 提供的一种日志基础设施。事件可以用来做操作记录，存储为日志。也可以用来实现一些交互功能，比如通知 UI，返回函数调用结果等<a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fn1" target="_blank" rel="noopener">1</a>。</p>
-<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>当定义的事件触发时，我们可以将事件存储到 EVM 的交易日志中，日志是区块链中的一种特殊数据结构。日志与合约关联，与合约的存储合并存入区块链中。只要某个区块可以访问，其相关的日志就可以访问。但在合约中，我们不能直接访问日志和事件数据（即便是创建日志的合约）。下面我们来看看，如何在 Solidity 中实现一个事件：</p>
-<pre><code class="js">pragma solidity ^0.4.0;
-
-contract Transfer{
-  event transfer(address indexed _from, address indexed _to, uint indexed value);
-
-  function deposit() payable {
-    address current = this;
-    uint value = msg.value;
-    transfer(msg.sender, current, value);
-  }
-
-
-  function getBanlance() constant returns(uint) {
-      return this.balance;
-  }
-
-  /* fallback function */
-  function(){}
-}</code></pre>
-<p>从上面的例子中，我们使用<code>event</code>关键字定义一个事件，参数列表中为要记录的日志参数的名称及类型。</p>
-<h2 id="监听事件"><a href="#监听事件" class="headerlink" title="监听事件"></a>监听事件</h2><p>在 web3.js 中，提供了响应事件的方法，如下<a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fn2" target="_blank" rel="noopener">2</a>：</p>
-<pre><code class="js">var event = myContract.transfer();
-
-// 监听
-event.watch(function(error, result) {
-  console.log(&#39;Event are as following:-------&#39;);
-
-  for (let key in result) {
-    console.log(key + &#39; : &#39; + result[key]);
-  }
-
-  console.log(&#39;Event ending-------&#39;);
-});</code></pre>
-<p>另外一种简便写法是直接加入事件回调，这样就不用再写<code>watch</code>的部分：</p>
-<pre><code class="js">var event = myContract.transfer(function(error, result) {
-  console.log(&#39;Event are as following:-------&#39;);
-
-  for (let key in result) {
-    console.log(key + &#39; : &#39; + result[key]);
-  }
-
-  console.log(&#39;Event ending-------&#39;);
-});</code></pre>
-<p>注意：在操作执行完成后，我们要记得调用<code>event.stopWatching();</code>来终止监听。</p>
-<h2 id="检索日志"><a href="#检索日志" class="headerlink" title="检索日志"></a>检索日志</h2><h3 id="Indexed-属性"><a href="#Indexed-属性" class="headerlink" title="Indexed 属性"></a>Indexed 属性</h3><p>可以在事件参数上增加<code>indexed</code>属性，最多可以对三个参数增加这样的属性。加上这个属性，可以允许你在 web3.js 中通过对加了这个属性的参数进行值过滤，方式如下<a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fn2" target="_blank" rel="noopener">2</a>：</p>
-<pre><code class="js">var event = myContract.transfer({value: &#39;100&#39;});</code></pre>
-<p>上面实现的是对<code>value</code>值为<code>100</code>的日志，过滤后的返回。</p>
-<p>如果你想同时匹配多个值，还可以传入一个要匹配的数组。</p>
-<pre><code class="js">var event = myContract.transfer({value: [&#39;99&#39;, &#39;100&#39;, &#39;101&#39;]});</code></pre>
-<p>增加了<code>indexed</code>的参数值会存到日志结构的<code>Topic</code>部分，便于快速查找。而未加<code>indexed</code>的参数值会存在<code>data</code>部分，成为原始日志。需要注意的是，如果增加<code>indexed</code>属性的是数组类型（包括<code>string</code>和<code>bytes</code>），那么只会在<code>Topic</code>存储对应的数据的<code>web3.sha3</code>哈希值，将不会再存原始数据。因为 Topic 是用于快速查找的，不能存任意长度的数据，所以通过 Topic 实际存的是数组这种非固定长度数据哈希结果。要查找时，是将要查找内容哈希后与 Topic 内容进行匹配，但我们不能反推哈希结果，从而得不到原始值<a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fn3" target="_blank" rel="noopener">3</a>。</p>
-<h3 id="其它过滤参数"><a href="#其它过滤参数" class="headerlink" title="其它过滤参数"></a>其它过滤参数</h3><p>事件还支持传入其它参数对象来限定可检索的范围，支持<code>fromBlock</code>，<code>toBlock</code>等过滤条件，详见<a href="https://github.com/ethereum/wiki/wiki/JavaScript-API#contract-events%EF%BC%8C%E9%93%BE%E6%8E%A5%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E5%8F%82%E6%95%B0%5B%5Efilter%5D%E3%80%82" target="_blank" rel="noopener">https://github.com/ethereum/wiki/wiki/JavaScript-API#contract-events，链接的第二个参数[^filter]。</a></p>
-<pre><code class="js">var event = myContract.transfer(
-  {value: &#39;100&#39;},
-  {fromBlock: 0, toBlock: &#39;latest&#39;},
-);</code></pre>
-<p>上面的代码实现了从第一块开始搜索日志。</p>
-<h2 id="Topic"><a href="#Topic" class="headerlink" title="Topic"></a>Topic</h2><p>日志中存储的不同的索引事件就叫不同的主题。比如，事件定义，<code>event transfer(address indexed _from, address indexed _to, uint value)</code>有三个主题，第一个主题为默认主题，即事件签名<code>transfer(address,address,uint256)</code>，但如果是声明为<code>anonymous</code>的事件，则没有这个主题；另外两个<code>indexed</code>的参数也会分别形成两个主题，可以分别通过<code>_from</code>，<code>_to</code>主题来进行过滤。如果数组，包括字符串，字节数据做为索引参数，实际主题是对应值的 Keccak-256 哈希值。</p>
-<pre><code class="js">var defaultTopic = web3.sha3(&#39;transfer(address,address,uint256)1&#39;);
-var event = myContract.transfer(
-  {value: &#39;100&#39;},
-  {fromBlock: 0, toBlock: &#39;latest&#39;, topics: [defaultTopic]},
-);</code></pre>
-<p>备注：Topic 过滤似乎没有生效，待研究</p>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>事件可以被继承。</p>
-<p>日志的 Merkle 证明是可能的，所以在区块链外，如果能提供这样一种证明，可以证明日志确实存在于区块链上。</p>
-<h2 id="底层的日志接口"><a href="#底层的日志接口" class="headerlink" title="底层的日志接口"></a>底层的日志接口</h2><p>可以通过底层的日志接口来访问底层的日志机制。通过函数<code>log0</code>，<code>log1</code>，<code>log2</code>，<code>log3</code>，<code>log4</code>。<code>logi</code>支持<code>i + 1</code>个类型为<code>bytes32</code>的参数。其中第一个参数是日志的<code>data</code>部分，其它参数为<code>topic</code>。所以下述事件：</p>
-<pre><code class="js">event Deposit(
-        address indexed _from,
-        bytes32 indexed _id,
-        uint _value
-    );</code></pre>
-<p>使用 API 的等同写法为:</p>
-<pre><code class="js">log3(
-  msg.value,
-  0x50cb9fe53daa9737b786ab3646f04d0150dc50ef4e75f59509d83667ad5adb20,
-  msg.sender,
-  _id,
-);</code></pre>
-<p>第一个参数为非<code>indexed</code>的<code>data</code>部分值。第二个参数为默认主题，即事件签名的哈希值<code>keccak256(&quot;Deposit(address,hash256,uint256)&quot;)</code>，后面两个是按顺序的<code>indexed</code>的主题。</p>
-<h2 id="使用-web3-js-读取事件的完整例子"><a href="#使用-web3-js-读取事件的完整例子" class="headerlink" title="使用 web3.js 读取事件的完整例子"></a>使用 web3.js 读取事件的完整例子</h2><p>下面是一个使用以太坊提供的工具包 web3.js 访问事件的完整例子：</p>
-<pre><code class="js">let Web3 = require(&#39;web3&#39;);
-let web3;
-
-if (typeof web3 !== &#39;undefined&#39;) {
-  web3 = new Web3(web3.currentProvider);
-} else {
-  // set the provider you want from Web3.providers
-  web3 = new Web3(new Web3.providers.HttpProvider(&#39;http://localhost:8545&#39;));
-}
-
-let from = web3.eth.accounts[0];
-
-//编译合约
-let source =
-  &#39;pragma solidity ^0.4.0;contract Transfer{  event transfer(address indexed _from, address indexed _to, uint indexed value);  function deposit() payable {    address current = this;    uint value = msg.value;    transfer(msg.sender, current, value);  }  function getBanlance() constant returns(uint) {      return this.balance;  }  /* fallback function */  function(){}}&#39;;
-let transferCompiled = web3.eth.compile.solidity(source);
-
-console.log(transferCompiled);
-console.log(&#39;ABI definition:&#39;);
-console.log(transferCompiled[&#39;info&#39;][&#39;abiDefinition&#39;]);
-
-//得到合约对象
-let abiDefinition = transferCompiled[&#39;info&#39;][&#39;abiDefinition&#39;];
-let transferContract = web3.eth.contract(abiDefinition);
-
-//2. 部署合约
-
-//2.1 获取合约的代码，部署时传递的就是合约编译后的二进制码
-let deployCode = transferCompiled[&#39;code&#39;];
-
-//2.2 部署者的地址，当前取默认账户的第一个地址。
-let deployeAddr = web3.eth.accounts[0];
-
-//2.3 异步方式，部署合约
-//警告，你不应该每次都部署合约，这里只是为了提供一个可以完全跑通的例子！！！
-transferContract.new(
-  {
-    data: deployCode,
-    from: deployeAddr,
-    gas: 1000000,
-  },
-  function(err, myContract) {
-    if (!err) {
-      // 注意：这个回调会触发两次
-      //一次是合约的交易哈希属性完成
-      //另一次是在某个地址上完成部署
-
-      // 通过判断是否有地址，来确认是第一次调用，还是第二次调用。
-      if (!myContract.address) {
-        console.log(
-          &#39;contract deploy transaction hash: &#39; + myContract.transactionHash,
-        ); //部署合约的交易哈希值
-
-        // 合约发布成功后，才能调用后续的方法
-      } else {
-        console.log(&#39;contract deploy address: &#39; + myContract.address); // 合约的部署地址
-
-        console.log(&#39;Current balance: &#39; + myContract.getBanlance());
-
-        var event = myContract.transfer();
-
-        // 监听
-        event.watch(function(error, result) {
-          console.log(&#39;Event are as following:-------&#39;);
-
-          for (let key in result) {
-            console.log(key + &#39; : &#39; + result[key]);
-          }
-
-          console.log(&#39;Event ending-------&#39;);
-        });
-
-        //使用transaction方式调用，写入到区块链上
-        myContract.deposit.sendTransaction(
-          {
-            from: deployeAddr,
-            value: 100,
-            gas: 1000000,
-          },
-          function(err, result) {
-            console.log(&#39;Deposit status: &#39; + err + &#39; result: &#39; + result);
-            console.log(&#39;After deposit balance: &#39; + myContract.getBanlance());
-
-            //终止监听，注意这里要在回调里面，因为是异步执行的。
-            event.stopWatching();
-          },
-        );
-      }
-    }
-  },
-);</code></pre>
-<h4 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h4><blockquote>
-<p>专注基于以太坊（Ethereum）的相关区块链（Blockchain）技术，了解以太坊，Solidity，Truffle，web3.js。</p>
-<p>个人博客: <a href="http://tryblockchain.org/" target="_blank" rel="noopener">http://tryblockchain.org</a><br>版权所有，转载注明出处</p>
-</blockquote>
-<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><hr>
-<ol>
-<li>事件、日志的技术指引。<a href="http://me.tryblockchain.org/Blockchain-event-bestpractice.html" target="_blank" rel="noopener">http://me.tryblockchain.org/Blockchain-event-bestpractice.html</a> <a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fnref1" target="_blank" rel="noopener">↩</a></li>
-<li>web3.js 提供的事件操作 API。 <a href="https://github.com/ethereum/wiki/wiki/JavaScript-API#contract-events" target="_blank" rel="noopener">https://github.com/ethereum/wiki/wiki/JavaScript-API#contract-events</a> <a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fnref2" target="_blank" rel="noopener">↩</a></li>
-<li>关于 String 的 Topic 说明。<a href="https://ethereum.stackexchange.com/questions/6840/indexed-event-with-string-not-getting-logged" target="_blank" rel="noopener">https://ethereum.stackexchange.com/questions/6840/indexed-event-with-string-not-getting-logged</a> <a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fnref3" target="_blank" rel="noopener">↩</a></li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">contract</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Solidity的数据位置特性深入详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/">Solidity的数据位置特性深入详解</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="http://me.tryblockchain.org/solidity-data-location.html" target="_blank" rel="noopener">转载</a><br>代码在执行前，一般会编译成指令。指令就是一个个逻辑，逻辑操作的是数据。代码，或者说业务，操作的其实是数据。非区块链中，代码操作的数据，一般会存到数据库中。</p>
-<p>在区块链里，区块链本身就是一个数据库。如果你使用区块链标记物产的所有权，归属信息将会被记录到区块链上，所有人都无法篡改，以标明不可争议的拥有权。所以在区块链中编程中，有一个数据位置的属性用来标识变量是否需要持久化到区块链中。</p>
-<h1 id="1-数据位置的类型"><a href="#1-数据位置的类型" class="headerlink" title="1. 数据位置的类型"></a>1. 数据位置的类型</h1><p><code>数据位置</code><a href="http://me.tryblockchain.org/solidity-data-location.html#fn1" target="_blank" rel="noopener">1</a>，变量的存储位置属性。有三种类型，<code>memory</code>，<code>storage</code>和<code>calldata</code>。最后一种数据位置比较特殊，一般只有外部函数的参数（不包括返回参数）被强制指定为<code>calldata</code>。这种数据位置是只读的，不会持久化到区块链。一般我们可以选择指定的是<code>memory</code>和<code>storage</code>。</p>
-<p><code>memory</code>存储位置同我们普通程序的内存类似。即分配，即使用，越过作用域即不可被访问，等待被回收。而对于<code>storage</code>的变量，数据将永远存在于区块链上。</p>
-<h1 id="2-默认数据位置"><a href="#2-默认数据位置" class="headerlink" title="2. 默认数据位置"></a>2. 默认数据位置</h1><h2 id="2-1-参数及局部变量"><a href="#2-1-参数及局部变量" class="headerlink" title="2.1 参数及局部变量"></a>2.1 参数及局部变量</h2><p>默认的函数参数，包括返回的参数，他们是<code>memory</code>。而默认的局部变量是<code>storage</code>的。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-contract SimpleAssign{
-  struct S{string a;uint b;}
-
-  //默认参数是memory
-  function assign(S s) internal{
-    //默认的变量是storage的指针
-    //Type struct MemoryToLocalVar.S memory is not implicitly convertible to expected type struct MemoryToLocalVar.S storage pointer.
-    //S tmp = s;
-  }
-}</code></pre>
-<p>在上述示例中，<code>assign()</code>尝试将一个参数赋值给一个局部变量。具体的报错信息<code>Error: Type struct memory is not implicitly convertible to expected type storage pointer.</code>。</p>
-<p>从报错可以看出，默认的的参数是<code>memory</code>的，而默认的局部变量是<code>storage</code>的。</p>
-<h2 id="2-2-状态变量"><a href="#2-2-状态变量" class="headerlink" title="2.2 状态变量"></a>2.2 状态变量</h2><p>状态变量，合约内声明的公有变量。默认的数据位置是<code>storage</code>。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-contract StateVariable{
-  struct S{string a;uint b;}
-  //状态变量，默认是storage
-  S s;
-}</code></pre>
-<h1 id="3-数据位置间相互转换"><a href="#3-数据位置间相互转换" class="headerlink" title="3. 数据位置间相互转换"></a>3. 数据位置间相互转换</h1><h2 id="3-1-storage-转换为-storage"><a href="#3-1-storage-转换为-storage" class="headerlink" title="3.1 storage 转换为 storage"></a>3.1 storage 转换为 storage</h2><p>当我们把一个<code>storage</code>类型的变量赋值给另一个<code>storage</code>时，我们只是修改了它的指针。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-contract StorageConvertToStorage{
-  struct S{string a;uint b;}
-
-  //默认是storage的
-  S s;
-
-  function convertStorage(S storage s) internal{
-    S tmp = s;
-    tmp.a = &quot;Test&quot;;
-  }
-
-  function call() returns (string){
-    convertStorage(s);
-    return s.a;//Test
-  }
-}</code></pre>
-<p>在上面的代码中，我们将传入的<code>storage</code>变量，赋值给另一个临时的<code>storage</code>类型的<code>tmp</code>时，并修改<code>tmp.a = &quot;Test&quot;</code>，最后我们发现合约的状态变量<code>s</code>也被修改了。</p>
-<h2 id="3-2-memory-转换为-storage"><a href="#3-2-memory-转换为-storage" class="headerlink" title="3.2 memory 转换为 storage"></a>3.2 memory 转换为 storage</h2><p>因为局部变量和状态变量的类型都可能是<code>storage</code>。所以我们要分开来说这两种情况。</p>
-<h3 id="3-2-1-memory-赋值给状态变量"><a href="#3-2-1-memory-赋值给状态变量" class="headerlink" title="3.2.1 memory 赋值给状态变量"></a>3.2.1 memory 赋值给状态变量</h3><p>将一个<code>memory</code>类型的变量赋值给一个状态变量时，实际是将内存变量拷贝到存储中。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-
-contract MemoryConvertToStateVariable{
-  struct S{string a;uint b;}
-
-  //默认是storage的
-  S s;
-
-  function memoryToState(S memory tmp) internal{
-    s = tmp;//从内存中复制到状态变量中。
-
-    //修改旧memory中的值，并不会影响状态变量
-    tmp.a = &quot;Test&quot;;
-  }
-
-  function call() returns(string){
-    S memory tmp = S(&quot;memory&quot;, 0);
-    memoryToState(tmp);
-
-    return s.a;
-  }
-}</code></pre>
-<p>通过上例，我们发现，在<code>memoryToState()</code>中，我们把<code>tmp</code>赋值给<code>s</code>后，再修改<code>tmp</code>值，并不能产生任何变化。赋值时，完成了值拷贝，后续他们不再有任何的关系。</p>
-<h3 id="3-2-2-memory-赋值给局部变量"><a href="#3-2-2-memory-赋值给局部变量" class="headerlink" title="3.2.2 memory 赋值给局部变量"></a>3.2.2 memory 赋值给局部变量</h3><p>由于在区块链中，<code>storage</code>必须是静态分配存储空间的<a href="http://me.tryblockchain.org/solidity-data-location.html#fn2" target="_blank" rel="noopener">2</a>。局部变量虽然是一个<code>storage</code>的，但它仅仅是一个<code>storage</code>类型的指针。如果进行这样的赋值，实际会产生一个错误。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-contract MemoryToLocalVar{
-  struct S{string a;uint b;}
-
-  //默认参数是memory
-  function memoryToLocal(S s) internal{
-    //默认的变量是storage的指针
-    //Type struct MemoryToLocalVar.S memory is not implicitly convertible to expected type struct MemoryToLocalVar.S storage pointer.
-    //S tmp = s;
-
-    //修改变量为memory类型
-    S memory tmp = s;
-  }
-}</code></pre>
-<p>通过上面的代码，我们可以看到这样的赋值的确不被允许。你可以通过将变量<code>tmp</code>改为<code>memory</code>来完成这样的赋值。</p>
-<h2 id="3-3-storage-转为-memory"><a href="#3-3-storage-转为-memory" class="headerlink" title="3.3 storage 转为 memory"></a>3.3 storage 转为 memory</h2><p>将<code>storage</code>转为<code>memory</code>，实际是将数据从<code>storage</code>拷贝到<code>memory</code>中。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-contract StorageToMemory{
-  struct S{string a;uint b;}
-
-  S s = S(&quot;storage&quot;, 1);
-
-  function storageToMemory(S storage x) internal{
-    S memory tmp = x;//由Storage拷贝到memory中
-
-    //memory的修改不影响storage
-    tmp.a = &quot;Test&quot;;
-  }
-
-  function call() returns (string){
-    storageToMemory(s);
-    return s.a;
-  }
-}</code></pre>
-<p>在上面的例子中，我们看到，拷贝后对<code>tmp</code>变量的修改，完全不会影响到原来的<code>storage</code>变量。</p>
-<h2 id="3-4-memory-转为-memory"><a href="#3-4-memory-转为-memory" class="headerlink" title="3.4 memory 转为 memory"></a>3.4 memory 转为 memory</h2><p><code>memory</code>之间是引用传递，并不会拷贝数据。我们来看看下面的代码。</p>
-<pre><code class="solidity">pragma solidity ^0.4.0;
-contract MemoryToMemory{
-  struct S{string a;uint b;}
-
-  //默认参数是memory
-  function memoryToMemory(S s) internal{
-    S memory tmp = s;
-
-    //引用传递
-    tmp.a = &quot;other memory&quot;;
-  }
-
-  function call() returns (string){
-    S memory mem = S(&quot;memory&quot;, 1);
-    memoryToMemory(mem);
-    return mem.a;//other memory
-  }
-}</code></pre>
-<p>在上面的代码中，<code>memoryToMemory()</code>传递进来了一个<code>memory</code>类型的变量，在函数内将之赋值给<code>tmp</code>，修改<code>tmp</code>的值，发现外部的<code>memory</code>也被改为了<code>other memory</code>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">展开全文 >></a>
         </p>
       
 
@@ -721,6 +275,90 @@ require &#39;bar&#39; </code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/ruby--require%E5%BC%95%E7%94%A8%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E6%96%B9%E6%B3%95%E4%B8%8E%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-solidity中返回mapping数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">solidity中返回mapping数据</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
+function getInfoByUser(address user) public view returns(uint[],uint[]){
+  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
+  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
+  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
+    money[i] = bank[user].depositRecord[i].money;
+    time[i] = bank[user].depositRecord[i].time;
+  }
+  return(money,time);
+}</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">展开全文 >></a>
         </p>
       
 
@@ -886,90 +524,6 @@ require &#39;bar&#39; </code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/simple_form/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-solidity中返回mapping数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">solidity中返回mapping数据</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
-function getInfoByUser(address user) public view returns(uint[],uint[]){
-  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
-  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
-  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
-    money[i] = bank[user].depositRecord[i].money;
-    time[i] = bank[user].depositRecord[i].time;
-  }
-  return(money,time);
-}</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">展开全文 >></a>
         </p>
       
 
@@ -1196,6 +750,102 @@ io.close</code></pre>
 
 
   
+    <article id="post-ruby多层数组排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">ruby多层数组排序</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.042Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##ruby中数组进行多层排序<br>例子如下：</p>
+<p>用sort_by</p>
+<pre><code class="ruby">def order_weight_sort_by(string)
+  string.split(&quot; &quot;).sort_by do |a|
+      sum_a = a.split(&quot;&quot;).inject(0) { |mem, var| mem += var.to_i }
+      first_number = a[0].to_i
+      [a.size, sum_a, first_number]
+  end.join(&quot; &quot;)
+end</code></pre>
+<p>string = “56 65 74 100 99 68 86 980 90”<br>p order_weight_sort_by(string )<br>结果是”90 56 65 74 68 86 99 100 980”</p>
+<p>上面的方法是先将字符串变成一个由数字字符串组成的数组。然后先按照字符串的长度进行排序，再按照字符串各数字之和进行排序，最后按照字符串的第一个数字大小进行排序。</p>
+<p>关键代码[a.size, sum_a, first_number]</p>
+<p>当最后是一个条件数组时，sort_by会按照该条件数组的顺序依次排序。</p>
+<p>用sort</p>
+<pre><code class="ruby">def order_weight_sort(string)
+  string.split(&quot; &quot;).sort do |a, b|
+      sum_a = a.split(&quot;&quot;).inject(0) { |mem, var| mem += var.to_i }
+      first_number_a = a[0].to_i
+      size_a = a.size
+
+      sum_b = b.split(&quot;&quot;).inject(0) { |mem, var| mem += var.to_i }
+      first_number_b = b[0].to_i
+      size_b = b.size
+
+      [size_a, sum_a, first_number_a] &lt;=&gt; [size_b, sum_b, first_number_b]
+  end.join(&quot; &quot;)
+end</code></pre>
+<p>string = “56 65 74 100 99 68 86 980 90”<br>p order_weight_sort(string )<br>结果与上面是一样的。</p>
+<p>关键代码[size_a, sum_a, first_number_a] &lt;=&gt; [size_b, sum_b, first_number_b]</p>
+<p>这样看起来sort_by比sort简洁很多。<br>确实sort_by只需要一个参数，而sort需要两个参数。但他们实现多层排序是一样的，最后都是用一个条件数组来表示。</p>
+<p>区别</p>
+<p>但sort要比sort_by灵活。因为最后的排序条件还可以这样写：</p>
+<p><code>[size_b, sum_a, first_number_b] &lt;=&gt; [size_a, sum_b, first_number_a]</code><br>这样就相当于先按长度倒序排列，然后再按照字符串各数字之和进行排序，最后再按照首个字符的大小倒序排列。</p>
+<p>作者：kamionayuki<br>链接：<a href="http://www.jianshu.com/p/319d0174f246" target="_blank" rel="noopener">http://www.jianshu.com/p/319d0174f246</a><br>來源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ruby命令行工具制作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1287,6 +937,75 @@ puts options.inspect</code></pre>
 
 
   
+    <article id="post-ruby数组排序,但是排序的字段可能为空" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">ruby数组排序,但是排序的字段可能为空</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.042Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="ruby数组排序-但是排序的字段可能为空"><a href="#ruby数组排序-但是排序的字段可能为空" class="headerlink" title="ruby数组排序,但是排序的字段可能为空"></a>ruby数组排序,但是排序的字段可能为空</h3><pre><code class="ruby">foo = [nil, -3, 100, 4, 6, nil, 4, nil, 23]
+
+foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
+
+=&gt; [-3, 4, 4, 6, 23, 100, nil, nil, nil]</code></pre>
+<pre><code class="ruby">children.sort_by {|child| [child.position ? 0 : 1,child.position || 0]}</code></pre>
+<p><a href="https://stackoverflow.com/questions/808318/sorting-a-ruby-array-of-objects-by-an-attribute-that-could-be-nil" target="_blank" rel="noopener">详情请看</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
@@ -1335,11 +1054,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1389,19 +1103,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1421,15 +1135,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1457,19 +1171,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1489,15 +1203,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1509,27 +1223,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1538,6 +1236,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1581,6 +1291,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1593,15 +1319,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1613,14 +1331,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1629,15 +1339,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1653,11 +1359,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1673,11 +1387,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1701,15 +1415,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1737,10 +1451,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1749,15 +1459,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1773,6 +1483,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1785,10 +1499,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1797,11 +1507,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1817,6 +1527,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1825,11 +1539,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1886,6 +1600,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

@@ -133,180 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-ssh远程查看日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/26/ssh%E8%BF%9C%E7%A8%8B%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97/">ssh远程查看日志</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/26/ssh%E8%BF%9C%E7%A8%8B%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97/" class="archive-article-date">
-  	<time datetime="2018-09-26T03:00:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="shell">ssh remote-server &#39;tail -f /var/rails/your_app/current/log/production.log&#39;</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/26/ssh%E8%BF%9C%E7%A8%8B%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ruby与C语言的结合" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/21/ruby%E4%B8%8EC%E8%AF%AD%E8%A8%80%E7%9A%84%E7%BB%93%E5%90%88/">ruby与C语言的结合</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/21/ruby%E4%B8%8EC%E8%AF%AD%E8%A8%80%E7%9A%84%E7%BB%93%E5%90%88/" class="archive-article-date">
-  	<time datetime="2018-09-21T09:03:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>因为 ruby 是解释性的语言，单纯计算的循环不是很快。如果将处理交给编译器，就会变的很快。</p>
-<p>用 C 语言编写 ruby 扩展了=库相当简单。RubyInline 就是 ruby 中能够直接嵌入 C 语言代码，初次执行时，C 语言代码会自动编译，第二次以后的执行会自动装载缓存中的扩展库</p>
-<p>示例:</p>
-<pre><code class="ruby">require &quot;inline&quot;
-class MyTest
-  inline do |builder|
-    builder.include &quot;&lt;math.h&gt;&quot;
-    builder.c &quot;
-    int sum(){
-      int len = 100;
-      sum = 0;
-      int i = 0;
-      for(i = 0; i&lt;= len i++){
-        sum += i;
-      }
-      return sum;
-    }
-    &quot;
-  end
-end
-
-t = MyTest.new
-t.sum</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ruby</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/21/ruby%E4%B8%8EC%E8%AF%AD%E8%A8%80%E7%9A%84%E7%BB%93%E5%90%88/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-改善程序执行效率的一个做法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -759,7 +585,7 @@ end</code></pre>
 cd certbot
 ./certbot-auto --help</code></pre>
         
-          <a class="article-more-a" href="/2018/09/20/https%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6/#more">more >></a>
+          <a class="article-more-a" href="/2018/09/20/https%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6/#more">更多 >></a>
         
       
 
@@ -1467,6 +1293,443 @@ export default class Request {
 
 
   
+    <article id="post-电子书合集-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/">电子书合集-2</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/" class="archive-article-date">
+  	<time datetime="2018-09-09T07:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一、中文电子书网站</p>
+<p>1.好读网站</p>
+<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
+<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
+<p>2.亿年书海</p>
+<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
+<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
+<p>3.只有下载</p>
+<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
+<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
+<p>4.逛电驴</p>
+<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
+<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
+<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
+<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
+<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
+<p>6.浩扬电子书城</p>
+<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
+<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
+<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
+<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
+<p>中文杂志下载网站，下载方式为网盘。</p>
+<p>8.书格</p>
+<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
+<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
+<p>9.中国哲学书电子化计划</p>
+<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
+<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
+<p>10.古籍馆</p>
+<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
+<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
+<p>11.马克思主义文库</p>
+<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
+<p>12.凡人大传</p>
+<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
+<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
+<p>13.殆知阁古籍搜索引擎</p>
+<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
+<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
+<p>14.中国国家数字图书馆</p>
+<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
+<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
+<p>15.超星</p>
+<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
+<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
+<p>16.E 书联盟</p>
+<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
+<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
+<p>17.轻之国度轻小说文库</p>
+<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
+<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
+<p>18.SF 互动传媒</p>
+<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
+<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
+<p>19.青年文摘</p>
+<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
+<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
+<p>20.zcom</p>
+<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
+<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
+<p>21.读书网</p>
+<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
+<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
+<p>时不时看一些书，充实生活，很不错。</p>
+<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
+<p>22.我有閑書庫</p>
+<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
+<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
+<p>23.完美文库</p>
+<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
+<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
+<p>24.en8848</p>
+<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
+<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
+<p>二、网盘和种子搜索引擎</p>
+<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
+<p>1.盘搜</p>
+<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
+<p>目前最常用的一个网盘搜索引擎。</p>
+<p>2.哈兔网盘搜索</p>
+<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
+<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
+<p>3.ZHA FILE 搜索</p>
+<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
+<p>基于谷歌的网盘搜索引擎。</p>
+<p>4.百度网盘搜索引擎</p>
+<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
+<p>专搜百度网盘资源。</p>
+<p>5.海盗湾</p>
+<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">hidden</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">电子书</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-电子书合集-3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-3/">电子书合集-3</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-3/" class="archive-article-date">
+  	<time datetime="2018-09-09T07:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>33.en8848</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//www.en8848.com.cn/Soft/">http://www.en8848.com.cn/Soft/</a></p>
+<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
+<p>34.墨墨英文电子书网<br><a href="https://link.zhihu.com/?target=http%3A//www.momowang.net/">http://www.momowang.net/</a></p>
+<p>一个提供很多有趣主题的英文电子书籍网站</p>
+<p>该网站 M 标记的电子书为付费下载，F 标记为免费下载，不过几乎所有电子书都在国外其他电子书网站上可以找到免费电子版，其提供的 epub 电子版有简要的中文介绍。在线阅读界面清新，无广告。</p>
+<p>35.书朋数字图书搜索引擎<br><a href="https://link.zhihu.com/?target=http%3A//www.shupeng.com/">http://www.shupeng.com/</a></p>
+<p>魏武挥:经常碰到人问我 ×× 书有电子版否。建议：1、使用 chrome 浏览器；2、安装一个“爱问共享资料豆瓣插件”的插件；3、在豆瓣中找到某书条目时，稍等 1-2 秒，右侧有惊喜。BTW 中国最大的版权争议作品集散地绝对不在百度文库的说</p>
+<p>此插件的下载链接来自书朋网，而书朋网的链接来自其他网站，一般来自爱问、百度文库超星、国外链接，格式以 txt、mobi、epub 为主，很少有 pdf，搜教材不太合适，小说倒是一大把。最大的问题在于死链颇多，很多时候是他说有资源时没有，他说没有资源网上有很多资源。</p>
+<p>36.iFindBook 电子书搜索引擎<br><a href="https://link.zhihu.com/?target=http%3A//www.ifindbook.net/">http://www.ifindbook.net/</a></p>
+<p>一个可以搜索 pdf, epub, chm, txt, mobi 等各类电子书、电子文档的精准搜索引擎，帮助用户快速找到想要的书籍资源。</p>
+<p>使用 iFindBook，通过关键词搜索来寻找想要的电子书资源，该搜索目前整合了爱问、百度、百度文库，相信还会有更多的搜索平台加入进来。</p>
+<p>心中永远充满着光明</p>
+<hr>
+<p>二、87 个外文电子书网站</p>
+<p>1.BookFinder</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//en.bookfi.org/">http://en.bookfi.org/</a></p>
+<p>这是最早的图书在线垂直搜索引擎之一。好用不掉线，一百二十多万册，麻烦在于下完一本后才能下第二本</p>
+<p>2.libgen</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//libgen.org/">http://libgen.org/</a><br>书籍多多，下载方便。 如打不开，可从其它 mirror 进：<br><a href="https://link.zhihu.com/?target=http%3A//gen.lib.rus.ec/">http://gen.lib.rus.ec</a></p>
+<p>3.bookos（已失效）<br><a href="https://link.zhihu.com/?target=http%3A//bookos.org/">http://bookos.org</a><br>好用不掉线，两百多万册，但每天限下 5 本，注册验证邮箱可多下 5 本<br><a href="https://link.zhihu.com/?target=http%3A//zh.bookzz.org/">http://zh.bookzz.org/</a></p>
+<p>4.bookboon<br><a href="https://link.zhihu.com/?target=http%3A//bookboon.com/">http://bookboon.com/</a><br>下载之前要填写简单的个人信息，包括邮箱、学校、下载书籍的用途</p>
+<p>5.planetpublish<br><a href="https://link.zhihu.com/?target=http%3A//www.planetpublish.com/">http://www.planetpublish.com/</a></p>
+<p>名著为主，格式为 pdf，不需注册</p>
+<p>6.planetebook 行星电子书<br><a href="https://link.zhihu.com/?target=http%3A//www.planetebook.com/">http://www.planetebook.com/</a></p>
+<p>免费经典文学下载和分享</p>
+<p>7.Internet Archive 互联网档案馆<br><a href="https://link.zhihu.com/?target=https%3A//archive.org/">https://archive.org/</a></p>
+<p>#普及资源# 互联网档案馆，即#Internet Archive#，是全世界最重要的公益性学术网站之一，也是网络开放与自由化的倡议者之一。提供海量数字数据如网页、音乐、动态图像、和数百万书籍（有 PDF 等数种格式）的永久性免费存储及获取。缺点是经常无法访问，原因未明</p>
+<p>8.公用图书馆#（Open Library）</p>
+<p>@乌衣衖 #普及贴# 当谷歌图书馆（<a href="https://link.zhihu.com/?target=http%3A//books.google.com">http://books.google.com</a>）和互联网档案馆(Internet Archive)都不好用的时候，就去#公用图书馆#（Open Library）吧，<a href="https://link.zhihu.com/?target=https%3A//openlibrary.org/">https://openlibrary.org/</a>三百余万册免费电子书，够你喝一壶的</p>
+<p>9.Free public domain audiobooks<br><a href="https://link.zhihu.com/?target=https%3A//librivox.org/">https://librivox.org/</a></p>
+<p>免费的公共领域有声读物</p>
+<p>10.【Kindle 电子书搜索】<br><a href="https://link.zhihu.com/?target=http%3A//forfrigg.com/">http://forfrigg.com/</a></p>
+<p>Kindle 电子书搜索引擎，用 google 自定义搜索制作，这里介绍的网站基本上都有收录，电子书、电子杂志等资源很丰富，可以分格式搜索，很好用。</p>
+<p>做一些棒棒的事情–比如读书</p>
+<p>11.【COAY】<br><a href="https://link.zhihu.com/?target=http%3A//coay.com/">http://coay.com/</a></p>
+<p>提供 ePub、mobi 格式电子书下载，支持 iBooks，Kindle，Stanza 等阅读器。</p>
+<p>12.ManyBooks<br><a href="https://link.zhihu.com/?target=http%3A//manybooks.net/">http://manybooks.net/</a></p>
+<p>一个专门提供免费电子书下载的网站, 它所所提供的免费电子书超过 2 万本. 你可以通过分类, 作者, 书名和语言进行搜索查询, 每本书都包含一个简介,包括书名,作者, 国家和内容简介. 所有电子书含都可以下载保存为几十种电子书格式, 比如 Doc, PDF, RTF, JAR, TXT 等等.</p>
+<p>13.FreeComputerBooks<br><a href="https://link.zhihu.com/?target=http%3A//freecomputerbooks.com/">http://freecomputerbooks.com/</a></p>
+<p>一个专门收集计算机, 编辑, 数学, 演讲报告和教程等专业知识电子书的网站. ,它的网站分类结构非常细致, 达到 12 层的分类系统, 超过 150 个子分类. 方面你的电子书搜索查找.</p>
+<p>14.FreeTechBooks<br><a href="https://link.zhihu.com/?target=http%3A//www.freetechbooks.com/">http://www.freetechbooks.com/</a></p>
+<p>也是一个提供科技类免费电子书下载的网站, 该网站提供的电子书都是符合法律要求或是版权协议的.</p>
+<p>15.OnlineFreeEBooks<br><a href="https://link.zhihu.com/?target=http%3A//www.onlinefreeebooks.net/">http://www.onlinefreeebooks.net/</a></p>
+<p>提供各种电子书的免费下载链接, 主要是 PDF 格式的免费电子书, 电子书的分类主要包括汽车类电子书, 商业电子书, 工程电子书, 机械电子书, 硬件电子书, 健康类电子书, 编程技术类电子书, 运行类电子书等等.</p>
+<p>16.MemoWare<br><a href="https://link.zhihu.com/?target=http%3A//www.memoware.com/">http://www.memoware.com/</a></p>
+<p>拥有上千种免费电子书下载, 并且可以让你很方便的把电子书发送到你的掌上设备, 支持各种 PDA 操作系统.</p>
+<p>17.SnipFiles<br><a href="https://link.zhihu.com/?target=http%3A//www.snipfiles.com/">http://www.snipfiles.com/</a></p>
+<p>提供合法的电子书给用户.</p>
+<p>18.BookYards<br><a href="https://link.zhihu.com/?target=http%3A//www.bookyards.com/">http://www.bookyards.com/</a></p>
+<p>一个提供教学相关类免费电子书下载的网络阂户.</p>
+<p>19.eBookLobby<br><a href="https://link.zhihu.com/?target=http%3A//www.freeebooks.info/">http://www.freeebooks.info/</a></p>
+<p>主要提供商业, 计算机, 艺术和教学类的免费电子书下载.</p>
+<p>20.DailyLit<br><a href="https://link.zhihu.com/?target=http%3A//www.dailylit.com/">http://www.dailylit.com/</a></p>
+<p>在线的免费电子书阅读网站, 可以通过邮件或 RSS 阅读器接受 FEED.</p>
+<p><img src="https://pic1.zhimg.com/80/v2-53b986f3ca67eb1c0312384872bbcc1d_hd.jpg" alt="img">读书–提升你的气质</p>
+<p>\21. Wikibooks<br><a href="https://link.zhihu.com/?target=http%3A//en.wikibooks.org/wiki/Main_Page">http://en.wikibooks.org/wiki/Main_Page</a></p>
+<p>Wikibooks 是一个 WIKI 风格的免费电子书网站, 任何人都可以创建电子书分享给别人.</p>
+<p>22.Humanities E-Book Collection<br><a href="https://link.zhihu.com/?target=http%3A//www.humanitiesebook.org/">http://www.humanitiesebook.org/</a></p>
+<p>@乌衣衖</p>
+<p>#Humanities E-Book Collection#，简称 HEB，鼓励史学界接受电子图书，HEB 只收录高水平的研究专著，目前共收录 3,000 多种著作，出版年代最早为 1820 年，最新为本年度，以英语为主，除进行浏览外还可以进行全文检索。HEB 从 2002 年 9 月起发布，每年新增著作近 500 种。需注册</p>
+<p>23.KnowFree<br><a href="https://link.zhihu.com/?target=http%3A//knowfree.net/">http://knowfree.net/</a></p>
+<p>免费电子科技书籍下载网是一个提供免费的教学类相关书籍，比如科技、数据分析、技术、编程、建站等方面的免费电子书。需要注册。</p>
+<p>24.医生的免费电子书(免费使用的医学电子书)<br><a href="https://link.zhihu.com/?target=http%3A//freebooks4doctors.com/">http://freebooks4doctors.com/</a></p>
+<p>25.宾夕法尼亚大学网站 The Online Book Page<br><a href="https://link.zhihu.com/?target=http%3A//digital.library.upenn.edu/books/">http://digital.library.upenn.edu/books/</a></p>
+<p>有超过 16000 部在线电子书 ,值得一读</p>
+<p>26.GetFreeeBooks<br><a href="https://link.zhihu.com/?target=http%3A//www.getfreeebooks.com/">http://www.getfreeebooks.com/</a></p>
+<p>免费电子书分享平台是一个专门收集计算机, 编辑, 数学, 演讲报告和教程等专业知识电子书的网站，你可以在该网站找个很多实名的电子书籍，并且分类非常全面。该网站分类结构非常细致，达到 12 层的分类系统，收录了超过 150 个子分类，通过关键词搜索非常方便你查找想要的电子书。</p>
+<p>27.books should be free<br><a href="https://link.zhihu.com/?target=http%3A//www.booksshouldbefree.com/">http://www.booksshouldbefree.com/</a></p>
+<p>免费公共领域有声电子书下载网站（音频，EPUB，在线，PDB，MOBI，TXT）</p>
+<p>28.Booksinmyphone<br><a href="https://link.zhihu.com/?target=http%3A//www.booksinmyphone.com/">http://www.booksinmyphone.com/</a></p>
+<p>手机上的电子书</p>
+<p>29.Baencd<br><a href="https://link.zhihu.com/?target=http%3A//Baencd.Thefifthimperium.com">http://Baencd.Thefifthimperium.com</a></p>
+<p>电子书 CD 下载，以科幻作品为主</p>
+<p>30.Chester Burton Brown 的个人科幻作品网站<br><a href="https://link.zhihu.com/?target=http%3A//cheeseburgerbrown.com/">http://cheeseburgerbrown.com/</a></p>
+<p>提供一部分免费阅读的文本，也可以在线购买其收费作品</p>
+<p><img src="https://pic3.zhimg.com/80/v2-80d5e571613a2d2adaeafb670baa497b_hd.jpg" alt="img">读书–提升个人技能</p>
+<p>31.Dailysciencefiction<br><a href="https://link.zhihu.com/?target=http%3A//dailysciencefiction.com/">http://dailysciencefiction.com/</a></p>
+<p>科幻短篇小说的在线杂志，提供超短篇的科幻故事在线阅读</p>
+<p>32.ebooks-free-net<br><a href="https://link.zhihu.com/?target=http%3A//www.ebooks-free-net.net/">http://www.ebooks-free-net.net/</a></p>
+<p>格式为 pdf，无需注册</p>
+<p>33.ebooksoneverything<br><a href="https://link.zhihu.com/?target=http%3A//www.ebooksoneverything.com/free-ebooks.html">http://www.ebooksoneverything.com/free-ebooks.html</a></p>
+<p>34.ebooktakeaway<br><a href="https://link.zhihu.com/?target=http%3A//www.ebooktakeaway.com/">http://www.ebooktakeaway.com/</a></p>
+<p>主要格式为 pdf、html 和 txt</p>
+<p>35.fictionpress<br>小说、诗歌、短篇故事在线阅读<br><a href="https://link.zhihu.com/?target=https%3A//www.fictionpress.com/">https://www.fictionpress.com/</a></p>
+<p>36.Free-Ebooks<br><a href="https://link.zhihu.com/?target=http%3A//www.free-ebooks.net/">http://www.free-ebooks.net/</a></p>
+<p>免费电子书分享平台是一个提供优秀的电子书下载分享平台，站内资源非常丰富，并且所有的电子书都是免费提供的，用户注册后，下载电子书是通过邮箱发送的方式获取。</p>
+<p>37.Ebook3000<br><a href="https://link.zhihu.com/?target=http%3A//ebook3000.com/">http://ebook3000.com/</a></p>
+<p>免费电子书下载网是一个提供免费的互联网电子书籍下载站点，收录了互联网上多种优秀的电子书籍免费提供下载。</p>
+<p>38.国外儿童绘本大全下载网<br><a href="https://link.zhihu.com/?target=http%3A//www.childrensbooksonline.org/">http://www.childrensbooksonline.org/</a></p>
+<p>一个推介儿童绘本的站点，同时可以免费下载， 该站点所下载的绘本均是清晰大图。</p>
+<p>39.NAP 免费电子图书<br><a href="https://link.zhihu.com/?target=http%3A//www.nap.edu/topics.php%3Fbrowse%3D1">http://www.nap.edu/topics.php?browse=1</a></p>
+<p>提供专业书籍下载，农业、行为与社会科学、生物学和生命科学、电脑与资讯科技、冲突和安全问题、地球科学、教育等。需要注册</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//40.Gadd.Lib.Overdrive.com">http://40.Gadd.Lib.Overdrive.com</a><br><a href="https://link.zhihu.com/?target=http%3A//gadd.lib.overdrive.com/92AE4BDF-FEBA-4C3A-8897-0739E9C96CE8/10/50/en/PublicDomainCollection.htm">http://gadd.lib.overdrive.com/92AE4BDF-FEBA-4C3A-8897-0739E9C96CE8/10/50/en/PublicDomainCollection.htm</a></p>
+<p>epub 图书下载网站</p>
+<p><img src="https://pic4.zhimg.com/80/v2-8f890b95972d6924b38a8865136d62fc_hd.jpg" alt="img">想要赢得胜利其实很简单</p>
+<p>41.克苏鲁神话小说在线阅读<br><a href="https://link.zhihu.com/?target=http%3A//www.eldritchdark.com/">http://www.eldritchdark.com/</a></p>
+<p>42.esspc-ebooks<br><a href="https://link.zhihu.com/?target=http%3A//esspc-ebooks.com/">http://esspc-ebooks.com/</a></p>
+<p>43.Smashwords<br><a href="https://link.zhihu.com/?target=http%3A//www.smashwords.com/">http://www.smashwords.com/</a></p>
+<p>大部分的书都是经济实惠的价格，而且很多都是免费的。</p>
+<p>44.TheAudioBookbay<br><a href="https://link.zhihu.com/?target=http%3A//theaudiobookbay.com/">http://theaudiobookbay.com/</a></p>
+<p>免费有声电子书下载站是一个提供未删节有声读物的国外英语小时下载网站，小说分类丰富，包含冒险、艺术、圣经、业务、儿童读物、经典专辑、电脑、现代、侦探、记录、教育等。</p>
+<p>TheAudioBookbay 网站提供五国语言：English、Dutch、French、German、Spanish，内容全部可下载，喜欢英文阅读的用户，还有锻炼听力的学生都可以使用该网站上的资源作为教材。</p>
+<p>45.Ebookee:<br><a href="https://link.zhihu.com/?target=http%3A//ebookee.org/">http://ebookee.org/</a></p>
+<p>免费电子图书下载搜索引擎是一个基于互联网的提供免费的电子图书下载搜索的网站，该网站的上电子书涵盖广泛，任何种类的电子书你都可以在这里找到和下载。</p>
+<p>46.计算机程序设计电子书<br><a href="https://link.zhihu.com/?target=http%3A//www.downloadfreepdf.com/">http://www.downloadfreepdf.com/</a></p>
+<p>包括:Abap, Java, Linux, Php, Oracle &amp; <a href="https://link.zhihu.com/?target=http%3A//Vb.net">http://Vb.net</a> 。 PDF 格式。注意，在下载之前，需先建立一个账户</p>
+<p>47.ebookgratis<br><a href="https://link.zhihu.com/?target=http%3A//www.ebookgratis.it/">http://www.ebookgratis.it/</a></p>
+<p>意大利电子书网站(包括小说,诗歌,古典文学，戏剧，传记，恐怖和幻想小说，新经济学等)</p>
+<p>48.selfknowledge<br><a href="https://link.zhihu.com/?target=http%3A//selfknowledge.com/index.shtml">http://selfknowledge.com/index.shtml</a></p>
+<p>这个经典作家书库收集的作家和书籍颇为不少，但大多以文学为主。值得一提的是它配有百科辞典功能，每本书中的很多词汇都可链接到辞书中，读者可听到该词的正规发音以及释义，有些书还有真人阅读片断，实为外语学习的好帮手。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-b9efe480b797641380db0e367b005cc0_hd.jpg" alt="img">书–给你不一样的生活</p>
+<p>49.MyBookezzz<br><a href="https://link.zhihu.com/?target=http%3A//www.mybookezzz.com/">http://www.mybookezzz.com/</a></p>
+<p>相似书籍免费下载网是一个提供免费电子书籍下载的站点，不过所不同的是，该平台提供一本需要购买的书籍，然后你可以选择购买也可以选择查找类似的同类书籍免费下载。</p>
+<p>50.青空文库<br><a href="https://link.zhihu.com/?target=http%3A//www.aozora.gr.jp/">http://www.aozora.gr.jp/</a></p>
+<p>[日文电子书]青空文库是将在日本国内著作权已经消灭的文学作品，或者著作权虽未消灭但其所有人允许网站上传的文学作品，收集、公开的网上电子图书馆，由富田伦生建立。</p>
+<p>青空文库中的 txt 格式书籍采用了日文 shift-JIS 编码，读者在日文版以外的操作系统上阅读时需要转换文件编码，否则将会看到乱码。</p>
+<p>51.早稻田大学图书馆古典书籍馆藏<br><a href="https://link.zhihu.com/?target=http%3A//www.wul.waseda.ac.jp/kotenseki/index.html">http://www.wul.waseda.ac.jp/kotenseki/index.html</a></p>
+<p>包括约 30 万册古籍图书，下载的方法是点击图片、点击图片、点击 PDF 带着仨字的链接</p>
+<p>52.古登堡工程<br><a href="https://link.zhihu.com/?target=http%3A//www.gutenberg.org/wiki/Main_Page">http://www.gutenberg.org/wiki/Main_Page</a></p>
+<p>谈到电子书，不能不说说古登堡工程。上面有整整 33，000 本可供免费下载的电子书，都是些经典名著，个个语种都有，不仅学英语，就算学二外也用得着。每本电子书都有几种不同的格式，可以在电脑上直接阅读，也可以下载到 iPad，iPhone，Kindle 等等电子阅览器上。</p>
+<p>53.PDF SEARCH<br><a href="https://link.zhihu.com/?target=http%3A//www.toodoc.com/">http://www.toodoc.com/</a></p>
+<p>搜索包括 pdf 在内的多种格式的免费文档，无须安装 pdf 阅读器即可实现在线阅读，提供 pdf 转 text 的服务。</p>
+<p>54.TophqBooks<br><a href="https://link.zhihu.com/?target=http%3A//tophqbooks.com/">http://tophqbooks.com/</a></p>
+<p>PDF 书籍搜索下载引擎是一个提供 PDF 数据搜索并下载的网站，通过关键词来搜索你想要的书籍，如果有相关的 PDF 电子书就可以下载或者在线阅读。</p>
+<p>书海冲浪就是这样的帅气</p>
+<p>55.FindeBookee<br><a href="https://link.zhihu.com/?target=http%3A//findebookee.com/">http://findebookee.com/</a></p>
+<p>PDF 资源搜索引擎是一个提供 PDF 书籍搜索并下载的站点，除了可以搜索 PDF 文件外，还可以搜索 DOC 文件，寻找这类资源最快最高效的方法就是使用专业的搜索引擎来找，保证事半功倍。</p>
+<p>56.PdfGeni<br><a href="https://link.zhihu.com/?target=http%3A//www.pdfgeni.com/index.php">http://www.pdfgeni.com/index.php</a></p>
+<p>一个专业的 PDF 文件搜索引擎，搜索的 PDF 文件可以直接下载。与 Search pdf 基于同一数据库，支持中文搜索，搜索结果几乎完全一样。搜索结果一页显示量大，减少分页浏览的繁琐。</p>
+<p>57.pdfbooks<br><a href="https://link.zhihu.com/?target=http%3A//pdfbooks.co.za/">http://pdfbooks.co.za/</a> 收录的书籍大都版权已经过期</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//58.holybooks.com">http://58.holybooks.com</a><br><a href="https://link.zhihu.com/?target=http%3A//www.holybooks.com/">http://www.holybooks.com/</a></p>
+<p>免费下载圣经、古兰经、佛教，魔术，冥想，自我提升等诸多方面免费的 PDF 电子书</p>
+<p>59.ebookdirectory<br><a href="https://link.zhihu.com/?target=http%3A//www.ebookdirectory.com/">http://www.ebookdirectory.com/</a></p>
+<p>如果您正在寻找高质量的免费的电子书，这是正确的地方。要访问成千上万的电子书简单地浏览各类左侧或者干脆使用搜索框。</p>
+<p>60.ebooksdownloadfree<br><a href="https://link.zhihu.com/?target=http%3A//www.ebooksdownloadfree.com/">http://www.ebooksdownloadfree.com/</a></p>
+<p>工程、计算机、生物方面书籍为主，下载方式为 4share 网盘</p>
+<p>61.pdfgallery<br><a href="https://link.zhihu.com/?target=http%3A//www.pdfgallery.net/">http://www.pdfgallery.net/</a></p>
+<p>62.Book-Bot<br><a href="https://link.zhihu.com/?target=http%3A//www.book-bot.com/reader/index">http://www.book-bot.com/reader/index</a></p>
+<p>有 14571 本书籍，以名著为主</p>
+<p>63.Issuu<br><a href="https://link.zhihu.com/?target=http%3A//issuu.com/">http://issuu.com/</a></p>
+<p>Issuu 是一个专业的在线 PDF 分享服务网站，或者也可以认为是一个很不错的在线 PDF 文档图书馆。详细介绍。</p>
+<p>64.Yudu<br><a href="https://link.zhihu.com/?target=http%3A//free.yudu.com/">http://free.yudu.com/</a></p>
+<p>Yudu 是一个在线 PDF 文档分享网网站，你可以发布自己的 PDF 文件，上面也有很丰富的 PDF 电子书资源。</p>
+<p>选择读书，选择一种宁静的生活方式</p>
+<p>65.01pdf 搜索引擎<br><a href="https://link.zhihu.com/?target=http%3A//01pdf.com/">http://01pdf.com/</a></p>
+<p>66.UC Press E-Books Collection, 1982-2004<br><a href="https://link.zhihu.com/?target=http%3A//publishing.cdlib.org/ucpressebooks/search%3Fsort%3Dtitle">http://publishing.cdlib.org/ucpressebooks/search?sort=title</a>;style=eschol;rights=Public</p>
+<p>加州大学出版社和加利福尼亚数字图书馆的联合项目，包含近 2,000 本加州大学出版社出版的学术著作，内容覆盖科学、历史、音乐、宗教和小说等诸多领域。特别提供其中的 700 多种电子图书免费在线浏览（以“public”标识）</p>
+<p>67.World eBook Library 电子图书<br><a href="https://link.zhihu.com/?target=http%3A//cn.ebooklibrary.org/default.aspx">http://cn.ebooklibrary.org/default.aspx</a></p>
+<p>覆盖了 31 个学科大类，共计 152 个学科种类（如文学，历史，政治，社会学，教育，经济，法律，戏剧等学科），以人文社会科学为主，还包括自然科学、农学、医学、工程技术等领域的经典文学作品、书籍、期刊、百科全书、字典、手册等参考资源，共有超过 260 种语言的 2,800,000 多册 PDF 格式电子图书与 23,000 多种有声读物。链接为清华大学的通道，下载方式为邮件传传递</p>
+<p>68.亞洲進行時<br><a href="https://link.zhihu.com/?target=http%3A//www.asiaing.com/ebooks">http://www.asiaing.com/ebooks</a></p>
+<p>亞洲進行時。這是它的电子书版塊，還有其他類別的書籍，比较不錯的一個電子書下載網站，大部分都是 PDF 格式的，質量很高速度也很快。但是圖書數量有限，而且有些書只提供一些章節預讀，但對於一個正規的網路來説已經很不錯了~裏面的原版 PDF 真的做的挺好的 下载方式为谷歌云硬盘</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//69.literature.org">http://69.literature.org</a><br><a href="https://link.zhihu.com/?target=http%3A//www.literature.org/">http://www.literature.org/</a></p>
+<p>英语文学经典作品的文本</p>
+<p>70.blackmask<br><a href="https://link.zhihu.com/?target=http%3A//www.blackmask.com/">http://www.blackmask.com/</a></p>
+<p>这个网站收藏的图书比较多，每本书也有很多格式，我个人推荐使用微软的 Reader 格式。不过该网站的搜索功能不怎么样，其他方面还算不错。</p>
+<p>71.fictionbook<br><a href="https://link.zhihu.com/?target=http%3A//www.fictionbook.ru/en/">http://www.fictionbook.ru/en/</a><br>一个俄国的英文原版小说小载站，比较齐全，不断有更新，可惜网站的语言是俄语。有些显示为乱码，里面的书搜集的大多是长篇小说，有兴趣的可以去看看</p>
+<p><img src="https://pic3.zhimg.com/80/v2-619954fdc616d26637597c6bc096baa7_hd.jpg" alt="img">坚守心中的一块圣洁之地</p>
+<p>72.YoueVrsion<br><a href="https://link.zhihu.com/?target=https%3A//www.bible.com/">https://www.bible.com/</a></p>
+<p>在线圣经数据库阅读平台是一个带有一个强大的在线数据库和阅读计划，并允许用户分享意见的圣经阅读器网站，该程序在用户中已经取得重大成功，包括 20 多亿分钟的圣经阅读以及超过 650000 此的手机安装。</p>
+<p>YouVersion 拥有网络版和手机版，帮助更多人每日阅读分享经文。YouVersion 是一个有 22 种语音、49 个版本圣经，在英语世界和其它国家已有成千上万用户的专门的读经网站</p>
+<p>73.IT Ebooks<br><a href="https://link.zhihu.com/?target=http%3A//it-ebooks.info/">http://it-ebooks.info/</a></p>
+<p>计算机编程电子书下载网是一个提供免费下载与计算机相关的电子书下载站点，提供 jQuery、<a href="https://link.zhihu.com/?target=http%3A//ASP.NET">http://ASP.NET</a>、Android、JavaScript、C#、Ajax 等编程语言数据。</p>
+<p>74.Epubbud<br><a href="https://link.zhihu.com/?target=http%3A//www.epubbud.com/">http://www.epubbud.com/</a></p>
+<p>免费儿童电子书下载网是一个非营利性的儿童电子书发现、分享下载的网站，支持 iPad 的 EPUB 文件格式电子书籍</p>
+<p>75.Bookrix 免费在线写作分享交流社区<br><a href="https://link.zhihu.com/?target=http%3A//www.bookrix.com/">http://www.bookrix.com/</a></p>
+<p>可以在线创作自己的书，给他人的书进行评论，也可以在上面推广自己的书籍，同时支持免费下载电子书籍，是你学习外语的优秀站点之一</p>
+<p>76.ReadPrint<br><a href="https://link.zhihu.com/?target=http%3A//www.readprint.com/">http://www.readprint.com/</a></p>
+<p>一个提供在线免费阅读图书的网站，号称“免费在线图书馆”，在 Readprint 中可以免费阅读很多图书，其中一些是版权过期的经典名著，也有菜鸟作家的作品，可以按照图书名直接查找，也可以按照作者名来浏览。</p>
+<p>ReadPrint 网站拥有海量的图书、诗歌、戏剧和短篇小说资源，主页上列出了很多热门的书籍和作者。Read Print 上目前存储有 3500 位作者，大约 8500 本的数字书籍，多数以欧美名家经典作品为主。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-915b968f4dc12373cd804d5705a6ff85_hd.jpg" alt="img">纵然风云变幻</p>
+<p>77.互联网宗教神话文本博物馆<br><a href="https://link.zhihu.com/?target=http%3A//www.sacred-texts.com/">http://www.sacred-texts.com/</a></p>
+<p>78.北欧神话在线图书馆<br><a href="https://link.zhihu.com/?target=http%3A//www.norsemyth.org/p/books.html">http://www.norsemyth.org/p/books.html</a></p>
+<p>（全部电子书可在线阅读或下载）</p>
+<p>79.经典基督教书籍电子版<br><a href="https://link.zhihu.com/?target=http%3A//www.ccel.org/">http://www.ccel.org/</a></p>
+<p>提供多种格式下载、pdf、epub、txt。在线、音频，部分下载链接失效</p>
+<p>80.Ebook Search- EbookBrowsee<br><a href="https://link.zhihu.com/?target=http%3A//ebookbrowsee.net/">http://ebookbrowsee.net/</a></p>
+<p>81.ShortbReadStories:在线短片小说分享网<br><a href="https://link.zhihu.com/?target=http%3A//www.shortbreadstories.co.uk/">http://www.shortbreadstories.co.uk/</a></p>
+<p>国外的一个短片小说创作和分享的写作网站，提供丰富的短片小说音频收听、在线阅读、小说点评、小说自由创作和发布，希望英文短片小说的用户不容错过。</p>
+<p>注册以后，可以下载该平台上的短篇小说，可以选择 txt、pdf、epub 格式</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//82.audiobooks.org">http://82.audiobooks.org</a></p>
+<p>部分免费资源可以下载</p>
+<p>83.thoughtaudio<br><a href="https://link.zhihu.com/?target=http%3A//www.thoughtaudio.com/">http://www.thoughtaudio.com/</a></p>
+<p>有声书下载网站，可以用迅雷下载</p>
+<p>84.FreeClassicAudioBooks<br><a href="https://link.zhihu.com/?target=http%3A//www.freeclassicaudiobooks.com/">http://www.freeclassicaudiobooks.com/</a></p>
+<p>欧美经典文学有声书下载</p>
+<p>\85. Lit2Go<br><a href="https://link.zhihu.com/?target=http%3A//etc.usf.edu/lit2go/">http://etc.usf.edu/lit2go/</a> 故事和诗歌中的 MP3（有声读物）格式的免费网上收集</p>
+<p>\86. All Freemagazines:在线免费杂志订阅平台<br><a href="https://link.zhihu.com/?target=http%3A//www.all-freemagazines.com/">http://www.all-freemagazines.com/</a></p>
+<p>一个提供在线杂志免费订阅和下载的站点，收录了互联网上知名的杂志，例如建筑杂志、商业杂志、汽车杂志、名人杂志、电脑杂志、健身杂志、园艺杂志、游戏杂志等 35 个分类，可以说几乎涵盖了网络上所有的杂志。</p>
+<p>需要亚马逊帐号。</p>
+<p>\87. PDFMagazines:在线 PDF 杂志免费下载大全<br><a href="https://link.zhihu.com/?target=http%3A//www.pdfmagazines.org/">http://www.pdfmagazines.org/</a></p>
+<p>一个收集了国际上知名媒体杂志的站点，提供免费的 PDF 格式的制作下载使用，所涉及的杂志种类非常多，例如新网杂志、报纸杂志、经济学杂志、教育学杂志、园艺杂志、户外杂志等。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-e4724c750dcc77a7d5d420a2089638d1_hd.jpg" alt="img">心中始终拥有一片阳光</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">hidden</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">电子书</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/15/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/17/">Next &amp;raquo;</a>
@@ -1515,11 +1778,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1569,19 +1827,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1601,15 +1859,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1637,19 +1895,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1669,15 +1927,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1689,27 +1947,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1718,6 +1960,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1761,6 +2015,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1773,15 +2043,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1793,14 +2055,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1809,15 +2063,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1833,11 +2083,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1853,11 +2111,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1881,15 +2139,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1917,10 +2175,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1929,15 +2183,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1953,6 +2207,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1965,10 +2223,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1977,11 +2231,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1997,6 +2251,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -2005,11 +2263,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2066,6 +2324,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

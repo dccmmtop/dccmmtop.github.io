@@ -133,200 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-postgresql数据导入导出" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/postgresql%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/">postgresql数据导入导出</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/postgresql%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>一.导出数据库及具体表</strong></p>
-<p>1.导出数据库：方式一：pg_dump -U postgres -f c:\db.sql postgis</p>
-<p>​ 方式二：pg_dump -U postgres postgis &gt; c:\db.sql</p>
-<p>2.导入数据库：方式一：psql -d postgis -f c:\db.sql postgres</p>
-<p>3.导出具体表：方式一：pg_dump -Upostgres -t mytable -f dump.sql postgres</p>
-<p>4.导入具体表：方式一：psql -d postgis -f c:\ dump.sql postgres</p>
-<p><strong>参数：</strong></p>
-<p>​ postgres：用户</p>
-<p>​ postgis：数据库名称</p>
-<p>​ mytable：表名称</p>
-<p>​ -f, –file=文件名： 输出文件名</p>
-<p>​ -U, –username=名字：以指定的数据库用户联接</p>
-<p><strong>二.导出数据格式详解</strong></p>
-<p>用法:<br>pg_dump [选项]… [数据库名字]</p>
-<p>一般选项:<br>-f, –file=文件名 输出文件名<br>-F, –format=c|t|p 输出文件格式 (定制,tar, 明文)<br>-v, –verbose 详细模式<br>-Z, –compress=0-9 被压缩格式的压缩级别<br>–lock-wait-timeout=TIMEOUT 在等待表锁超时后操作失败<br>–help 显示此帮助信息,然后退出<br>–versoin 输出版本信息,然后退出</p>
-<p>控制输出内容选项:<br>-a, –data-only 只转储数据,不包括模式<br>-b, –blobs 在转储中包括大对象<br>-c, –clean 在重新创建之前，先清除（删除）数据库对象<br>-C, –create 在转储中包括命令,以便创建数据库<br>-E, –encoding=ENCODING 转储以 ENCODING 形式编码的数据<br>-n, –schema=SCHEMA 只转储指定名称的模式<br>-N,–exclude-schema=SCHEMA 不转储已命名的模式<br>-o, –oids 在转储中包括 OID<br>-O, –no-owner 在明文格式中,忽略恢复对象所属者</p>
-<p>-s, –schema-only 只转储模式,不包括数据<br>-S, –superuser=NAME 在转储中, 指定的超级用户名<br>-t, –table=TABLE 只转储指定名称的表<br>-T, –exclude-table=TABLE 只转储指定名称的表<br>-x, –no-privileges 不要转储权限 (grant/revoke)<br>–binary-upgrade 只能由升级工具使用<br>–inserts 以 INSERT 命令，而不是 COPY 命令的形式转储数据<br>–column-inserts 以带有列名的 INSERT 命令形式转储数据<br>–disable-dollar-quoting 取消美元 (符号)引号, 使用 SQL 标准引号<br>–disable-triggers 在只恢复数据的过程中禁用触发器<br>–no-tablespaces 不转储表空间分配信息<br>–role=ROLENAME 在转储前运行 SETROLE<br>–use-set-session-authorization<br>​ 使用 SESSION AUTHORIZATION 命令代替<br>​ ALTER OWNER 命令来设置所有权</p>
-<p>联接选项:<br>-h, –host=主机名 数据库服务器的主机名或套接字目录<br>-p, –port=端口号 数据库服务器的端口号<br>-U, –username=名字 以指定的数据库用户联接<br>-w, –no-password 永远不提示输入口令</p>
-<p>-W, –password 强制口令提示 (自动)</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">postgresql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">备份</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">恢复</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/postgresql%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-通过Socks5Proxy实现HTTP-Proxy" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/%E9%80%9A%E8%BF%87Socks5Proxy%E5%AE%9E%E7%8E%B0HTTP-Proxy/">通过Socks5Proxy实现HTTP-Proxy</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/%E9%80%9A%E8%BF%87Socks5Proxy%E5%AE%9E%E7%8E%B0HTTP-Proxy/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:46:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在用 Eclipse 来写 Android 程序时发现 Android SDK Manager 下载 SDK 时非常慢（Google~）。 查看了下发现 Android SDK Manager 可以使用 HTTP Proxy 但是 我只有 Socks5 Proxy 于是查了下如何通过 Socks5 Proxy 实现 HTTP Proxy，最终找到了如下方法。</p>
-<h3 id="安装-Polipo"><a href="#安装-Polipo" class="headerlink" title="安装 Polipo"></a>安装 Polipo</h3><p><a href="http://www.pps.univ-paris-diderot.fr/~jch/software/polipo/" target="_blank" rel="noopener">Polipo</a> 是一个很小以及快速的有缓存的 HTTP Proxy，关键是它可以和 Socks5 协议通讯。</p>
-<p>在 Ubuntu 下安装 Polipo 很简单：</p>
-<pre><code>$ sudo apt-get install -y polipo</code></pre><h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><p>假设 Sockes Proxy 是本机的 12345 端口，那么配置文件修改为：</p>
-<pre><code>proxyAddress = &quot;0.0.0.0&quot;
-proxyPort = 8118
-socksParentProxy = &quot;127.0.0.1:12345&quot;
-socksProxyType = socks5
-allowedClients = 127.0.0.1</code></pre><p>其中:</p>
-<ul>
-<li>proxyPort 是 HTTP Proxy 端口地址</li>
-<li>socksParentProxy 表示通过这个地址转发请求</li>
-<li>socksProxyType 表示通过 socks5 来转发请求</li>
-<li>allowedClients 表示允许访问这个 HTTP Proxy 的地址</li>
-</ul>
-<h3 id="重启-Polipo"><a href="#重启-Polipo" class="headerlink" title="重启 Polipo"></a>重启 Polipo</h3><p>修改好配置文件后，只需要重启 Polipo 即可：</p>
-<pre><code>$ sudo /etc/init.d/polipo restart</code></pre><p>现在，在需要使用 HTTP Proxy 的地方填上 127.0.0.1:8118 即可。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">proxy</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/%E9%80%9A%E8%BF%87Socks5Proxy%E5%AE%9E%E7%8E%B0HTTP-Proxy/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-监听粘贴上传图片事件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1257,6 +1063,401 @@ CREATE ROLE name [ [ WITH] option [ ... ] ]</code></pre>
 
 
   
+    <article id="post-ruby_heredoc的用法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/22/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/">ruby_heredoc的用法</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/22/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2018-11-22T01:23:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="整理自ruby-china"><a href="#整理自ruby-china" class="headerlink" title="整理自ruby-china"></a>整理自<a href="https://ruby-china.org/topics/25983" target="_blank" rel="noopener">ruby-china</a></h2><h3 id="基础的用法"><a href="#基础的用法" class="headerlink" title="基础的用法"></a>基础的用法</h3><pre><code class="ruby">def print_heredoc
+  puts &lt;&lt;EOF
+this is the first line
+this is the second line
+EOF
+end
+
+print_heredoc</code></pre>
+<p>输出：</p>
+<pre><code class="txt">this is the first line
+this is the second line</code></pre>
+<p>如果你觉得代码太难看（这根本不符合 Ruby 的风格），你可能会这样写：</p>
+<pre><code class="ruby">def print_heredoc
+  puts &lt;&lt;EOF
+    this is the first line
+    this is the second line
+  EOF
+end
+
+print_heredoc</code></pre>
+<p>你会发现高亮显示已经不对了，它还会报这样的一个错误：</p>
+<pre><code class="txt">test.rb:6: can&#39;t find string &quot;EOF&quot; anywhere before EOF
+test.rb:2: syntax error, unexpected end-of-input, expecting tSTRING_CONTENT or tSTRING_DBEG or tSTRING_DVAR or tSTRING_END</code></pre>
+<h3 id="可以缩进的用法"><a href="#可以缩进的用法" class="headerlink" title="可以缩进的用法"></a>可以缩进的用法</h3><p>希望代码写的漂亮一点的话，就得多做点工作，在第一个 EOF 前加上一个减号就 OK 了：</p>
+<pre><code class="ruby">def print_heredoc
+  puts &lt;&lt;-EOF
+    this is the first line
+    this is the second line
+  EOF
+end
+
+print_heredoc</code></pre>
+<p>输出：</p>
+<pre><code class="txt">this is the first line
+this is the second line</code></pre>
+<h3 id="ruby-2-3-引入一个新的语法"><a href="#ruby-2-3-引入一个新的语法" class="headerlink" title="ruby 2.3 引入一个新的语法"></a>ruby 2.3 引入一个新的语法</h3><pre><code class="ruby">def hello
+  puts &lt;&lt;~HEREDOC
+    I know I know
+    You will like it.
+  HEREDOC
+end
+
+hello</code></pre>
+<p>完美输出:</p>
+<pre><code class="txt">I know I know
+You will like it.</code></pre>
+<h3 id="heredoc-的本质"><a href="#heredoc-的本质" class="headerlink" title="heredoc 的本质"></a>heredoc 的本质</h3><p>有下面一个方法：</p>
+<pre><code class="ruby">def a_method(string, integer)
+  puts &quot;the string is #{string} and the integer is #{integer}&quot;
+end</code></pre>
+<p>一般这么用这个方法：</p>
+<pre><code class="ruby">a_method &quot;the string&quot;, 1</code></pre>
+<p>如果想用 heredoc 呢？这里就需要说下那个<code>&lt;&lt;-EOF</code>到底是什么东西？其实<code>&lt;&lt;-EOF</code>只是个占位符，写上它以后，它就代表将要输入的字符串，这个字符串的判断是从<code>&lt;&lt;-EOF</code>的下一行开始计算，一直碰到只有<code>EOF</code>的一行（这一行只有一个<code>EOF</code>），这个字符串就这样计算出来的。如果上面的这个方法要用 heredoc 的话，就可以这样写：</p>
+<pre><code class="ruby">a_method &lt;&lt;-EOF, 1
+  this is the first line
+  this is the second line
+  EOF</code></pre>
+<p>输出：</p>
+<pre><code class="ruby">the string is this is the first line
+this is the second line
+ and the integer is 1</code></pre>
+<p>可以看到，这个<code>&lt;&lt;-EOF</code>就好像一个实参一样，我们也可以把他完全当个实参来对待，它是个字符串，那么就可以调用字符串的方法，像这样：</p>
+<pre><code class="ruby">a_method &lt;&lt;-EOF.gsub(&quot;\n&quot;, &quot;&quot;), 1
+  this is the first line
+  this is the second line
+  EOF</code></pre>
+<p>输出：</p>
+<pre><code class="txt">the string is this is the first linethis is the second line and the integer is 1</code></pre>
+<p>我们把它掰直了，哈哈。换个写法更能体现 heredoc 的本质：</p>
+<pre><code class="ruby">a_method(&lt;&lt;-EOF.gsub(&quot;\n&quot;, &quot;&quot;), 1)
+  this is the first line
+  this is the second line
+  EOF</code></pre>
+<h3 id="heredoc-的小技巧"><a href="#heredoc-的小技巧" class="headerlink" title="heredoc 的小技巧"></a>heredoc 的小技巧</h3><p>那个<code>&lt;&lt;-EOF</code>为什么叫<code>EOF</code>，为什么不叫<code>ABC</code>，你可以试试，叫<code>ABC</code>也可以，但是末尾那个也要写 ABC，要保持配对。在有些编辑器（Atom，RubyMine）中甚至会根据占位符将 heredoc 中的内容高亮显示，比如可以写<code>&lt;&lt;-RUBY</code>, <code>&lt;&lt;-HTML</code>等等。</p>
+<p>假如前面的那个方法要传入两个字符串该怎么写呢？很简单：</p>
+<pre><code class="ruby">a_method &lt;&lt;-STR1, &lt;&lt;-STR2
+  this is for STR1
+  STR1
+  this is for STR2
+  STR2</code></pre>
+<p>输出：</p>
+<pre><code class="txt">the string is this is for STR1
+ and the integer is   this is for STR2</code></pre>
+<p>有一点点晕，解释一下。<code>&lt;&lt;-STR1</code>在前面，它就会一直找到只包含<code>STR1</code>的那一行，并把其中的内容替换掉<code>&lt;&lt;-STR1</code>，而<code>&lt;&lt;-STR2</code>在后面，它不会包括<code>&lt;&lt;-STR1</code>和<code>STR1</code>中的部分， 会一直找到只包含<code>STR2</code>的那一行，然后替换<code>&lt;&lt;-STR2</code>。只需记住是只包含占位符的一行，像<code>this is for STR1</code>中虽然包含<code>STR1</code>，但是这一行还有其他字符，heredoc 就不会在这一行结束，而是接着往下找。同时需要知道，虽然是占位符，但是可以调用字符串的方法，在 Rails5 中最近的一个 pull request 中 DHH 就用了很多 heredoc。不过我找了半天没找到，等以后找到再把链接付在这里。</p>
+<p>前面的输出结果中，大家一定发现一个问题，就是字符串的换行和行首的缩进，有时候你想要他们，有时候可不是，我们可以用<code>gsub</code>来替换。在 Rails 中已经有一个好用的方法了：</p>
+<pre><code class="ruby">2.times do
+  puts &lt;&lt;-STR.strip_heredoc
+    this is the first line
+      this is the second line
+  STR
+end</code></pre>
+<p>输出：</p>
+<pre><code class="ruby">this is the first line
+  this is the second line
+this is the first line
+  this is the second line</code></pre>
+<p>注意行首是没有空格的，和输入的格式保持了一致，很方便，实现也是很简单的，参考 github 吧，<a href="https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/string/strip.rb#L22" target="_blank" rel="noopener">strip.rb</a></p>
+<h3 id="那些太奇怪的写法"><a href="#那些太奇怪的写法" class="headerlink" title="那些太奇怪的写法"></a>那些太奇怪的写法</h3><p>其实还有很多奇怪的写法，比如下面这个：</p>
+<pre><code class="ruby">puts &lt;&lt;-&quot;I am the content&quot;
+line 1
+line 2
+line 3
+I am the content</code></pre>
+<p>这是合法语法，但估计不会有人这么写，甚至有的编辑器都不能正常高亮显示它.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ruby</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">heredoc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/22/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-rails_多态关联" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/21/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/">rails_多态关联</a>
+    </h1>
+  
+
+        
+        <a href="/2018/11/21/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/" class="archive-article-date">
+  	<time datetime="2018-11-21T07:35:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="什么是多态关联"><a href="#什么是多态关联" class="headerlink" title="什么是多态关联"></a>什么是多态关联</h3><p>假如有三个模型，分别是 用户， 产品， 图片。图片为用户所有，也为产品所有。我们可以创建两个 picture 的模型，如下</p>
+<p><code>rails g modle picture_user user_id:integer name:string url:string</code></p>
+<p><code>rails g modle picture_product product_id:integer name:string url:string</code></p>
+<pre><code class="ruby">class PictureUser &lt; ApplicationRecord
+  belongs_to :user
+end
+
+class PictureProduct &lt; ApplicationRecord
+  belongs_to :product
+end</code></pre>
+<p>这样我们就可以使用<code>user.prictures</code> 和 <code>product.pictures</code>来分别获得用户下和产品下的图片了。但是我们发现，两个图片模型除了外键不一样，其他字段都是一样的，那么有没有一种办法只创建一个 picture 模型，同时属于 user 和 product 呢，这种既属于一个模型又属于另外一个模型（可以是很多个）的关联就是多态关联。</p>
+<h3 id="多态关联的实现"><a href="#多态关联的实现" class="headerlink" title="多态关联的实现"></a>多态关联的实现</h3><p>为了能同时使用 <code>user.pictures</code> 和 <code>product.pictures</code> 来获得各自的图片，我们就需要对 picture 模型做一些修改，使其能够标识一张图片是属于 user 还是属于 product ，当然外键是必不可少的。我们还需要一个外键对应类的名称，如下：</p>
+<p><code>rails g modle picture pictureable_id:integer pictureable_type:string name:string url:string</code></p>
+<pre><code class="ruby">class Picture &lt; ApplicationRecord
+  belongs_to :pictureable, polymorphic: true
+end
+
+class User &lt; ApplicationRecord
+  has_many :pictures, as: :pictureable
+end
+
+class Product &lt; ApplicationRecord
+  has_many :pictures, as: :pictureable
+end</code></pre>
+<p>pictureable 相当于一个接口，凡是拥有图片的模型都可以像 User 那样使用关联。</p>
+<p>可以使用<code>user.pictures.create(name: &#39;user_0&#39;, url: &#39;https://dcc.com&#39;)</code>来创建一条关联对象，创建之后我们发现在 picture 表中多了一条记录：</p>
+<pre><code class="txt">id: 1, pictureable_type: &#39;User&#39;, pictureable_id: 1, name:&quot;user_0&quot;, url:&#39;https://dcc.com&#39;</code></pre>
+<p>pictureable_type: ‘User’ 就是所属对象的标识，这样才可以使用 user.pictures 进行查询。由此我们知道，多态关联中，<code>xxxable_type, xxxable_id</code>字段是必不可少的。</p>
+<p>-————————————————————————————</p>
+<p>下面是关于多态 view 页面使用的讲解<a href="https://blog.csdn.net/qwbtc/article/details/52035603" target="_blank" rel="noopener">原文</a></p>
+<h3 id="什么是多态"><a href="#什么是多态" class="headerlink" title="什么是多态"></a>什么是多态</h3><p>Rails 模型中的关系有一对一，一对多还有多对多，这些关联关系都比较直观，除此之外 Rails 还支持多态关联，所谓的多态关联其实可以概括为一个模型同时与多个其它模型之间发生一对多的关联。并且在实际的应用中这种关系也十分普遍，比如可以应用到站内消息模块，评论模块，标签模块等地方，下图就是多态关系下的评论模块的 E-R 图。</p>
+<p>通过 E-R 图，我们能直观的看到系统中的事件，文章以及照片都可以被用户评论，并且这些评论都被存储在一张叫 comments 表中。Ok，现在我们已经搞清楚了多态的含义，下面继续看下 Rails 中是如何实现多态关联的。</p>
+<h3 id="Rails-中实现多态的步骤"><a href="#Rails-中实现多态的步骤" class="headerlink" title="Rails 中实现多态的步骤"></a>Rails 中实现多态的步骤</h3><p>这里我们通过将 Rails Guides 中给出的例子线性化(转化为详细步骤)来说明这个问题。</p>
+<h4 id="Step-1：-通过-Migration-创建表"><a href="#Step-1：-通过-Migration-创建表" class="headerlink" title="Step 1： 通过 Migration 创建表"></a>Step 1： 通过 Migration 创建表</h4><p>执行下面命令来生成 Migration 文件</p>
+<pre><code class="css">rails g model picture name:string imageable_id:integer  imageable_type:string</code></pre>
+<p>生成的 Migration 文件如下:</p>
+<pre><code class="ruby">class CreatePictures &lt; ActiveRecord::Migration
+  def change
+    create_table :pictures do |t|
+      t.string  :name
+      t.integer :imageable_id
+      t.string  :imageable_type
+      t.timestamps null: false
+    end
+
+    add_index :pictures, :imageable_id
+  end
+end</code></pre>
+<p>其中需要特别关注， <code>imageable_id</code> 与 <code>imageable_type</code> 两个字段，前者用来存储相关联内容的外键键值，后者则用来存储相关联内容的类型名。后面在通过模型查找关联内容的时候，可以通过这两个值来定位到要找到的内容。特别是后者 <code>imageable_type</code> 的存在是多态实现的关键。</p>
+<h4 id="Step-2-修改各-Model-得关联关系"><a href="#Step-2-修改各-Model-得关联关系" class="headerlink" title="Step 2: 修改各 Model 得关联关系"></a>Step 2: 修改各 Model 得关联关系</h4><p><img src="https://i.loli.net/2018/11/21/5bf5282bce812.png?filename=/home/mc/%E5%9B%BE%E7%89%87/1542793224.png" alt=""></p>
+<p>按照上面 E-R 图和代码修改模型结构，因为 Employee，Product 分别与 Picture 是一对多的关系，所以用到了 has_many 与 belongs_to 方法，再使用 polymorphic 与 as 来指明是多态关联。</p>
+<h4 id="Step-3-Controller-中应用"><a href="#Step-3-Controller-中应用" class="headerlink" title="Step 3: Controller 中应用"></a>Step 3: Controller 中应用</h4><p>上面的两步完成后就能在 Controller 中通过多态关联关系进行相互访问了，并且通过关联关系创建的新评论 Rails 也会自动帮你设置 commentable_id 与 commentable_type 两个字段的值。</p>
+<pre><code>event = Event.create name: &quot;event1&quot;
+event1= event.comments.create content: “comment1”
+event1.commentable_type #=&gt; “Event”</code></pre><p>Done！到此就算完整应用到了多态关联关系，后续需要处理的就是如何来组织代码让多态关系更加灵活便捷的被你操作，不过这个就应该是另一篇文章的内容了。:)</p>
+<p>刚开始看 Rails Guide 的时候对多态的表关联真的是一头雾水。后来自己写了一个博客应用的时候用到了 acts_as_commentable 这个 gem，它就是用到了多态表的关联，然后我又看了 Terry 在 railscasts china 上的 <a href="http://railscasts-china.com/episodes/file-uploading-by-carrierwave?autoplay=true" target="_blank" rel="noopener">视频</a> ，对多态的理解就深了很多。</p>
+<h4 id="理解什么是多态"><a href="#理解什么是多态" class="headerlink" title="理解什么是多态"></a>理解什么是多态</h4><p>一般表的关联有一对一，一对多，多对多，这些都是非常好理解的，然后对于多态的表关联可能稍微有点不好理解。其实多态关键就是一个表关联到多个表上。就如 Comment（评论）表吧，一个 Topic 应该有 Comment（一个帖子应该有许多的评论），除此之外 Micropost（微博）也可能有很多的 Comment。然后一个网站中既有 Topic 的论坛功能，又有 Micropost 的功能，我们怎么处理 Comment 表呢？当然我们可以建两个独立的表比如 TopicComment 和 MicropostComment，再分别关联到 Topic 和 Micropost 上，但这不是一种好的选择，我们可以只建一个表，然后去关联这两个表，甚至多个表。这也就实现了多态的能力。</p>
+<h4 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h4><p>1.首先我们先生成一个 Comment 的 model，假设已经有 Topic 和 Micropost 这两个 model 了</p>
+<pre><code class="css">rails g model comment content:text commentable_id:integer comment_type:string</code></pre>
+<p>2.然后我们 会得到一个 migration</p>
+<pre><code class="ruby">class CreateComments &lt; ActiveRecord::Migration
+  def change
+    create_table :comments do |t|
+      t.text :content
+      t.integer :commentable_id
+      t.string  :commentable_type
+      t.timestamps
+    end
+  end
+end</code></pre>
+<p>也可以通过 t.references 来简化上面的</p>
+<pre><code class="ruby">class CreateComments &lt; ActiveRecord::Migration
+  def change
+    create_table :comments do |t|
+      t.text :content
+      t.references :commentable, :polymorphic =&gt; true #这里指明了多态，这样会生成comment_id和comment_type这两个字段的，如上
+      t.timestamps
+    end
+  end
+end</code></pre>
+<p>多态魔法就在这里，commentable_typle 字段用于指明 comment 所关联的表的类型，如 topic 或 micropost 等，而 comment_id 用于指定那个关联表的类型对象的 id。如：可以把一个 comment 关联到第一篇 topic 上，那么 comment_type 字段为 topic，而 comment_id 为对应 topic 对象的 id 1,同理这样就可以关联到不同表了，从而实现多态的关联。</p>
+<p>3,数据迁移 <code>rake db:migrate</code> 就能生成我们要的表了</p>
+<p>4,对 model 进行操作从而现实表的关联</p>
+<pre><code class="ruby">####comment model
+class Comment &lt; ActiveRecord::Base
+  belongs_to :commentable, :polymorphic =&gt; true
+end</code></pre>
+<p>看到没有，这里的 comment belongs_to 没有写 topic，micropost 等，而写了 commentable,因为 commentable 中有 type 和 id 两个字段，可以指定任何其他 model 对象的，从而才能实现多态，如果这里写 belongs_to topic 的话就没办法实现多态了。然后我们看看 topic 和 mocropost 的 model 该如何写。</p>
+<pre><code class="ruby">class Topic &lt; ActiveRecord::Base
+  has_many :comments, :as =&gt; :commentable
+end
+class Micropost &lt; ActiveRecord::Base
+  has_many :comments, :as =&gt; :commentable
+end</code></pre>
+<p>看到这里的 as 了吗？as 在这我们可以解释为：作为（我的理解，可能这种理解补科学，哈哈），也就是说 Topic 有许多的 comments，但是它是通过将自己作为 commentable，实现的。Micropost 同理。</p>
+<p>然后就是 controller 和 views 中（如 form 表单）的设计了，这也是我刚学的时候，最头疼这个了，因为对 params 参数通过表单到 controller 的传递没掌握好。</p>
+<p>在写这些之前，我们先看看如何写路由吧，因为一个 topic 有多个 comments，Micropost 同理。所以我们可以这样写</p>
+<pre><code class="ruby">resources :topics do
+  resources :comments
+end
+
+resources :microposts do
+  resources :comments
+end</code></pre>
+<p>然后我们通过命令 <code>rake routes</code> 就可以得到相应的路由了如：</p>
+<pre><code class="ruby">          topic_comments GET    /topics/:topic_id/comments(.:format)          comments#index
+                                    POST   /topics/:topic_id/comments(.:format)          comments#create
+       new_topic_comment GET    /topics/:topic_id/comments/new(.:format)      comments#new
+      edit_topic_comment GET    /topics/:topic_id/comments/:id/edit(.:format) comments#edit
+           topic_comment GET    /topics/:topic_id/comments/:id(.:format)      comments#show
+                                    PUT    /topics/:topic_id/comments/:id(.:format)      comments#update
+                                   DELETE /topics/:topic_id/comments/:id(.:format)      comments#destroy</code></pre>
+<p>这些待会我们会用到。</p>
+<p>然后我们再来分析 controller 和 views 之间的参数传递。我们通过完整的创建 comment 的过程进行说明</p>
+<p>(1)首先页面上肯定有一个创建 comment 的连接或按钮（假设创建 comment 的表单和 topic show 页面不在统一页面上），代码应该是这样的：</p>
+<pre><code>&lt;%= link_to &quot;发表评论&quot;, new_topic_comment_path%&gt;</code></pre><p>(2)点击这个链接后，通过路由来到 controller 中的 new 方法(同时会将对应的 topic 相关的参数传给 controller)</p>
+<pre><code class="ruby">def new
+  @topic = Topic.find(parmas[:id]) #找到comment属于的topic
+  @comment = @topic.comments.build #建立这个关系
+end</code></pre>
+<p>(3)经过这个方法（action）后，页面来到了 comments/new.html.erb,在这个页面中有一个评论的表单，大概是这样的</p>
+<pre><code> &lt;%= form_for([@comment.commentable, @comment]) do |f| %&gt;
+  ......
+&lt;%end%&gt;</code></pre><p>这个表的参数是一个数组，[email protected]</p>
+<p>@comment，如果没有关联的化，[email protected]，</p>
+<p>[email protected]</p>
+<p>��，还有一个就是 commentable，这里也就是 topic。</p>
+<p>还记得 new 中的 <code>@comment = @topic.comments.build</code> 的吗，这里就暂时将对应的 topic 对象写入 commentable（注意：只是暂时建立关系，还没有写入数据库），[email protected]</p>
+<p>@topic。</p>
+<p>(4)然后你填完表单后，按提交按钮后，表单中的参数（包括 commentable，@post 的 id 等信息），一起来到 controller 的 create 方法中</p>
+<pre><code class="ruby">def create
+  Topic.find(parmas[:topic_id]).comments.create(parmas[:comment])
+  ......
+end</code></pre>
+<p>这样就真正创建了一个新的 comment。micropost 同理。</p>
+<p>其实多态讲的也差不多了，但在提一个地方</p>
+<p><strong>重要知识点:</strong>假设一个 comment 已经建立了，它的 commentable_type 是:topic.comment_id 是 1。如果我们得到了这个 id 为 1 的 topic，@topic，那么我们怎么得到它的 comments 呢？是的很简单，直接 <code>@topic.comments</code> 就 ok 了。但是反过来呢，我们得到了这个 comment，@comment，我们如何得到对应的 topic 的信息呢？我以前刚学的时候，就用了<code>@comment.topic</code> ，呵呵，没错，得到的是一串错误，正确一概是 <code>@comment.commentable</code></p>
+<p>关于多态我们已经讲的差不多了。</p>
+<p>补充：上面的例子 comment 的表单是独立在 comments/new.html.erb 中的，但是一般的应用 comment 的表单是在 topics/show.html.erb 中，也就是上面一个 topic，topic 下有一个 comment 表单。这样的话在 controller 中我们就不需要 new 这个方法了，那么我们在哪建立关系呢？</p>
+<pre><code class="ruby">@comment = @topic.comments.build #建立这个关系</code></pre>
+<p>我们就在表单的 <code>&lt;%= form_for ...%&gt;</code> 前面写 <code>&lt;@comment = @topic.comments.build&gt;</code></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/11/21/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/12/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/14/">Next &amp;raquo;</a>
@@ -1305,11 +1506,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1359,19 +1555,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1391,15 +1587,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1427,19 +1623,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1459,15 +1655,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1479,27 +1675,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1508,6 +1688,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1551,6 +1743,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1563,15 +1771,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1583,14 +1783,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1599,15 +1791,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1623,11 +1811,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1643,11 +1839,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1671,15 +1867,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1707,10 +1903,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1719,15 +1911,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1743,6 +1935,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1755,10 +1951,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1767,11 +1959,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1787,6 +1979,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1795,11 +1991,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1856,6 +2052,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

@@ -10,15 +10,16 @@
 
   <title>vim中与系统的粘贴和复制 | 梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="vim中与系统的粘贴和复制以前就遇到过的问题。有如下情景：  1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用vs或者sp命令打开这两个文件然后用y和p进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。  今">
+  <meta name="description" content="以前就遇到过的问题。有如下情景：  1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用vs或者sp命令打开这两个文件然后用y和p进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。  今天，对于vim这个没办法跟">
+<meta name="keywords" content="vim">
 <meta property="og:type" content="article">
 <meta property="og:title" content="vim中与系统的粘贴和复制">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;31&#x2F;vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6&#x2F;index.html">
 <meta property="og:site_name" content="梦里不知身是客">
-<meta property="og:description" content="vim中与系统的粘贴和复制以前就遇到过的问题。有如下情景：  1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用vs或者sp命令打开这两个文件然后用y和p进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。  今">
+<meta property="og:description" content="以前就遇到过的问题。有如下情景：  1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用vs或者sp命令打开这两个文件然后用y和p进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。  今天，对于vim这个没办法跟">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdn.net&#x2F;20161215215734971?watermark&#x2F;2&#x2F;text&#x2F;aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=&#x2F;font&#x2F;5a6L5L2T&#x2F;fontsize&#x2F;400&#x2F;fill&#x2F;I0JBQkFCMA==&#x2F;dissolve&#x2F;70&#x2F;gravity&#x2F;SouthEast">
-<meta property="og:updated_time" content="2019-10-30T17:08:53.049Z">
+<meta property="og:updated_time" content="2019-10-31T14:01:32.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdn.net&#x2F;20161215215734971?watermark&#x2F;2&#x2F;text&#x2F;aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=&#x2F;font&#x2F;5a6L5L2T&#x2F;fontsize&#x2F;400&#x2F;fill&#x2F;I0JBQkFCMA==&#x2F;dissolve&#x2F;70&#x2F;gravity&#x2F;SouthEast">
   
@@ -147,14 +148,14 @@
 
         
         <a href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+  	<time datetime="2019-10-31T14:01:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="vim中与系统的粘贴和复制"><a href="#vim中与系统的粘贴和复制" class="headerlink" title="vim中与系统的粘贴和复制"></a>vim中与系统的粘贴和复制</h1><p>以前就遇到过的问题。有如下情景：</p>
+        <p>以前就遇到过的问题。有如下情景：</p>
 <blockquote>
 <p>1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用<code>vs</code>或者<code>sp</code>命令打开这两个文件然后用<code>y</code>和<code>p</code>进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。<br>2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。</p>
 </blockquote>
@@ -162,7 +163,8 @@
 <h3 id="1-首先，查看vim版本是否支持clipboard"><a href="#1-首先，查看vim版本是否支持clipboard" class="headerlink" title="1.首先，查看vim版本是否支持clipboard"></a><strong>1.首先，查看vim版本是否支持clipboard</strong></h3><pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>结果如下： </p>
 <p><img src="https://img-blog.csdn.net/20161215215734971?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 <p>clipboard 前面有一个小小的减号，说明不支持。</p>
-<h3 id="2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><a href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim" class="headerlink" title="2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"></a><strong>2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</strong></h3><pre><code>sudo apt-get install vim-gnome1</code></pre><p>安装完成后再次执行：</p>
+<h3 id="2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><a href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim" class="headerlink" title="2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"></a><strong>2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</strong></h3><pre><code>sudo apt-get install vim-gnome1</code></pre><a id="more"></a>
+<p>安装完成后再次执行：</p>
 <pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>发现已经支持clipboard</p>
 <h3 id="3-vim的寄存器"><a href="#3-vim的寄存器" class="headerlink" title="3.vim的寄存器"></a><strong>3.vim的寄存器</strong></h3><p>打开vim输入<code>:reg</code>查看vim的寄存器，当支持clipboard之后，会多出<code>&quot;+</code>寄存器，表示系统剪切板，在vim中进入visual视图后使用<code>&quot;Ny</code>(N表示特定寄存器编好)，将内容复制到特定的剪切板，那么我们的目的是要复制到系统剪切板则需要选中内容后输入命令：</p>
 <pre><code>&quot;+y1</code></pre><p>粘贴到特定的寄存器也是同理。例如<code>&quot;+p</code>将系统剪切板的内容拷贝到vim中（非编辑模式下）。</p>
@@ -179,6 +181,17 @@ vmap Y &quot;+y</code></pre>
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -243,18 +256,18 @@ vmap Y &quot;+y</code></pre>
   
 <nav id="article-nav">
   
-    <a href="/2019/10/31/Truffle/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/10/31/vs_config/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Truffle
+          vs_config
         
       </div>
     </a>
   
   
-    <a href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">vim中插入当前文件名</div>
+    <a href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Ubuntu下sublime无法输入中文问题完美解决</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -281,7 +294,7 @@ vmap Y &quot;+y</code></pre>
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#vim中与系统的粘贴和复制"><span class="toc-number">1.</span> <span class="toc-text">vim中与系统的粘贴和复制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-首先，查看vim版本是否支持clipboard"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.首先，查看vim版本是否支持clipboard</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-vim的寄存器"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.vim的寄存器</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-首先，查看vim版本是否支持clipboard"><span class="toc-number">1.</span> <span class="toc-text">1.首先，查看vim版本是否支持clipboard</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><span class="toc-number">2.</span> <span class="toc-text">2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-vim的寄存器"><span class="toc-number">3.</span> <span class="toc-text">3.vim的寄存器</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -344,11 +357,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -398,19 +406,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -430,15 +438,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -466,19 +474,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -498,15 +506,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,27 +526,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -547,6 +539,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -590,6 +594,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -602,15 +622,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -622,14 +634,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -638,15 +642,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -662,11 +662,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -682,11 +690,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -710,15 +718,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -746,10 +754,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -758,15 +762,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -782,6 +786,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -794,10 +802,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -806,11 +810,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -826,6 +830,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -834,11 +842,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -895,6 +903,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

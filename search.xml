@@ -1,563 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>text</title>
-    <url>/2019/10/31/text/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Truffle</title>
-    <url>/2019/10/31/Truffle/</url>
-    <content><![CDATA[<h2 id="安装-Truffle-4-0"><a href="#安装-Truffle-4-0" class="headerlink" title="安装 Truffle 4.0"></a>安装 Truffle 4.0</h2><pre><code class="shell">npm install -g truffle@4.0.0</code></pre>
-<p>查看安装的版本：</p>
-<pre><code class="shell">truffle version
-Truffle v4.0.0 (core: 4.0.0)
-Solidity v0.4.18 (solc-js)</code></pre>
-<h2 id="安装-TestRPC"><a href="#安装-TestRPC" class="headerlink" title="安装 TestRPC"></a>安装 TestRPC</h2><pre><code class="shell">npm install -g ethereumjs-testrpc
-/usr/local/bin/testrpc -&gt; /usr/local/lib/node_modules/ethereumjs-testrpc/build/cli.node.js
-+ ethereumjs-testrpc@6.0.1
-added 1 package and updated 2 packages in 10.648s</code></pre>
-<h2 id="初始化一个-Truffle-项目"><a href="#初始化一个-Truffle-项目" class="headerlink" title="初始化一个 Truffle 项目"></a>初始化一个 Truffle 项目</h2><pre><code class="shell">mkdir test_truffle
-cd test_truffle
-truffle init
-
-Downloading...
-Unpacking...
-Setting up...
-Unbox successful. Sweet!
-
-Commands:
-
-  Compile:        truffle compile
-  Migrate:        truffle migrate
-  Test contracts: truffle test</code></pre>
-<p>完成后，你将拥有如下目录：</p>
-<ul>
-<li><p><code>contracts</code> 智能合约目录</p>
-</li>
-<li><p><code>migrations</code> 发布脚本目录</p>
-</li>
-<li><p><code>test</code> 存放测试文件</p>
-</li>
-<li><p><code>truffle.js</code> Truffle 的配置文件</p>
-</li>
-</ul>
-<h2 id="编译合约"><a href="#编译合约" class="headerlink" title="编译合约"></a>编译合约</h2><p>要编译合约，使用<code>truffle compile</code>命令，可以将原始代码编译成以太坊认可的字节码</p>
-<p><code>Truffle</code>仅默认编译自上次编译后被修改过的文件，来减少不必要的编译。如果你想编译全部文件，可以使用<code>--compile-all</code>选项</p>
-<pre><code>truffle compile --compile-all</code></pre><p><code>Truffle</code>需要定义的合约名称和文件名准确匹配,这种匹配是区分大小写的，也就是说大小写也要一致。推荐大写每一个开头字母。</p>
-<p>文件之间的相互依赖，可以使用<code>import</code>进行合约间的引用，Truffle 将会按正确顺序依次编译合约，并在需要的时候自动关联库。例如：</p>
-<pre><code>import &quot;./AnotherContract.sol&quot;;</code></pre><h1 id="部署智能合约"><a href="#部署智能合约" class="headerlink" title="部署智能合约"></a>部署智能合约</h1><p>编辑<code>truffle.js</code>配置文件，设置我们稍后要部署智能合约的位置，内容如下：</p>
-<pre><code class="js">module.exports = {
-    networks: {
-        development: {
-          host: &quot;localhost&quot;,
-          port: 8545,
-          network_id: &quot;*&quot;
-        }
-    }</code></pre>
-<p>接下来，我们会使用上面的智能合约，分别在<code>testRPC</code>和<code>geth</code>中进行部署测试。</p>
-<p><code>truffle</code>的智能合约项目部署，使用下面的命令：</p>
-<pre><code class="shell">truffle migrate</code></pre>
-<blockquote>
-<p>这个命令会执行所有<code>migrations</code>目录下的 js 文件。如果之前执行过<code>truffle migrate</code>命令，再次执行，只会部署新的 js 文件，如果没有新的 js 文件，不会起任何作用。如果使用<code>--reset</code>参数，则会重新的执行所有脚本的部署。</p>
-</blockquote>
-<p>如果要部署到指定的网络，可以使用<code>--network</code>参数，例如：</p>
-<pre><code class="shell">truffle migrate --network live</code></pre>
-<p>多个网络的配置格式如下：</p>
-<pre><code class="js">networks: {
-  development: {
-    host: &quot;localhost&quot;,
-    port: 8545,
-    network_id: &quot;*&quot; // match any network
-  },
-  live: {
-    host: &quot;178.25.19.88&quot;, // Random IP for example purposes (do not use)
-    port: 80,
-    network_id: 1,        // Ethereum public network
-    // optional config values:
-    // gas  Gas limit used for deploys. Default is 4712388
-    // gasPrice Gas price used for deploys. Default is 100000000000 (100 Shannon).
-    // from - default address to use for any transaction Truffle makes during migrations
-    // provider - web3 provider instance Truffle should use to talk to the Ethereum network.
-    //          - if specified, host and port are ignored.
-  }
-}</code></pre>
-<h3 id="通过-truffle-migrate-命令，对合约进行部署"><a href="#通过-truffle-migrate-命令，对合约进行部署" class="headerlink" title="通过 truffle migrate 命令，对合约进行部署"></a>通过 truffle migrate 命令，对合约进行部署</h3><p>使用<code>truffle migrate</code>命令，发布项目：</p>
-<pre><code>➜ /Users/lion/my_project/_eth/test_truffle &gt;truffle migrate
-Using network &#39;development&#39;.
-
-Running migration: 1_initial_migration.js
-  Deploying Migrations...
-  ... 0xd9e5fa242d29362e57e3da7b0bf6f71b72767972fc15240ed3a02d341e814a44
-  Migrations: 0x4bedd1bb517ff9a54f6f3df8eba821ff16a4109b
-  Deploying Hello_mshk_top...
-  ... 0xc22ff050e189c2561d40250077ee4bf628f957899dfa8d0b5fa50e3ab7a896b0
-  Hello_mshk_top: 0xa7ef5037ff81d7932e01b68a503ca4587f00b35c
-Saving successful migration to network...
-  ... 0x49505a54042f5f74146fbfafef63dd408cb0a7a0c66214ebbaa3217e443d792a
-Saving artifacts...</code></pre>]]></content>
-      <tags>
-        <tag>contract</tag>
-        <tag>truffle</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vim中与系统的粘贴和复制</title>
-    <url>/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/</url>
-    <content><![CDATA[<h1 id="vim中与系统的粘贴和复制"><a href="#vim中与系统的粘贴和复制" class="headerlink" title="vim中与系统的粘贴和复制"></a>vim中与系统的粘贴和复制</h1><p>以前就遇到过的问题。有如下情景：</p>
-<blockquote>
-<p>1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用<code>vs</code>或者<code>sp</code>命令打开这两个文件然后用<code>y</code>和<code>p</code>进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。<br>2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。</p>
-</blockquote>
-<p>今天，对于vim这个没办法跟“外界”交流的特性忍够了，决定解决一下。</p>
-<h3 id="1-首先，查看vim版本是否支持clipboard"><a href="#1-首先，查看vim版本是否支持clipboard" class="headerlink" title="1.首先，查看vim版本是否支持clipboard"></a><strong>1.首先，查看vim版本是否支持clipboard</strong></h3><pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>结果如下： </p>
-<p><img src="https://img-blog.csdn.net/20161215215734971?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>clipboard 前面有一个小小的减号，说明不支持。</p>
-<h3 id="2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><a href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim" class="headerlink" title="2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"></a><strong>2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</strong></h3><pre><code>sudo apt-get install vim-gnome1</code></pre><p>安装完成后再次执行：</p>
-<pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>发现已经支持clipboard</p>
-<h3 id="3-vim的寄存器"><a href="#3-vim的寄存器" class="headerlink" title="3.vim的寄存器"></a><strong>3.vim的寄存器</strong></h3><p>打开vim输入<code>:reg</code>查看vim的寄存器，当支持clipboard之后，会多出<code>&quot;+</code>寄存器，表示系统剪切板，在vim中进入visual视图后使用<code>&quot;Ny</code>(N表示特定寄存器编好)，将内容复制到特定的剪切板，那么我们的目的是要复制到系统剪切板则需要选中内容后输入命令：</p>
-<pre><code>&quot;+y1</code></pre><p>粘贴到特定的寄存器也是同理。例如<code>&quot;+p</code>将系统剪切板的内容拷贝到vim中（非编辑模式下）。</p>
-<p><strong>4. 映射</strong></p>
-<pre><code class="vim">&quot; 从系统剪切板粘贴
-nnoremap P &quot;+p
-&quot; 复制到系统剪切板
-vmap Y &quot;+y</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>vim中插入当前文件名</title>
-    <url>/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/</url>
-    <content><![CDATA[<h2 id="vim中插入当前文件名"><a href="#vim中插入当前文件名" class="headerlink" title="vim中插入当前文件名"></a>vim中插入当前文件名</h2><p>再插入模式下<code>ctrl + r</code>,然后在按<code>%</code>即可。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>vim插件surround常用命令</title>
-    <url>/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="vim插件surround常用命令"><a href="#vim插件surround常用命令" class="headerlink" title="vim插件surround常用命令"></a>vim插件surround常用命令</h2><pre><code class="text"> Old text                  Command     New text ~
- &quot;Hello *world!&quot;           ds&quot;         Hello world!
- [123+4*56]/2              cs])        (123+456)/2
- &quot;Look ma, I&#39;m *HTML!&quot;     cs&quot;&lt;q&gt;      &lt;q&gt;Look ma, I&#39;m HTML!&lt;/q&gt;
- if *x&gt;3 {                 ysW(        if ( x&gt;3 ) {
- my $str = *whee!;         vlllls&#39;     my $str = &#39;whee!&#39;;
- &lt;div&gt;Yo!*&lt;/div&gt;           dst         Yo!
- &lt;div&gt;Yo!*&lt;/div&gt;           cst&lt;p&gt;      &lt;p&gt;Yo!&lt;/p&gt;</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>vim脚本_生成图片外链</title>
-    <url>/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/</url>
-    <content><![CDATA[<p>vim脚本将选中的图片本机地址转换为器牛云的外链</p>
-<pre><code class="vim">function! qiniu#get_file_url_from_qiniu()
-    &quot; Why is this not a built-in Vim script function?!
-    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
-    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
-        return &#39;&#39;
-    endif
-    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    &quot; 得到选中的文本
-    let re = join(lines,&quot;\n&quot;)
-    &quot; 执行系统命令
-    let  re1 = system(&quot;qiniu &quot; . re)
-    &quot; url 处理
-    let tmpq = split(re1,&quot;\n&quot;)[-1]
-    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;) 
-    &quot; 替换文本
-    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
-endfunction</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>vps</title>
-    <url>/2019/10/31/vps/</url>
-    <content><![CDATA[<h3 id="shadowsocks-服务器安装"><a href="#shadowsocks-服务器安装" class="headerlink" title="shadowsocks 服务器安装"></a>shadowsocks 服务器安装</h3><ul>
-<li>更新软件源</li>
-</ul>
-<pre><code class="shell">sudo apt update</code></pre>
-<ul>
-<li>安装 pip 环境</li>
-</ul>
-<pre><code class="shell">sudo apt-get install python-pip</code></pre>
-<ul>
-<li>直接安装 shadowsocks</li>
-</ul>
-<pre><code class="shell">sudo pip install shadowsocks</code></pre>
-<ul>
-<li>运行 shadowsocks 服务器<br>启动命令如下：如果要停止运行，将命令中的 start 改成 stop。</li>
-</ul>
-<pre><code class="shell">sudo ssserver -p 8388 -k password -m rc4-md5 -d start</code></pre>
-<p>也可以使用配置文件进行配置，方法创建/etc/shadowsocks.json 文件，填入如下内容：</p>
-<pre><code class="json">{
-  &quot;server&quot;: &quot;my_server_ip&quot;,
-  &quot;server_port&quot;: 8388,
-  &quot;local_address&quot;: &quot;127.0.0.1&quot;,
-  &quot;local_port&quot;: 1080,
-  &quot;password&quot;: &quot;mypassword&quot;,
-  &quot;timeout&quot;: 300,
-  &quot;method&quot;: &quot;rc4-md5&quot;
-}</code></pre>
-<p>各字段的含义：</p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>server</td>
-<td>服务器 IP (IPv4/IPv6)，注意这也将是服务端监听的 IP 地址</td>
-</tr>
-<tr>
-<td>server_port</td>
-<td>服务器端口</td>
-</tr>
-<tr>
-<td>local_port</td>
-<td>本地端端口</td>
-</tr>
-<tr>
-<td>password</td>
-<td>用来加密的密码</td>
-</tr>
-<tr>
-<td>timeout</td>
-<td>超时时间（秒）</td>
-</tr>
-<tr>
-<td>method</td>
-<td>加密方法，可选择 “bf-cfb”, “aes-256-cfb”, “des-cfb”, “rc4″, 等等</td>
-</tr>
-</tbody></table>
-<p>Tips: 加密方式推荐使用 rc4-md5，因为 RC4 比 AES 速度快好几倍，如果用在路由器上会带来显著性能提升。旧的 RC4 加密之所以不安全是因为 Shadowsocks 在每个连接上重复使用 key，没有使用 IV。现在已经重新正确实现，可以放心使用。更多可以看 issue。<br>Tips: 如果需要配置多个用户,可以这样来设置:</p>
-<pre><code class="json">{
-  &quot;server&quot;: &quot;my_server_ip&quot;,
-  &quot;port_password&quot;: {
-    &quot;端口1&quot;: &quot;密码1&quot;,
-    &quot;端口2&quot;: &quot;密码2&quot;
-  },
-  &quot;timeout&quot;: 300,
-  &quot;method&quot;: &quot;rc4-md5&quot;,
-  &quot;fast_open&quot;: false
-}</code></pre>
-<p>创建完毕后，赋予文件权限：</p>
-<pre><code class="shell">sudo chmod 755 /etc/shadowsocks.json</code></pre>
-<p>为了支持这些加密方式，你要需要安装</p>
-<pre><code class="shell">sudo apt–get install python–m2crypto</code></pre>
-<p>然后使用配置文件在后台运行：</p>
-<pre><code class="shell">sudo ssserver -c /etc/shadowsocks.json -d start</code></pre>
-<p>配置开机自启动<br>编辑 /etc/rc.local 文件<br>sudo vi /etc/rc.local<br>在 exit 0 这一行的上边加入如下</p>
-<pre><code class="shellj">/usr/local/bin/ssserver –c /etc/shadowsocks.json</code></pre>
-<p>或者 不用配置文件 直接加入命令启动如下：</p>
-<pre><code class="shell">/usr/local/bin/ssserver -p 8388 -k password -m aes-256-cfb -d start</code></pre>
-<p>到此重启服务器后，会自动启动。<br>安装和配置 shadowsocks 客户端<br>最新版本的 shadowsocks 客户端可以从其 Github 上下载.<br>客户端配置及使用方法可以参考这里的教程。<br>iPhone 及安卓手机上的配置,可以参考这个教程。<br>需要特别注意的是,在 Chrome 上需要设置代理为 SOCKS v5 模式,127.0.0.1:1080,建议安装 SwitchySharp 扩展。</p>
-<h3 id="ubuntu-客户端"><a href="#ubuntu-客户端" class="headerlink" title="ubuntu 客户端"></a>ubuntu 客户端</h3><p>在 ubuntu 上可以这样，通过 PPA 源安装，仅支持 Ubuntu 14.04 或更高版本。</p>
-<pre><code class="shell">sudo add-apt-repository ppa:hzwhuang/ss-qt5
-sudo apt-get update
-sudo apt-get install shadowsocks-qt5</code></pre>
-<p>由于是图形界面，配置和 windows 基本没啥差别就不赘述了。经过上面的配置，你只是启动了 sslocal 但是要上网你还需要配置下浏览器到指定到代理端口比如 1080 才可以正式上网。</p>
-]]></content>
-      <tags>
-        <tag>vps</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vs_config</title>
-    <url>/2019/10/31/vs_config/</url>
-    <content><![CDATA[<pre><code class="json">{
-  &quot;window.zoomLevel&quot;: 2,
-  &quot;workbench.colorTheme&quot;: &quot;Gruvbox Dark (Medium)&quot;,
-  &quot;workbench.iconTheme&quot;: &quot;vscode-great-icons&quot;,
-  &quot;javascript.updateImportsOnFileMove.enabled&quot;: &quot;always&quot;,
-  &quot;editor.tabSize&quot;: 2,
-  &quot;editor.detectIndentation&quot;: false,
-  &quot;prettier.printWidth&quot;: 80,
-  &quot;vim.easymotion&quot;: true,
-  &quot;vim.sneak&quot;: true,
-  &quot;vim.incsearch&quot;: true,
-  &quot;vim.useSystemClipboard&quot;: true,
-  &quot;vim.useCtrlKeys&quot;: true,
-  &quot;vim.hlsearch&quot;: true,
-  &quot;vim.insertModeKeyBindings&quot;: [
-    {
-      &quot;before&quot;: [
-        &quot;j&quot;,
-        &quot;k&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;&lt;Esc&gt;&quot;
-      ]
-    }
-  ],
-  &quot;vim.normalModeKeyBindingsNonRecursive&quot;: [
-    {
-      &quot;before&quot;: [
-        &quot;N&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;N&quot;,
-        &quot;z&quot;,
-        &quot;z&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;n&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;n&quot;,
-        &quot;z&quot;,
-        &quot;z&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;-&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;$&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;;&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;:&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;]&quot;,
-        &quot;\\&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;&lt;C-w&gt;&quot;,
-        &quot;c&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;}&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;g&quot;,
-        &quot;t&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;{&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;g&quot;,
-        &quot;T&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;s&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;x&quot;,
-        &quot;i&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;&lt;tab&gt;&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;&lt;space&gt;&quot;,
-        &quot;&lt;space&gt;&quot;,
-        &quot;/&quot;
-      ]
-    }
-  ],
-  &quot;vim.leader&quot;: &quot;&lt;space&gt;&quot;,
-  &quot;terminal.integrated.rendererType&quot;: &quot;dom&quot;,
-  &quot;workbench.sideBar.location&quot;: &quot;right&quot;,
-  &quot;vim.statusBarColorControl&quot;: true,
-  &quot;vim.statusBarColors&quot;: {
-    &quot;normal&quot;: &quot;#444444&quot;,
-    &quot;insert&quot;: &quot;#444444&quot;,
-    &quot;visual&quot;: &quot;#444444&quot;,
-    &quot;visualline&quot;: &quot;#444444&quot;,
-    &quot;visualblock&quot;: &quot;#444444&quot;,
-    &quot;replace&quot;: &quot;#444444&quot;
-  },
-  &quot;workbench.colorCustomizations&quot;: {
-    &quot;statusBar.background&quot;: &quot;#444444&quot;,
-    &quot;statusBar.noFolderBackground&quot;: &quot;#444444&quot;,
-    &quot;statusBar.debuggingBackground&quot;: &quot;#444444&quot;
-  }
-}</code></pre>
-]]></content>
-      <tags>
-        <tag>vs</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vs_keybinding</title>
-    <url>/2019/10/31/vs_keybinding/</url>
-    <content><![CDATA[<pre><code class="json">[
-  {
-    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
-    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
-    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
-    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-editor.action.rename&quot;,
-    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
-    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.setVariable&quot;,
-    &quot;when&quot;: &quot;variablesFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-renameFile&quot;,
-    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+b&quot;,
-    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
-    &quot;when&quot;: &quot;editorFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+`&quot;,
-    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
-  }
-]</code></pre>
-]]></content>
-      <tags>
-        <tag>vscode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>whenever使用方式</title>
-    <url>/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="whenever-使用方式"><a href="#whenever-使用方式" class="headerlink" title="whenever 使用方式"></a>whenever 使用方式</h2><p>根据项目的进展，我们需要实现后台进行定时读取信息的功能，而最关键的实现部分是周期性功能，根据调研，决定使用whenever来实现这一功能。</p>
-<p>github：<a href="https://link.jianshu.com?t=https://github.com/javan/whenever" target="_blank" rel="noopener">https://github.com/javan/whenever</a></p>
-<h4 id="开发前需要明确的问题"><a href="#开发前需要明确的问题" class="headerlink" title="开发前需要明确的问题"></a>开发前需要明确的问题</h4><ul>
-<li>whenever是怎样一种周期性机制？</li>
-<li>whenever能为我们提供什么功能？</li>
-<li>whenever为周期性任务提供了哪些控制方式？</li>
-</ul>
-<p>问题解决</p>
-<p>whenever周期性机制</p>
-<p>我们来看一下github上面是怎么说的：</p>
-<p>Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.</p>
-<p>意思就是说，whenever是一个ruby gem，但同时它是基于cron jobs的。</p>
-<p>那么什么是cron jobs呢？我们来看一下维基百科的定义：</p>
-<h4 id="Cron"><a href="#Cron" class="headerlink" title="Cron"></a>Cron</h4><p>crontab命令常见于<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/Unix" target="_blank" rel="noopener">Unix</a>和<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E7%B1%BBUnix" target="_blank" rel="noopener">类Unix</a>的<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">操作系统</a>之中，用于设置周期性被执行的指令。该命令从标准输入设备读取指令，并将其存放于“crontab”文件中，以供之后读取和执行。该词来源于<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E5%B8%8C%E8%85%8A%E8%AF%AD" target="_blank" rel="noopener">希腊语</a>chronos（χρόνος），原意是时间。</p>
-<p>通常，crontab储存的指令被<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B" target="_blank" rel="noopener">守护进程</a>激活，crond常常在后台运行，每一分钟检查是否有预定的作业需要执行。这类作业一般称为cron jobs。</p>
-<p>也就是说，crontab是在unix和类unix系统中用来实现周期性功能的指令。在网上搜一下，我们就会看到很多crontab指令相关的语法。</p>
-<p>根据上述的分析，我们可以得出这样的结论：</p>
-<p>whenever事实上是一个cron翻译器，它将rails中的ruby代码翻译成cron脚本，从而将周期性的任务交给cron来执行。 这样，通过whenever我们可以使用ruby语言来写周期性任务代码，在ruby层控制代码，而不需要与shell脚本进行切换；另一方面，我们会发现，由于cron命令的强大，它的语法也因此变得很复杂，通过whenever，我们可以很方便的实现周期性任务。</p>
-<h4 id="一个十分简单的demo"><a href="#一个十分简单的demo" class="headerlink" title="一个十分简单的demo"></a>一个十分简单的demo</h4><p>1.添加whenever(Gemfile)</p>
-<p><code>gem &#39;whenever&#39;, :require =&gt;false</code></p>
-<p>2.生成config/schedule.rb文件</p>
-<p>执行命令：</p>
-<p><code>wheneverize</code></p>
-<p>3.添加自己的周期性任务</p>
-<p>在<code>config/schedule.rb</code>文件中添加：</p>
-<pre><code class="ruby">set :environment, :development
-every 2.minutes do  
-  runner &quot;Timetest.mytime&quot;
-end</code></pre>
-<p>其中，<code>set :environment, :development</code>是设置执行任务时的环境，默认情况下环境为<code>production</code></p>
-<p>上述代码实现的是每两分钟读取当前时间并存入到数据库的功能。其中，runner方法执行的方法如下：</p>
-<pre><code class="ruby">classTimetest &lt; ApplicationRecord
-def self.mytime
-  a = Timetest.new
-  a.time_now = Time.now
-  a.save
- end
-end</code></pre>
-<p>这样，在rails中实现whenever的代码就算是写完了，真的是简单到不行啊！（实在忍不住感慨一句）</p>
-<p>下面就要执行周期性任务了。</p>
-<p>4.执行周期性任务</p>
-<p>在rails工程文件夹下进行一下操作</p>
-<ul>
-<li>更新schedule.rb中的任务到cronjob中</li>
-</ul>
-<p><code>whenever -i</code></p>
-<p>可以看到这样的打印结果：</p>
-<p><code>[write]crontabfileupdated</code></p>
-<ul>
-<li>执行周期性任务</li>
-</ul>
-<p><code>whenever -w</code></p>
-<p>可以看到：</p>
-<p><code>[write]crontabfilewritten</code></p>
-<p>此时我们的周期性任务便在后台运行了，此时查看我们的任务：</p>
-<p><code>crontab -l</code></p>
-<p>可以看到以下打印：</p>
-<p># Begin Whenever generated tasks for: </p>
-<pre><code class="shell">/home/vito/rails/test_of_rails/test_rails/config/schedule.rb0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58 * * * * /bin/bash -l -c &#39;cd /home/vito/rails/test_of_rails/test_rails &amp;&amp; bundle exec bin/rails runner -e development &#39;\&#39;&#39;Timetest.mytime&#39;\&#39;&#39;&#39;# End Whenever generated tasks for: /home/vito/rails/test_of_rails/test_rails/config/schedule.rb</code></pre>
-<p>这样，我们的周期性任务就算是在顺利执行了。</p>
-<p>需要注意的一点是运行时crontab的环境（rails和crontab环境不匹配时whenever无法执行），一般调试时多使用的是development环境，而不设置时默认的是production环境，如果你使用<code>crontab -l</code>发现是production环境，可以使用</p>
-<p><code>crontab -e</code></p>
-<p>直接修改为development，或者直接将-e production删掉即可。</p>
-<p>经过上述流程，我们便可以成功地实现周期性任务了。如果此时你发现自己的周期性任务还是没有执行，那你就得好好看看你自己的任务代码了，很可能是执行的任务代码本身有问题，而与whenever的实现没有太大的关系了。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Ubuntu下sublime无法输入中文问题完美解决</title>
-    <url>/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/</url>
-    <content><![CDATA[<h2 id="Ubuntu下sublime无法输入中文问题完美解决"><a href="#Ubuntu下sublime无法输入中文问题完美解决" class="headerlink" title="Ubuntu下sublime无法输入中文问题完美解决"></a>Ubuntu下sublime无法输入中文问题完美解决</h2><ol>
-<li>从官网<a href="https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2" target="_blank" rel="noopener">下载</a>压缩包</li>
-<li>解压到<code>/opt/</code>目录下</li>
-<li>将解压后的文件夹重命名为<code>sublime_text</code></li>
-<li>在终端执行<code>git clone https://github.com/lyfeyaj/sublime-text-imfix.git</code></li>
-<li>进入<code>sublime-text-imfix/src/</code> 执行 <code>sudo cp subl /opt/bin/</code></li>
-<li>进入<code>sublime-text/</code>下 执行 <code>./sublime-imfix</code></li>
-<li>大功告成，，仔细看一下<code>sublime-imfix</code>的代码，就知道为什么这么做了</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
     <title>Solidity的event事件</title>
     <url>/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/</url>
     <content><![CDATA[<h3 id="本文属于转载内容，转载来源"><a href="#本文属于转载内容，转载来源" class="headerlink" title="本文属于转载内容，转载来源"></a>本文属于转载内容，<a href="http://me.tryblockchain.org/blockchain-solidity-event.html" target="_blank" rel="noopener">转载来源</a></h3><p>在介绍事件前，我们先明确事件，日志这两个概念。事件发生后被记录到区块链上成为了日志。总的来说，事件强调功能，一种行为；日志强调存储，内容。</p>
 <p>事件是以太坊 EVM 提供的一种日志基础设施。事件可以用来做操作记录，存储为日志。也可以用来实现一些交互功能，比如通知 UI，返回函数调用结果等<a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fn1" target="_blank" rel="noopener">1</a>。</p>
 <h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>当定义的事件触发时，我们可以将事件存储到 EVM 的交易日志中，日志是区块链中的一种特殊数据结构。日志与合约关联，与合约的存储合并存入区块链中。只要某个区块可以访问，其相关的日志就可以访问。但在合约中，我们不能直接访问日志和事件数据（即便是创建日志的合约）。下面我们来看看，如何在 Solidity 中实现一个事件：</p>
+<a id="more"></a>
+
 <pre><code class="js">pragma solidity ^0.4.0;
 
 contract Transfer{
@@ -741,8 +191,8 @@ transferContract.new(
 </ol>
 ]]></content>
       <tags>
-        <tag>contract</tag>
         <tag>solidity</tag>
+        <tag>contract</tag>
       </tags>
   </entry>
   <entry>
@@ -752,6 +202,7 @@ transferContract.new(
 <p>在区块链里，区块链本身就是一个数据库。如果你使用区块链标记物产的所有权，归属信息将会被记录到区块链上，所有人都无法篡改，以标明不可争议的拥有权。所以在区块链中编程中，有一个数据位置的属性用来标识变量是否需要持久化到区块链中。</p>
 <h1 id="1-数据位置的类型"><a href="#1-数据位置的类型" class="headerlink" title="1. 数据位置的类型"></a>1. 数据位置的类型</h1><p><code>数据位置</code><a href="http://me.tryblockchain.org/solidity-data-location.html#fn1" target="_blank" rel="noopener">1</a>，变量的存储位置属性。有三种类型，<code>memory</code>，<code>storage</code>和<code>calldata</code>。最后一种数据位置比较特殊，一般只有外部函数的参数（不包括返回参数）被强制指定为<code>calldata</code>。这种数据位置是只读的，不会持久化到区块链。一般我们可以选择指定的是<code>memory</code>和<code>storage</code>。</p>
 <p><code>memory</code>存储位置同我们普通程序的内存类似。即分配，即使用，越过作用域即不可被访问，等待被回收。而对于<code>storage</code>的变量，数据将永远存在于区块链上。</p>
+<a id="more"></a>
 <h1 id="2-默认数据位置"><a href="#2-默认数据位置" class="headerlink" title="2. 默认数据位置"></a>2. 默认数据位置</h1><h2 id="2-1-参数及局部变量"><a href="#2-1-参数及局部变量" class="headerlink" title="2.1 参数及局部变量"></a>2.1 参数及局部变量</h2><p>默认的函数参数，包括返回的参数，他们是<code>memory</code>。而默认的局部变量是<code>storage</code>的。</p>
 <pre><code class="solidity">pragma solidity ^0.4.0;
 contract SimpleAssign{
@@ -879,6 +330,469 @@ contract MemoryToMemory{
       </tags>
   </entry>
   <entry>
+    <title>whenever使用方式</title>
+    <url>/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<p>根据项目的进展，我们需要实现后台进行定时读取信息的功能，而最关键的实现部分是周期性功能，根据调研，决定使用whenever来实现这一功能。</p>
+<p>github：<a href="https://link.jianshu.com?t=https://github.com/javan/whenever" target="_blank" rel="noopener">https://github.com/javan/whenever</a></p>
+<h4 id="开发前需要明确的问题"><a href="#开发前需要明确的问题" class="headerlink" title="开发前需要明确的问题"></a>开发前需要明确的问题</h4><ul>
+<li>whenever是怎样一种周期性机制？</li>
+<li>whenever能为我们提供什么功能？</li>
+<li>whenever为周期性任务提供了哪些控制方式？</li>
+</ul>
+<p>问题解决</p>
+<p>whenever周期性机制</p>
+<a id="more"></a>
+<p>我们来看一下github上面是怎么说的：</p>
+<p>Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.</p>
+<p>意思就是说，whenever是一个ruby gem，但同时它是基于cron jobs的。</p>
+<p>那么什么是cron jobs呢？我们来看一下维基百科的定义：</p>
+<h4 id="Cron"><a href="#Cron" class="headerlink" title="Cron"></a>Cron</h4><p>crontab命令常见于<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/Unix" target="_blank" rel="noopener">Unix</a>和<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E7%B1%BBUnix" target="_blank" rel="noopener">类Unix</a>的<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">操作系统</a>之中，用于设置周期性被执行的指令。该命令从标准输入设备读取指令，并将其存放于“crontab”文件中，以供之后读取和执行。该词来源于<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E5%B8%8C%E8%85%8A%E8%AF%AD" target="_blank" rel="noopener">希腊语</a>chronos（χρόνος），原意是时间。</p>
+<p>通常，crontab储存的指令被<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B" target="_blank" rel="noopener">守护进程</a>激活，crond常常在后台运行，每一分钟检查是否有预定的作业需要执行。这类作业一般称为cron jobs。</p>
+<p>也就是说，crontab是在unix和类unix系统中用来实现周期性功能的指令。在网上搜一下，我们就会看到很多crontab指令相关的语法。</p>
+<p>根据上述的分析，我们可以得出这样的结论：</p>
+<p>whenever事实上是一个cron翻译器，它将rails中的ruby代码翻译成cron脚本，从而将周期性的任务交给cron来执行。 这样，通过whenever我们可以使用ruby语言来写周期性任务代码，在ruby层控制代码，而不需要与shell脚本进行切换；另一方面，我们会发现，由于cron命令的强大，它的语法也因此变得很复杂，通过whenever，我们可以很方便的实现周期性任务。</p>
+<h4 id="一个十分简单的demo"><a href="#一个十分简单的demo" class="headerlink" title="一个十分简单的demo"></a>一个十分简单的demo</h4><p>1.添加whenever(Gemfile)</p>
+<p><code>gem &#39;whenever&#39;, :require =&gt;false</code></p>
+<p>2.生成config/schedule.rb文件</p>
+<p>执行命令：</p>
+<p><code>wheneverize</code></p>
+<p>3.添加自己的周期性任务</p>
+<p>在<code>config/schedule.rb</code>文件中添加：</p>
+<pre><code class="ruby">set :environment, :development
+every 2.minutes do  
+  runner &quot;Timetest.mytime&quot;
+end</code></pre>
+<p>其中，<code>set :environment, :development</code>是设置执行任务时的环境，默认情况下环境为<code>production</code></p>
+<p>上述代码实现的是每两分钟读取当前时间并存入到数据库的功能。其中，runner方法执行的方法如下：</p>
+<pre><code class="ruby">classTimetest &lt; ApplicationRecord
+def self.mytime
+  a = Timetest.new
+  a.time_now = Time.now
+  a.save
+ end
+end</code></pre>
+<p>这样，在rails中实现whenever的代码就算是写完了，真的是简单到不行啊！（实在忍不住感慨一句）</p>
+<p>下面就要执行周期性任务了。</p>
+<p>4.执行周期性任务</p>
+<p>在rails工程文件夹下进行一下操作</p>
+<ul>
+<li>更新schedule.rb中的任务到cronjob中</li>
+</ul>
+<p><code>whenever -i</code></p>
+<p>可以看到这样的打印结果：</p>
+<p><code>[write]crontabfileupdated</code></p>
+<ul>
+<li>执行周期性任务</li>
+</ul>
+<p><code>whenever -w</code></p>
+<p>可以看到：</p>
+<p><code>[write]crontabfilewritten</code></p>
+<p>此时我们的周期性任务便在后台运行了，此时查看我们的任务：</p>
+<p><code>crontab -l</code></p>
+<p>可以看到以下打印：</p>
+<p># Begin Whenever generated tasks for: </p>
+<pre><code class="shell">/home/vito/rails/test_of_rails/test_rails/config/schedule.rb0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58 * * * * /bin/bash -l -c &#39;cd /home/vito/rails/test_of_rails/test_rails &amp;&amp; bundle exec bin/rails runner -e development &#39;\&#39;&#39;Timetest.mytime&#39;\&#39;&#39;&#39;# End Whenever generated tasks for: /home/vito/rails/test_of_rails/test_rails/config/schedule.rb</code></pre>
+<p>这样，我们的周期性任务就算是在顺利执行了。</p>
+<p>需要注意的一点是运行时crontab的环境（rails和crontab环境不匹配时whenever无法执行），一般调试时多使用的是development环境，而不设置时默认的是production环境，如果你使用<code>crontab -l</code>发现是production环境，可以使用</p>
+<p><code>crontab -e</code></p>
+<p>直接修改为development，或者直接将-e production删掉即可。</p>
+<p>经过上述流程，我们便可以成功地实现周期性任务了。如果此时你发现自己的周期性任务还是没有执行，那你就得好好看看你自己的任务代码了，很可能是执行的任务代码本身有问题，而与whenever的实现没有太大的关系了。</p>
+]]></content>
+      <tags>
+        <tag>whenever</tag>
+        <tag>定时任务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vps</title>
+    <url>/2019/10/31/vps/</url>
+    <content><![CDATA[<h3 id="shadowsocks-服务器安装"><a href="#shadowsocks-服务器安装" class="headerlink" title="shadowsocks 服务器安装"></a>shadowsocks 服务器安装</h3><ul>
+<li>更新软件源</li>
+</ul>
+<pre><code class="shell">sudo apt update</code></pre>
+<ul>
+<li>安装 pip 环境</li>
+</ul>
+<pre><code class="shell">sudo apt-get install python-pip</code></pre>
+<ul>
+<li>直接安装 shadowsocks</li>
+</ul>
+<pre><code class="shell">sudo pip install shadowsocks</code></pre>
+<a id="more"></a>
+<ul>
+<li>运行 shadowsocks 服务器<br>启动命令如下：如果要停止运行，将命令中的 start 改成 stop。</li>
+</ul>
+<pre><code class="shell">sudo ssserver -p 8388 -k password -m rc4-md5 -d start</code></pre>
+<p>也可以使用配置文件进行配置，方法创建/etc/shadowsocks.json 文件，填入如下内容：</p>
+<pre><code class="json">{
+  &quot;server&quot;: &quot;my_server_ip&quot;,
+  &quot;server_port&quot;: 8388,
+  &quot;local_address&quot;: &quot;127.0.0.1&quot;,
+  &quot;local_port&quot;: 1080,
+  &quot;password&quot;: &quot;mypassword&quot;,
+  &quot;timeout&quot;: 300,
+  &quot;method&quot;: &quot;rc4-md5&quot;
+}</code></pre>
+<p>各字段的含义：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>server</td>
+<td>服务器 IP (IPv4/IPv6)，注意这也将是服务端监听的 IP 地址</td>
+</tr>
+<tr>
+<td>server_port</td>
+<td>服务器端口</td>
+</tr>
+<tr>
+<td>local_port</td>
+<td>本地端端口</td>
+</tr>
+<tr>
+<td>password</td>
+<td>用来加密的密码</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>超时时间（秒）</td>
+</tr>
+<tr>
+<td>method</td>
+<td>加密方法，可选择 “bf-cfb”, “aes-256-cfb”, “des-cfb”, “rc4″, 等等</td>
+</tr>
+</tbody></table>
+<p>Tips: 加密方式推荐使用 rc4-md5，因为 RC4 比 AES 速度快好几倍，如果用在路由器上会带来显著性能提升。旧的 RC4 加密之所以不安全是因为 Shadowsocks 在每个连接上重复使用 key，没有使用 IV。现在已经重新正确实现，可以放心使用。更多可以看 issue。<br>Tips: 如果需要配置多个用户,可以这样来设置:</p>
+<pre><code class="json">{
+  &quot;server&quot;: &quot;my_server_ip&quot;,
+  &quot;port_password&quot;: {
+    &quot;端口1&quot;: &quot;密码1&quot;,
+    &quot;端口2&quot;: &quot;密码2&quot;
+  },
+  &quot;timeout&quot;: 300,
+  &quot;method&quot;: &quot;rc4-md5&quot;,
+  &quot;fast_open&quot;: false
+}</code></pre>
+<p>创建完毕后，赋予文件权限：</p>
+<pre><code class="shell">sudo chmod 755 /etc/shadowsocks.json</code></pre>
+<p>为了支持这些加密方式，你要需要安装</p>
+<pre><code class="shell">sudo apt–get install python–m2crypto</code></pre>
+<p>然后使用配置文件在后台运行：</p>
+<pre><code class="shell">sudo ssserver -c /etc/shadowsocks.json -d start</code></pre>
+<p>配置开机自启动<br>编辑 /etc/rc.local 文件<br>sudo vi /etc/rc.local<br>在 exit 0 这一行的上边加入如下</p>
+<pre><code class="shellj">/usr/local/bin/ssserver –c /etc/shadowsocks.json</code></pre>
+<p>或者 不用配置文件 直接加入命令启动如下：</p>
+<pre><code class="shell">/usr/local/bin/ssserver -p 8388 -k password -m aes-256-cfb -d start</code></pre>
+<p>到此重启服务器后，会自动启动。<br>安装和配置 shadowsocks 客户端<br>最新版本的 shadowsocks 客户端可以从其 Github 上下载.<br>客户端配置及使用方法可以参考这里的教程。<br>iPhone 及安卓手机上的配置,可以参考这个教程。<br>需要特别注意的是,在 Chrome 上需要设置代理为 SOCKS v5 模式,127.0.0.1:1080,建议安装 SwitchySharp 扩展。</p>
+<h3 id="ubuntu-客户端"><a href="#ubuntu-客户端" class="headerlink" title="ubuntu 客户端"></a>ubuntu 客户端</h3><p>在 ubuntu 上可以这样，通过 PPA 源安装，仅支持 Ubuntu 14.04 或更高版本。</p>
+<pre><code class="shell">sudo add-apt-repository ppa:hzwhuang/ss-qt5
+sudo apt-get update
+sudo apt-get install shadowsocks-qt5</code></pre>
+<p>由于是图形界面，配置和 windows 基本没啥差别就不赘述了。经过上面的配置，你只是启动了 sslocal 但是要上网你还需要配置下浏览器到指定到代理端口比如 1080 才可以正式上网。</p>
+]]></content>
+      <tags>
+        <tag>vps</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vs_keybinding</title>
+    <url>/2019/10/31/vs_keybinding/</url>
+    <content><![CDATA[<a id="more"></a>
+<pre><code class="json">[
+  {
+    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
+    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
+    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
+    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
+    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
+    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
+    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
+    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-editor.action.rename&quot;,
+    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
+    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-debug.setVariable&quot;,
+    &quot;when&quot;: &quot;variablesFocused&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-renameFile&quot;,
+    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+b&quot;,
+    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f3&quot;,
+    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
+    &quot;when&quot;: &quot;editorFocus&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f3&quot;,
+    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+`&quot;,
+    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
+  }
+]</code></pre>
+]]></content>
+      <tags>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vs_config</title>
+    <url>/2019/10/31/vs_config/</url>
+    <content><![CDATA[<a id="more"></a>
+<pre><code class="json">{
+  &quot;window.zoomLevel&quot;: 2,
+  &quot;workbench.colorTheme&quot;: &quot;Gruvbox Dark (Medium)&quot;,
+  &quot;workbench.iconTheme&quot;: &quot;vscode-great-icons&quot;,
+  &quot;javascript.updateImportsOnFileMove.enabled&quot;: &quot;always&quot;,
+  &quot;editor.tabSize&quot;: 2,
+  &quot;editor.detectIndentation&quot;: false,
+  &quot;prettier.printWidth&quot;: 80,
+  &quot;vim.easymotion&quot;: true,
+  &quot;vim.sneak&quot;: true,
+  &quot;vim.incsearch&quot;: true,
+  &quot;vim.useSystemClipboard&quot;: true,
+  &quot;vim.useCtrlKeys&quot;: true,
+  &quot;vim.hlsearch&quot;: true,
+  &quot;vim.insertModeKeyBindings&quot;: [
+    {
+      &quot;before&quot;: [
+        &quot;j&quot;,
+        &quot;k&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;&lt;Esc&gt;&quot;
+      ]
+    }
+  ],
+  &quot;vim.normalModeKeyBindingsNonRecursive&quot;: [
+    {
+      &quot;before&quot;: [
+        &quot;N&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;N&quot;,
+        &quot;z&quot;,
+        &quot;z&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;n&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;n&quot;,
+        &quot;z&quot;,
+        &quot;z&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;-&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;$&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;;&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;:&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;]&quot;,
+        &quot;\\&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;&lt;C-w&gt;&quot;,
+        &quot;c&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;}&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;g&quot;,
+        &quot;t&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;{&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;g&quot;,
+        &quot;T&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;s&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;x&quot;,
+        &quot;i&quot;
+      ]
+    },
+    {
+      &quot;before&quot;: [
+        &quot;&lt;tab&gt;&quot;
+      ],
+      &quot;after&quot;: [
+        &quot;&lt;space&gt;&quot;,
+        &quot;&lt;space&gt;&quot;,
+        &quot;/&quot;
+      ]
+    }
+  ],
+  &quot;vim.leader&quot;: &quot;&lt;space&gt;&quot;,
+  &quot;terminal.integrated.rendererType&quot;: &quot;dom&quot;,
+  &quot;workbench.sideBar.location&quot;: &quot;right&quot;,
+  &quot;vim.statusBarColorControl&quot;: true,
+  &quot;vim.statusBarColors&quot;: {
+    &quot;normal&quot;: &quot;#444444&quot;,
+    &quot;insert&quot;: &quot;#444444&quot;,
+    &quot;visual&quot;: &quot;#444444&quot;,
+    &quot;visualline&quot;: &quot;#444444&quot;,
+    &quot;visualblock&quot;: &quot;#444444&quot;,
+    &quot;replace&quot;: &quot;#444444&quot;
+  },
+  &quot;workbench.colorCustomizations&quot;: {
+    &quot;statusBar.background&quot;: &quot;#444444&quot;,
+    &quot;statusBar.noFolderBackground&quot;: &quot;#444444&quot;,
+    &quot;statusBar.debuggingBackground&quot;: &quot;#444444&quot;
+  }
+}</code></pre>
+]]></content>
+      <tags>
+        <tag>vs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>vim中与系统的粘贴和复制</title>
+    <url>/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/</url>
+    <content><![CDATA[<p>以前就遇到过的问题。有如下情景：</p>
+<blockquote>
+<p>1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用<code>vs</code>或者<code>sp</code>命令打开这两个文件然后用<code>y</code>和<code>p</code>进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。<br>2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。</p>
+</blockquote>
+<p>今天，对于vim这个没办法跟“外界”交流的特性忍够了，决定解决一下。</p>
+<h3 id="1-首先，查看vim版本是否支持clipboard"><a href="#1-首先，查看vim版本是否支持clipboard" class="headerlink" title="1.首先，查看vim版本是否支持clipboard"></a><strong>1.首先，查看vim版本是否支持clipboard</strong></h3><pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>结果如下： </p>
+<p><img src="https://img-blog.csdn.net/20161215215734971?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>clipboard 前面有一个小小的减号，说明不支持。</p>
+<h3 id="2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><a href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim" class="headerlink" title="2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"></a><strong>2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</strong></h3><pre><code>sudo apt-get install vim-gnome1</code></pre><a id="more"></a>
+<p>安装完成后再次执行：</p>
+<pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>发现已经支持clipboard</p>
+<h3 id="3-vim的寄存器"><a href="#3-vim的寄存器" class="headerlink" title="3.vim的寄存器"></a><strong>3.vim的寄存器</strong></h3><p>打开vim输入<code>:reg</code>查看vim的寄存器，当支持clipboard之后，会多出<code>&quot;+</code>寄存器，表示系统剪切板，在vim中进入visual视图后使用<code>&quot;Ny</code>(N表示特定寄存器编好)，将内容复制到特定的剪切板，那么我们的目的是要复制到系统剪切板则需要选中内容后输入命令：</p>
+<pre><code>&quot;+y1</code></pre><p>粘贴到特定的寄存器也是同理。例如<code>&quot;+p</code>将系统剪切板的内容拷贝到vim中（非编辑模式下）。</p>
+<p><strong>4. 映射</strong></p>
+<pre><code class="vim">&quot; 从系统剪切板粘贴
+nnoremap P &quot;+p
+&quot; 复制到系统剪切板
+vmap Y &quot;+y</code></pre>
+]]></content>
+      <tags>
+        <tag>vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ubuntu下sublime无法输入中文问题完美解决</title>
+    <url>/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/</url>
+    <content><![CDATA[<h2 id="Ubuntu下sublime无法输入中文问题完美解决"><a href="#Ubuntu下sublime无法输入中文问题完美解决" class="headerlink" title="Ubuntu下sublime无法输入中文问题完美解决"></a>Ubuntu下sublime无法输入中文问题完美解决</h2><ol>
+<li>从官网<a href="https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2" target="_blank" rel="noopener">下载</a>压缩包</li>
+<li>解压到<code>/opt/</code>目录下</li>
+<li>将解压后的文件夹重命名为<code>sublime_text</code></li>
+<li>在终端执行<code>git clone https://github.com/lyfeyaj/sublime-text-imfix.git</code></li>
+<li>进入<code>sublime-text-imfix/src/</code> 执行 <code>sudo cp subl /opt/bin/</code></li>
+<li>进入<code>sublime-text/</code>下 执行 <code>./sublime-imfix</code></li>
+<li>大功告成，，仔细看一下<code>sublime-imfix</code>的代码，就知道为什么这么做了</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>vim中插入当前文件名</title>
+    <url>/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/</url>
+    <content><![CDATA[<h2 id="vim中插入当前文件名"><a href="#vim中插入当前文件名" class="headerlink" title="vim中插入当前文件名"></a>vim中插入当前文件名</h2><p>再插入模式下<code>ctrl + r</code>,然后在按<code>%</code>即可。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>vim插件surround常用命令</title>
+    <url>/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="vim插件surround常用命令"><a href="#vim插件surround常用命令" class="headerlink" title="vim插件surround常用命令"></a>vim插件surround常用命令</h2><pre><code class="text"> Old text                  Command     New text ~
+ &quot;Hello *world!&quot;           ds&quot;         Hello world!
+ [123+4*56]/2              cs])        (123+456)/2
+ &quot;Look ma, I&#39;m *HTML!&quot;     cs&quot;&lt;q&gt;      &lt;q&gt;Look ma, I&#39;m HTML!&lt;/q&gt;
+ if *x&gt;3 {                 ysW(        if ( x&gt;3 ) {
+ my $str = *whee!;         vlllls&#39;     my $str = &#39;whee!&#39;;
+ &lt;div&gt;Yo!*&lt;/div&gt;           dst         Yo!
+ &lt;div&gt;Yo!*&lt;/div&gt;           cst&lt;p&gt;      &lt;p&gt;Yo!&lt;/p&gt;</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>vim脚本_生成图片外链</title>
+    <url>/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/</url>
+    <content><![CDATA[<p>vim脚本将选中的图片本机地址转换为器牛云的外链</p>
+<pre><code class="vim">function! qiniu#get_file_url_from_qiniu()
+    &quot; Why is this not a built-in Vim script function?!
+    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
+    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return &#39;&#39;
+    endif
+    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    &quot; 得到选中的文本
+    let re = join(lines,&quot;\n&quot;)
+    &quot; 执行系统命令
+    let  re1 = system(&quot;qiniu &quot; . re)
+    &quot; url 处理
+    let tmpq = split(re1,&quot;\n&quot;)[-1]
+    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
+    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;) 
+    &quot; 替换文本
+    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
+endfunction</code></pre>
+]]></content>
+  </entry>
+  <entry>
     <title>ruby--require引用文件路径方法与问题总结</title>
     <url>/2019/10/31/ruby--require%E5%BC%95%E7%94%A8%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E6%96%B9%E6%B3%95%E4%B8%8E%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h3 id="ruby–require引用文件路径方法与问题总结"><a href="#ruby–require引用文件路径方法与问题总结" class="headerlink" title="ruby–require引用文件路径方法与问题总结"></a>ruby–require引用文件路径方法与问题总结</h3><p>同一目录下的文件，如<code>/usr/local/ruby/foo.rb</code>与<code>/usr/local/ruby/bar.rb</code>两个文件。<br>如果直接在foo.rb中<br><code>require &#39;bar&#39;</code><br>执行时会报找不到bar.rb错误。</p>
@@ -907,6 +821,25 @@ require &#39;bar&#39; </code></pre>
 </ul>
 <p>一个gem搞定<br><a href="https://rubygems.org/gems/require_all" target="_blank" rel="noopener">https://rubygems.org/gems/require_all</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>solidity中返回mapping数据</title>
+    <url>/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
+function getInfoByUser(address user) public view returns(uint[],uint[]){
+  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
+  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
+  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
+    money[i] = bank[user].depositRecord[i].money;
+    time[i] = bank[user].depositRecord[i].time;
+  }
+  return(money,time);
+}</code></pre>
+]]></content>
+      <tags>
+        <tag>solidity</tag>
+      </tags>
   </entry>
   <entry>
     <title>ruby文件加载</title>
@@ -958,25 +891,6 @@ require &#39;bar&#39; </code></pre>
 <p>備註hint</p>
 <p><code>hint: &#39;文字&#39;</code></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>solidity中返回mapping数据</title>
-    <url>/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
-function getInfoByUser(address user) public view returns(uint[],uint[]){
-  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
-  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
-  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
-    money[i] = bank[user].depositRecord[i].money;
-    time[i] = bank[user].depositRecord[i].time;
-  }
-  return(money,time);
-}</code></pre>
-]]></content>
-      <tags>
-        <tag>solidity</tag>
-      </tags>
   </entry>
   <entry>
     <title>solidity多个返回值</title>
@@ -1054,40 +968,6 @@ io.close</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>ruby命令行工具制作</title>
-    <url>/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/</url>
-    <content><![CDATA[<pre><code class="ruby">require &#39;optparse&#39;
-
-options = {}
-option_parser = OptionParser.new do |opts|
-  # 这里是这个命令行工具的帮助信息
-  opts.banner = &#39;here is help messages of the command line tool.&#39;
-
-  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
-  options[:switch] = false
-  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
-  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
-    # 这个部分就是使用这个Option后执行的代码
-    options[:switch] = true
-  end
-
-  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
-  #下面的“value”就是用户使用时输入的argument
-  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
-    options[:name] = value
-  end
-
-  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
-  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
-    puts value
-    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
-  end
-end.parse!
-
-puts options.inspect</code></pre>
-]]></content>
-  </entry>
-  <entry>
     <title>ruby多层数组排序</title>
     <url>/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<p>##ruby中数组进行多层排序<br>例子如下：</p>
@@ -1124,6 +1004,40 @@ end</code></pre>
 <p>但sort要比sort_by灵活。因为最后的排序条件还可以这样写：</p>
 <p><code>[size_b, sum_a, first_number_b] &lt;=&gt; [size_a, sum_b, first_number_a]</code><br>这样就相当于先按长度倒序排列，然后再按照字符串各数字之和进行排序，最后再按照首个字符的大小倒序排列。</p>
 <p>作者：kamionayuki<br>链接：<a href="http://www.jianshu.com/p/319d0174f246" target="_blank" rel="noopener">http://www.jianshu.com/p/319d0174f246</a><br>來源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>ruby命令行工具制作</title>
+    <url>/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/</url>
+    <content><![CDATA[<pre><code class="ruby">require &#39;optparse&#39;
+
+options = {}
+option_parser = OptionParser.new do |opts|
+  # 这里是这个命令行工具的帮助信息
+  opts.banner = &#39;here is help messages of the command line tool.&#39;
+
+  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
+  options[:switch] = false
+  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
+  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
+    # 这个部分就是使用这个Option后执行的代码
+    options[:switch] = true
+  end
+
+  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
+  #下面的“value”就是用户使用时输入的argument
+  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
+    options[:name] = value
+  end
+
+  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
+  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
+    puts value
+    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
+  end
+end.parse!
+
+puts options.inspect</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -1646,6 +1560,19 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>rails_model字段验证</title>
+    <url>/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/</url>
+    <content><![CDATA[<pre><code class="ruby">validates :address,  presence: true, uniqueness: true
+validates :email, presence: true, length: { maximum: 255 },
+VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+format: { with: VALID_EMAIL_REGEX }</code></pre>
+]]></content>
+      <tags>
+        <tag>rails</tag>
+        <tag>validates</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>qiniu_upload_file</title>
     <url>/2019/10/31/qiniu_upload_file/</url>
     <content><![CDATA[<pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
@@ -1676,19 +1603,6 @@ code, result, response_headers = Qiniu::Storage.upload_with_token_2(
 # puts &quot;\n\e[1;40;37mhttp://ogbkru1bq.bkt.clouddn.com/#{key}\e[0m&quot;
 puts &quot;http://ogbkru1bq.bkt.clouddn.com/#{key}&quot;</code></pre>
 ]]></content>
-  </entry>
-  <entry>
-    <title>rails_model字段验证</title>
-    <url>/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/</url>
-    <content><![CDATA[<pre><code class="ruby">validates :address,  presence: true, uniqueness: true
-validates :email, presence: true, length: { maximum: 255 },
-VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-format: { with: VALID_EMAIL_REGEX }</code></pre>
-]]></content>
-      <tags>
-        <tag>rails</tag>
-        <tag>validates</tag>
-      </tags>
   </entry>
   <entry>
     <title>rails_record数据库查询</title>
@@ -1934,6 +1848,18 @@ Client.exists?([1,2,3])</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>rails健壮参数</title>
+    <url>/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/</url>
+    <content><![CDATA[<pre><code class="ruby">def user_params
+  params.require(:user).permit(:nickname, :email, :address)
+end</code></pre>
+]]></content>
+      <tags>
+        <tag>rails</tag>
+        <tag>健壮参数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>rails使用markdown显示文本</title>
     <url>/2019/10/31/rails%E4%BD%BF%E7%94%A8markdown%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC/</url>
     <content><![CDATA[<h2 id="rails使用markdown显示文本"><a href="#rails使用markdown显示文本" class="headerlink" title="rails使用markdown显示文本"></a>rails使用markdown显示文本</h2><ul>
@@ -2009,73 +1935,6 @@ gem &#39;coderay&#39;</code></pre>
 <ul>
 <li>在view中要显示markdown文本的地方添加<code>&lt;%= markdown(text)%&gt;</code></li>
 </ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>rails健壮参数</title>
-    <url>/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/</url>
-    <content><![CDATA[<pre><code class="ruby">def user_params
-  params.require(:user).permit(:nickname, :email, :address)
-end</code></pre>
-]]></content>
-      <tags>
-        <tag>rails</tag>
-        <tag>健壮参数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>rails国际化</title>
-    <url>/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/</url>
-    <content><![CDATA[<h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
-<pre><code class="yml">zh-CN:
-  menu:
-    home: &#39;首页&#39;
-    team: &#39;团队&#39;
-    projects: &#39;项目&#39;
-    careers: &#39;招聘&#39;
-    blog: &#39;博客&#39;</code></pre>
-<p>与之对应新建翻译文本<code>en.yml</code><br>文件内容参考如下</p>
-<pre><code class="yml">en:
-  menu:
-    home: &#39;About&#39;
-    team: &#39;Team&#39;
-    projects: &#39;Projects&#39;
-    careers: &#39;Careers&#39;
-    blog: &#39;Blog&#39;</code></pre>
-<h2 id="在console中测试"><a href="#在console中测试" class="headerlink" title="在console中测试"></a>在console中测试</h2><h4 id="查看可用的语言"><a href="#查看可用的语言" class="headerlink" title="查看可用的语言"></a>查看可用的语言</h4><p><code>I18n.available_locales</code></p>
-<h4 id="设置当前语言"><a href="#设置当前语言" class="headerlink" title="设置当前语言"></a>设置当前语言</h4><p><code>I18n.locale = &#39;en&#39;</code></p>
-<h4 id="测试翻译"><a href="#测试翻译" class="headerlink" title="测试翻译"></a>测试翻译</h4><p><code>I18n.t(&#39;menu.home&#39;)</code></p>
-<h2 id="在view中使用"><a href="#在view中使用" class="headerlink" title="在view中使用"></a>在view中使用</h2><pre><code class="erb">&lt;%= t(&quot;menu.home&quot;)%&gt;</code></pre>
-<h2 id="设置网站的语言环境"><a href="#设置网站的语言环境" class="headerlink" title="设置网站的语言环境"></a>设置网站的语言环境</h2><h4 id="view"><a href="#view" class="headerlink" title="view"></a>view</h4><p>在helper中编写生成语言选择的下拉列表框的辅助方法，方便在view中使用，尽量不要把ruby语言部分过多的写在html中</p>
-<pre><code class="ruby">  def language(language_category)
-    case language_category
-    when :&#39;en&#39;
-      &#39;English&#39;
-    when :&#39;zh-CN&#39;
-      &#39;简体中文&#39;
-    end
-  end
-
-  def language_tag
-    request_url = request.url
-    I18n.available_locales.map do |la|
-      content_tag(:li,content_tag(:a ,language(la),href:&quot;#{request_url}?&amp;locale=#{la.to_s}&quot;,data: {remote: true},class:&#39;language&#39;))
-      # &lt;li&gt;&lt;a class=&#39;language&#39; href= &quot;xxxx?&amp;local=en&quot; data-remote=&#39;true&#39;&gt;English&lt;/a&gt;&lt;/li&gt;
-    end.join.html_safe
-  end</code></pre>
-<p>注意<code>content_tag</code>的用法<br>当选择语言时，需要异步提交到后台设置语言环境，然后重新加载本页面</p>
-<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>每个页面都需要检查一下当前的语言环境，所以在每个页面跳转之前都到先设置正确的语言，因此在<code>ApplicationController</code>中如下</p>
-<pre><code class="ruby">  before_action :set_language
-
-  def set_language
-    session[:locale] = params[:locale] if params[:locale]
-    I18n.locale = session[:locale] || I18n.default_locale
-  end</code></pre>
-<h4 id="刷新当前页面"><a href="#刷新当前页面" class="headerlink" title="刷新当前页面"></a>刷新当前页面</h4><p>由于是异步提交到后台中，所以页面不会刷新。对语言选择的超链接添加<code>ajax:success</code>监听，当成功设置语言环境后，使用前端的方法刷新本页面</p>
-<pre><code class="javascript">function set_language(){
-  $(&quot;.language&quot;).on(&#39;ajax:success&#39;, function(event, data, status, xhr) {
-    location.reload();
-  });</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2187,21 +2046,6 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>rails返回json数据</title>
-    <url>/2019/10/31/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<pre><code class="ruby">def current_contract
-  respond_to do |format|
-    u = User.where(isCurrentContract: true).first
-    cs = {token: u.address, auction: u.nickname, type: u.email.split(&#39;@&#39;)[0]}
-    format.json { render json: cs.to_json }
-  end
-end</code></pre>
-]]></content>
-      <tags>
-        <tag>rails</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>rails部署后图片404问题</title>
     <url>/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%8E%E5%9B%BE%E7%89%87404%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h2 id="rails部署之后图片404问题"><a href="#rails部署之后图片404问题" class="headerlink" title="rails部署之后图片404问题"></a>rails部署之后图片404问题</h2><p>当在html.erb中添加一张图片时，可以用<code>&lt;%= image_tag%&gt;</code><br>辅助函数，但是如果我们要在scss文件中给某个divt添加北京图片时，该怎样设置图片的url呢？</p>
@@ -2249,6 +2093,61 @@ gem &#39;dalli&#39;</code></pre>
     img.attr(&#39;src&#39;, currentSrc.split(&#39;?&#39;)[0] + &#39;?&#39; + (new Date()).getTime());
     return false
 </code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>rails返回json数据</title>
+    <url>/2019/10/31/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<pre><code class="ruby">def current_contract
+  respond_to do |format|
+    u = User.where(isCurrentContract: true).first
+    cs = {token: u.address, auction: u.nickname, type: u.email.split(&#39;@&#39;)[0]}
+    format.json { render json: cs.to_json }
+  end
+end</code></pre>
+]]></content>
+      <tags>
+        <tag>rails</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>react_native点击空白处输入法隐藏</title>
+    <url>/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/</url>
+    <content><![CDATA[<h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
+    this.refs.textInput1.blur();
+    this.refs.textInput2.blur();
+  };
+
+  render() {
+    return (
+      &lt;TouchableWithoutFeedback
+        style={styles.container}
+        onPress={() =&gt; {
+          this.hideInputBox();
+        }}
+      &gt;
+        &lt;View style={styles.container}&gt;
+          &lt;View style={styles.inputGroup}&gt;
+
+            &lt;TextInput
+              ref=&quot;textInput1&quot;
+            /&gt;
+          &lt;/View&gt;
+          &lt;View style={[styles.inputGroup]}&gt;
+            &lt;TextInput
+              ref=&quot;textInput2&quot;
+            /&gt;
+          &lt;/View&gt;
+        &lt;/View&gt;
+      &lt;/TouchableWithoutFeedback&gt;
+    );
+    const styles = StyleSheet.create({
+  container: {
+    justifyContent: &quot;center&quot;,
+    flex: 1
+  },
+    })</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2383,43 +2282,58 @@ const styles = StyleSheet.create({
 ]]></content>
   </entry>
   <entry>
-    <title>react_native点击空白处输入法隐藏</title>
-    <url>/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/</url>
-    <content><![CDATA[<h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
-    this.refs.textInput1.blur();
-    this.refs.textInput2.blur();
-  };
+    <title>rails国际化</title>
+    <url>/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/</url>
+    <content><![CDATA[<h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
+<pre><code class="yml">zh-CN:
+  menu:
+    home: &#39;首页&#39;
+    team: &#39;团队&#39;
+    projects: &#39;项目&#39;
+    careers: &#39;招聘&#39;
+    blog: &#39;博客&#39;</code></pre>
+<p>与之对应新建翻译文本<code>en.yml</code><br>文件内容参考如下</p>
+<pre><code class="yml">en:
+  menu:
+    home: &#39;About&#39;
+    team: &#39;Team&#39;
+    projects: &#39;Projects&#39;
+    careers: &#39;Careers&#39;
+    blog: &#39;Blog&#39;</code></pre>
+<h2 id="在console中测试"><a href="#在console中测试" class="headerlink" title="在console中测试"></a>在console中测试</h2><h4 id="查看可用的语言"><a href="#查看可用的语言" class="headerlink" title="查看可用的语言"></a>查看可用的语言</h4><p><code>I18n.available_locales</code></p>
+<h4 id="设置当前语言"><a href="#设置当前语言" class="headerlink" title="设置当前语言"></a>设置当前语言</h4><p><code>I18n.locale = &#39;en&#39;</code></p>
+<h4 id="测试翻译"><a href="#测试翻译" class="headerlink" title="测试翻译"></a>测试翻译</h4><p><code>I18n.t(&#39;menu.home&#39;)</code></p>
+<h2 id="在view中使用"><a href="#在view中使用" class="headerlink" title="在view中使用"></a>在view中使用</h2><pre><code class="erb">&lt;%= t(&quot;menu.home&quot;)%&gt;</code></pre>
+<h2 id="设置网站的语言环境"><a href="#设置网站的语言环境" class="headerlink" title="设置网站的语言环境"></a>设置网站的语言环境</h2><h4 id="view"><a href="#view" class="headerlink" title="view"></a>view</h4><p>在helper中编写生成语言选择的下拉列表框的辅助方法，方便在view中使用，尽量不要把ruby语言部分过多的写在html中</p>
+<pre><code class="ruby">  def language(language_category)
+    case language_category
+    when :&#39;en&#39;
+      &#39;English&#39;
+    when :&#39;zh-CN&#39;
+      &#39;简体中文&#39;
+    end
+  end
 
-  render() {
-    return (
-      &lt;TouchableWithoutFeedback
-        style={styles.container}
-        onPress={() =&gt; {
-          this.hideInputBox();
-        }}
-      &gt;
-        &lt;View style={styles.container}&gt;
-          &lt;View style={styles.inputGroup}&gt;
+  def language_tag
+    request_url = request.url
+    I18n.available_locales.map do |la|
+      content_tag(:li,content_tag(:a ,language(la),href:&quot;#{request_url}?&amp;locale=#{la.to_s}&quot;,data: {remote: true},class:&#39;language&#39;))
+      # &lt;li&gt;&lt;a class=&#39;language&#39; href= &quot;xxxx?&amp;local=en&quot; data-remote=&#39;true&#39;&gt;English&lt;/a&gt;&lt;/li&gt;
+    end.join.html_safe
+  end</code></pre>
+<p>注意<code>content_tag</code>的用法<br>当选择语言时，需要异步提交到后台设置语言环境，然后重新加载本页面</p>
+<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>每个页面都需要检查一下当前的语言环境，所以在每个页面跳转之前都到先设置正确的语言，因此在<code>ApplicationController</code>中如下</p>
+<pre><code class="ruby">  before_action :set_language
 
-            &lt;TextInput
-              ref=&quot;textInput1&quot;
-            /&gt;
-          &lt;/View&gt;
-          &lt;View style={[styles.inputGroup]}&gt;
-            &lt;TextInput
-              ref=&quot;textInput2&quot;
-            /&gt;
-          &lt;/View&gt;
-        &lt;/View&gt;
-      &lt;/TouchableWithoutFeedback&gt;
-    );
-    const styles = StyleSheet.create({
-  container: {
-    justifyContent: &quot;center&quot;,
-    flex: 1
-  },
-    })</code></pre>
+  def set_language
+    session[:locale] = params[:locale] if params[:locale]
+    I18n.locale = session[:locale] || I18n.default_locale
+  end</code></pre>
+<h4 id="刷新当前页面"><a href="#刷新当前页面" class="headerlink" title="刷新当前页面"></a>刷新当前页面</h4><p>由于是异步提交到后台中，所以页面不会刷新。对语言选择的超链接添加<code>ajax:success</code>监听，当成功设置语言环境后，使用前端的方法刷新本页面</p>
+<pre><code class="javascript">function set_language(){
+  $(&quot;.language&quot;).on(&#39;ajax:success&#39;, function(event, data, status, xhr) {
+    location.reload();
+  });</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2544,16 +2458,6 @@ new Date(ms);</code></pre>
       </tags>
   </entry>
   <entry>
-    <title>linux下文件的加密与解密</title>
-    <url>/2019/10/31/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/</url>
-    <content><![CDATA[<h2 id="linux下文件的加密与解密"><a href="#linux下文件的加密与解密" class="headerlink" title="linux下文件的加密与解密"></a>linux下文件的加密与解密</h2><p>使用GnuPG实现对文件的加密与解密<a href="https://www.howtoing.com/linux-password-protect-files-with-encryption" target="_blank" rel="noopener">详细参考</a></p>
-<h3 id="安装GnuPG"><a href="#安装GnuPG" class="headerlink" title="安装GnuPG"></a>安装GnuPG</h3><pre><code class="shell">sudo apt install gnupg</code></pre>
-<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><pre><code class="shell">gpg -c filename // -c 使用对称加密</code></pre>
-<p>输入命令<code>gpg --version</code> 查看更多的加密方式</p>
-<h3 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h3><pre><code class="shell">gpg filename</code></pre>
-]]></content>
-  </entry>
-  <entry>
     <title>linux下满速下载百度网盘的方法</title>
     <url>/2019/10/31/linux%E4%B8%8B%E6%BB%A1%E9%80%9F%E4%B8%8B%E8%BD%BD%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98%E7%9A%84%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>百度网盘更新后，在liunx下无法下载大文件，非要安装客户端，你倒是开发出来一个linux的客户端呀！</p>
@@ -2567,22 +2471,19 @@ new Date(ms);</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>linux更改非root账户密码</title>
-    <url>/2019/10/31/linux%E6%9B%B4%E6%94%B9%E9%9D%9Eroot%E8%B4%A6%E6%88%B7%E5%AF%86%E7%A0%81/</url>
-    <content><![CDATA[<h2 id="linux更改非root账户密码"><a href="#linux更改非root账户密码" class="headerlink" title="linux更改非root账户密码"></a>linux更改非root账户密码</h2><p>在root用户下，使用<code>passwd username</code>命令，然后输入新的密码。</p>
+    <title>linux下文件的加密与解密</title>
+    <url>/2019/10/31/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/</url>
+    <content><![CDATA[<h2 id="linux下文件的加密与解密"><a href="#linux下文件的加密与解密" class="headerlink" title="linux下文件的加密与解密"></a>linux下文件的加密与解密</h2><p>使用GnuPG实现对文件的加密与解密<a href="https://www.howtoing.com/linux-password-protect-files-with-encryption" target="_blank" rel="noopener">详细参考</a></p>
+<h3 id="安装GnuPG"><a href="#安装GnuPG" class="headerlink" title="安装GnuPG"></a>安装GnuPG</h3><pre><code class="shell">sudo apt install gnupg</code></pre>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><pre><code class="shell">gpg -c filename // -c 使用对称加密</code></pre>
+<p>输入命令<code>gpg --version</code> 查看更多的加密方式</p>
+<h3 id="解密"><a href="#解密" class="headerlink" title="解密"></a>解密</h3><pre><code class="shell">gpg filename</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>linux添加新用户</title>
-    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
-    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
-<li>adduser username</li>
-<li>输入密码</li>
-<li>再次输密码</li>
-<li>输入电话号等，按enter使用默认值</li>
-<li>新用户创建成功</li>
-</ol>
-<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
+    <title>linux更改非root账户密码</title>
+    <url>/2019/10/31/linux%E6%9B%B4%E6%94%B9%E9%9D%9Eroot%E8%B4%A6%E6%88%B7%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<h2 id="linux更改非root账户密码"><a href="#linux更改非root账户密码" class="headerlink" title="linux更改非root账户密码"></a>linux更改非root账户密码</h2><p>在root用户下，使用<code>passwd username</code>命令，然后输入新的密码。</p>
 ]]></content>
   </entry>
   <entry>
@@ -2621,6 +2522,19 @@ new Date(ms);</code></pre>
 <p>./liyao: empty</p>
 <p>3、尝试用rm 删除太多的文件，你可能得到一个错误信息：/bin/rm Argument list too long. 用xargs 去避免这个问题<br>$find ~ -name ‘*.log’ -print0 | xargs -i -0 rm -f {}</p>
 <p>4、查找所有的jpg 文件，并且压缩它<br># find / -name *.jpg -type f -print | xargs tar -cvzf images.tar.gz<br>5、拷贝所有的图片文件到一个外部的硬盘驱动<br># ls *.jpg | xargs -n1 -i cp {} /external-hard-drive/directory</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>linux添加新用户</title>
+    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
+    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
+<li>adduser username</li>
+<li>输入密码</li>
+<li>再次输密码</li>
+<li>输入电话号等，按enter使用默认值</li>
+<li>新用户创建成功</li>
+</ol>
+<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
 ]]></content>
   </entry>
   <entry>
@@ -2950,8 +2864,8 @@ var hello = helloContract.new(
 </ul>
 ]]></content>
       <tags>
-        <tag>contract</tag>
         <tag>solidity</tag>
+        <tag>contract</tag>
         <tag>geth</tag>
       </tags>
   </entry>
@@ -3296,35 +3210,6 @@ end  </code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>强制重启Linux系统的几种方法</title>
-    <url>/2019/10/31/%E5%BC%BA%E5%88%B6%E9%87%8D%E5%90%AFLinux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="强制重启Linux系统的几种方法"><a href="#强制重启Linux系统的几种方法" class="headerlink" title="强制重启Linux系统的几种方法"></a>强制重启Linux系统的几种方法</h1><p> <a href="https://zohead.com/archives/linux-force-reboot/" target="_blank" rel="noopener">2014年01月26日 星期日</a>  <a href="https://zohead.com/archives/author/admin/" target="_blank" rel="noopener">Uranus Zhou</a> <a href="https://zohead.com/archives/category/technology/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/category/technology/" target="_blank" rel="noopener">技术</a></p>
-<p>实际生产环境中某些情况下 Linux 服务器系统在出现致命错误需要远程进行重启，通过常规的 <code>reboot</code>、<code>init 6</code> 等方法无法正常重启（例如重启时卡在驱动程序里等情况），这时就需要通过下面介绍的几种特殊的方法进行强制重启。</p>
-<blockquote>
-<p><strong>注意</strong></p>
-<p>下面这些强制重启 Linux 的方法都是直接跳过 umount 文件系统及 sync 等操作，可能导致数据损坏，不在特殊情况下请勿使用。另外当然这些都是需要 root 超级用户权限的哦。</p>
-</blockquote>
-<h2 id="reboot-命令"><a href="#reboot-命令" class="headerlink" title="reboot 命令"></a>reboot 命令</h2><p>直接通过运行 <code>reboot -nf</code> 命令，这样重启时可以指定跳过 init 的处理和 sync 操作，这样可以避免大多数情况下的问题。</p>
-<h2 id="magic-SysRq-key-方法"><a href="#magic-SysRq-key-方法" class="headerlink" title="magic SysRq key 方法"></a>magic SysRq key 方法</h2><p>magic SysRq key 通过 proc 接口提供用户直接发底层命令给 kernel 的功能，可以实现关机、重启、宕机等操作，Linux kernel 需要开启 <code>CONFIG_MAGIC_SYSRQ</code> 才可以支持 magic SysRq key。</p>
-<p>运行下面两条命令就可以直接强制重启系统：</p>
-<p>相应的直接强制关机的命令：</p>
-<h2 id="watchdog-方法"><a href="#watchdog-方法" class="headerlink" title="watchdog 方法"></a>watchdog 方法</h2><p>如果 Linux kernel 未开启 magic SysRq key 或者不起作用，可以尝试使用 watchdog 重启方法。watchdog 通过监控数据输入是否正常可以实现在系统出现异常时自动重启系统，这里我们刚好可以借用的。</p>
-<p>首先需要加载 watchdog 支持，这个和主板硬件设备有关，如果只需要软件模拟的，可以运行：</p>
-<p>命令加载软件 watchdog 支持，接着再运行：</p>
-<p>命令，该命令会马上退出并报错，同时系统日志中就会提示：</p>
-<p>这就表示 watchdog 设备是被意外关闭的而不是正常停止的，大约等待 60 秒之后你就会发现 Linux 系统自动重启了。Linux watchdog 的异常等待时间是通过 <code>/proc/sys/kernel/watchdog_thresh</code> 设置的，一般默认为 60 秒。</p>
-<h2 id="IPMI-方法"><a href="#IPMI-方法" class="headerlink" title="IPMI 方法"></a>IPMI 方法</h2><p>上面几种方法都不能用？如果你的主板刚好支持 IPMI 管理接口的话，那可以直接通过 IPMI 实现硬件上的强制关机或重启。</p>
-<p>首先加载 IPMI 支持：</p>
-<p>确认 IPMI 设备是否已找到：</p>
-<p>如果输出正常的话表示 IPMI 被正确加载了，接着安装 <code>ipmitool</code> 管理工具。<code>ipmitool</code> 可以通过 IPMI 接口完成对本机或远程主机的一系列管理操作。</p>
-<p>这里我们就用直接电源管理的，重启系统：</p>
-<p>运行完成后主机就会马上重启，相应的关闭主机可以运行命令：</p>
-<p><code>ipmitool</code> 还可以实现在系统未启动时远程查看监控主板硬件状态等功能，在 IPMI 可用的情况下 <code>ipmitool</code> 还是比较方便好用的。</p>
-<p>无相关文章.</p>
-<p> <a href="https://zohead.com/archives/tag/ipmi/" target="_blank" rel="noopener">IPMI</a>, <a href="https://zohead.com/archives/tag/ipmitool/" target="_blank" rel="noopener">ipmitool</a>, <a href="https://zohead.com/archives/tag/kernel/" target="_blank" rel="noopener">kernel</a>, <a href="https://zohead.com/archives/tag/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/tag/sysrq/" target="_blank" rel="noopener">SysRq</a>, <a href="https://zohead.com/archives/tag/watchdog/" target="_blank" rel="noopener">watchdog</a>, <a href="https://zohead.com/archives/tag/reboot/" target="_blank" rel="noopener">重启</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>得到图片外链vim脚本</title>
     <url>/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h3 id="选中的图片地址，将图片上传到七牛云，并得到外链"><a href="#选中的图片地址，将图片上传到七牛云，并得到外链" class="headerlink" title="选中的图片地址，将图片上传到七牛云，并得到外链"></a>选中的图片地址，将图片上传到七牛云，并得到外链</h3><p>配合自定义命令<a href="https://dccmm.world/topics/qiniu_upload_file" target="_blank" rel="noopener">qiniu</a>使用</p>
@@ -3354,6 +3239,35 @@ endfunction</code></pre>
         <tag>vim</tag>
         <tag>DIY_script</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>强制重启Linux系统的几种方法</title>
+    <url>/2019/10/31/%E5%BC%BA%E5%88%B6%E9%87%8D%E5%90%AFLinux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="强制重启Linux系统的几种方法"><a href="#强制重启Linux系统的几种方法" class="headerlink" title="强制重启Linux系统的几种方法"></a>强制重启Linux系统的几种方法</h1><p> <a href="https://zohead.com/archives/linux-force-reboot/" target="_blank" rel="noopener">2014年01月26日 星期日</a>  <a href="https://zohead.com/archives/author/admin/" target="_blank" rel="noopener">Uranus Zhou</a> <a href="https://zohead.com/archives/category/technology/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/category/technology/" target="_blank" rel="noopener">技术</a></p>
+<p>实际生产环境中某些情况下 Linux 服务器系统在出现致命错误需要远程进行重启，通过常规的 <code>reboot</code>、<code>init 6</code> 等方法无法正常重启（例如重启时卡在驱动程序里等情况），这时就需要通过下面介绍的几种特殊的方法进行强制重启。</p>
+<blockquote>
+<p><strong>注意</strong></p>
+<p>下面这些强制重启 Linux 的方法都是直接跳过 umount 文件系统及 sync 等操作，可能导致数据损坏，不在特殊情况下请勿使用。另外当然这些都是需要 root 超级用户权限的哦。</p>
+</blockquote>
+<h2 id="reboot-命令"><a href="#reboot-命令" class="headerlink" title="reboot 命令"></a>reboot 命令</h2><p>直接通过运行 <code>reboot -nf</code> 命令，这样重启时可以指定跳过 init 的处理和 sync 操作，这样可以避免大多数情况下的问题。</p>
+<h2 id="magic-SysRq-key-方法"><a href="#magic-SysRq-key-方法" class="headerlink" title="magic SysRq key 方法"></a>magic SysRq key 方法</h2><p>magic SysRq key 通过 proc 接口提供用户直接发底层命令给 kernel 的功能，可以实现关机、重启、宕机等操作，Linux kernel 需要开启 <code>CONFIG_MAGIC_SYSRQ</code> 才可以支持 magic SysRq key。</p>
+<p>运行下面两条命令就可以直接强制重启系统：</p>
+<p>相应的直接强制关机的命令：</p>
+<h2 id="watchdog-方法"><a href="#watchdog-方法" class="headerlink" title="watchdog 方法"></a>watchdog 方法</h2><p>如果 Linux kernel 未开启 magic SysRq key 或者不起作用，可以尝试使用 watchdog 重启方法。watchdog 通过监控数据输入是否正常可以实现在系统出现异常时自动重启系统，这里我们刚好可以借用的。</p>
+<p>首先需要加载 watchdog 支持，这个和主板硬件设备有关，如果只需要软件模拟的，可以运行：</p>
+<p>命令加载软件 watchdog 支持，接着再运行：</p>
+<p>命令，该命令会马上退出并报错，同时系统日志中就会提示：</p>
+<p>这就表示 watchdog 设备是被意外关闭的而不是正常停止的，大约等待 60 秒之后你就会发现 Linux 系统自动重启了。Linux watchdog 的异常等待时间是通过 <code>/proc/sys/kernel/watchdog_thresh</code> 设置的，一般默认为 60 秒。</p>
+<h2 id="IPMI-方法"><a href="#IPMI-方法" class="headerlink" title="IPMI 方法"></a>IPMI 方法</h2><p>上面几种方法都不能用？如果你的主板刚好支持 IPMI 管理接口的话，那可以直接通过 IPMI 实现硬件上的强制关机或重启。</p>
+<p>首先加载 IPMI 支持：</p>
+<p>确认 IPMI 设备是否已找到：</p>
+<p>如果输出正常的话表示 IPMI 被正确加载了，接着安装 <code>ipmitool</code> 管理工具。<code>ipmitool</code> 可以通过 IPMI 接口完成对本机或远程主机的一系列管理操作。</p>
+<p>这里我们就用直接电源管理的，重启系统：</p>
+<p>运行完成后主机就会马上重启，相应的关闭主机可以运行命令：</p>
+<p><code>ipmitool</code> 还可以实现在系统未启动时远程查看监控主板硬件状态等功能，在 IPMI 可用的情况下 <code>ipmitool</code> 还是比较方便好用的。</p>
+<p>无相关文章.</p>
+<p> <a href="https://zohead.com/archives/tag/ipmi/" target="_blank" rel="noopener">IPMI</a>, <a href="https://zohead.com/archives/tag/ipmitool/" target="_blank" rel="noopener">ipmitool</a>, <a href="https://zohead.com/archives/tag/kernel/" target="_blank" rel="noopener">kernel</a>, <a href="https://zohead.com/archives/tag/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/tag/sysrq/" target="_blank" rel="noopener">SysRq</a>, <a href="https://zohead.com/archives/tag/watchdog/" target="_blank" rel="noopener">watchdog</a>, <a href="https://zohead.com/archives/tag/reboot/" target="_blank" rel="noopener">重启</a></p>
+]]></content>
   </entry>
   <entry>
     <title>消息闪现</title>
@@ -8543,6 +8457,103 @@ export https_proxy=&quot;socks5://127.0.0.1:1080&quot;</code></pre>
       </tags>
   </entry>
   <entry>
+    <title>Truffle</title>
+    <url>/2018/09/01/Truffle/</url>
+    <content><![CDATA[<h2 id="安装-Truffle-4-0"><a href="#安装-Truffle-4-0" class="headerlink" title="安装 Truffle 4.0"></a>安装 Truffle 4.0</h2><pre><code class="shell">npm install -g truffle@4.0.0</code></pre>
+<p>查看安装的版本：</p>
+<pre><code class="shell">truffle version
+Truffle v4.0.0 (core: 4.0.0)
+Solidity v0.4.18 (solc-js)</code></pre>
+<h2 id="安装-TestRPC"><a href="#安装-TestRPC" class="headerlink" title="安装 TestRPC"></a>安装 TestRPC</h2><pre><code class="shell">npm install -g ethereumjs-testrpc
+/usr/local/bin/testrpc -&gt; /usr/local/lib/node_modules/ethereumjs-testrpc/build/cli.node.js
++ ethereumjs-testrpc@6.0.1
+added 1 package and updated 2 packages in 10.648s</code></pre>
+<a id="more"></a>
+<h2 id="初始化一个-Truffle-项目"><a href="#初始化一个-Truffle-项目" class="headerlink" title="初始化一个 Truffle 项目"></a>初始化一个 Truffle 项目</h2><pre><code class="shell">mkdir test_truffle
+cd test_truffle
+truffle init
+
+Downloading...
+Unpacking...
+Setting up...
+Unbox successful. Sweet!
+
+Commands:
+
+  Compile:        truffle compile
+  Migrate:        truffle migrate
+  Test contracts: truffle test</code></pre>
+<p>完成后，你将拥有如下目录：</p>
+<ul>
+<li><p><code>contracts</code> 智能合约目录</p>
+</li>
+<li><p><code>migrations</code> 发布脚本目录</p>
+</li>
+<li><p><code>test</code> 存放测试文件</p>
+</li>
+<li><p><code>truffle.js</code> Truffle 的配置文件</p>
+</li>
+</ul>
+<h2 id="编译合约"><a href="#编译合约" class="headerlink" title="编译合约"></a>编译合约</h2><p>要编译合约，使用<code>truffle compile</code>命令，可以将原始代码编译成以太坊认可的字节码</p>
+<p><code>Truffle</code>仅默认编译自上次编译后被修改过的文件，来减少不必要的编译。如果你想编译全部文件，可以使用<code>--compile-all</code>选项</p>
+<pre><code>truffle compile --compile-all</code></pre><p><code>Truffle</code>需要定义的合约名称和文件名准确匹配,这种匹配是区分大小写的，也就是说大小写也要一致。推荐大写每一个开头字母。</p>
+<p>文件之间的相互依赖，可以使用<code>import</code>进行合约间的引用，Truffle 将会按正确顺序依次编译合约，并在需要的时候自动关联库。例如：</p>
+<pre><code>import &quot;./AnotherContract.sol&quot;;</code></pre><h1 id="部署智能合约"><a href="#部署智能合约" class="headerlink" title="部署智能合约"></a>部署智能合约</h1><p>编辑<code>truffle.js</code>配置文件，设置我们稍后要部署智能合约的位置，内容如下：</p>
+<pre><code class="js">module.exports = {
+    networks: {
+        development: {
+          host: &quot;localhost&quot;,
+          port: 8545,
+          network_id: &quot;*&quot;
+        }
+    }</code></pre>
+<p>接下来，我们会使用上面的智能合约，分别在<code>testRPC</code>和<code>geth</code>中进行部署测试。</p>
+<p><code>truffle</code>的智能合约项目部署，使用下面的命令：</p>
+<pre><code class="shell">truffle migrate</code></pre>
+<blockquote>
+<p>这个命令会执行所有<code>migrations</code>目录下的 js 文件。如果之前执行过<code>truffle migrate</code>命令，再次执行，只会部署新的 js 文件，如果没有新的 js 文件，不会起任何作用。如果使用<code>--reset</code>参数，则会重新的执行所有脚本的部署。</p>
+</blockquote>
+<p>如果要部署到指定的网络，可以使用<code>--network</code>参数，例如：</p>
+<pre><code class="shell">truffle migrate --network live</code></pre>
+<p>多个网络的配置格式如下：</p>
+<pre><code class="js">networks: {
+  development: {
+    host: &quot;localhost&quot;,
+    port: 8545,
+    network_id: &quot;*&quot; // match any network
+  },
+  live: {
+    host: &quot;178.25.19.88&quot;, // Random IP for example purposes (do not use)
+    port: 80,
+    network_id: 1,        // Ethereum public network
+    // optional config values:
+    // gas  Gas limit used for deploys. Default is 4712388
+    // gasPrice Gas price used for deploys. Default is 100000000000 (100 Shannon).
+    // from - default address to use for any transaction Truffle makes during migrations
+    // provider - web3 provider instance Truffle should use to talk to the Ethereum network.
+    //          - if specified, host and port are ignored.
+  }
+}</code></pre>
+<h3 id="通过-truffle-migrate-命令，对合约进行部署"><a href="#通过-truffle-migrate-命令，对合约进行部署" class="headerlink" title="通过 truffle migrate 命令，对合约进行部署"></a>通过 truffle migrate 命令，对合约进行部署</h3><p>使用<code>truffle migrate</code>命令，发布项目：</p>
+<pre><code>➜ /Users/lion/my_project/_eth/test_truffle &gt;truffle migrate
+Using network &#39;development&#39;.
+
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0xd9e5fa242d29362e57e3da7b0bf6f71b72767972fc15240ed3a02d341e814a44
+  Migrations: 0x4bedd1bb517ff9a54f6f3df8eba821ff16a4109b
+  Deploying Hello_mshk_top...
+  ... 0xc22ff050e189c2561d40250077ee4bf628f957899dfa8d0b5fa50e3ab7a896b0
+  Hello_mshk_top: 0xa7ef5037ff81d7932e01b68a503ca4587f00b35c
+Saving successful migration to network...
+  ... 0x49505a54042f5f74146fbfafef63dd408cb0a7a0c66214ebbaa3217e443d792a
+Saving artifacts...</code></pre>]]></content>
+      <tags>
+        <tag>contract</tag>
+        <tag>truffle</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>用ruby编写vim脚本</title>
     <url>/2018/08/30/%E7%94%A8ruby%E7%BC%96%E5%86%99vim%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<p>在开始编写插件之前，你需要确认 Vim 是否支持 Ruby，通过以下命令来判别：</p>
@@ -9198,8 +9209,8 @@ name = Time.now.to_i.to_s + &quot;.png&quot;
 <h3 id="绑定快捷键"><a href="#绑定快捷键" class="headerlink" title="绑定快捷键"></a>绑定快捷键</h3><p><img src="http://ogbkru1bq.bkt.clouddn.com/1534739826.png" alt=""></p>
 ]]></content>
       <tags>
-        <tag>shutter</tag>
         <tag>linux</tag>
+        <tag>shutter</tag>
         <tag>截屏</tag>
       </tags>
   </entry>
@@ -9996,8 +10007,8 @@ set tags+=tags;</code></pre>
 <p>在光标所在单词下，使用 <code>ctrl + ]</code>便可以跳转函数的源码处，使用<code>ctrl + o</code> 或者<code>ctrl + t</code>返回</p>
 ]]></content>
       <tags>
-        <tag>ctags</tag>
         <tag>vim</tag>
+        <tag>ctags</tag>
       </tags>
   </entry>
   <entry>
@@ -10784,8 +10795,8 @@ large_client_header_buffers 4 512k;</code></pre>
 <h3 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h3><pre><code class="shell">service nginx restart</code></pre>
 ]]></content>
       <tags>
-        <tag>nginx</tag>
         <tag>rails</tag>
+        <tag>nginx</tag>
         <tag>http</tag>
       </tags>
   </entry>

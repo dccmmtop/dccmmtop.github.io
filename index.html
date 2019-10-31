@@ -133,176 +133,32 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-text" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Solidity的event事件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/text/">text</a>
+      <a class="article-title" href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/">Solidity的event事件</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/text/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+        <a href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/" class="archive-article-date">
+  	<time datetime="2019-10-31T14:05:57.396Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
+        <h3 id="本文属于转载内容，转载来源"><a href="#本文属于转载内容，转载来源" class="headerlink" title="本文属于转载内容，转载来源"></a>本文属于转载内容，<a href="http://me.tryblockchain.org/blockchain-solidity-event.html" target="_blank" rel="noopener">转载来源</a></h3><p>在介绍事件前，我们先明确事件，日志这两个概念。事件发生后被记录到区块链上成为了日志。总的来说，事件强调功能，一种行为；日志强调存储，内容。</p>
+<p>事件是以太坊 EVM 提供的一种日志基础设施。事件可以用来做操作记录，存储为日志。也可以用来实现一些交互功能，比如通知 UI，返回函数调用结果等<a href="http://me.tryblockchain.org/blockchain-solidity-event.html#fn1" target="_blank" rel="noopener">1</a>。</p>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>当定义的事件触发时，我们可以将事件存储到 EVM 的交易日志中，日志是区块链中的一种特殊数据结构。日志与合约关联，与合约的存储合并存入区块链中。只要某个区块可以访问，其相关的日志就可以访问。但在合约中，我们不能直接访问日志和事件数据（即便是创建日志的合约）。下面我们来看看，如何在 Solidity 中实现一个事件：</p>
         
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/text/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
+          <a class="article-more-a" href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/#more">更多 >></a>
         
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Truffle" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/Truffle/">Truffle</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/Truffle/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="安装-Truffle-4-0"><a href="#安装-Truffle-4-0" class="headerlink" title="安装 Truffle 4.0"></a>安装 Truffle 4.0</h2><pre><code class="shell">npm install -g truffle@4.0.0</code></pre>
-<p>查看安装的版本：</p>
-<pre><code class="shell">truffle version
-Truffle v4.0.0 (core: 4.0.0)
-Solidity v0.4.18 (solc-js)</code></pre>
-<h2 id="安装-TestRPC"><a href="#安装-TestRPC" class="headerlink" title="安装 TestRPC"></a>安装 TestRPC</h2><pre><code class="shell">npm install -g ethereumjs-testrpc
-/usr/local/bin/testrpc -&gt; /usr/local/lib/node_modules/ethereumjs-testrpc/build/cli.node.js
-+ ethereumjs-testrpc@6.0.1
-added 1 package and updated 2 packages in 10.648s</code></pre>
-<h2 id="初始化一个-Truffle-项目"><a href="#初始化一个-Truffle-项目" class="headerlink" title="初始化一个 Truffle 项目"></a>初始化一个 Truffle 项目</h2><pre><code class="shell">mkdir test_truffle
-cd test_truffle
-truffle init
-
-Downloading...
-Unpacking...
-Setting up...
-Unbox successful. Sweet!
-
-Commands:
-
-  Compile:        truffle compile
-  Migrate:        truffle migrate
-  Test contracts: truffle test</code></pre>
-<p>完成后，你将拥有如下目录：</p>
-<ul>
-<li><p><code>contracts</code> 智能合约目录</p>
-</li>
-<li><p><code>migrations</code> 发布脚本目录</p>
-</li>
-<li><p><code>test</code> 存放测试文件</p>
-</li>
-<li><p><code>truffle.js</code> Truffle 的配置文件</p>
-</li>
-</ul>
-<h2 id="编译合约"><a href="#编译合约" class="headerlink" title="编译合约"></a>编译合约</h2><p>要编译合约，使用<code>truffle compile</code>命令，可以将原始代码编译成以太坊认可的字节码</p>
-<p><code>Truffle</code>仅默认编译自上次编译后被修改过的文件，来减少不必要的编译。如果你想编译全部文件，可以使用<code>--compile-all</code>选项</p>
-<pre><code>truffle compile --compile-all</code></pre><p><code>Truffle</code>需要定义的合约名称和文件名准确匹配,这种匹配是区分大小写的，也就是说大小写也要一致。推荐大写每一个开头字母。</p>
-<p>文件之间的相互依赖，可以使用<code>import</code>进行合约间的引用，Truffle 将会按正确顺序依次编译合约，并在需要的时候自动关联库。例如：</p>
-<pre><code>import &quot;./AnotherContract.sol&quot;;</code></pre><h1 id="部署智能合约"><a href="#部署智能合约" class="headerlink" title="部署智能合约"></a>部署智能合约</h1><p>编辑<code>truffle.js</code>配置文件，设置我们稍后要部署智能合约的位置，内容如下：</p>
-<pre><code class="js">module.exports = {
-    networks: {
-        development: {
-          host: &quot;localhost&quot;,
-          port: 8545,
-          network_id: &quot;*&quot;
-        }
-    }</code></pre>
-<p>接下来，我们会使用上面的智能合约，分别在<code>testRPC</code>和<code>geth</code>中进行部署测试。</p>
-<p><code>truffle</code>的智能合约项目部署，使用下面的命令：</p>
-<pre><code class="shell">truffle migrate</code></pre>
-<blockquote>
-<p>这个命令会执行所有<code>migrations</code>目录下的 js 文件。如果之前执行过<code>truffle migrate</code>命令，再次执行，只会部署新的 js 文件，如果没有新的 js 文件，不会起任何作用。如果使用<code>--reset</code>参数，则会重新的执行所有脚本的部署。</p>
-</blockquote>
-<p>如果要部署到指定的网络，可以使用<code>--network</code>参数，例如：</p>
-<pre><code class="shell">truffle migrate --network live</code></pre>
-<p>多个网络的配置格式如下：</p>
-<pre><code class="js">networks: {
-  development: {
-    host: &quot;localhost&quot;,
-    port: 8545,
-    network_id: &quot;*&quot; // match any network
-  },
-  live: {
-    host: &quot;178.25.19.88&quot;, // Random IP for example purposes (do not use)
-    port: 80,
-    network_id: 1,        // Ethereum public network
-    // optional config values:
-    // gas  Gas limit used for deploys. Default is 4712388
-    // gasPrice Gas price used for deploys. Default is 100000000000 (100 Shannon).
-    // from - default address to use for any transaction Truffle makes during migrations
-    // provider - web3 provider instance Truffle should use to talk to the Ethereum network.
-    //          - if specified, host and port are ignored.
-  }
-}</code></pre>
-<h3 id="通过-truffle-migrate-命令，对合约进行部署"><a href="#通过-truffle-migrate-命令，对合约进行部署" class="headerlink" title="通过 truffle migrate 命令，对合约进行部署"></a>通过 truffle migrate 命令，对合约进行部署</h3><p>使用<code>truffle migrate</code>命令，发布项目：</p>
-<pre><code>➜ /Users/lion/my_project/_eth/test_truffle &gt;truffle migrate
-Using network &#39;development&#39;.
-
-Running migration: 1_initial_migration.js
-  Deploying Migrations...
-  ... 0xd9e5fa242d29362e57e3da7b0bf6f71b72767972fc15240ed3a02d341e814a44
-  Migrations: 0x4bedd1bb517ff9a54f6f3df8eba821ff16a4109b
-  Deploying Hello_mshk_top...
-  ... 0xc22ff050e189c2561d40250077ee4bf628f957899dfa8d0b5fa50e3ab7a896b0
-  Hello_mshk_top: 0xa7ef5037ff81d7932e01b68a503ca4587f00b35c
-Saving successful migration to network...
-  ... 0x49505a54042f5f74146fbfafef63dd408cb0a7a0c66214ebbaa3217e443d792a
-Saving artifacts...</code></pre>
       
 
       
@@ -315,11 +171,11 @@ Saving artifacts...</code></pre>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">contract</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">truffle</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">contract</a>
         		</li>
       		
 		</ul>
@@ -329,7 +185,7 @@ Saving artifacts...</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/Truffle/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/">展开全文 >></a>
         </p>
       
 
@@ -359,44 +215,33 @@ Saving artifacts...</code></pre>
 
 
   
-    <article id="post-vim中与系统的粘贴和复制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Solidity的数据位置特性深入详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">vim中与系统的粘贴和复制</a>
+      <a class="article-title" href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/">Solidity的数据位置特性深入详解</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+        <a href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
+  	<time datetime="2019-10-31T14:05:14.800Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="vim中与系统的粘贴和复制"><a href="#vim中与系统的粘贴和复制" class="headerlink" title="vim中与系统的粘贴和复制"></a>vim中与系统的粘贴和复制</h1><p>以前就遇到过的问题。有如下情景：</p>
-<blockquote>
-<p>1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用<code>vs</code>或者<code>sp</code>命令打开这两个文件然后用<code>y</code>和<code>p</code>进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。<br>2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。</p>
-</blockquote>
-<p>今天，对于vim这个没办法跟“外界”交流的特性忍够了，决定解决一下。</p>
-<h3 id="1-首先，查看vim版本是否支持clipboard"><a href="#1-首先，查看vim版本是否支持clipboard" class="headerlink" title="1.首先，查看vim版本是否支持clipboard"></a><strong>1.首先，查看vim版本是否支持clipboard</strong></h3><pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>结果如下： </p>
-<p><img src="https://img-blog.csdn.net/20161215215734971?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>clipboard 前面有一个小小的减号，说明不支持。</p>
-<h3 id="2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><a href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim" class="headerlink" title="2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"></a><strong>2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</strong></h3><pre><code>sudo apt-get install vim-gnome1</code></pre><p>安装完成后再次执行：</p>
-<pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>发现已经支持clipboard</p>
-<h3 id="3-vim的寄存器"><a href="#3-vim的寄存器" class="headerlink" title="3.vim的寄存器"></a><strong>3.vim的寄存器</strong></h3><p>打开vim输入<code>:reg</code>查看vim的寄存器，当支持clipboard之后，会多出<code>&quot;+</code>寄存器，表示系统剪切板，在vim中进入visual视图后使用<code>&quot;Ny</code>(N表示特定寄存器编好)，将内容复制到特定的剪切板，那么我们的目的是要复制到系统剪切板则需要选中内容后输入命令：</p>
-<pre><code>&quot;+y1</code></pre><p>粘贴到特定的寄存器也是同理。例如<code>&quot;+p</code>将系统剪切板的内容拷贝到vim中（非编辑模式下）。</p>
-<p><strong>4. 映射</strong></p>
-<pre><code class="vim">&quot; 从系统剪切板粘贴
-nnoremap P &quot;+p
-&quot; 复制到系统剪切板
-vmap Y &quot;+y</code></pre>
-
+        <p><a href="http://me.tryblockchain.org/solidity-data-location.html" target="_blank" rel="noopener">转载</a><br>代码在执行前，一般会编译成指令。指令就是一个个逻辑，逻辑操作的是数据。代码，或者说业务，操作的其实是数据。非区块链中，代码操作的数据，一般会存到数据库中。</p>
+<p>在区块链里，区块链本身就是一个数据库。如果你使用区块链标记物产的所有权，归属信息将会被记录到区块链上，所有人都无法篡改，以标明不可争议的拥有权。所以在区块链中编程中，有一个数据位置的属性用来标识变量是否需要持久化到区块链中。</p>
+<h1 id="1-数据位置的类型"><a href="#1-数据位置的类型" class="headerlink" title="1. 数据位置的类型"></a>1. 数据位置的类型</h1><p><code>数据位置</code><a href="http://me.tryblockchain.org/solidity-data-location.html#fn1" target="_blank" rel="noopener">1</a>，变量的存储位置属性。有三种类型，<code>memory</code>，<code>storage</code>和<code>calldata</code>。最后一种数据位置比较特殊，一般只有外部函数的参数（不包括返回参数）被强制指定为<code>calldata</code>。这种数据位置是只读的，不会持久化到区块链。一般我们可以选择指定的是<code>memory</code>和<code>storage</code>。</p>
+<p><code>memory</code>存储位置同我们普通程序的内存类似。即分配，即使用，越过作用域即不可被访问，等待被回收。而对于<code>storage</code>的变量，数据将永远存在于区块链上。</p>
+        
+          <a class="article-more-a" href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/#more">更多 >></a>
+        
       
 
       
@@ -404,11 +249,22 @@ vmap Y &quot;+y</code></pre>
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/Solidity%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BD%8D%E7%BD%AE%E7%89%B9%E6%80%A7%E6%B7%B1%E5%85%A5%E8%AF%A6%E8%A7%A3/">展开全文 >></a>
         </p>
       
 
@@ -438,28 +294,38 @@ vmap Y &quot;+y</code></pre>
 
 
   
-    <article id="post-vim中插入当前文件名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-whenever使用方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">vim中插入当前文件名</a>
+      <a class="article-title" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">whenever使用方式</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+        <a href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-31T14:04:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="vim中插入当前文件名"><a href="#vim中插入当前文件名" class="headerlink" title="vim中插入当前文件名"></a>vim中插入当前文件名</h2><p>再插入模式下<code>ctrl + r</code>,然后在按<code>%</code>即可。</p>
-
+        <p>根据项目的进展，我们需要实现后台进行定时读取信息的功能，而最关键的实现部分是周期性功能，根据调研，决定使用whenever来实现这一功能。</p>
+<p>github：<a href="https://link.jianshu.com?t=https://github.com/javan/whenever" target="_blank" rel="noopener">https://github.com/javan/whenever</a></p>
+<h4 id="开发前需要明确的问题"><a href="#开发前需要明确的问题" class="headerlink" title="开发前需要明确的问题"></a>开发前需要明确的问题</h4><ul>
+<li>whenever是怎样一种周期性机制？</li>
+<li>whenever能为我们提供什么功能？</li>
+<li>whenever为周期性任务提供了哪些控制方式？</li>
+</ul>
+<p>问题解决</p>
+<p>whenever周期性机制</p>
+        
+          <a class="article-more-a" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/#more">更多 >></a>
+        
       
 
       
@@ -467,165 +333,26 @@ vmap Y &quot;+y</code></pre>
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">whenever</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">定时任务</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vim插件surround常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">vim插件surround常用命令</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="vim插件surround常用命令"><a href="#vim插件surround常用命令" class="headerlink" title="vim插件surround常用命令"></a>vim插件surround常用命令</h2><pre><code class="text"> Old text                  Command     New text ~
- &quot;Hello *world!&quot;           ds&quot;         Hello world!
- [123+4*56]/2              cs])        (123+456)/2
- &quot;Look ma, I&#39;m *HTML!&quot;     cs&quot;&lt;q&gt;      &lt;q&gt;Look ma, I&#39;m HTML!&lt;/q&gt;
- if *x&gt;3 {                 ysW(        if ( x&gt;3 ) {
- my $str = *whee!;         vlllls&#39;     my $str = &#39;whee!&#39;;
- &lt;div&gt;Yo!*&lt;/div&gt;           dst         Yo!
- &lt;div&gt;Yo!*&lt;/div&gt;           cst&lt;p&gt;      &lt;p&gt;Yo!&lt;/p&gt;</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vim脚本_生成图片外链" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">vim脚本_生成图片外链</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vim脚本将选中的图片本机地址转换为器牛云的外链</p>
-<pre><code class="vim">function! qiniu#get_file_url_from_qiniu()
-    &quot; Why is this not a built-in Vim script function?!
-    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
-    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
-        return &#39;&#39;
-    endif
-    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    &quot; 得到选中的文本
-    let re = join(lines,&quot;\n&quot;)
-    &quot; 执行系统命令
-    let  re1 = system(&quot;qiniu &quot; . re)
-    &quot; url 处理
-    let tmpq = split(re1,&quot;\n&quot;)[-1]
-    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;) 
-    &quot; 替换文本
-    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
-endfunction</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">展开全文 >></a>
         </p>
       
 
@@ -668,7 +395,7 @@ endfunction</code></pre>
 
         
         <a href="/2019/10/31/vps/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+  	<time datetime="2019-10-31T14:03:25.236Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -687,81 +414,9 @@ endfunction</code></pre>
 <li>直接安装 shadowsocks</li>
 </ul>
 <pre><code class="shell">sudo pip install shadowsocks</code></pre>
-<ul>
-<li>运行 shadowsocks 服务器<br>启动命令如下：如果要停止运行，将命令中的 start 改成 stop。</li>
-</ul>
-<pre><code class="shell">sudo ssserver -p 8388 -k password -m rc4-md5 -d start</code></pre>
-<p>也可以使用配置文件进行配置，方法创建/etc/shadowsocks.json 文件，填入如下内容：</p>
-<pre><code class="json">{
-  &quot;server&quot;: &quot;my_server_ip&quot;,
-  &quot;server_port&quot;: 8388,
-  &quot;local_address&quot;: &quot;127.0.0.1&quot;,
-  &quot;local_port&quot;: 1080,
-  &quot;password&quot;: &quot;mypassword&quot;,
-  &quot;timeout&quot;: 300,
-  &quot;method&quot;: &quot;rc4-md5&quot;
-}</code></pre>
-<p>各字段的含义：</p>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>server</td>
-<td>服务器 IP (IPv4/IPv6)，注意这也将是服务端监听的 IP 地址</td>
-</tr>
-<tr>
-<td>server_port</td>
-<td>服务器端口</td>
-</tr>
-<tr>
-<td>local_port</td>
-<td>本地端端口</td>
-</tr>
-<tr>
-<td>password</td>
-<td>用来加密的密码</td>
-</tr>
-<tr>
-<td>timeout</td>
-<td>超时时间（秒）</td>
-</tr>
-<tr>
-<td>method</td>
-<td>加密方法，可选择 “bf-cfb”, “aes-256-cfb”, “des-cfb”, “rc4″, 等等</td>
-</tr>
-</tbody></table>
-<p>Tips: 加密方式推荐使用 rc4-md5，因为 RC4 比 AES 速度快好几倍，如果用在路由器上会带来显著性能提升。旧的 RC4 加密之所以不安全是因为 Shadowsocks 在每个连接上重复使用 key，没有使用 IV。现在已经重新正确实现，可以放心使用。更多可以看 issue。<br>Tips: 如果需要配置多个用户,可以这样来设置:</p>
-<pre><code class="json">{
-  &quot;server&quot;: &quot;my_server_ip&quot;,
-  &quot;port_password&quot;: {
-    &quot;端口1&quot;: &quot;密码1&quot;,
-    &quot;端口2&quot;: &quot;密码2&quot;
-  },
-  &quot;timeout&quot;: 300,
-  &quot;method&quot;: &quot;rc4-md5&quot;,
-  &quot;fast_open&quot;: false
-}</code></pre>
-<p>创建完毕后，赋予文件权限：</p>
-<pre><code class="shell">sudo chmod 755 /etc/shadowsocks.json</code></pre>
-<p>为了支持这些加密方式，你要需要安装</p>
-<pre><code class="shell">sudo apt–get install python–m2crypto</code></pre>
-<p>然后使用配置文件在后台运行：</p>
-<pre><code class="shell">sudo ssserver -c /etc/shadowsocks.json -d start</code></pre>
-<p>配置开机自启动<br>编辑 /etc/rc.local 文件<br>sudo vi /etc/rc.local<br>在 exit 0 这一行的上边加入如下</p>
-<pre><code class="shellj">/usr/local/bin/ssserver –c /etc/shadowsocks.json</code></pre>
-<p>或者 不用配置文件 直接加入命令启动如下：</p>
-<pre><code class="shell">/usr/local/bin/ssserver -p 8388 -k password -m aes-256-cfb -d start</code></pre>
-<p>到此重启服务器后，会自动启动。<br>安装和配置 shadowsocks 客户端<br>最新版本的 shadowsocks 客户端可以从其 Github 上下载.<br>客户端配置及使用方法可以参考这里的教程。<br>iPhone 及安卓手机上的配置,可以参考这个教程。<br>需要特别注意的是,在 Chrome 上需要设置代理为 SOCKS v5 模式,127.0.0.1:1080,建议安装 SwitchySharp 扩展。</p>
-<h3 id="ubuntu-客户端"><a href="#ubuntu-客户端" class="headerlink" title="ubuntu 客户端"></a>ubuntu 客户端</h3><p>在 ubuntu 上可以这样，通过 PPA 源安装，仅支持 Ubuntu 14.04 或更高版本。</p>
-<pre><code class="shell">sudo add-apt-repository ppa:hzwhuang/ss-qt5
-sudo apt-get update
-sudo apt-get install shadowsocks-qt5</code></pre>
-<p>由于是图形界面，配置和 windows 基本没啥差别就不赘述了。经过上面的配置，你只是启动了 sslocal 但是要上网你还需要配置下浏览器到指定到代理端口比如 1080 才可以正式上网。</p>
-
+        
+          <a class="article-more-a" href="/2019/10/31/vps/#more">更多 >></a>
+        
       
 
       
@@ -814,6 +469,142 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
 
   
+    <article id="post-vs_keybinding" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/vs_keybinding/">vs_keybinding</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/vs_keybinding/" class="archive-article-date">
+  	<time datetime="2019-10-31T14:03:00.243Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<pre><code class="json">[
+  {
+    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
+    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
+    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
+    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
+    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
+    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
+    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
+    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-editor.action.rename&quot;,
+    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
+    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-debug.setVariable&quot;,
+    &quot;when&quot;: &quot;variablesFocused&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-renameFile&quot;,
+    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+b&quot;,
+    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f3&quot;,
+    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
+    &quot;when&quot;: &quot;editorFocus&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f3&quot;,
+    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+`&quot;,
+    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
+  }
+]</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">vscode</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/vs_keybinding/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-vs_config" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -827,14 +618,15 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
         
         <a href="/2019/10/31/vs_config/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+  	<time datetime="2019-10-31T14:02:31.950Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code class="json">{
+        <a id="more"></a>
+<pre><code class="json">{
   &quot;window.zoomLevel&quot;: 2,
   &quot;workbench.colorTheme&quot;: &quot;Gruvbox Dark (Medium)&quot;,
   &quot;workbench.iconTheme&quot;: &quot;vscode-great-icons&quot;,
@@ -1015,89 +807,38 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
 
   
-    <article id="post-vs_keybinding" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-vim中与系统的粘贴和复制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/vs_keybinding/">vs_keybinding</a>
+      <a class="article-title" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">vim中与系统的粘贴和复制</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/vs_keybinding/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+        <a href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/" class="archive-article-date">
+  	<time datetime="2019-10-31T14:01:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code class="json">[
-  {
-    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
-    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
-    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
-    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-editor.action.rename&quot;,
-    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
-    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.setVariable&quot;,
-    &quot;when&quot;: &quot;variablesFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-renameFile&quot;,
-    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+b&quot;,
-    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
-    &quot;when&quot;: &quot;editorFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+`&quot;,
-    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
-  }
-]</code></pre>
-
+        <p>以前就遇到过的问题。有如下情景：</p>
+<blockquote>
+<p>1.假设现在我要将文件a的部分内容复制到文件b中，一般情况，我会用<code>vs</code>或者<code>sp</code>命令打开这两个文件然后用<code>y</code>和<code>p</code>进行复制粘贴。但是如果分别用vim打开这两个文件就不能完成上述动作。<br>2.假设我先在要把vim打开的源代码中的部分内容复制到博客中，一般我会用vim编辑好以后，退出用gedit打开，或者cat一下，再复制到系统剪切板，再粘贴。</p>
+</blockquote>
+<p>今天，对于vim这个没办法跟“外界”交流的特性忍够了，决定解决一下。</p>
+<h3 id="1-首先，查看vim版本是否支持clipboard"><a href="#1-首先，查看vim版本是否支持clipboard" class="headerlink" title="1.首先，查看vim版本是否支持clipboard"></a><strong>1.首先，查看vim版本是否支持clipboard</strong></h3><pre><code>vim --version | grep &quot;clipboard&quot;1</code></pre><p>结果如下： </p>
+<p><img src="https://img-blog.csdn.net/20161215215734971?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhhbmd4aWFvOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>clipboard 前面有一个小小的减号，说明不支持。</p>
+<h3 id="2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"><a href="#2-如果不支持的话，需要安装图形化界面的vim，或者重新编译vim" class="headerlink" title="2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim"></a><strong>2.如果不支持的话，需要安装图形化界面的vim，或者重新编译vim</strong></h3><pre><code>sudo apt-get install vim-gnome1</code></pre>
+        
+          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/#more">更多 >></a>
+        
       
 
       
@@ -1110,7 +851,7 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">vscode</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
         		</li>
       		
 		</ul>
@@ -1120,7 +861,7 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/vs_keybinding/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">展开全文 >></a>
         </p>
       
 
@@ -1150,19 +891,19 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
 
   
-    <article id="post-whenever使用方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Ubuntu下sublime无法输入中文问题完美解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">whenever使用方式</a>
+      <a class="article-title" href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/">Ubuntu下sublime无法输入中文问题完美解决</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/" class="archive-article-date">
+        <a href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -1170,70 +911,15 @@ sudo apt-get install shadowsocks-qt5</code></pre>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="whenever-使用方式"><a href="#whenever-使用方式" class="headerlink" title="whenever 使用方式"></a>whenever 使用方式</h2><p>根据项目的进展，我们需要实现后台进行定时读取信息的功能，而最关键的实现部分是周期性功能，根据调研，决定使用whenever来实现这一功能。</p>
-<p>github：<a href="https://link.jianshu.com?t=https://github.com/javan/whenever" target="_blank" rel="noopener">https://github.com/javan/whenever</a></p>
-<h4 id="开发前需要明确的问题"><a href="#开发前需要明确的问题" class="headerlink" title="开发前需要明确的问题"></a>开发前需要明确的问题</h4><ul>
-<li>whenever是怎样一种周期性机制？</li>
-<li>whenever能为我们提供什么功能？</li>
-<li>whenever为周期性任务提供了哪些控制方式？</li>
-</ul>
-<p>问题解决</p>
-<p>whenever周期性机制</p>
-<p>我们来看一下github上面是怎么说的：</p>
-<p>Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs.</p>
-<p>意思就是说，whenever是一个ruby gem，但同时它是基于cron jobs的。</p>
-<p>那么什么是cron jobs呢？我们来看一下维基百科的定义：</p>
-<h4 id="Cron"><a href="#Cron" class="headerlink" title="Cron"></a>Cron</h4><p>crontab命令常见于<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/Unix" target="_blank" rel="noopener">Unix</a>和<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E7%B1%BBUnix" target="_blank" rel="noopener">类Unix</a>的<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">操作系统</a>之中，用于设置周期性被执行的指令。该命令从标准输入设备读取指令，并将其存放于“crontab”文件中，以供之后读取和执行。该词来源于<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E5%B8%8C%E8%85%8A%E8%AF%AD" target="_blank" rel="noopener">希腊语</a>chronos（χρόνος），原意是时间。</p>
-<p>通常，crontab储存的指令被<a href="https://link.jianshu.com?t=https://wikipedia.kfd.me/wiki/%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B" target="_blank" rel="noopener">守护进程</a>激活，crond常常在后台运行，每一分钟检查是否有预定的作业需要执行。这类作业一般称为cron jobs。</p>
-<p>也就是说，crontab是在unix和类unix系统中用来实现周期性功能的指令。在网上搜一下，我们就会看到很多crontab指令相关的语法。</p>
-<p>根据上述的分析，我们可以得出这样的结论：</p>
-<p>whenever事实上是一个cron翻译器，它将rails中的ruby代码翻译成cron脚本，从而将周期性的任务交给cron来执行。 这样，通过whenever我们可以使用ruby语言来写周期性任务代码，在ruby层控制代码，而不需要与shell脚本进行切换；另一方面，我们会发现，由于cron命令的强大，它的语法也因此变得很复杂，通过whenever，我们可以很方便的实现周期性任务。</p>
-<h4 id="一个十分简单的demo"><a href="#一个十分简单的demo" class="headerlink" title="一个十分简单的demo"></a>一个十分简单的demo</h4><p>1.添加whenever(Gemfile)</p>
-<p><code>gem &#39;whenever&#39;, :require =&gt;false</code></p>
-<p>2.生成config/schedule.rb文件</p>
-<p>执行命令：</p>
-<p><code>wheneverize</code></p>
-<p>3.添加自己的周期性任务</p>
-<p>在<code>config/schedule.rb</code>文件中添加：</p>
-<pre><code class="ruby">set :environment, :development
-every 2.minutes do  
-  runner &quot;Timetest.mytime&quot;
-end</code></pre>
-<p>其中，<code>set :environment, :development</code>是设置执行任务时的环境，默认情况下环境为<code>production</code></p>
-<p>上述代码实现的是每两分钟读取当前时间并存入到数据库的功能。其中，runner方法执行的方法如下：</p>
-<pre><code class="ruby">classTimetest &lt; ApplicationRecord
-def self.mytime
-  a = Timetest.new
-  a.time_now = Time.now
-  a.save
- end
-end</code></pre>
-<p>这样，在rails中实现whenever的代码就算是写完了，真的是简单到不行啊！（实在忍不住感慨一句）</p>
-<p>下面就要执行周期性任务了。</p>
-<p>4.执行周期性任务</p>
-<p>在rails工程文件夹下进行一下操作</p>
-<ul>
-<li>更新schedule.rb中的任务到cronjob中</li>
-</ul>
-<p><code>whenever -i</code></p>
-<p>可以看到这样的打印结果：</p>
-<p><code>[write]crontabfileupdated</code></p>
-<ul>
-<li>执行周期性任务</li>
-</ul>
-<p><code>whenever -w</code></p>
-<p>可以看到：</p>
-<p><code>[write]crontabfilewritten</code></p>
-<p>此时我们的周期性任务便在后台运行了，此时查看我们的任务：</p>
-<p><code>crontab -l</code></p>
-<p>可以看到以下打印：</p>
-<p># Begin Whenever generated tasks for: </p>
-<pre><code class="shell">/home/vito/rails/test_of_rails/test_rails/config/schedule.rb0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58 * * * * /bin/bash -l -c &#39;cd /home/vito/rails/test_of_rails/test_rails &amp;&amp; bundle exec bin/rails runner -e development &#39;\&#39;&#39;Timetest.mytime&#39;\&#39;&#39;&#39;# End Whenever generated tasks for: /home/vito/rails/test_of_rails/test_rails/config/schedule.rb</code></pre>
-<p>这样，我们的周期性任务就算是在顺利执行了。</p>
-<p>需要注意的一点是运行时crontab的环境（rails和crontab环境不匹配时whenever无法执行），一般调试时多使用的是development环境，而不设置时默认的是production环境，如果你使用<code>crontab -l</code>发现是production环境，可以使用</p>
-<p><code>crontab -e</code></p>
-<p>直接修改为development，或者直接将-e production删掉即可。</p>
-<p>经过上述流程，我们便可以成功地实现周期性任务了。如果此时你发现自己的周期性任务还是没有执行，那你就得好好看看你自己的任务代码了，很可能是执行的任务代码本身有问题，而与whenever的实现没有太大的关系了。</p>
+        <h2 id="Ubuntu下sublime无法输入中文问题完美解决"><a href="#Ubuntu下sublime无法输入中文问题完美解决" class="headerlink" title="Ubuntu下sublime无法输入中文问题完美解决"></a>Ubuntu下sublime无法输入中文问题完美解决</h2><ol>
+<li>从官网<a href="https://download.sublimetext.com/sublime_text_3_build_3143_x64.tar.bz2" target="_blank" rel="noopener">下载</a>压缩包</li>
+<li>解压到<code>/opt/</code>目录下</li>
+<li>将解压后的文件夹重命名为<code>sublime_text</code></li>
+<li>在终端执行<code>git clone https://github.com/lyfeyaj/sublime-text-imfix.git</code></li>
+<li>进入<code>sublime-text-imfix/src/</code> 执行 <code>sudo cp subl /opt/bin/</code></li>
+<li>进入<code>sublime-text/</code>下 执行 <code>./sublime-imfix</code></li>
+<li>大功告成，，仔细看一下<code>sublime-imfix</code>的代码，就知道为什么这么做了</li>
+</ol>
 
       
 
@@ -1246,7 +932,140 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/Ubuntu%E4%B8%8Bsublime%E6%97%A0%E6%B3%95%E8%BE%93%E5%85%A5%E4%B8%AD%E6%96%87%E9%97%AE%E9%A2%98%E5%AE%8C%E7%BE%8E%E8%A7%A3%E5%86%B3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vim中插入当前文件名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">vim中插入当前文件名</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="vim中插入当前文件名"><a href="#vim中插入当前文件名" class="headerlink" title="vim中插入当前文件名"></a>vim中插入当前文件名</h2><p>再插入模式下<code>ctrl + r</code>,然后在按<code>%</code>即可。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vim插件surround常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">vim插件surround常用命令</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="vim插件surround常用命令"><a href="#vim插件surround常用命令" class="headerlink" title="vim插件surround常用命令"></a>vim插件surround常用命令</h2><pre><code class="text"> Old text                  Command     New text ~
+ &quot;Hello *world!&quot;           ds&quot;         Hello world!
+ [123+4*56]/2              cs])        (123+456)/2
+ &quot;Look ma, I&#39;m *HTML!&quot;     cs&quot;&lt;q&gt;      &lt;q&gt;Look ma, I&#39;m HTML!&lt;/q&gt;
+ if *x&gt;3 {                 ysW(        if ( x&gt;3 ) {
+ my $str = *whee!;         vlllls&#39;     my $str = &#39;whee!&#39;;
+ &lt;div&gt;Yo!*&lt;/div&gt;           dst         Yo!
+ &lt;div&gt;Yo!*&lt;/div&gt;           cst&lt;p&gt;      &lt;p&gt;Yo!&lt;/p&gt;</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
         </p>
       
 
@@ -1324,11 +1143,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1378,19 +1192,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1410,15 +1224,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1446,19 +1260,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1478,15 +1292,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1498,27 +1312,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1527,6 +1325,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1570,6 +1380,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1582,15 +1408,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1602,14 +1420,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1618,15 +1428,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1642,11 +1448,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1662,11 +1476,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1690,15 +1504,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1726,10 +1540,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1738,15 +1548,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1762,6 +1572,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1774,10 +1588,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1786,11 +1596,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1806,6 +1616,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1814,11 +1628,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1875,6 +1689,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>

@@ -133,19 +133,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-判断浏览器类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-得到图片外链vim脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/">判断浏览器类型</a>
+      <a class="article-title" href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/">得到图片外链vim脚本</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
+        <a href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -153,22 +153,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code class="js">var Browser = new Object();
-Browser.isMozilla =
-  typeof document.implementation != &#39;undefined&#39; &amp;&amp;
-  typeof document.implementation.createDocument != &#39;undefined&#39; &amp;&amp;
-  typeof HTMLDocument != &#39;undefined&#39;;
-Browser.isIE = window.ActiveXObject ? true : false;
-Browser.isFirefox = navigator.userAgent.toLowerCase().indexOf(&#39;firefox&#39;) != -1;
-Browser.isSafari = navigator.userAgent.toLowerCase().indexOf(&#39;safari&#39;) != -1;
-Browser.isOpera = navigator.userAgent.toLowerCase().indexOf(&#39;opera&#39;) != -1;
-Browser.isChrome = navigator.userAgent.indexOf(&#39;Chrome&#39;) &gt; -1;
-
-function initCheck() {
-  if (Browser.isFirefox || Browser.isChrome) {
-  } else {
-  }
-}</code></pre>
+        <h3 id="选中的图片地址，将图片上传到七牛云，并得到外链"><a href="#选中的图片地址，将图片上传到七牛云，并得到外链" class="headerlink" title="选中的图片地址，将图片上传到七牛云，并得到外链"></a>选中的图片地址，将图片上传到七牛云，并得到外链</h3><p>配合自定义命令<a href="https://dccmm.world/topics/qiniu_upload_file" target="_blank" rel="noopener">qiniu</a>使用</p>
+<pre><code class="vimscript">function! qiniu#get_file_url_from_qiniu()
+    &quot; Why is this not a built-in Vim script function?!
+    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
+    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
+    let lines = getline(line_start, line_end)
+    if len(lines) == 0
+        return &#39;&#39;
+    endif
+    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
+    let lines[0] = lines[0][column_start - 1:]
+    &quot; 得到选中的文本
+    let re = join(lines,&quot;\n&quot;)
+    &quot; 执行系统命令
+    let  re1 = system(&quot;qiniu &quot; . re)
+    &quot; url 处理
+    let tmpq = split(re1,&quot;\n&quot;)[-1]
+    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
+    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
+    &quot; 替换文本
+    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
+endfunction</code></pre>
 
       
 
@@ -182,7 +188,11 @@ function initCheck() {
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">js</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">DIY_script</a>
         		</li>
       		
 		</ul>
@@ -192,137 +202,7 @@ function initCheck() {
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-如何创建自己的ruby_gem包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84ruby_gem%E5%8C%85/">如何创建自己的ruby_gem包</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84ruby_gem%E5%8C%85/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="如何创建自己的ruby-gem包"><a href="#如何创建自己的ruby-gem包" class="headerlink" title="如何创建自己的ruby gem包"></a>如何创建自己的ruby gem包</h3><h4 id="编写一个最简单的例子"><a href="#编写一个最简单的例子" class="headerlink" title="编写一个最简单的例子"></a>编写一个最简单的例子</h4><ol>
-<li>建好如下文件夹<br>注意：lib目录下必须有个和你gem名字一样的rb文件。<pre><code class="shell">$ cd hola  
-$ tree  </code></pre>
-.<br>├── hola.gemspec<br>└── lib<br> └── hola.rb  </li>
-<li>编写代码<br>. hola.rb<pre><code class="ruby">class Hola  
-def self.hi  
- puts &quot;Hello world!&quot;  
-end  
-end  </code></pre>
-</li>
-</ol>
-<p>.hola.gemspec</p>
-<pre><code class="ruby">Gem::Specification.new do |s|  
-  s.name        = &#39;hola&#39;  
-  s.version     = &#39;0.0.0&#39;  
-  s.date        = &#39;2010-04-28&#39;  
-  s.summary     = &quot;Hola!&quot;  
-  s.description = &quot;A simple hello world gem&quot;  
-  s.authors     = [&quot;Nick Quaranto&quot;]  
-  s.email       = &#39;nick@quaran.to&#39;  
-  s.files       = [&quot;lib/hola.rb&quot;]  
-  s.homepage    =  
-    &#39;http://rubygems.org/gems/hola&#39;  
-end  </code></pre>
-<p>上面字段的意思，比较简单。相信大家都能理解。</p>
-<p>3.编译生成gem</p>
-<pre><code class="shell">% gem build hola.gemspec  </code></pre>
-<blockquote>
-<p> Successfully built RubyGem  </p>
-<p>Name: hola  </p>
-<p>Version: 0.0.0  </p>
-<p>File: hola-0.0.0.gem  </p>
-</blockquote>
-<pre><code class="shell">% gem install ./hola-0.0.0.gem </code></pre>
-<blockquote>
-<p> Successfully installed hola-0.0.0  </p>
-</blockquote>
-<blockquote>
-<p> 1 gem installed  </p>
-</blockquote>
-<p>4.测试使用<br>[ruby] view plain copy<br>% irb  </p>
-<blockquote>
-<blockquote>
-<p>require ‘hola’<br>true<br>Hola.hi<br>  llo world!<br>  ：在ruby 1.9.2之前到版本里面，需要先require ‘rubygem’，才能使用我们写的gem.</p>
-</blockquote>
-</blockquote>
-<p>5.发布到rubygems网站<br>[ruby] view plain copy<br>$ curl -u tom <a href="https://rubygems.org/api/v1/api_key.yaml" target="_blank" rel="noopener">https://rubygems.org/api/v1/api_key.yaml</a> &gt;<br>~/.gem/credentials<br>Enter host password for user ‘tom’:<br>设定完之后发布<br>[ruby] view plain copy<br>% gem push hola-0.0.0.gem<br>Pushing gem to RubyGems.org…<br>Successfully registered gem: hola (0.0.0)<br>发布成功。<br>这样任何一个人都可以使用你写的gem了。</p>
-<p>稍微复杂的rubygem例子<br>上面的例子只有一个ruby文件，一般gem应该没有这么简单的。<br>下面说下有多个ruby文件该怎么写。</p>
-<ol>
-<li><p>目录结构<br>多了个hola目录和translator.rb文件<br>[ruby] view plain copy<br>% tree<br>.<br>├── hola.gemspec<br>└── lib<br> ├── hola<br> │   └── translator.rb<br> └── hola.rb  </p>
-</li>
-<li><p>代码<br>lib/hola/translator.rb<br>[ruby] view plain copy<br>% cat  lib/hola/translator.rb<br>class Hola::Translator<br>def initialize(language)<br> @language = language<br>end  </p>
-<p>def hi<br> case @language<br> when :spanish<br>   “hola mundo”<br> else<br>   “hello world”<br> end<br>end<br>end<br>lib/hola.rb<br>[ruby] view plain copy<br>% cat lib/hola.rb<br>class Hola<br>def self.hi(language = :english)<br> translator = Translator.new(language)<br> translator.hi<br>end<br>end  </p>
-</li>
-</ol>
-<p>require ‘hola/translator’<br>.hola.gemspec<br>[ruby] view plain copy<br>% cat hola.gemspec<br>Gem::Specification.new do |s|<br>  s.name        = ‘hola’<br>  s.version     = ‘0.0.0’<br>  s.date        = ‘2010-04-28’<br>  s.summary     = “Hola!”<br>  s.description = “A simple hello world gem”<br>  s.authors     = [“Nick Quaranto”]<br>  s.email       = ‘nick@quaran.to’<br>  s.files       = [“lib/hola.rb”, “lib/hola/translator.rb”]<br>  s.homepage    =<br>    ‘<a href="http://rubygems.org/gems/hola&#39;" target="_blank" rel="noopener">http://rubygems.org/gems/hola&#39;</a><br>end<br>红色是和上面不一样的地方。</p>
-<p>其他步骤和上面一样了。很简单吧！</p>
-<p>最后说下怎么写个 gem包含可执行文件的例子。<br>这个也很简单。像rake就是典型的包含可执行文件的gem.</p>
-<ol>
-<li><p>在刚才工程目录下建个bin文件夹<br>生成可执行文件，并且修改权限为可运行。<br>[ruby] view plain copy<br>% mkdir bin<br>% touch bin/hola<br>% chmod a+x bin/hola  </p>
-</li>
-<li><p>修改可执行文件内容<br>bin/hola<br>[ruby] view plain copy<br>#!/usr/bin/env ruby  </p>
-</li>
-</ol>
-<p>require ‘hola’<br>puts Hola.hi(ARGV[0])  </p>
-<p>测试下<br>% ruby -Ilib ./bin/hola<br>hello world  </p>
-<p>% ruby -Ilib ./bin/hola spanish<br>hola mundo  </p>
-<p>3 .最后修改gemspec<br>[ruby] view plain copy<br>% head -4 hola.gemspec<br>Gem::Specification.new do |s|<br>  s.name        = ‘hola’<br>  s.version     = ‘0.0.1’<br>  s.executables &lt;&lt; ‘hola’<br>其他就和上面一样了。很简单吧。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84ruby_gem%E5%8C%85/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/">展开全文 >></a>
         </p>
       
 
@@ -409,105 +289,6 @@ end  </code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/%E5%BC%BA%E5%88%B6%E9%87%8D%E5%90%AFLinux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-得到图片外链vim脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/">得到图片外链vim脚本</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="选中的图片地址，将图片上传到七牛云，并得到外链"><a href="#选中的图片地址，将图片上传到七牛云，并得到外链" class="headerlink" title="选中的图片地址，将图片上传到七牛云，并得到外链"></a>选中的图片地址，将图片上传到七牛云，并得到外链</h3><p>配合自定义命令<a href="https://dccmm.world/topics/qiniu_upload_file" target="_blank" rel="noopener">qiniu</a>使用</p>
-<pre><code class="vimscript">function! qiniu#get_file_url_from_qiniu()
-    &quot; Why is this not a built-in Vim script function?!
-    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
-    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
-        return &#39;&#39;
-    endif
-    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    &quot; 得到选中的文本
-    let re = join(lines,&quot;\n&quot;)
-    &quot; 执行系统命令
-    let  re1 = system(&quot;qiniu &quot; . re)
-    &quot; url 处理
-    let tmpq = split(re1,&quot;\n&quot;)[-1]
-    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    &quot; 替换文本
-    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
-endfunction</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">DIY_script</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/">展开全文 >></a>
         </p>
       
 
@@ -1005,6 +786,194 @@ html::-webkit-scrollbar {
 
 
   
+    <article id="post-参数路由与路由冲突解决与筛选路由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/">参数路由与路由冲突解决与筛选路由</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.012Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="参数路由与路由冲突解决与筛选路由"><a href="#参数路由与路由冲突解决与筛选路由" class="headerlink" title="参数路由与路由冲突解决与筛选路由"></a>参数路由与路由冲突解决与筛选路由</h3><p>有时候我需要写一个页面能向show edit 那样可以接受参数的路由,弄了好久不知道怎样解决,今天恍然大悟</p>
+<p>我们执行 <code>rake routes</code> 就会看到如下</p>
+<pre><code class="ruby">                     wechat_nodes GET      /wechat/nodes(.:format)                                  wechat/nodes#index
+                                  POST     /wechat/nodes(.:format)                                  wechat/nodes#create
+                  new_wechat_node GET      /wechat/nodes/new(.:format)                              wechat/nodes#new
+                 edit_wechat_node GET      /wechat/nodes/:id/edit(.:format)                         wechat/nodes#edit
+                      wechat_node GET      /wechat/nodes/:id(.:format)                              wechat/nodes#show
+                                  PATCH    /wechat/nodes/:id(.:format)                              wechat/nodes#update
+                                  PUT      /wechat/nodes/:id(.:format)                              wechat/nodes#update
+                                  DELETE   /wechat/nodes/:id(.:format)                              wechat/nodes#destroy
+</code></pre>
+<p>这是使用resources 生成一些路由,我们可以模仿写出自己的路由</p>
+<p>我们看最后一列的内容,  对于show 来说 他的格式为<code>/wechat/nodes/:id</code> 再看edit 他的格式是<code>/wechat/nodes/:id/edit</code> </p>
+<p>加入我们要想写一个/wechat/node/edit/34/topic/23 类似的路由,我们可以直接这样写</p>
+<pre><code class="ruby">resources nodes do 
+  collection do 
+    get &#39;edit/:id/topic/:node_id&#39;, to: &#39;nodes#topic&#39; , as: &#39;topic_edit&#39;
+  end
+end</code></pre>
+<p>这里为什么会有一个<code>as</code>呢,因为没有<code>as</code>和其后面的名称的话,这样是没有前面的路由信息的.</p>
+<h3 id="筛选路由-路由冲突的解决方案"><a href="#筛选路由-路由冲突的解决方案" class="headerlink" title="筛选路由-路由冲突的解决方案"></a>筛选路由-路由冲突的解决方案</h3><p>Rails项目有一个Article模型,对应ArticlesController控制器,其路由设置如下:</p>
+<pre><code class="ruby">resources :articles do
+end</code></pre>
+<p>这样它的CRUD路径就都自动创建出来了 ;)</p>
+<p>现在我想再添加一个对Article模型搜索的页面,那么首先要在控制器中添加对应的search方法:</p>
+<pre><code class="ruby">def search   
+  render text:&quot;hello search!!!&quot;
+end</code></pre>
+<p>然后在Article默认路由集合后面添加一行新路由:</p>
+<p><code>get &quot;articles/search&quot;,to:&quot;articles#search&quot;</code>1</p>
+<p>现在我们访问一下articles/search页面,咦?怎么出错了:</p>
+<p><img src="http://img.blog.csdn.net/20170310112802687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXlkbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>仔细看出错信息,原来Article之前的show路由恰恰可以匹配新的search路由,只不过原来的:id变成了search这个字符串哦.这就是为什么报Couldn’t find Article with id=search的原因了!</p>
+<p>下面给出解决,我们只需要先禁用默认的show路由:</p>
+<pre><code class="ruby">resources :articles,except:[:show] do    
+  resources :comments
+end</code></pre>
+<p>然后再生成一条筛选路由即可,所谓筛选路由就是对该路由内容进行细粒度匹配的方法:</p>
+<pre><code class="ruby">get &quot;articles/:id&quot;,to:&quot;articles#show&quot;,constraints:{id:/\d+/}</code></pre>
+<p>路由都是从上之下依次匹配的,如果上面一条被匹配则路由匹配结束!这里只匹配id为数字的articles/xxx路径,所以search就会默认被忽略从而被后面search正确的路由所匹配!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-处理Gradle中的这个文件下载慢的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">处理Gradle中的这个文件下载慢的问题</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.012Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用阿里云的国内镜像仓库地址，就可以快速的下载需要的文件修改项目根目录下的文件</p>
+<pre><code class="text">build.gradle ：buildscript {
+    repositories {
+        maven{ url &#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;}
+    }
+}
+
+allprojects {
+    repositories {
+        maven{ url &#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;}
+    }
+}</code></pre>
+<p>然后选择重新构建</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/9/">Next &amp;raquo;</a>
@@ -1053,11 +1022,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
 
 <script src="/plugins/highlight/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<!-- <script type="text/javascript"> -->
-<!-- $(window).load(function(){ -->
-<!--    hljs.initHighlightingOnLoad(); -->
-<!-- }) -->
-<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1107,19 +1071,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">rails</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1139,15 +1103,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1175,19 +1139,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1207,15 +1171,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1227,27 +1191,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1256,6 +1204,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1299,6 +1259,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1311,15 +1287,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1331,14 +1299,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1347,15 +1307,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1371,11 +1327,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1391,11 +1355,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1419,15 +1383,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1455,10 +1419,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vps</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
@@ -1467,15 +1427,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">vps</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1491,6 +1451,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1503,10 +1467,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1515,11 +1475,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1535,6 +1495,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1543,11 +1507,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1604,6 +1568,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
             
             <div class="clearfix"></div>
