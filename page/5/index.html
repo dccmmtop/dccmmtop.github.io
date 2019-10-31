@@ -133,306 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-react_native模态框的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/react_native%E6%A8%A1%E6%80%81%E6%A1%86%E7%9A%84%E4%BD%BF%E7%94%A8/">react_native模态框的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/react_native%E6%A8%A1%E6%80%81%E6%A1%86%E7%9A%84%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="模态框是父容器的一个组件，关闭和显示应该由父容器决定"><a href="#模态框是父容器的一个组件，关闭和显示应该由父容器决定" class="headerlink" title="模态框是父容器的一个组件，关闭和显示应该由父容器决定"></a>模态框是父容器的一个组件，关闭和显示应该由父容器决定</h4><h3 id="父容器"><a href="#父容器" class="headerlink" title="父容器"></a>父容器</h3><p>mapInfo.js</p>
-<pre><code class="js">import BaseModal from &#39;./baseModal&#39;;
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDialogVisible: false,
-      setAlert: {
-        // 向弹出框传递 签到成功或失败的信息
-        alertInfo: &#39;&#39;,
-        // 签到是否成功
-        isSuccess: true
-      }
-    };
-  }
-  showDialog() {
-    this.setState({ isDialogVisible: true });
-  }
-
-  hideDialog() {
-    this.setState({ isDialogVisible: false });
-  }
-
-  // 视图部分
-  &lt;View style={[styles.viewLocation, styles.flex]}&gt;
-    &lt;TouchableOpacity
-      onPress={() =&gt; {
-        this.showDialog();
-          //改变模态对话框内容
-          this.setState({ setAlert: { isSuccess: true, alertInfo: &#39;签到成功 积分 +&#39; + addScore } });
-        }).catch(error =&gt; {
-          this.setState({ setAlert: { isSuccess: false, alertInfo: &#39;签到失败&#39; + &quot;\n&quot; + error } })
-        })
-      }}&gt;
-      &lt;BaseModal
-        hide={() =&gt; { this.hideDialog() }}
-        modalVisible={this.state.isDialogVisible}
-        isSuccess={this.state.setAlert.isSuccess}
-        info={this.state.setAlert.alertInfo}
-      /&gt;
-    &lt;/TouchableOpacity&gt;
-  &lt;/View&gt;</code></pre>
-<h3 id="模态框部分"><a href="#模态框部分" class="headerlink" title="模态框部分"></a>模态框部分</h3><pre><code class="js">import React, {Component} from &#39;react&#39;;
-import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Image,
-} from &#39;react-native&#39;;
-
-let Dimensions = require(&#39;Dimensions&#39;);
-let SCREEN_WIDTH = Dimensions.get(&#39;window&#39;).width; //宽
-let SCREEN_HEIGHT = Dimensions.get(&#39;window&#39;).height; //高
-
-export default class ModalDialog extends Component {
-  // 构造
-  constructor(props) {
-    super(props);
-    this.props.modalVisible = false;
-    // 此属性是一个方法
-    this.props.hide = () =&gt; {};
-    this.props.info = &#39;&#39;;
-    this.props.isSuccess = true;
-  }
-
-  render() {
-    return (
-      &lt;Modal
-        visible={this.props.modalVisible}
-        transparent={true}
-        onRequestClose={() =&gt; {}} //如果是Android设备 必须有此方法
-      &gt;
-        &lt;View style={styles.bg}&gt;
-          &lt;View style={styles.dialog}&gt;
-            {/* onPress事件直接与父组件传递进来的属性挂接 */}
-            &lt;TouchableOpacity
-              style={styles.dialogBtnViewItem}
-              onPress={this.props.hide}&gt;
-              &lt;View style={{alignItems: 'center'}}&gt;
-                &lt;Image
-                  style={[styles.icon, {marginBottom: 20}]}
-                  source={
-                    this.props.isSuccess
-                      ? require(&#39;../icons/success.png&#39;)
-                      : require(&#39;../icons/fail.png&#39;)
-                  }
-                /&gt;
-                &lt;Text&gt;{this.props.info}&lt;/Text&gt;
-              &lt;/View&gt;
-            &lt;/TouchableOpacity&gt;
-          &lt;/View&gt;
-        &lt;/View&gt;
-      &lt;/Modal&gt;
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  //全屏显示 半透明 可以看到之前的控件但是不能操作了
-  bg: {
-    backgroundColor: &#39;rgba(52,52,52,0.5)&#39;, //rgba  a0-1  其余都是16进制数
-    justifyContent: &#39;center&#39;,
-    alignItems: &#39;center&#39;,
-    flex: 1,
-  },
-  dialog: {
-    width: SCREEN_WIDTH * 0.65,
-    height: SCREEN_HEIGHT * 0.2,
-    backgroundColor: &#39;white&#39;,
-    justifyContent: &#39;center&#39;,
-    alignContent: &#39;center&#39;,
-    borderRadius: 4,
-  },
-  dialogBtnViewItem: {
-    flex: 1,
-    backgroundColor: &#39;white&#39;,
-    borderRadius: 4,
-    justifyContent: &#39;center&#39;,
-    alignItems: &#39;center&#39;,
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-});</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/react_native%E6%A8%A1%E6%80%81%E6%A1%86%E7%9A%84%E4%BD%BF%E7%94%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-rails国际化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/">rails国际化</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
-<pre><code class="yml">zh-CN:
-  menu:
-    home: &#39;首页&#39;
-    team: &#39;团队&#39;
-    projects: &#39;项目&#39;
-    careers: &#39;招聘&#39;
-    blog: &#39;博客&#39;</code></pre>
-<p>与之对应新建翻译文本<code>en.yml</code><br>文件内容参考如下</p>
-<pre><code class="yml">en:
-  menu:
-    home: &#39;About&#39;
-    team: &#39;Team&#39;
-    projects: &#39;Projects&#39;
-    careers: &#39;Careers&#39;
-    blog: &#39;Blog&#39;</code></pre>
-<h2 id="在console中测试"><a href="#在console中测试" class="headerlink" title="在console中测试"></a>在console中测试</h2><h4 id="查看可用的语言"><a href="#查看可用的语言" class="headerlink" title="查看可用的语言"></a>查看可用的语言</h4><p><code>I18n.available_locales</code></p>
-<h4 id="设置当前语言"><a href="#设置当前语言" class="headerlink" title="设置当前语言"></a>设置当前语言</h4><p><code>I18n.locale = &#39;en&#39;</code></p>
-<h4 id="测试翻译"><a href="#测试翻译" class="headerlink" title="测试翻译"></a>测试翻译</h4><p><code>I18n.t(&#39;menu.home&#39;)</code></p>
-<h2 id="在view中使用"><a href="#在view中使用" class="headerlink" title="在view中使用"></a>在view中使用</h2><pre><code class="erb">&lt;%= t(&quot;menu.home&quot;)%&gt;</code></pre>
-<h2 id="设置网站的语言环境"><a href="#设置网站的语言环境" class="headerlink" title="设置网站的语言环境"></a>设置网站的语言环境</h2><h4 id="view"><a href="#view" class="headerlink" title="view"></a>view</h4><p>在helper中编写生成语言选择的下拉列表框的辅助方法，方便在view中使用，尽量不要把ruby语言部分过多的写在html中</p>
-<pre><code class="ruby">  def language(language_category)
-    case language_category
-    when :&#39;en&#39;
-      &#39;English&#39;
-    when :&#39;zh-CN&#39;
-      &#39;简体中文&#39;
-    end
-  end
-
-  def language_tag
-    request_url = request.url
-    I18n.available_locales.map do |la|
-      content_tag(:li,content_tag(:a ,language(la),href:&quot;#{request_url}?&amp;locale=#{la.to_s}&quot;,data: {remote: true},class:&#39;language&#39;))
-      # &lt;li&gt;&lt;a class=&#39;language&#39; href= &quot;xxxx?&amp;local=en&quot; data-remote=&#39;true&#39;&gt;English&lt;/a&gt;&lt;/li&gt;
-    end.join.html_safe
-  end</code></pre>
-<p>注意<code>content_tag</code>的用法<br>当选择语言时，需要异步提交到后台设置语言环境，然后重新加载本页面</p>
-<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>每个页面都需要检查一下当前的语言环境，所以在每个页面跳转之前都到先设置正确的语言，因此在<code>ApplicationController</code>中如下</p>
-<pre><code class="ruby">  before_action :set_language
-
-  def set_language
-    session[:locale] = params[:locale] if params[:locale]
-    I18n.locale = session[:locale] || I18n.default_locale
-  end</code></pre>
-<h4 id="刷新当前页面"><a href="#刷新当前页面" class="headerlink" title="刷新当前页面"></a>刷新当前页面</h4><p>由于是异步提交到后台中，所以页面不会刷新。对语言选择的超链接添加<code>ajax:success</code>监听，当成功设置语言环境后，使用前端的方法刷新本页面</p>
-<pre><code class="javascript">function set_language(){
-  $(&quot;.language&quot;).on(&#39;ajax:success&#39;, function(event, data, status, xhr) {
-    location.reload();
-  });</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-JQuery为动态添加的元素绑定事件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1050,6 +750,139 @@ new Date(ms);</code></pre>
 
 
   
+    <article id="post-linux添加新用户" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/">linux添加新用户</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
+<li>adduser username</li>
+<li>输入密码</li>
+<li>再次输密码</li>
+<li>输入电话号等，按enter使用默认值</li>
+<li>新用户创建成功</li>
+</ol>
+<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-liunx用命令行的方式更换桌面背景" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/">liunx用命令行的方式更换桌面背景</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="liunx用命令行的方式更换桌面背景"><a href="#liunx用命令行的方式更换桌面背景" class="headerlink" title="liunx用命令行的方式更换桌面背景"></a>liunx用命令行的方式更换桌面背景</h2><pre><code class="shell"> gsettings set org.gnome.desktop.background picture-uri &quot;file:/home/mc/桌面/disco-75c0c1ef.png&quot;</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
@@ -1143,7 +976,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1151,15 +984,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1167,15 +996,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1184,10 +1021,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1215,11 +1048,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1247,10 +1080,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
@@ -1259,7 +1088,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1267,11 +1096,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1283,7 +1120,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1292,10 +1129,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1323,11 +1156,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1336,18 +1169,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1363,7 +1184,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1375,6 +1204,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1383,11 +1216,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1403,23 +1244,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">email</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1431,11 +1260,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1455,6 +1284,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
@@ -1464,10 +1297,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1495,14 +1324,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vps</a>
               </li>
              
@@ -1511,7 +1332,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1527,10 +1356,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1543,6 +1368,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1551,15 +1380,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1571,10 +1400,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1583,11 +1408,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1623,6 +1448,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1631,11 +1460,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">部署</a>
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1643,11 +1468,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color3">部署</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+                <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
             
             <div class="clearfix"></div>

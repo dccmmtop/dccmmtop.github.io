@@ -133,279 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-rails_action_cable使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/18/rails_action_cable%E4%BD%BF%E7%94%A8/">rails_action_cable使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/18/rails_action_cable%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-  	<time datetime="2018-11-18T09:24:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="安装-redis"><a href="#安装-redis" class="headerlink" title="安装 redis"></a>安装 redis</h3><ol>
-<li><code>gem redis</code></li>
-<li>bundle install</li>
-</ol>
-<h3 id="修改-cable-yml"><a href="#修改-cable-yml" class="headerlink" title="修改 cable.yml"></a>修改 cable.yml</h3><pre><code class="yml">development:
-  adapter: redis</code></pre>
-<h3 id="生成订阅"><a href="#生成订阅" class="headerlink" title="生成订阅"></a>生成订阅</h3><p><code>rails g channel block speak</code></p>
-<h3 id="连接设置"><a href="#连接设置" class="headerlink" title="连接设置"></a>连接设置</h3><blockquote>
-<p>连接是客户端-服务器通信的基础。每当服务器接受一个 WebSocket，就会实例化一个连接对象。所有频道订阅（channel subscription）都是在继承连接对象的基础上创建的。连接本身并不处理身份验证和授权之外的任何应用逻辑。WebSocket 连接的客户端被称为连接用户（connection consumer）。每当用户新打开一个浏览器标签、窗口或设备，对应地都会新建一个用户-连接对（consumer-connection pair）。 连接是 ApplicationCable::Connection 类的实例。对连接的授权就是在这个类中完成的，对于能够识别的用户，才会继续建立连接。</p>
-</blockquote>
-<p>例子：</p>
-<pre><code class="ruby">module ApplicationCable
-  class Connection &lt; ActionCable::Connection::Base
-    identified_by :current_user
-
-    def connect
-      self.current_user = find_verified_user
-    end
-
-    private
-      def find_verified_user
-        if cu_user = User.find_by(id: cookies.signed[:user_id])
-          cu_user
-        else
-          reject_unauthorized_connection
-        end
-      end
-  end
-end</code></pre>
-<p>action cable 中不能使用 session，我们可以用 cookie 来验证用户。下面在 SessionHelper 中加入 cookie，方便 action cable 使用</p>
-<pre><code class="ruby">module SessionsHelper
-  def log_in(user)
-    session[:user_address] = user.address
-    user = User.find_by(address: session[:user_address])
-    if user
-      cookies.permanent.signed[:user_id] = user.id
-    end
-  end
-
-  def current_user
-    @current_user ||= User.find_by(address: session[:user_address])
-  end
-
-  def logged_in?
-    !current_user.nil?
-  end
-
-  def log_out
-    session.delete(:user_address)
-    @current_user = nil
-    cookies.delete(:user_id)
-  end
-end</code></pre>
-<h3 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h3><pre><code class="coffee">App.block = App.cable.subscriptions.create channel: &quot;BlockChannel&quot;,
-  connected: -&gt;
-    # Called when the subscription is ready for use on the server
-
-  disconnected: -&gt;
-    # Called when the subscription has been terminated by the server
-
-  received: (data) -&gt;
-    alert(data)</code></pre>
-<p>上述<code>channel: &#39;BlockChannel&#39;</code>是必须的，声明像哪个频道订阅</p>
-<h3 id="处理订阅"><a href="#处理订阅" class="headerlink" title="处理订阅"></a>处理订阅</h3><pre><code class="ruby">class BlockChannel &lt; ApplicationCable::Channel
-  def subscribed
-    # 设置可以向哪些订阅者发布信息
-    stream_from current_user.address
-  end
-
-  def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
-  end</code></pre>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在 rails console 中</p>
-<pre><code class="ruby"># 向用户22发送一条通知
-ActionCable.server.broadcast User.find(22).address, data: 22</code></pre>
-<h2 id="关于-action-cable-的部署"><a href="#关于-action-cable-的部署" class="headerlink" title="关于 action cable 的部署"></a>关于 action cable 的部署</h2><h3 id="cable-yml"><a href="#cable-yml" class="headerlink" title="cable.yml"></a>cable.yml</h3><p>action cable 默认为“异步”适配器，当涉及多个进程时，它不起作用。因此，您需要配置 Action Cable 以使用其他适配器，例如 Redis 或 PostgreSQL。</p>
-<pre><code class="yml">production:
-  adapter: redis
-  url: redis://localhost:6379
-
-staging:
-  adapter: redis
-  url: redis://localhost:6379
-
-local: &amp;local
-  adapter: redis
-  url: redis://localhost:6379
-
-development: *local
-test: *local</code></pre>
-<p>不要忘记启动 redis</p>
-<h3 id="在和-rails-相同的主机和端口使用-action-cable"><a href="#在和-rails-相同的主机和端口使用-action-cable" class="headerlink" title="在和 rails 相同的主机和端口使用 action cable"></a>在和 rails 相同的主机和端口使用 action cable</h3><p>下面是 Rails 推荐的默认设置，也是最简单的设置.它的工作原理是将 ActionCable.server 挂载到 config / routes.rb 中的某个路径。这样，您的 Action Cable 服务器将在与您的应用程序相同的主机和端口上运行，但在子 URI 下运行。</p>
-<p>在 router.rb 文件中</p>
-<pre><code class="ruby">mount ActionCable.server =&gt; &#39;/cable&#39;</code></pre>
-<p>你需要配置一个 <code>location</code>块 配置 cable 的请求,像下面这样：</p>
-<pre><code class="nginx">server {
-    listen 80;
-    server_name www.foo.com;
-    root /path-to-your-app/public;
-    passenger_enabled on;
-
-    ### INSERT THIS!!! ###
-    location /cable {
-        passenger_force_max_concurrent_requests_per_process 0;
-    }
-}</code></pre>
-<p>为了应用的性能，必须添加<code>passenger_force_max_concurrent_requests_per_process 0</code>的配置，关于这个配置的详解请看 <a href="https://www.phusionpassenger.com/library/config/nginx/reference/#passenger_force_max_concurrent_requests_per_process" target="_blank" rel="noopener">文档</a></p>
-<blockquote>
-<p>本文内容整理自 ruby-china 和 <a href="https://www.phusionpassenger.com/library/config/nginx/action_cable_integration/" target="_blank" rel="noopener">passenger 的配置文档</a></p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">cable</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/18/rails_action_cable%E4%BD%BF%E7%94%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-react-native错误解决记录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/03/react-native%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/">react-native错误解决记录</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/03/react-native%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/" class="archive-article-date">
-  	<time datetime="2018-11-03T08:10:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="unable-to-load-script-from-assets-‘index-android-bundle"><a href="#unable-to-load-script-from-assets-‘index-android-bundle" class="headerlink" title="unable to load script from assets ‘index.android.bundle"></a>unable to load script from assets ‘index.android.bundle</h3><ol>
-<li>mkdir android/app/src/main/assets/</li>
-<li>rm -r node_modules</li>
-<li>yarn install</li>
-<li>react-native bundle –platform android –dev false –entry-file index.js –bundle-output android/app/src/main/assets/index.android.bundle –assets-dest android/app/src/main/res</li>
-<li>react-native run-android</li>
-</ol>
-<h3 id="Error-type-3-Error-Activity-class-xxxxxx-MainActivity-does-not-exist"><a href="#Error-type-3-Error-Activity-class-xxxxxx-MainActivity-does-not-exist" class="headerlink" title="Error type 3; Error: Activity class {xxxxxx.MainActivity} does not exist."></a>Error type 3; Error: Activity class {xxxxxx.MainActivity} does not exist.</h3><p><code>adb uninstall &lt;package name&gt;</code></p>
-<p>ex: adb uninsall com.wall</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">react-native</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">error-records</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/03/react-native%E9%94%99%E8%AF%AF%E8%A7%A3%E5%86%B3%E8%AE%B0%E5%BD%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-高德地图获取API" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1352,6 +1079,233 @@ endfunction</code></pre>
 
 
   
+    <article id="post-CSS自定义浏览器滚动条样式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/18/CSS%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B5%8F%E8%A7%88%E5%99%A8%E6%BB%9A%E5%8A%A8%E6%9D%A1%E6%A0%B7%E5%BC%8F/">CSS自定义浏览器滚动条样式</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/18/CSS%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B5%8F%E8%A7%88%E5%99%A8%E6%BB%9A%E5%8A%A8%E6%9D%A1%E6%A0%B7%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2018-10-18T01:12:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="WebKit-浏览器-CSS-设置滚动条"><a href="#WebKit-浏览器-CSS-设置滚动条" class="headerlink" title="WebKit 浏览器 CSS 设置滚动条"></a>WebKit 浏览器 CSS 设置滚动条</h3><p>主要有下面 7 个属性:</p>
+<ol>
+<li>::-webkit-scrollbar 滚动条整体部分，可以设置宽度啥的</li>
+<li>::-webkit-scrollbar-button 滚动条两端的按钮</li>
+<li>::-webkit-scrollbar-track 外层轨道</li>
+<li>::-webkit-scrollbar-track-piece 内层轨道，滚动条中间部分（除去）</li>
+<li>::-webkit-scrollbar-thumb 拖动条，滑块</li>
+<li>::-webkit-scrollbar-corner 边角</li>
+<li>::-webkit-resizer 定义右下角拖动块的样式</li>
+</ol>
+<p>具体所指如下图:</p>
+<p><img src="http://ogbkru1bq.bkt.clouddn.com/1539825277.png" alt=""></p>
+<p>上面是滚动条的主要设置属性，还有更详尽的 CSS 属性伪类，可以更丰富滚动条样式。</p>
+<pre><code>:horizontal 水平方向的滚动条
+:vertical 垂直方向的滚动条
+:decrement 应用于按钮和内层轨道(track piece)。它用来指示按钮或者内层轨道是否会减小视窗的位置(比如，垂直滚动条的上面，水平滚动条的左边)
+:increment 和 decrement 类似，用来指示按钮或内层轨道是否会增大视窗的位置(比如，垂直滚动条的下面和水平滚动条的右边)
+:start 也应用于按钮和滑块。它用来定义对象是否放到滑块的前面。
+:end 类似于 start 伪类，标识对象是否放到滑块的后面。
+:double-button 该伪类以用于按钮和内层轨道。用于判断一个按钮是不是放在滚动条同一端的一对按钮中的一个。对于内层轨道来说，它表示内层轨道是否紧靠一对按钮。
+:single-button 类似于 double-button 伪类。对按钮来说，它用于判断一个按钮是否自己独立的在滚动条的一段。对内层轨道来说，它表示内层轨道是否紧靠一个 single-button。
+:no-button 用于内层轨道，表示内层轨道是否要滚动到滚动条的终端，比如，滚动条两端没有按钮的时候。
+:corner-present 用于所有滚动条轨道，指示滚动条圆角是否显示。
+:window-inactive 用于所有的滚动条轨道，指示应用滚动条的某个页面容器(元素)是否当前被激活。(在 webkit 最近的版本中，该伪类也可以用于::selection 伪元素。webkit 团队有计划扩展它并推动成为一个标准的伪类)</code></pre><p>另外，:enabled、:disabled、:hover 和 :active 等伪类同样可以用于滚动条中。</p>
+<p>值得一提的是，WebKit 伪类和伪元素的实现很强大，虽然类目有些多，但是我们可以把滚动条当成一个页面元素来定义，也差不多可以用上一些高级的 CSS3 属性，比如渐变、圆角、RGBA 等等，当然有些地方也可以用图片，然后图片也可以转换成 Base64，总之，可以尽情发挥了。</p>
+<p>写个实例 Demo（请在 webkit 浏览器下观看）。</p>
+<pre><code class="css">/_ 设置滚动条的样式 _/ ::-webkit-scrollbar {
+  width: 12px;
+}
+
+/_ 滚动槽 _/ ::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+/_ 滚动条滑块 _/ ::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255, 0, 0, 0.4);
+}</code></pre>
+<p>Firefox 浏览器滚动条样式插件<br>吐槽下，作为三大浏览器的火狐居然没有相关 CSS。</p>
+<p>火狐不支持滚动条样式调整，火狐浏览器未开放针对滚动条样式的设定。且也不支持 css 代码关于这些浏览器属性的控制。如果非要样式效果，只能滚动效果用 JS 来做，使用图片代替按钮。</p>
+<p>不过博主发现，本地的 Firefox 可以通过安装 Stylish 扩展定制滚动条样式</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">css</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/18/CSS%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B5%8F%E8%A7%88%E5%99%A8%E6%BB%9A%E5%8A%A8%E6%9D%A1%E6%A0%B7%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-rails中嵌套布局的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/18/rails%E4%B8%AD%E5%B5%8C%E5%A5%97%E5%B8%83%E5%B1%80%E7%9A%84%E4%BD%BF%E7%94%A8/">rails中嵌套布局的使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/18/rails%E4%B8%AD%E5%B5%8C%E5%A5%97%E5%B8%83%E5%B1%80%E7%9A%84%E4%BD%BF%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2018-10-18T00:44:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><img src="http://ogbkru1bq.bkt.clouddn.com/1539823637.png" alt=""></p>
+<p>如上图，绿色是 application 布局,红色 aside 布局，蓝色是内容，如何实现？</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>layouts/application 布局如下</p>
+<pre><code class="erb">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;&lt;%= @page_title or &quot;Page Title&quot; %&gt;&lt;/title&gt;
+  &lt;%= stylesheet_link_tag &quot;layout&quot; %&gt;
+  &lt;style&gt;&lt;%= yield :stylesheets %&gt;&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id=&quot;top_menu&quot;&gt;Top menu items here&lt;/div&gt;
+  &lt;div id=&quot;menu&quot;&gt;Menu items here&lt;/div&gt;
+  &lt;div id=&quot;content&quot;&gt;&lt;%= content_for?(:content) ? yield(:content) : yield %&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>layouts/aside 布局如下</p>
+<pre><code class="erb">&lt;% content_for :stylesheets do %&gt;
+  #top_menu {display: none}
+  #right_menu {float: right; background-color: yellow; color: black}
+&lt;% end %&gt;
+&lt;% content_for :content do %&gt;
+  &lt;%= yield %&gt;
+&lt;% end %&gt;
+&lt;%= render template: &quot;layouts/application&quot; %&gt;</code></pre>
+<p>蓝色内容：</p>
+<pre><code class="erb">&lt;div&gt;
+.....
+&lt;/div&gt;</code></pre>
+<p>在控制器中：</p>
+<pre><code class="ruby">layout &#39;aside&#39;</code></pre>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ul>
+<li>布局的嵌套层级没有限制</li>
+<li><strong>要使用具名 yield</strong></li>
+<li>在 aside 布局中使用<code>&lt;%= render template: &quot;layouts/application&quot; %</code>指定父布局</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/18/rails%E4%B8%AD%E5%B5%8C%E5%A5%97%E5%B8%83%E5%B1%80%E7%9A%84%E4%BD%BF%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/13/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/15/">Next &amp;raquo;</a>
@@ -1445,7 +1399,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1453,15 +1407,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1469,15 +1419,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1486,10 +1444,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1517,11 +1471,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1549,10 +1503,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
@@ -1561,7 +1511,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1569,11 +1519,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1585,7 +1543,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1594,10 +1552,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1625,11 +1579,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1638,18 +1592,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1665,7 +1607,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1677,6 +1627,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1685,11 +1639,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1705,23 +1667,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">email</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1733,11 +1683,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1757,6 +1707,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
@@ -1766,10 +1720,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1797,14 +1747,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vps</a>
               </li>
              
@@ -1813,7 +1755,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1829,10 +1779,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1845,6 +1791,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1853,15 +1803,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1873,10 +1823,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1885,11 +1831,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1925,6 +1871,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1933,11 +1883,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">部署</a>
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1945,11 +1891,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color3">部署</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+                <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
             
             <div class="clearfix"></div>

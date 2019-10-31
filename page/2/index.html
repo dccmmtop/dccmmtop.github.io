@@ -133,90 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-vim脚本_生成图片外链" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">vim脚本_生成图片外链</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vim脚本将选中的图片本机地址转换为器牛云的外链</p>
-<pre><code class="vim">function! qiniu#get_file_url_from_qiniu()
-    &quot; Why is this not a built-in Vim script function?!
-    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
-    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
-        return &#39;&#39;
-    endif
-    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    &quot; 得到选中的文本
-    let re = join(lines,&quot;\n&quot;)
-    &quot; 执行系统命令
-    let  re1 = system(&quot;qiniu &quot; . re)
-    &quot; url 处理
-    let tmpq = split(re1,&quot;\n&quot;)[-1]
-    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;) 
-    &quot; 替换文本
-    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
-endfunction</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-ruby--require引用文件路径方法与问题总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -275,90 +191,6 @@ require &#39;bar&#39; </code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/ruby--require%E5%BC%95%E7%94%A8%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E6%96%B9%E6%B3%95%E4%B8%8E%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-solidity中返回mapping数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">solidity中返回mapping数据</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
-function getInfoByUser(address user) public view returns(uint[],uint[]){
-  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
-  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
-  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
-    money[i] = bank[user].depositRecord[i].money;
-    time[i] = bank[user].depositRecord[i].time;
-  }
-  return(money,time);
-}</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">展开全文 >></a>
         </p>
       
 
@@ -451,19 +283,19 @@ function getInfoByUser(address user) public view returns(uint[],uint[]){
 
 
   
-    <article id="post-simple_form" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-solidity中返回mapping数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/simple_form/">simple_form</a>
+      <a class="article-title" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">solidity中返回mapping数据</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/simple_form/" class="archive-article-date">
+        <a href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -471,46 +303,17 @@ function getInfoByUser(address user) public view returns(uint[],uint[]){
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Simple-form"><a href="#Simple-form" class="headerlink" title="Simple_form"></a>Simple_form</h2><h4 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h4><p><code>gem &#39;simple_form&#39;</code></p>
-<p><code>bundle install</code></p>
-<p><code>rails generate simple_form:install --bootstrap</code></p>
-<p>基本使用方式</p>
-<p>只要输入f.input，simple_form會自動根據資料庫中該欄位的資料型態，判斷此input顯示的格式</p>
-<pre><code class="erb">&lt;%= simple_form_for @post do |f| %&gt;
-  &lt;div class=&quot;form-group&quot;&gt; 
-  &lt;%= f.input :username, label: &#39;Your username please&#39;, error: &#39;Username is mandatory, please specify one&#39; %&gt;
-  &lt;%= f.input :password, hint: &#39;No special characters.&#39; %&gt;  &lt;%= f.input :email, placeholder: &#39;user@domain.com&#39; %&gt; 
-  &lt;%= f.input :remember_me, inline_label: &#39;Yes, remember me&#39; %&gt;
-  &lt;/div&gt;
-  &lt;%= f.submit &quot;Submit&quot;, class: &quot;btn btn-primary&quot;, data: { disable_with: &quot;Submiting...&quot; } %&gt;
-&lt;% end %&gt;</code></pre>
-<p>若有錯誤，也可使用as手動調整欄位格式</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
-  &lt;%= f.input :username %&gt;
-  &lt;%= f.input :password %&gt;
-  &lt;%= f.input :description, as: :text %&gt;
-  &lt;%= f.input :accepts,     as: :radio_buttons %&gt;
-  &lt;%= f.button :submit %&gt;
-&lt;% end %&gt;</code></pre>
-<h4 id="排版"><a href="#排版" class="headerlink" title="排版"></a>排版</h4><p>為了排版，平常寫在後面的參數，也可以分開填寫</p>
-<p>例如</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt;
-  &lt;%= f.input :username, label: &#39;username&#39;, hint: &#39;No special characters, please!&#39;, error: &#39;username&#39;, id: &#39;user_name_error&#39;, full_error: &#39;token&#39;  %&gt;
-  &lt;%= f.submit &#39;Save&#39; %&gt;
-&lt;% end %&gt;</code></pre>
-<p>可調整為：</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
-  &lt;%= f.label :username %&gt;
-  &lt;%= f.input_field :username %&gt; 
-  &lt;%= f.hint &#39;No special characters, please!&#39; %&gt; 
-  &lt;%= f.error :username, id: &#39;user_name_error&#39; %&gt; 
-  &lt;%= f.full_error :token %&gt;
-  &lt;%= f.submit &#39;Save&#39; %&gt;
-&lt;% end %&gt;</code></pre>
-<h4 id="疑難雜症"><a href="#疑難雜症" class="headerlink" title="疑難雜症"></a>疑難雜症</h4><p>關閉label</p>
-<p><code>label: false</code></p>
-<p>備註hint</p>
-<p><code>hint: &#39;文字&#39;</code></p>
+        <p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
+function getInfoByUser(address user) public view returns(uint[],uint[]){
+  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
+  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
+  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
+    money[i] = bank[user].depositRecord[i].money;
+    time[i] = bank[user].depositRecord[i].time;
+  }
+  return(money,time);
+}</code></pre>
 
       
 
@@ -519,11 +322,22 @@ function getInfoByUser(address user) public view returns(uint[],uint[]){
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/simple_form/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">展开全文 >></a>
         </p>
       
 
@@ -750,6 +564,97 @@ io.close</code></pre>
 
 
   
+    <article id="post-ruby命令行工具制作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/">ruby命令行工具制作</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.042Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="ruby">require &#39;optparse&#39;
+
+options = {}
+option_parser = OptionParser.new do |opts|
+  # 这里是这个命令行工具的帮助信息
+  opts.banner = &#39;here is help messages of the command line tool.&#39;
+
+  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
+  options[:switch] = false
+  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
+  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
+    # 这个部分就是使用这个Option后执行的代码
+    options[:switch] = true
+  end
+
+  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
+  #下面的“value”就是用户使用时输入的argument
+  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
+    options[:name] = value
+  end
+
+  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
+  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
+    puts value
+    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
+  end
+end.parse!
+
+puts options.inspect</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-ruby多层数组排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -846,97 +751,6 @@ end</code></pre>
 
 
   
-    <article id="post-ruby命令行工具制作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/">ruby命令行工具制作</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.042Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">require &#39;optparse&#39;
-
-options = {}
-option_parser = OptionParser.new do |opts|
-  # 这里是这个命令行工具的帮助信息
-  opts.banner = &#39;here is help messages of the command line tool.&#39;
-
-  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
-  options[:switch] = false
-  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
-  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
-    # 这个部分就是使用这个Option后执行的代码
-    options[:switch] = true
-  end
-
-  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
-  #下面的“value”就是用户使用时输入的argument
-  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
-    options[:name] = value
-  end
-
-  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
-  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
-    puts value
-    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
-  end
-end.parse!
-
-puts options.inspect</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-ruby数组排序,但是排序的字段可能为空" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -977,6 +791,136 @@ foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-README" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/README/">README</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/README/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>添加 pacman 源—待整理</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/README/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-react_native_default_not_found" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/react_native_default_not_found/">react_native_default_not_found</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/react_native_default_not_found/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="记录一下错误日志以及解决方法"><a href="#记录一下错误日志以及解决方法" class="headerlink" title="记录一下错误日志以及解决方法"></a>记录一下错误日志以及解决方法</h3><h4 id="错误信息"><a href="#错误信息" class="headerlink" title="错误信息"></a>错误信息</h4><pre><code>Error:Configuration with name &#39;default&#39; not found.</code></pre><h4 id="可能的原因"><a href="#可能的原因" class="headerlink" title="可能的原因"></a>可能的原因</h4><p>以前使用某个包，,并且进行了<code>link</code>操作，也许你是全局安装的，pakage.json 没有这个包的信息。</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>重新执行<code>npm i 包名 --save</code></p>
+<p>终于处理掉了这个问题，其实这个问题是很简单的问题，只是怪自己年少无知，故现在记录下这些曾经无知的过错，等以后反过来看自己也许会一笑而过。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/react_native_default_not_found/">展开全文 >></a>
         </p>
       
 
@@ -1099,7 +1043,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1107,15 +1051,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1123,15 +1063,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1140,10 +1088,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1171,11 +1115,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1203,10 +1147,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
@@ -1215,7 +1155,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1223,11 +1163,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1239,7 +1187,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1248,10 +1196,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1279,11 +1223,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1292,18 +1236,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1319,7 +1251,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1331,6 +1271,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1339,11 +1283,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1359,23 +1311,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">email</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1387,11 +1327,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1411,6 +1351,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
@@ -1420,10 +1364,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1451,14 +1391,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vps</a>
               </li>
              
@@ -1467,7 +1399,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1483,10 +1423,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1499,6 +1435,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1507,15 +1447,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1527,10 +1467,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1539,11 +1475,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1579,6 +1515,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1587,11 +1527,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">部署</a>
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1599,11 +1535,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color3">部署</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+                <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
             
             <div class="clearfix"></div>

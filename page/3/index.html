@@ -133,19 +133,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-README" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-react_native条件渲染" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/README/">README</a>
+      <a class="article-title" href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/">react_native条件渲染</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/README/" class="archive-article-date">
+        <a href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -153,9 +153,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ul>
-<li>添加 pacman 源—待整理</li>
-</ul>
+        <p>根据不同的条件渲染不同的组件<br>一般的套路是把将要渲染的组件赋值给一个<code>const</code>，然后根据不同的条件使用不同的 const</p>
+<pre><code class="jsx"> render() {
+ const emptyImage = (
+  &lt;View
+    style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  &gt;
+    &lt;Image source={require(&quot;../icons/empty.png&quot;)} style={styles.emptyImg} /&gt;
+    &lt;Text style={styles.text}&gt;你还没有任何土地&lt;/Text&gt;
+  &lt;/View&gt;
+);
+const List= &lt;FlatList.../&gt;
+    return (
+    &lt;View style={styles.container}&gt;
+        {/* 导航，返回按钮*/}
+        &lt;View style={[styles.back]}&gt;
+          &lt;TouchableOpacity
+            onPress={() =&gt; {
+              Actions.pop();
+            }}
+            style={styles.backBtn}
+          &gt;
+            &lt;Image
+              style={styles.backImg}
+              source={require(&quot;../icons/back.png&quot;)}
+            /&gt;
+          &lt;/TouchableOpacity&gt;
+          &lt;Text style={[styles.text, styles.title]}&gt;我的地块&lt;/Text&gt;
+        &lt;/View&gt;
+        {this.props.list ? List : emptyImage}
+      &lt;/View&gt;
+    );
+  }
+}</code></pre>
 
       
 
@@ -164,76 +198,22 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">react-native</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/README/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-react_native_default_not_found" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/react_native_default_not_found/">react_native_default_not_found</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/react_native_default_not_found/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="记录一下错误日志以及解决方法"><a href="#记录一下错误日志以及解决方法" class="headerlink" title="记录一下错误日志以及解决方法"></a>记录一下错误日志以及解决方法</h3><h4 id="错误信息"><a href="#错误信息" class="headerlink" title="错误信息"></a>错误信息</h4><pre><code>Error:Configuration with name &#39;default&#39; not found.</code></pre><h4 id="可能的原因"><a href="#可能的原因" class="headerlink" title="可能的原因"></a>可能的原因</h4><p>以前使用某个包，,并且进行了<code>link</code>操作，也许你是全局安装的，pakage.json 没有这个包的信息。</p>
-<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>重新执行<code>npm i 包名 --save</code></p>
-<p>终于处理掉了这个问题，其实这个问题是很简单的问题，只是怪自己年少无知，故现在记录下这些曾经无知的过错，等以后反过来看自己也许会一笑而过。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/react_native_default_not_found/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/">展开全文 >></a>
         </p>
       
 
@@ -475,116 +455,6 @@ ReactDom.render(&lt;Container /&gt;, document.getElementById(&#39;container&#39;
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/react_native_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-react_native条件渲染" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/">react_native条件渲染</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>根据不同的条件渲染不同的组件<br>一般的套路是把将要渲染的组件赋值给一个<code>const</code>，然后根据不同的条件使用不同的 const</p>
-<pre><code class="jsx"> render() {
- const emptyImage = (
-  &lt;View
-    style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-    }}
-  &gt;
-    &lt;Image source={require(&quot;../icons/empty.png&quot;)} style={styles.emptyImg} /&gt;
-    &lt;Text style={styles.text}&gt;你还没有任何土地&lt;/Text&gt;
-  &lt;/View&gt;
-);
-const List= &lt;FlatList.../&gt;
-    return (
-    &lt;View style={styles.container}&gt;
-        {/* 导航，返回按钮*/}
-        &lt;View style={[styles.back]}&gt;
-          &lt;TouchableOpacity
-            onPress={() =&gt; {
-              Actions.pop();
-            }}
-            style={styles.backBtn}
-          &gt;
-            &lt;Image
-              style={styles.backImg}
-              source={require(&quot;../icons/back.png&quot;)}
-            /&gt;
-          &lt;/TouchableOpacity&gt;
-          &lt;Text style={[styles.text, styles.title]}&gt;我的地块&lt;/Text&gt;
-        &lt;/View&gt;
-        {this.props.list ? List : emptyImage}
-      &lt;/View&gt;
-    );
-  }
-}</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">react-native</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/">展开全文 >></a>
         </p>
       
 
@@ -1161,6 +1031,95 @@ end</code></pre>
 
 
   
+    <article id="post-qiniu_upload_file" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/qiniu_upload_file/">qiniu_upload_file</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/qiniu_upload_file/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
+require &#39;qiniu&#39;
+Qiniu.establish_connection! access_key: &#39;xxxxxxxxxx&#39;,
+                            secret_key: &#39;xxxxxxxxxx&#39;
+bucket = &#39;dc141210104&#39;
+puts ARGV[0]
+key = ARGV[0].split(/\//).last
+
+put_policy = Qiniu::Auth::PutPolicy.new(
+    bucket, # 存储空间
+    key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
+    3600    # token 过期时间，默认为 3600 秒，即 1 小时
+)
+# 生成上传 Token
+uptoken = Qiniu::Auth.generate_uptoken(put_policy)
+filePath = ARGV[0]
+# 调用 upload_with_token_2 方法上传
+code, result, response_headers = Qiniu::Storage.upload_with_token_2(
+     uptoken,
+     filePath,
+     key,
+     nil, # 可以接受一个 Hash 作为自定义变量，请参照 http://developer.qiniu.com/article/kodo/kodo-developer/up/vars.html#xvar
+     bucket: bucket
+)
+#打印上传返回的信息
+# puts &quot;\n\e[1;40;37mhttp://ogbkru1bq.bkt.clouddn.com/#{key}\e[0m&quot;
+puts &quot;http://ogbkru1bq.bkt.clouddn.com/#{key}&quot;</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/qiniu_upload_file/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-rails_model字段验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1213,6 +1172,306 @@ format: { with: VALID_EMAIL_REGEX }</code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-rails_record数据库查询" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/rails_record%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2/">rails_record数据库查询</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/rails_record%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="获取第一条、最后一条记录"><a href="#获取第一条、最后一条记录" class="headerlink" title="获取第一条、最后一条记录"></a>获取第一条、最后一条记录</h4><pre><code class="ruby">Model.first
+
+Model.first(options)
+
+Model.find(:first, options)
+
+Model.last
+
+Model.last(options)
+
+Model.find(:last, options)</code></pre>
+<h4 id="通过id获取记录"><a href="#通过id获取记录" class="headerlink" title="通过id获取记录"></a>通过id获取记录</h4><pre><code class="ruby">Model.find(1, 10, options)
+
+Model.find([1, 10], options)
+</code></pre>
+<h4 id="find-all"><a href="#find-all" class="headerlink" title="find all"></a>find all</h4><pre><code class="ruby">Model.all(options)</code></pre>
+<p>对一组数据进行相同操作</p>
+<pre><code class="ruby">User.all.each do |user|
+    NewsLetter.weekly_deliver(user)
+end</code></pre>
+<p>如果表记录数比较大，这种方式比较耗资源，因为它会一次载入整个表的数据。改用以下这种方式，它每次只载入<strong>1000</strong>行，然后逐步yield完整个表</p>
+<pre><code class="ruby">User.find_each do |user|
+  NewsLetter.weekly_deliver(user)
+end</code></pre>
+<h4 id="自定义方式，find-each接受和find同样的options"><a href="#自定义方式，find-each接受和find同样的options" class="headerlink" title="自定义方式，find_each接受和find同样的options"></a>自定义方式，find_each接受和find同样的options</h4><pre><code class="ruby">
+User.find_each(:batch_size =&gt; 5000, :start =&gt; 2000) do |user|
+  NewsLetter.weekly_deliver(user)
+end</code></pre>
+<p>find_in_batches，和find_each相似，但它yield时传递的是model对象数组，而不是单个model对象</p>
+<pre><code class="ruby">Invoice.find_in_batches(:include =&gt; :invoice_lines) do |invoices|
+   export.add_invoices(invoices)
+end</code></pre>
+<h3 id="查询条件"><a href="#查询条件" class="headerlink" title="查询条件"></a>查询条件</h3><p>通过替换？来传递条件值，可避免SQL注入</p>
+<pre><code class="ruby">Client.first(:conditions =&gt; [&quot;orders_count = ?&quot;, params[:orders])</code></pre>
+<p>symbol占位条件</p>
+<pre><code class="ruby">Client.all(:conditions =&gt; [&quot;created_at &gt;= :start_date AND created_at &lt;= :end_date&quot;, {:start_date =&gt; params[:start_date], :end_date =&gt; params[:end_date] }])</code></pre>
+<h4 id="范围条件-in-集合"><a href="#范围条件-in-集合" class="headerlink" title="范围条件 in(集合)"></a>范围条件 in(集合)</h4><pre><code class="ruby">Client.all(:conditions =&gt; [&quot;created_at IN (?)&quot;, (params[:start_date].to_date)..(params[:end_date].to_date])</code></pre>
+<p>生成sql</p>
+<pre><code class="sql">SELECT * FROM users WHERE (created_at IN (&#39;2007-12-31&#39;,&#39;2008-01-01&#39;,&#39;2008-01-02&#39;,&#39;2008-01-03&#39;,&#39;2008-01-04&#39;,&#39;2008-01-05&#39;, &#39;2008-01-06&#39;,&#39;2008-01-07&#39;,&#39;2008-01-08&#39;))</code></pre>
+<p>如果要生成日期时间，再加上.to_time</p>
+<p>复制代码代码如下:</p>
+<p><code>params[:start_date].to_date.to_time</code>，生成2007-12-01 00:00:00格式</p>
+<p>有上数据库会在以上条件中报错，如<strong>Mysql会报查询语句过长的错误</strong>，此时可以改成created_at &gt; ? AND created_at &lt; ?的形式</p>
+<h4 id="Hash条件"><a href="#Hash条件" class="headerlink" title="Hash条件"></a>Hash条件</h4><pre><code class="ruby">Client.all(:conditions =&gt; {:locked =&gt; true })</code></pre>
+<p><strong>带范围条件</strong></p>
+<pre><code class="ruby">Client.all(:conditons =&gt; {:created =&gt; (Time.now.midnight - 1.day)..Time.now.midnight})</code></pre>
+<p>生成sql</p>
+<pre><code class="sql">SELECT * FROM clients WHERE (clients.created_at BETWEEN &#39;2008-12-21 00:00:00&#39; AND &#39;2008-12-22 00:00:00&#39;)</code></pre>
+<p><strong>集合条件</strong></p>
+<pre><code class="ruby">Client.all(:conditons =&gt; {:orders_count =&gt; [1,3,5])</code></pre>
+<p>生成sql</p>
+<pre><code class="sql">SELECT * FROM clients WHERE (clients.orders_count IN (1,3,5))</code></pre>
+<h3 id="查询选项"><a href="#查询选项" class="headerlink" title="查询选项"></a>查询选项</h3><p><strong>排序</strong></p>
+<ul>
+<li>单个排序</li>
+</ul>
+<pre><code class="ruby">Client.all(:order =&gt; &quot;created_at ASC&quot;)</code></pre>
+<ul>
+<li>多个排序</li>
+</ul>
+<pre><code class="ruby">Client.all(:order =&gt; &quot;orders_count ASC, created_at DESC&quot;)</code></pre>
+<p><strong>返回指定字段</strong></p>
+<pre><code class="ruby">Client.all(:select =&gt; &quot;viewable_by, locked&quot;)</code></pre>
+<ul>
+<li>使用函数</li>
+</ul>
+<pre><code class="ruby">Client.all(:select =&gt; &quot;DISTINCT(name)&quot;)</code></pre>
+<ul>
+<li>限定和偏移Limit and Offset</li>
+</ul>
+<pre><code class="ruby">Client.all(:limit =&gt; 5)</code></pre>
+<p>生成sql</p>
+<pre><code class="sql">SELECT * FROM clients LIMIT 5</code></pre>
+<pre><code class="ruby">Client.all(:limit =&gt; 5, :offset =&gt; 5)</code></pre>
+<p>生成sql</p>
+<pre><code class="sql">SELECT * FROM clients LIMIT 5, 5</code></pre>
+<p><strong>Group分组</strong></p>
+<pre><code class="ruby">Order.all(:group =&gt; &quot;date(created_at)&quot;, :order =&gt; &quot;created_at&quot;)</code></pre>
+<p><strong>Having</strong></p>
+<pre><code class="ruby">Order.all(:group =&gt; &quot;date(created_at)&quot;, :having =&gt; [&quot;created_at &gt; ?&quot;, 1.month.ago)</code></pre>
+<p><strong>只读</strong></p>
+<pre><code class="ruby">client = Client.first(:readonly =&gt; true)
+client.locked = false
+client.save</code></pre>
+<blockquote>
+<p> <strong>对只读对象进行保存将会触发ActiveRecord::ReadOnlyRecord异常</strong></p>
+</blockquote>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><p><strong>更新时锁定记录</strong></p>
+<ul>
+<li>乐观锁Optimistic Locking</li>
+</ul>
+<p>为使用乐观锁，须在表里建一个lock_version的字段，每次更新记录时，ActiveRecord自动递增lock_version的值，</p>
+<pre><code class="ruby">c1 = Client.find(1) 
+c2 = Client.find(1)
+c1.name = &quot;Michael&quot; 
+c1.save 
+c2.name = &quot;should fail&quot; 
+c2.save # Raises a ActiveRecord::StaleObjectError</code></pre>
+<p>备注：You must ensure that your database schema defaults the lock_version column to 0.</p>
+<p>This behavior can be turned off by setting ActiveRecord::Base.lock_optimistically = false.</p>
+<p>指定乐观锁字段名</p>
+<pre><code class="ruby">class Client &lt; ActiveRecord::Base 
+    set_locking_column :lock_client_column 
+end</code></pre>
+<ul>
+<li>悲观锁Pessimistic Locking</li>
+</ul>
+<p>悲观锁定由数据库直接提供</p>
+<pre><code class="ruby">Item.transaction do
+    i = Item.first(:lock =&gt; true)
+    i.name = &#39;Jones&#39;
+    i.save
+end</code></pre>
+<p>Mysql执行返回</p>
+<pre><code class="sql"> SELECT * FROM items LIMIT 1 FOR UPDATE Item Update (0.4ms) UPDATE items SET updated_at = &#39;2009-02-07 18:05:56&#39;, name = &#39;Jones&#39; WHERE id = 1</code></pre>
+<p>为特定数据库加入原始的lock声明</p>
+<p>为Mysql的锁定声明为共享模式，即锁定时仍然可读</p>
+<pre><code class="ruby">Item.transaction do
+    i = Item.find(1, :lock =&gt; &quot;LOCK IN SHARE MODE&quot;)
+    i.increment!(:views)
+end</code></pre>
+<h3 id="关联表"><a href="#关联表" class="headerlink" title="关联表"></a>关联表</h3><pre><code class="ruby">Client.all(:joins =&gt; &quot;LEFT OUTER JOIN address ON addresses.client_id = clients.id&#39;)</code></pre>
+<p>生成sql</p>
+<pre><code class="sql">SELECT clients.* FROM clients LEFT OUTER JOIN addresses ON addresses.client_id = clients.id</code></pre>
+<p>使用Array、Hash、Named Associations关联表</p>
+<p>有如下model</p>
+<pre><code class="ruby">class Category &lt; ActiveRecord::Base
+    has_many :posts
+end
+
+class Post &lt; ActiveRecord::Base
+    belongs_to :category
+    has_many :comments
+    has_many :tags
+end
+
+class Comments &lt;ActiveRecord::Base
+    belongs_to :post
+    has_one :guest
+end
+
+class Guest &lt; ActiveRecord::Base
+    belongs_to :comment
+end</code></pre>
+<ul>
+<li>关联一个关系</li>
+</ul>
+<pre><code class="ruby">Category.all :joins =&gt; :posts</code></pre>
+<ul>
+<li>关联多个关系</li>
+</ul>
+<pre><code class="ruby">Post.all :joins =&gt; [:category, :comments]</code></pre>
+<ul>
+<li>嵌套关联</li>
+</ul>
+<pre><code class="ruby">Category.all :joins =&gt; {:posts =&gt; [{:comments =&gt; :guest}, :tags]}</code></pre>
+<ul>
+<li>为关联查询结果设定条件</li>
+</ul>
+<pre><code class="ruby">time_range = (Time.now.midnight - 1.day)..Time.now.midnight
+Client.all :joins =&gt; :orders, :conditions =&gt; {&#39;orders.created_at&#39; =&gt; time_ran</code></pre>
+<p>#或者</p>
+<pre><code class="ruby">time_range = (Time.now.midnight - 1.day)..Time.now.midnight 
+Client.all :joins =&gt; :orders, :conditions =&gt; {:orders =&gt; {:created_at =&gt; time_range}}</code></pre>
+<h3 id="优化载入"><a href="#优化载入" class="headerlink" title="优化载入"></a>优化载入</h3><p>以下代码，需要执行1 + 10次sql</p>
+<pre><code class="ruby">clients = Client.all(:limit =&gt; 10)
+clients.each do |client|
+    puts client.address.postcode
+end</code></pre>
+<p>优化：</p>
+<pre><code class="ruby">clients = Client.all(:include =&gt; :address, :limit =&gt; 10)
+clients.each do |client|
+    puts client.address.postcode
+end</code></pre>
+<p>一次性载入post的所有分类和评论</p>
+<p>复制代码代码如下:</p>
+<p><code>Post.all :include =&gt; [:category, :comments]</code></p>
+<p>载入category为1的所有post和cooment及tag</p>
+<p><code>Category.find 1, :include =&gt; {:posts =&gt; [{:comments =&gt; :guest}, :tags]}</code></p>
+<h3 id="动态查询"><a href="#动态查询" class="headerlink" title="动态查询"></a>动态查询</h3><pre><code class="ruby">Client.find_by_name(&quot;Ryan&quot;)
+
+Client.find_all_by_name(&quot;Ryan&quot;)</code></pre>
+<p><strong>方法，没有记录时抛出ActiveRecord::RecordNotFound异常</strong></p>
+<pre><code class="ruby">Client.find_by_name!(&quot;Ryan&quot;)</code></pre>
+<ul>
+<li>查询多个字段</li>
+</ul>
+<pre><code class="ruby">Client.find_by_name_and_locked(&quot;Ryan&quot;, true)</code></pre>
+<ul>
+<li>查询不到时就创建并保存</li>
+</ul>
+<pre><code class="ruby">Client.find_or_create_by_name(params[:name])</code></pre>
+<ul>
+<li>查询不到时创建一个实例，但不保存</li>
+</ul>
+<pre><code class="ruby">Client.find_or_initialize_by_name(&#39;Ryan&#39;)</code></pre>
+<h3 id="find-by-sql"><a href="#find-by-sql" class="headerlink" title="find_by_sql"></a>find_by_sql</h3><pre><code class="ruby">Client.find_by_sql(&quot;SELECT * FROM clients INNER JOIN orders ON clients.id = orders.client_id ORDER clients.created_at desc&quot;)</code></pre>
+<h3 id="select-all"><a href="#select-all" class="headerlink" title="select_all"></a>select_all</h3><p>和find_by_sql类似，<strong>但不会用model实例化返回记录，你会得到一个hash数组</strong></p>
+<pre><code class="ruby">Client.connection.select_all(&quot;SELECT * FROM clients WHERE id = &#39;1&#39;&quot;)</code></pre>
+<h3 id="判断记录是否存在"><a href="#判断记录是否存在" class="headerlink" title="判断记录是否存在"></a>判断记录是否存在</h3><p>复制代码代码如下:</p>
+<ul>
+<li>通过id来查询</li>
+</ul>
+<pre><code class="ruby">Client.exists?(1)
+
+Client.exists?(1, 2, 3)
+
+Client.exists?([1,2,3])</code></pre>
+<ul>
+<li>通过其他条件来查询</li>
+</ul>
+<pre><code class="ruby">Client.exists?(:conditions =&gt; &quot;first_name = &#39;Ryan&#39;&quot;)</code></pre>
+<p>#没有参数时，则：表是空的 ? false : true</p>
+<p>Client.exists?</p>
+<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><ul>
+<li>求结果集条数</li>
+</ul>
+<pre><code class="ruby">Client.count(:conditons =&gt; &quot;first_name = &#39;Ryan&#39;&quot;)</code></pre>
+<ul>
+<li>求某个字段非空白的条数</li>
+</ul>
+<pre><code class="ruby">Client.count(:age)</code></pre>
+<ul>
+<li>平均值</li>
+</ul>
+<pre><code class="ruby">Client.average(&quot;orders_count&quot;)</code></pre>
+<ul>
+<li>求最小值</li>
+</ul>
+<pre><code class="ruby">Client.minimum(&quot;age&quot;)</code></pre>
+<ul>
+<li>求最大值</li>
+</ul>
+<pre><code class="ruby">Client.maximum(&quot;age&quot;)</code></pre>
+<ul>
+<li>求和</li>
+</ul>
+<pre><code class="ruby">Client.sum(&quot;orders_count&quot;) </code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/rails_record%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2/">展开全文 >></a>
         </p>
       
 
@@ -1335,7 +1594,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1343,15 +1602,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1359,15 +1614,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
+                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">proxy</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1376,10 +1639,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1407,11 +1666,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1439,10 +1698,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
@@ -1451,7 +1706,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
+                <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1459,11 +1714,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1475,7 +1738,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1484,10 +1747,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1515,11 +1774,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">pacman</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1528,18 +1787,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">备份</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1555,7 +1802,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">备份</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">恢复</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1567,6 +1822,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1575,11 +1834,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1595,23 +1862,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息闪现</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">email</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1623,11 +1878,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">error-records</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1647,6 +1902,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
@@ -1656,10 +1915,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1687,14 +1942,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vps</a>
               </li>
              
@@ -1703,7 +1950,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1719,10 +1974,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
@@ -1735,6 +1986,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
@@ -1743,15 +1998,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1763,10 +2018,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1775,11 +2026,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1815,6 +2066,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1823,11 +2078,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">部署</a>
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1835,11 +2086,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color3">部署</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
+                <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
             
             <div class="clearfix"></div>

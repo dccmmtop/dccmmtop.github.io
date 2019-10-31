@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>simple_form</title>
+    <url>/2019/10/31/simple_form/</url>
+    <content><![CDATA[<h2 id="Simple-form"><a href="#Simple-form" class="headerlink" title="Simple_form"></a>Simple_form</h2><h4 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h4><p><code>gem &#39;simple_form&#39;</code></p>
+<p><code>bundle install</code></p>
+<p><code>rails generate simple_form:install --bootstrap</code></p>
+<p>基本使用方式</p>
+<p>只要输入f.input，simple_form會自動根據資料庫中該欄位的資料型態，判斷此input顯示的格式</p>
+<pre><code class="erb">&lt;%= simple_form_for @post do |f| %&gt;
+  &lt;div class=&quot;form-group&quot;&gt; 
+  &lt;%= f.input :username, label: &#39;Your username please&#39;, error: &#39;Username is mandatory, please specify one&#39; %&gt;
+  &lt;%= f.input :password, hint: &#39;No special characters.&#39; %&gt;  &lt;%= f.input :email, placeholder: &#39;user@domain.com&#39; %&gt; 
+  &lt;%= f.input :remember_me, inline_label: &#39;Yes, remember me&#39; %&gt;
+  &lt;/div&gt;
+  &lt;%= f.submit &quot;Submit&quot;, class: &quot;btn btn-primary&quot;, data: { disable_with: &quot;Submiting...&quot; } %&gt;
+&lt;% end %&gt;</code></pre>
+<a id="more"></a>
+
+<p>若有錯誤，也可使用as手動調整欄位格式</p>
+<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
+  &lt;%= f.input :username %&gt;
+  &lt;%= f.input :password %&gt;
+  &lt;%= f.input :description, as: :text %&gt;
+  &lt;%= f.input :accepts,     as: :radio_buttons %&gt;
+  &lt;%= f.button :submit %&gt;
+&lt;% end %&gt;</code></pre>
+<h4 id="排版"><a href="#排版" class="headerlink" title="排版"></a>排版</h4><p>為了排版，平常寫在後面的參數，也可以分開填寫</p>
+<p>例如</p>
+<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt;
+  &lt;%= f.input :username, label: &#39;username&#39;, hint: &#39;No special characters, please!&#39;, error: &#39;username&#39;, id: &#39;user_name_error&#39;, full_error: &#39;token&#39;  %&gt;
+  &lt;%= f.submit &#39;Save&#39; %&gt;
+&lt;% end %&gt;</code></pre>
+<p>可調整為：</p>
+<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
+  &lt;%= f.label :username %&gt;
+  &lt;%= f.input_field :username %&gt; 
+  &lt;%= f.hint &#39;No special characters, please!&#39; %&gt; 
+  &lt;%= f.error :username, id: &#39;user_name_error&#39; %&gt; 
+  &lt;%= f.full_error :token %&gt;
+  &lt;%= f.submit &#39;Save&#39; %&gt;
+&lt;% end %&gt;</code></pre>
+<h4 id="疑難雜症"><a href="#疑難雜症" class="headerlink" title="疑難雜症"></a>疑難雜症</h4><p>關閉label</p>
+<p><code>label: false</code></p>
+<p>備註hint</p>
+<p><code>hint: &#39;文字&#39;</code></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Solidity的event事件</title>
     <url>/2019/10/31/Solidity%E7%9A%84event%E4%BA%8B%E4%BB%B6/</url>
     <content><![CDATA[<h3 id="本文属于转载内容，转载来源"><a href="#本文属于转载内容，转载来源" class="headerlink" title="本文属于转载内容，转载来源"></a>本文属于转载内容，<a href="http://me.tryblockchain.org/blockchain-solidity-event.html" target="_blank" rel="noopener">转载来源</a></h3><p>在介绍事件前，我们先明确事件，日志这两个概念。事件发生后被记录到区块链上成为了日志。总的来说，事件强调功能，一种行为；日志强调存储，内容。</p>
@@ -191,8 +238,8 @@ transferContract.new(
 </ol>
 ]]></content>
       <tags>
-        <tag>solidity</tag>
         <tag>contract</tag>
+        <tag>solidity</tag>
       </tags>
   </entry>
   <entry>
@@ -499,214 +546,6 @@ sudo apt-get install shadowsocks-qt5</code></pre>
       </tags>
   </entry>
   <entry>
-    <title>vs_keybinding</title>
-    <url>/2019/10/31/vs_keybinding/</url>
-    <content><![CDATA[<a id="more"></a>
-<pre><code class="json">[
-  {
-    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
-    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
-    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
-    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-editor.action.rename&quot;,
-    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
-    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.setVariable&quot;,
-    &quot;when&quot;: &quot;variablesFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-renameFile&quot;,
-    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+b&quot;,
-    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
-    &quot;when&quot;: &quot;editorFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+`&quot;,
-    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
-  }
-]</code></pre>
-]]></content>
-      <tags>
-        <tag>vscode</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>vs_config</title>
-    <url>/2019/10/31/vs_config/</url>
-    <content><![CDATA[<a id="more"></a>
-<pre><code class="json">{
-  &quot;window.zoomLevel&quot;: 2,
-  &quot;workbench.colorTheme&quot;: &quot;Gruvbox Dark (Medium)&quot;,
-  &quot;workbench.iconTheme&quot;: &quot;vscode-great-icons&quot;,
-  &quot;javascript.updateImportsOnFileMove.enabled&quot;: &quot;always&quot;,
-  &quot;editor.tabSize&quot;: 2,
-  &quot;editor.detectIndentation&quot;: false,
-  &quot;prettier.printWidth&quot;: 80,
-  &quot;vim.easymotion&quot;: true,
-  &quot;vim.sneak&quot;: true,
-  &quot;vim.incsearch&quot;: true,
-  &quot;vim.useSystemClipboard&quot;: true,
-  &quot;vim.useCtrlKeys&quot;: true,
-  &quot;vim.hlsearch&quot;: true,
-  &quot;vim.insertModeKeyBindings&quot;: [
-    {
-      &quot;before&quot;: [
-        &quot;j&quot;,
-        &quot;k&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;&lt;Esc&gt;&quot;
-      ]
-    }
-  ],
-  &quot;vim.normalModeKeyBindingsNonRecursive&quot;: [
-    {
-      &quot;before&quot;: [
-        &quot;N&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;N&quot;,
-        &quot;z&quot;,
-        &quot;z&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;n&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;n&quot;,
-        &quot;z&quot;,
-        &quot;z&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;-&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;$&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;;&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;:&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;]&quot;,
-        &quot;\\&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;&lt;C-w&gt;&quot;,
-        &quot;c&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;}&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;g&quot;,
-        &quot;t&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;{&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;g&quot;,
-        &quot;T&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;s&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;x&quot;,
-        &quot;i&quot;
-      ]
-    },
-    {
-      &quot;before&quot;: [
-        &quot;&lt;tab&gt;&quot;
-      ],
-      &quot;after&quot;: [
-        &quot;&lt;space&gt;&quot;,
-        &quot;&lt;space&gt;&quot;,
-        &quot;/&quot;
-      ]
-    }
-  ],
-  &quot;vim.leader&quot;: &quot;&lt;space&gt;&quot;,
-  &quot;terminal.integrated.rendererType&quot;: &quot;dom&quot;,
-  &quot;workbench.sideBar.location&quot;: &quot;right&quot;,
-  &quot;vim.statusBarColorControl&quot;: true,
-  &quot;vim.statusBarColors&quot;: {
-    &quot;normal&quot;: &quot;#444444&quot;,
-    &quot;insert&quot;: &quot;#444444&quot;,
-    &quot;visual&quot;: &quot;#444444&quot;,
-    &quot;visualline&quot;: &quot;#444444&quot;,
-    &quot;visualblock&quot;: &quot;#444444&quot;,
-    &quot;replace&quot;: &quot;#444444&quot;
-  },
-  &quot;workbench.colorCustomizations&quot;: {
-    &quot;statusBar.background&quot;: &quot;#444444&quot;,
-    &quot;statusBar.noFolderBackground&quot;: &quot;#444444&quot;,
-    &quot;statusBar.debuggingBackground&quot;: &quot;#444444&quot;
-  }
-}</code></pre>
-]]></content>
-      <tags>
-        <tag>vs</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>vim中与系统的粘贴和复制</title>
     <url>/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/</url>
     <content><![CDATA[<p>以前就遇到过的问题。有如下情景：</p>
@@ -753,19 +592,6 @@ vmap Y &quot;+y</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>vim插件surround常用命令</title>
-    <url>/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="vim插件surround常用命令"><a href="#vim插件surround常用命令" class="headerlink" title="vim插件surround常用命令"></a>vim插件surround常用命令</h2><pre><code class="text"> Old text                  Command     New text ~
- &quot;Hello *world!&quot;           ds&quot;         Hello world!
- [123+4*56]/2              cs])        (123+456)/2
- &quot;Look ma, I&#39;m *HTML!&quot;     cs&quot;&lt;q&gt;      &lt;q&gt;Look ma, I&#39;m HTML!&lt;/q&gt;
- if *x&gt;3 {                 ysW(        if ( x&gt;3 ) {
- my $str = *whee!;         vlllls&#39;     my $str = &#39;whee!&#39;;
- &lt;div&gt;Yo!*&lt;/div&gt;           dst         Yo!
- &lt;div&gt;Yo!*&lt;/div&gt;           cst&lt;p&gt;      &lt;p&gt;Yo!&lt;/p&gt;</code></pre>
-]]></content>
-  </entry>
-  <entry>
     <title>vim脚本_生成图片外链</title>
     <url>/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/</url>
     <content><![CDATA[<p>vim脚本将选中的图片本机地址转换为器牛云的外链</p>
@@ -790,6 +616,19 @@ vmap Y &quot;+y</code></pre>
     &quot; 替换文本
     exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
 endfunction</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>vim插件surround常用命令</title>
+    <url>/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="vim插件surround常用命令"><a href="#vim插件surround常用命令" class="headerlink" title="vim插件surround常用命令"></a>vim插件surround常用命令</h2><pre><code class="text"> Old text                  Command     New text ~
+ &quot;Hello *world!&quot;           ds&quot;         Hello world!
+ [123+4*56]/2              cs])        (123+456)/2
+ &quot;Look ma, I&#39;m *HTML!&quot;     cs&quot;&lt;q&gt;      &lt;q&gt;Look ma, I&#39;m HTML!&lt;/q&gt;
+ if *x&gt;3 {                 ysW(        if ( x&gt;3 ) {
+ my $str = *whee!;         vlllls&#39;     my $str = &#39;whee!&#39;;
+ &lt;div&gt;Yo!*&lt;/div&gt;           dst         Yo!
+ &lt;div&gt;Yo!*&lt;/div&gt;           cst&lt;p&gt;      &lt;p&gt;Yo!&lt;/p&gt;</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -823,6 +662,12 @@ require &#39;bar&#39; </code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>ruby文件加载</title>
+    <url>/2019/10/31/ruby%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<h2 id="ruby–-unshift-File-expand-path-‘-’-FILE-（转载）"><a href="#ruby–-unshift-File-expand-path-‘-’-FILE-（转载）" class="headerlink" title="ruby–$:.unshift File.expand_path(‘..’, FILE)（转载）"></a><a href="http://www.cnblogs.com/timsheng/archive/2013/04/13/3017911.html" target="_blank" rel="noopener">ruby–$:.unshift File.expand_path(‘..’, <strong>FILE</strong>)（转载）</a></h2><p>一直能看到一些gem里面会有这样一句代码：<br><code>$:.unshift File.expand_path(&#39;..&#39;, __FILE__)</code><br>这句话是干什么用的呢<br>$:就是ruby的一个全局变量，也叫$LOAD_PATH，功能就是java中的classpath，用来加载类库的，当你require某个文件时，ruby就会从这个变量的值去查找，找不到会报LoadError。这个值其实就是一个包含了类库绝对路径的数组。<br><code>__FILE__</code>这个变量代表文件自己的文件名，在foo.rb中puts__FILE__，结果就是foo.rb。<br><code>File.expand_path</code>可以把路径转换成绝对路径，假设有这样一个文件<code>/Users/kenshin/foo.rb</code>，里面有<code>File.expand_path(&#39;..&#39;, __FILE__)</code>，返回的结果就是<code>/Users/kenshin</code>。<br>unshift是数组的一个方法，功能就是把指定的值加到数组的最前面，<code>[3,4].unshift(1,2) =&gt; [1,2,3,4]</code><br>所以这段代码的意思就是把当前文件所在的目录加到ruby的loadpath的最前面，在require文件时，ruby就会先从当前目录下去查找了。</p>
+]]></content>
+  </entry>
+  <entry>
     <title>solidity中返回mapping数据</title>
     <url>/2019/10/31/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/</url>
     <content><![CDATA[<p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
@@ -840,57 +685,6 @@ function getInfoByUser(address user) public view returns(uint[],uint[]){
       <tags>
         <tag>solidity</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>ruby文件加载</title>
-    <url>/2019/10/31/ruby%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD/</url>
-    <content><![CDATA[<h2 id="ruby–-unshift-File-expand-path-‘-’-FILE-（转载）"><a href="#ruby–-unshift-File-expand-path-‘-’-FILE-（转载）" class="headerlink" title="ruby–$:.unshift File.expand_path(‘..’, FILE)（转载）"></a><a href="http://www.cnblogs.com/timsheng/archive/2013/04/13/3017911.html" target="_blank" rel="noopener">ruby–$:.unshift File.expand_path(‘..’, <strong>FILE</strong>)（转载）</a></h2><p>一直能看到一些gem里面会有这样一句代码：<br><code>$:.unshift File.expand_path(&#39;..&#39;, __FILE__)</code><br>这句话是干什么用的呢<br>$:就是ruby的一个全局变量，也叫$LOAD_PATH，功能就是java中的classpath，用来加载类库的，当你require某个文件时，ruby就会从这个变量的值去查找，找不到会报LoadError。这个值其实就是一个包含了类库绝对路径的数组。<br><code>__FILE__</code>这个变量代表文件自己的文件名，在foo.rb中puts__FILE__，结果就是foo.rb。<br><code>File.expand_path</code>可以把路径转换成绝对路径，假设有这样一个文件<code>/Users/kenshin/foo.rb</code>，里面有<code>File.expand_path(&#39;..&#39;, __FILE__)</code>，返回的结果就是<code>/Users/kenshin</code>。<br>unshift是数组的一个方法，功能就是把指定的值加到数组的最前面，<code>[3,4].unshift(1,2) =&gt; [1,2,3,4]</code><br>所以这段代码的意思就是把当前文件所在的目录加到ruby的loadpath的最前面，在require文件时，ruby就会先从当前目录下去查找了。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>simple_form</title>
-    <url>/2019/10/31/simple_form/</url>
-    <content><![CDATA[<h2 id="Simple-form"><a href="#Simple-form" class="headerlink" title="Simple_form"></a>Simple_form</h2><h4 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h4><p><code>gem &#39;simple_form&#39;</code></p>
-<p><code>bundle install</code></p>
-<p><code>rails generate simple_form:install --bootstrap</code></p>
-<p>基本使用方式</p>
-<p>只要输入f.input，simple_form會自動根據資料庫中該欄位的資料型態，判斷此input顯示的格式</p>
-<pre><code class="erb">&lt;%= simple_form_for @post do |f| %&gt;
-  &lt;div class=&quot;form-group&quot;&gt; 
-  &lt;%= f.input :username, label: &#39;Your username please&#39;, error: &#39;Username is mandatory, please specify one&#39; %&gt;
-  &lt;%= f.input :password, hint: &#39;No special characters.&#39; %&gt;  &lt;%= f.input :email, placeholder: &#39;user@domain.com&#39; %&gt; 
-  &lt;%= f.input :remember_me, inline_label: &#39;Yes, remember me&#39; %&gt;
-  &lt;/div&gt;
-  &lt;%= f.submit &quot;Submit&quot;, class: &quot;btn btn-primary&quot;, data: { disable_with: &quot;Submiting...&quot; } %&gt;
-&lt;% end %&gt;</code></pre>
-<p>若有錯誤，也可使用as手動調整欄位格式</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
-  &lt;%= f.input :username %&gt;
-  &lt;%= f.input :password %&gt;
-  &lt;%= f.input :description, as: :text %&gt;
-  &lt;%= f.input :accepts,     as: :radio_buttons %&gt;
-  &lt;%= f.button :submit %&gt;
-&lt;% end %&gt;</code></pre>
-<h4 id="排版"><a href="#排版" class="headerlink" title="排版"></a>排版</h4><p>為了排版，平常寫在後面的參數，也可以分開填寫</p>
-<p>例如</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt;
-  &lt;%= f.input :username, label: &#39;username&#39;, hint: &#39;No special characters, please!&#39;, error: &#39;username&#39;, id: &#39;user_name_error&#39;, full_error: &#39;token&#39;  %&gt;
-  &lt;%= f.submit &#39;Save&#39; %&gt;
-&lt;% end %&gt;</code></pre>
-<p>可調整為：</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
-  &lt;%= f.label :username %&gt;
-  &lt;%= f.input_field :username %&gt; 
-  &lt;%= f.hint &#39;No special characters, please!&#39; %&gt; 
-  &lt;%= f.error :username, id: &#39;user_name_error&#39; %&gt; 
-  &lt;%= f.full_error :token %&gt;
-  &lt;%= f.submit &#39;Save&#39; %&gt;
-&lt;% end %&gt;</code></pre>
-<h4 id="疑難雜症"><a href="#疑難雜症" class="headerlink" title="疑難雜症"></a>疑難雜症</h4><p>關閉label</p>
-<p><code>label: false</code></p>
-<p>備註hint</p>
-<p><code>hint: &#39;文字&#39;</code></p>
-]]></content>
   </entry>
   <entry>
     <title>solidity多个返回值</title>
@@ -968,6 +762,40 @@ io.close</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>ruby命令行工具制作</title>
+    <url>/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/</url>
+    <content><![CDATA[<pre><code class="ruby">require &#39;optparse&#39;
+
+options = {}
+option_parser = OptionParser.new do |opts|
+  # 这里是这个命令行工具的帮助信息
+  opts.banner = &#39;here is help messages of the command line tool.&#39;
+
+  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
+  options[:switch] = false
+  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
+  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
+    # 这个部分就是使用这个Option后执行的代码
+    options[:switch] = true
+  end
+
+  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
+  #下面的“value”就是用户使用时输入的argument
+  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
+    options[:name] = value
+  end
+
+  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
+  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
+    puts value
+    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
+  end
+end.parse!
+
+puts options.inspect</code></pre>
+]]></content>
+  </entry>
+  <entry>
     <title>ruby多层数组排序</title>
     <url>/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<p>##ruby中数组进行多层排序<br>例子如下：</p>
@@ -1007,40 +835,6 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>ruby命令行工具制作</title>
-    <url>/2019/10/31/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/</url>
-    <content><![CDATA[<pre><code class="ruby">require &#39;optparse&#39;
-
-options = {}
-option_parser = OptionParser.new do |opts|
-  # 这里是这个命令行工具的帮助信息
-  opts.banner = &#39;here is help messages of the command line tool.&#39;
-
-  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
-  options[:switch] = false
-  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
-  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
-    # 这个部分就是使用这个Option后执行的代码
-    options[:switch] = true
-  end
-
-  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
-  #下面的“value”就是用户使用时输入的argument
-  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
-    options[:name] = value
-  end
-
-  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
-  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
-    puts value
-    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
-  end
-end.parse!
-
-puts options.inspect</code></pre>
-]]></content>
-  </entry>
-  <entry>
     <title>ruby数组排序,但是排序的字段可能为空</title>
     <url>/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/</url>
     <content><![CDATA[<h3 id="ruby数组排序-但是排序的字段可能为空"><a href="#ruby数组排序-但是排序的字段可能为空" class="headerlink" title="ruby数组排序,但是排序的字段可能为空"></a>ruby数组排序,但是排序的字段可能为空</h3><pre><code class="ruby">foo = [nil, -3, 100, 4, 6, nil, 4, nil, 23]
@@ -1067,6 +861,51 @@ foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
 <h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>重新执行<code>npm i 包名 --save</code></p>
 <p>终于处理掉了这个问题，其实这个问题是很简单的问题，只是怪自己年少无知，故现在记录下这些曾经无知的过错，等以后反过来看自己也许会一笑而过。</p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>react_native条件渲染</title>
+    <url>/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/</url>
+    <content><![CDATA[<p>根据不同的条件渲染不同的组件<br>一般的套路是把将要渲染的组件赋值给一个<code>const</code>，然后根据不同的条件使用不同的 const</p>
+<pre><code class="jsx"> render() {
+ const emptyImage = (
+  &lt;View
+    style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  &gt;
+    &lt;Image source={require(&quot;../icons/empty.png&quot;)} style={styles.emptyImg} /&gt;
+    &lt;Text style={styles.text}&gt;你还没有任何土地&lt;/Text&gt;
+  &lt;/View&gt;
+);
+const List= &lt;FlatList.../&gt;
+    return (
+    &lt;View style={styles.container}&gt;
+        {/* 导航，返回按钮*/}
+        &lt;View style={[styles.back]}&gt;
+          &lt;TouchableOpacity
+            onPress={() =&gt; {
+              Actions.pop();
+            }}
+            style={styles.backBtn}
+          &gt;
+            &lt;Image
+              style={styles.backImg}
+              source={require(&quot;../icons/back.png&quot;)}
+            /&gt;
+          &lt;/TouchableOpacity&gt;
+          &lt;Text style={[styles.text, styles.title]}&gt;我的地块&lt;/Text&gt;
+        &lt;/View&gt;
+        {this.props.list ? List : emptyImage}
+      &lt;/View&gt;
+    );
+  }
+}</code></pre>
+]]></content>
+      <tags>
+        <tag>react-native</tag>
+      </tags>
   </entry>
   <entry>
     <title>react_native_生命周期</title>
@@ -1251,51 +1090,6 @@ class Container extends React.Component {
 
 ReactDom.render(&lt;Container /&gt;, document.getElementById(&#39;container&#39;));</code></pre>
 ]]></content>
-  </entry>
-  <entry>
-    <title>react_native条件渲染</title>
-    <url>/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/</url>
-    <content><![CDATA[<p>根据不同的条件渲染不同的组件<br>一般的套路是把将要渲染的组件赋值给一个<code>const</code>，然后根据不同的条件使用不同的 const</p>
-<pre><code class="jsx"> render() {
- const emptyImage = (
-  &lt;View
-    style={{
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center"
-    }}
-  &gt;
-    &lt;Image source={require(&quot;../icons/empty.png&quot;)} style={styles.emptyImg} /&gt;
-    &lt;Text style={styles.text}&gt;你还没有任何土地&lt;/Text&gt;
-  &lt;/View&gt;
-);
-const List= &lt;FlatList.../&gt;
-    return (
-    &lt;View style={styles.container}&gt;
-        {/* 导航，返回按钮*/}
-        &lt;View style={[styles.back]}&gt;
-          &lt;TouchableOpacity
-            onPress={() =&gt; {
-              Actions.pop();
-            }}
-            style={styles.backBtn}
-          &gt;
-            &lt;Image
-              style={styles.backImg}
-              source={require(&quot;../icons/back.png&quot;)}
-            /&gt;
-          &lt;/TouchableOpacity&gt;
-          &lt;Text style={[styles.text, styles.title]}&gt;我的地块&lt;/Text&gt;
-        &lt;/View&gt;
-        {this.props.list ? List : emptyImage}
-      &lt;/View&gt;
-    );
-  }
-}</code></pre>
-]]></content>
-      <tags>
-        <tag>react-native</tag>
-      </tags>
   </entry>
   <entry>
     <title>remove_nginx_from_ubuntu</title>
@@ -1560,19 +1354,6 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>rails_model字段验证</title>
-    <url>/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/</url>
-    <content><![CDATA[<pre><code class="ruby">validates :address,  presence: true, uniqueness: true
-validates :email, presence: true, length: { maximum: 255 },
-VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-format: { with: VALID_EMAIL_REGEX }</code></pre>
-]]></content>
-      <tags>
-        <tag>rails</tag>
-        <tag>validates</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>qiniu_upload_file</title>
     <url>/2019/10/31/qiniu_upload_file/</url>
     <content><![CDATA[<pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
@@ -1603,6 +1384,19 @@ code, result, response_headers = Qiniu::Storage.upload_with_token_2(
 # puts &quot;\n\e[1;40;37mhttp://ogbkru1bq.bkt.clouddn.com/#{key}\e[0m&quot;
 puts &quot;http://ogbkru1bq.bkt.clouddn.com/#{key}&quot;</code></pre>
 ]]></content>
+  </entry>
+  <entry>
+    <title>rails_model字段验证</title>
+    <url>/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/</url>
+    <content><![CDATA[<pre><code class="ruby">validates :address,  presence: true, uniqueness: true
+validates :email, presence: true, length: { maximum: 255 },
+VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+format: { with: VALID_EMAIL_REGEX }</code></pre>
+]]></content>
+      <tags>
+        <tag>rails</tag>
+        <tag>validates</tag>
+      </tags>
   </entry>
   <entry>
     <title>rails_record数据库查询</title>
@@ -1938,6 +1732,71 @@ gem &#39;coderay&#39;</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>rails返回json数据</title>
+    <url>/2019/10/31/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/</url>
+    <content><![CDATA[<pre><code class="ruby">def current_contract
+  respond_to do |format|
+    u = User.where(isCurrentContract: true).first
+    cs = {token: u.address, auction: u.nickname, type: u.email.split(&#39;@&#39;)[0]}
+    format.json { render json: cs.to_json }
+  end
+end</code></pre>
+]]></content>
+      <tags>
+        <tag>rails</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>rails部署后图片404问题</title>
+    <url>/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%8E%E5%9B%BE%E7%89%87404%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="rails部署之后图片404问题"><a href="#rails部署之后图片404问题" class="headerlink" title="rails部署之后图片404问题"></a>rails部署之后图片404问题</h2><p>当在html.erb中添加一张图片时，可以用<code>&lt;%= image_tag%&gt;</code><br>辅助函数，但是如果我们要在scss文件中给某个divt添加北京图片时，该怎样设置图片的url呢？</p>
+<pre><code class="scss">  .div#name{
+    background-image:url(image-path(&quot;1.png&quot;));
+  }</code></pre>
+<p>需要使用<code>image-path</code>辅助函数，如果直接写图片名称，再开发环境下没有问题，但是部署到线上就会404<br>还有另外一种方式</p>
+<pre><code class="erb"> &lt;img  class=&quot;img-circle&quot; src=&quot;&lt;%=asset_path(&#39;user.png&#39;)%&gt;&quot; width=&quot;100px;&quot;
+ height=&#39;100px&#39; style=&quot;margin: 20px;&quot;&gt;</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>rails部署启用es6语法</title>
+    <url>/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="Uglifier-Error-Unexpected-token-punc-To-use-ES6-syntax-harmony-mode-must-be-enabled-with-Uglifier-new-harmony-gt-true"><a href="#Uglifier-Error-Unexpected-token-punc-To-use-ES6-syntax-harmony-mode-must-be-enabled-with-Uglifier-new-harmony-gt-true" class="headerlink" title="Uglifier::Error: Unexpected token: punc ((). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true)"></a>Uglifier::Error: Unexpected token: punc ((). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true)</h3><p>部署时启用 ES6 语法<br>Try replacing</p>
+<pre><code class="ruby">config.assets.js_compressor = :uglifier</code></pre>
+<p>with</p>
+<pre><code class="ruby">config.assets.js_compressor = Uglifier.new(harmony: true)</code></pre>
+<p>in <code>config/environments/production.rb</code></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>rails验证码</title>
+    <url>/2019/10/31/rails%E9%AA%8C%E8%AF%81%E7%A0%81/</url>
+    <content><![CDATA[<h2 id="rails验证码"><a href="#rails验证码" class="headerlink" title="rails验证码"></a>rails验证码</h2><p>1.安装包</p>
+<pre><code class="ruby">gem &#39;rucaptcha&#39;
+gem &#39;dalli&#39;</code></pre>
+<p>2.配置路由  （最新版本的不用配置路由）</p>
+<pre><code class="ruby">mount RuCaptcha::Engine =&gt; &quot;/rucaptcha&quot;</code></pre>
+<p>3.controller部分</p>
+<pre><code class="ruby">def create
+    @user = User.new(user_params)
+    if  verify_rucaptcha?(@user)&amp;&amp;@user.save
+    ......</code></pre>
+<p>4.view部分</p>
+<pre><code class="ruby">  &lt;div class=&quot;form-group &quot;&gt;
+     &lt;%= rucaptcha_input_tag( class:&#39;form-control rucaptcha-text&#39;) %&gt;
+     &lt;a href=&quot;#&quot; class=&#39;rucaptcha-image-box&#39;&gt;&lt;%= rucaptcha_image_tag(class:&#39;rucaptcha-image&#39;, alt: &#39;Captcha&#39;) %&gt;&lt;/a&gt;
+  &lt;/div&gt;</code></pre>
+<p>5.实现点击图片刷新验证码</p>
+<pre><code class="coffee"> #点击验证码刷新
+  $(&quot;.rucaptcha-image&quot;).click -&gt;
+    img = $(this)
+    currentSrc = img.attr(&#39;src&#39;);
+    img.attr(&#39;src&#39;, currentSrc.split(&#39;?&#39;)[0] + &#39;?&#39; + (new Date()).getTime());
+    return false
+</code></pre>
+]]></content>
+  </entry>
+  <entry>
     <title>rails字体加载问题</title>
     <url>/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
@@ -2046,108 +1905,58 @@ gem &#39;coderay&#39;</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>rails部署后图片404问题</title>
-    <url>/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%8E%E5%9B%BE%E7%89%87404%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h2 id="rails部署之后图片404问题"><a href="#rails部署之后图片404问题" class="headerlink" title="rails部署之后图片404问题"></a>rails部署之后图片404问题</h2><p>当在html.erb中添加一张图片时，可以用<code>&lt;%= image_tag%&gt;</code><br>辅助函数，但是如果我们要在scss文件中给某个divt添加北京图片时，该怎样设置图片的url呢？</p>
-<pre><code class="scss">  .div#name{
-    background-image:url(image-path(&quot;1.png&quot;));
-  }</code></pre>
-<p>需要使用<code>image-path</code>辅助函数，如果直接写图片名称，再开发环境下没有问题，但是部署到线上就会404<br>还有另外一种方式</p>
-<pre><code class="erb"> &lt;img  class=&quot;img-circle&quot; src=&quot;&lt;%=asset_path(&#39;user.png&#39;)%&gt;&quot; width=&quot;100px;&quot;
- height=&#39;100px&#39; style=&quot;margin: 20px;&quot;&gt;</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>rails部署启用es6语法</title>
-    <url>/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="Uglifier-Error-Unexpected-token-punc-To-use-ES6-syntax-harmony-mode-must-be-enabled-with-Uglifier-new-harmony-gt-true"><a href="#Uglifier-Error-Unexpected-token-punc-To-use-ES6-syntax-harmony-mode-must-be-enabled-with-Uglifier-new-harmony-gt-true" class="headerlink" title="Uglifier::Error: Unexpected token: punc ((). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true)"></a>Uglifier::Error: Unexpected token: punc ((). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true)</h3><p>部署时启用 ES6 语法<br>Try replacing</p>
-<pre><code class="ruby">config.assets.js_compressor = :uglifier</code></pre>
-<p>with</p>
-<pre><code class="ruby">config.assets.js_compressor = Uglifier.new(harmony: true)</code></pre>
-<p>in <code>config/environments/production.rb</code></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>rails验证码</title>
-    <url>/2019/10/31/rails%E9%AA%8C%E8%AF%81%E7%A0%81/</url>
-    <content><![CDATA[<h2 id="rails验证码"><a href="#rails验证码" class="headerlink" title="rails验证码"></a>rails验证码</h2><p>1.安装包</p>
-<pre><code class="ruby">gem &#39;rucaptcha&#39;
-gem &#39;dalli&#39;</code></pre>
-<p>2.配置路由  （最新版本的不用配置路由）</p>
-<pre><code class="ruby">mount RuCaptcha::Engine =&gt; &quot;/rucaptcha&quot;</code></pre>
-<p>3.controller部分</p>
-<pre><code class="ruby">def create
-    @user = User.new(user_params)
-    if  verify_rucaptcha?(@user)&amp;&amp;@user.save
-    ......</code></pre>
-<p>4.view部分</p>
-<pre><code class="ruby">  &lt;div class=&quot;form-group &quot;&gt;
-     &lt;%= rucaptcha_input_tag( class:&#39;form-control rucaptcha-text&#39;) %&gt;
-     &lt;a href=&quot;#&quot; class=&#39;rucaptcha-image-box&#39;&gt;&lt;%= rucaptcha_image_tag(class:&#39;rucaptcha-image&#39;, alt: &#39;Captcha&#39;) %&gt;&lt;/a&gt;
-  &lt;/div&gt;</code></pre>
-<p>5.实现点击图片刷新验证码</p>
-<pre><code class="coffee"> #点击验证码刷新
-  $(&quot;.rucaptcha-image&quot;).click -&gt;
-    img = $(this)
-    currentSrc = img.attr(&#39;src&#39;);
-    img.attr(&#39;src&#39;, currentSrc.split(&#39;?&#39;)[0] + &#39;?&#39; + (new Date()).getTime());
-    return false
-</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>rails返回json数据</title>
-    <url>/2019/10/31/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/</url>
-    <content><![CDATA[<pre><code class="ruby">def current_contract
-  respond_to do |format|
-    u = User.where(isCurrentContract: true).first
-    cs = {token: u.address, auction: u.nickname, type: u.email.split(&#39;@&#39;)[0]}
-    format.json { render json: cs.to_json }
+    <title>rails国际化</title>
+    <url>/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/</url>
+    <content><![CDATA[<h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
+<pre><code class="yml">zh-CN:
+  menu:
+    home: &#39;首页&#39;
+    team: &#39;团队&#39;
+    projects: &#39;项目&#39;
+    careers: &#39;招聘&#39;
+    blog: &#39;博客&#39;</code></pre>
+<p>与之对应新建翻译文本<code>en.yml</code><br>文件内容参考如下</p>
+<pre><code class="yml">en:
+  menu:
+    home: &#39;About&#39;
+    team: &#39;Team&#39;
+    projects: &#39;Projects&#39;
+    careers: &#39;Careers&#39;
+    blog: &#39;Blog&#39;</code></pre>
+<h2 id="在console中测试"><a href="#在console中测试" class="headerlink" title="在console中测试"></a>在console中测试</h2><h4 id="查看可用的语言"><a href="#查看可用的语言" class="headerlink" title="查看可用的语言"></a>查看可用的语言</h4><p><code>I18n.available_locales</code></p>
+<h4 id="设置当前语言"><a href="#设置当前语言" class="headerlink" title="设置当前语言"></a>设置当前语言</h4><p><code>I18n.locale = &#39;en&#39;</code></p>
+<h4 id="测试翻译"><a href="#测试翻译" class="headerlink" title="测试翻译"></a>测试翻译</h4><p><code>I18n.t(&#39;menu.home&#39;)</code></p>
+<h2 id="在view中使用"><a href="#在view中使用" class="headerlink" title="在view中使用"></a>在view中使用</h2><pre><code class="erb">&lt;%= t(&quot;menu.home&quot;)%&gt;</code></pre>
+<h2 id="设置网站的语言环境"><a href="#设置网站的语言环境" class="headerlink" title="设置网站的语言环境"></a>设置网站的语言环境</h2><h4 id="view"><a href="#view" class="headerlink" title="view"></a>view</h4><p>在helper中编写生成语言选择的下拉列表框的辅助方法，方便在view中使用，尽量不要把ruby语言部分过多的写在html中</p>
+<pre><code class="ruby">  def language(language_category)
+    case language_category
+    when :&#39;en&#39;
+      &#39;English&#39;
+    when :&#39;zh-CN&#39;
+      &#39;简体中文&#39;
+    end
   end
-end</code></pre>
-]]></content>
-      <tags>
-        <tag>rails</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>react_native点击空白处输入法隐藏</title>
-    <url>/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/</url>
-    <content><![CDATA[<h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
-    this.refs.textInput1.blur();
-    this.refs.textInput2.blur();
-  };
 
-  render() {
-    return (
-      &lt;TouchableWithoutFeedback
-        style={styles.container}
-        onPress={() =&gt; {
-          this.hideInputBox();
-        }}
-      &gt;
-        &lt;View style={styles.container}&gt;
-          &lt;View style={styles.inputGroup}&gt;
+  def language_tag
+    request_url = request.url
+    I18n.available_locales.map do |la|
+      content_tag(:li,content_tag(:a ,language(la),href:&quot;#{request_url}?&amp;locale=#{la.to_s}&quot;,data: {remote: true},class:&#39;language&#39;))
+      # &lt;li&gt;&lt;a class=&#39;language&#39; href= &quot;xxxx?&amp;local=en&quot; data-remote=&#39;true&#39;&gt;English&lt;/a&gt;&lt;/li&gt;
+    end.join.html_safe
+  end</code></pre>
+<p>注意<code>content_tag</code>的用法<br>当选择语言时，需要异步提交到后台设置语言环境，然后重新加载本页面</p>
+<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>每个页面都需要检查一下当前的语言环境，所以在每个页面跳转之前都到先设置正确的语言，因此在<code>ApplicationController</code>中如下</p>
+<pre><code class="ruby">  before_action :set_language
 
-            &lt;TextInput
-              ref=&quot;textInput1&quot;
-            /&gt;
-          &lt;/View&gt;
-          &lt;View style={[styles.inputGroup]}&gt;
-            &lt;TextInput
-              ref=&quot;textInput2&quot;
-            /&gt;
-          &lt;/View&gt;
-        &lt;/View&gt;
-      &lt;/TouchableWithoutFeedback&gt;
-    );
-    const styles = StyleSheet.create({
-  container: {
-    justifyContent: &quot;center&quot;,
-    flex: 1
-  },
-    })</code></pre>
+  def set_language
+    session[:locale] = params[:locale] if params[:locale]
+    I18n.locale = session[:locale] || I18n.default_locale
+  end</code></pre>
+<h4 id="刷新当前页面"><a href="#刷新当前页面" class="headerlink" title="刷新当前页面"></a>刷新当前页面</h4><p>由于是异步提交到后台中，所以页面不会刷新。对语言选择的超链接添加<code>ajax:success</code>监听，当成功设置语言环境后，使用前端的方法刷新本页面</p>
+<pre><code class="javascript">function set_language(){
+  $(&quot;.language&quot;).on(&#39;ajax:success&#39;, function(event, data, status, xhr) {
+    location.reload();
+  });</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2282,58 +2091,43 @@ const styles = StyleSheet.create({
 ]]></content>
   </entry>
   <entry>
-    <title>rails国际化</title>
-    <url>/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/</url>
-    <content><![CDATA[<h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
-<pre><code class="yml">zh-CN:
-  menu:
-    home: &#39;首页&#39;
-    team: &#39;团队&#39;
-    projects: &#39;项目&#39;
-    careers: &#39;招聘&#39;
-    blog: &#39;博客&#39;</code></pre>
-<p>与之对应新建翻译文本<code>en.yml</code><br>文件内容参考如下</p>
-<pre><code class="yml">en:
-  menu:
-    home: &#39;About&#39;
-    team: &#39;Team&#39;
-    projects: &#39;Projects&#39;
-    careers: &#39;Careers&#39;
-    blog: &#39;Blog&#39;</code></pre>
-<h2 id="在console中测试"><a href="#在console中测试" class="headerlink" title="在console中测试"></a>在console中测试</h2><h4 id="查看可用的语言"><a href="#查看可用的语言" class="headerlink" title="查看可用的语言"></a>查看可用的语言</h4><p><code>I18n.available_locales</code></p>
-<h4 id="设置当前语言"><a href="#设置当前语言" class="headerlink" title="设置当前语言"></a>设置当前语言</h4><p><code>I18n.locale = &#39;en&#39;</code></p>
-<h4 id="测试翻译"><a href="#测试翻译" class="headerlink" title="测试翻译"></a>测试翻译</h4><p><code>I18n.t(&#39;menu.home&#39;)</code></p>
-<h2 id="在view中使用"><a href="#在view中使用" class="headerlink" title="在view中使用"></a>在view中使用</h2><pre><code class="erb">&lt;%= t(&quot;menu.home&quot;)%&gt;</code></pre>
-<h2 id="设置网站的语言环境"><a href="#设置网站的语言环境" class="headerlink" title="设置网站的语言环境"></a>设置网站的语言环境</h2><h4 id="view"><a href="#view" class="headerlink" title="view"></a>view</h4><p>在helper中编写生成语言选择的下拉列表框的辅助方法，方便在view中使用，尽量不要把ruby语言部分过多的写在html中</p>
-<pre><code class="ruby">  def language(language_category)
-    case language_category
-    when :&#39;en&#39;
-      &#39;English&#39;
-    when :&#39;zh-CN&#39;
-      &#39;简体中文&#39;
-    end
-  end
+    <title>react_native点击空白处输入法隐藏</title>
+    <url>/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/</url>
+    <content><![CDATA[<h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
+    this.refs.textInput1.blur();
+    this.refs.textInput2.blur();
+  };
 
-  def language_tag
-    request_url = request.url
-    I18n.available_locales.map do |la|
-      content_tag(:li,content_tag(:a ,language(la),href:&quot;#{request_url}?&amp;locale=#{la.to_s}&quot;,data: {remote: true},class:&#39;language&#39;))
-      # &lt;li&gt;&lt;a class=&#39;language&#39; href= &quot;xxxx?&amp;local=en&quot; data-remote=&#39;true&#39;&gt;English&lt;/a&gt;&lt;/li&gt;
-    end.join.html_safe
-  end</code></pre>
-<p>注意<code>content_tag</code>的用法<br>当选择语言时，需要异步提交到后台设置语言环境，然后重新加载本页面</p>
-<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>每个页面都需要检查一下当前的语言环境，所以在每个页面跳转之前都到先设置正确的语言，因此在<code>ApplicationController</code>中如下</p>
-<pre><code class="ruby">  before_action :set_language
+  render() {
+    return (
+      &lt;TouchableWithoutFeedback
+        style={styles.container}
+        onPress={() =&gt; {
+          this.hideInputBox();
+        }}
+      &gt;
+        &lt;View style={styles.container}&gt;
+          &lt;View style={styles.inputGroup}&gt;
 
-  def set_language
-    session[:locale] = params[:locale] if params[:locale]
-    I18n.locale = session[:locale] || I18n.default_locale
-  end</code></pre>
-<h4 id="刷新当前页面"><a href="#刷新当前页面" class="headerlink" title="刷新当前页面"></a>刷新当前页面</h4><p>由于是异步提交到后台中，所以页面不会刷新。对语言选择的超链接添加<code>ajax:success</code>监听，当成功设置语言环境后，使用前端的方法刷新本页面</p>
-<pre><code class="javascript">function set_language(){
-  $(&quot;.language&quot;).on(&#39;ajax:success&#39;, function(event, data, status, xhr) {
-    location.reload();
-  });</code></pre>
+            &lt;TextInput
+              ref=&quot;textInput1&quot;
+            /&gt;
+          &lt;/View&gt;
+          &lt;View style={[styles.inputGroup]}&gt;
+            &lt;TextInput
+              ref=&quot;textInput2&quot;
+            /&gt;
+          &lt;/View&gt;
+        &lt;/View&gt;
+      &lt;/TouchableWithoutFeedback&gt;
+    );
+    const styles = StyleSheet.create({
+  container: {
+    justifyContent: &quot;center&quot;,
+    flex: 1
+  },
+    })</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2487,6 +2281,25 @@ new Date(ms);</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>linux添加新用户</title>
+    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
+    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
+<li>adduser username</li>
+<li>输入密码</li>
+<li>再次输密码</li>
+<li>输入电话号等，按enter使用默认值</li>
+<li>新用户创建成功</li>
+</ol>
+<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>liunx用命令行的方式更换桌面背景</title>
+    <url>/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/</url>
+    <content><![CDATA[<h2 id="liunx用命令行的方式更换桌面背景"><a href="#liunx用命令行的方式更换桌面背景" class="headerlink" title="liunx用命令行的方式更换桌面背景"></a>liunx用命令行的方式更换桌面背景</h2><pre><code class="shell"> gsettings set org.gnome.desktop.background picture-uri &quot;file:/home/mc/桌面/disco-75c0c1ef.png&quot;</code></pre>
+]]></content>
+  </entry>
+  <entry>
     <title>linux管道传递参数xargs用法</title>
     <url>/2019/10/31/linux%E7%AE%A1%E9%81%93%E4%BC%A0%E9%80%92%E5%8F%82%E6%95%B0xargs%E7%94%A8%E6%B3%95/</url>
     <content><![CDATA[<h2 id="linux-管道传递参数xargs-用法"><a href="#linux-管道传递参数xargs-用法" class="headerlink" title="linux 管道传递参数xargs 用法"></a>linux 管道传递参数xargs 用法</h2><p hidden>sfdfagjkjfguhf847289bcf874bf88964451-jdfh-0=448fj5</p>
@@ -2522,25 +2335,6 @@ new Date(ms);</code></pre>
 <p>./liyao: empty</p>
 <p>3、尝试用rm 删除太多的文件，你可能得到一个错误信息：/bin/rm Argument list too long. 用xargs 去避免这个问题<br>$find ~ -name ‘*.log’ -print0 | xargs -i -0 rm -f {}</p>
 <p>4、查找所有的jpg 文件，并且压缩它<br># find / -name *.jpg -type f -print | xargs tar -cvzf images.tar.gz<br>5、拷贝所有的图片文件到一个外部的硬盘驱动<br># ls *.jpg | xargs -n1 -i cp {} /external-hard-drive/directory</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>linux添加新用户</title>
-    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
-    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
-<li>adduser username</li>
-<li>输入密码</li>
-<li>再次输密码</li>
-<li>输入电话号等，按enter使用默认值</li>
-<li>新用户创建成功</li>
-</ol>
-<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>liunx用命令行的方式更换桌面背景</title>
-    <url>/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/</url>
-    <content><![CDATA[<h2 id="liunx用命令行的方式更换桌面背景"><a href="#liunx用命令行的方式更换桌面背景" class="headerlink" title="liunx用命令行的方式更换桌面背景"></a>liunx用命令行的方式更换桌面背景</h2><pre><code class="shell"> gsettings set org.gnome.desktop.background picture-uri &quot;file:/home/mc/桌面/disco-75c0c1ef.png&quot;</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2864,8 +2658,8 @@ var hello = helloContract.new(
 </ul>
 ]]></content>
       <tags>
-        <tag>solidity</tag>
         <tag>contract</tag>
+        <tag>solidity</tag>
         <tag>geth</tag>
       </tags>
   </entry>
@@ -2905,6 +2699,42 @@ end</code></pre>
     $(&quot;#new_article&quot;).append &quot;&lt;p&gt;ERROR&lt;/p&gt;&quot;</code></pre>
 </li>
 </ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>修改postgres的登录密码</title>
+    <url>/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
+<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
+<blockquote>
+<p><code>local   all             postgres                                peer</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                trust</code></p>
+</blockquote>
+</li>
+<li><p>restart the server</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>sudo service postgresql restart</code></pre></blockquote>
+<ol start="3">
+<li><p>Login into psql and set your password</p>
+<blockquote>
+<p><code>psql -U postgres</code></p>
+<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
+</blockquote>
+</li>
+</ol>
+<ol start="4">
+<li><p>Finally change the <code>pg_hba.conf</code> </p>
+<blockquote>
+<p><code>local   all             postgres                                trust</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                md5</code>to</p>
+</blockquote>
+</li>
+</ol>
+<p>After restarting the postgresql server, you can access it with your own password</p>
 ]]></content>
   </entry>
   <entry>
@@ -3015,42 +2845,6 @@ help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETH
         <tag>contract</tag>
         <tag>geth</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>修改postgres的登录密码</title>
-    <url>/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/</url>
-    <content><![CDATA[<h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
-<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
-<blockquote>
-<p><code>local   all             postgres                                peer</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                trust</code></p>
-</blockquote>
-</li>
-<li><p>restart the server</p>
-</li>
-</ol>
-<blockquote>
-<pre><code>sudo service postgresql restart</code></pre></blockquote>
-<ol start="3">
-<li><p>Login into psql and set your password</p>
-<blockquote>
-<p><code>psql -U postgres</code></p>
-<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
-</blockquote>
-</li>
-</ol>
-<ol start="4">
-<li><p>Finally change the <code>pg_hba.conf</code> </p>
-<blockquote>
-<p><code>local   all             postgres                                trust</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                md5</code>to</p>
-</blockquote>
-</li>
-</ol>
-<p>After restarting the postgresql server, you can access it with your own password</p>
-]]></content>
   </entry>
   <entry>
     <title>修饰符moifier的作用</title>
@@ -7944,6 +7738,105 @@ export default class Request {
       </tags>
   </entry>
   <entry>
+    <title>电子书合集-2</title>
+    <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/</url>
+    <content><![CDATA[<p>一、中文电子书网站</p>
+<p>1.好读网站</p>
+<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
+<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
+<p>2.亿年书海</p>
+<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
+<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
+<p>3.只有下载</p>
+<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
+<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
+<p>4.逛电驴</p>
+<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
+<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
+<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
+<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
+<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
+<p>6.浩扬电子书城</p>
+<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
+<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
+<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
+<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
+<p>中文杂志下载网站，下载方式为网盘。</p>
+<p>8.书格</p>
+<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
+<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
+<p>9.中国哲学书电子化计划</p>
+<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
+<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
+<p>10.古籍馆</p>
+<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
+<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
+<p>11.马克思主义文库</p>
+<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
+<p>12.凡人大传</p>
+<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
+<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
+<p>13.殆知阁古籍搜索引擎</p>
+<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
+<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
+<p>14.中国国家数字图书馆</p>
+<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
+<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
+<p>15.超星</p>
+<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
+<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
+<p>16.E 书联盟</p>
+<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
+<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
+<p>17.轻之国度轻小说文库</p>
+<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
+<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
+<p>18.SF 互动传媒</p>
+<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
+<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
+<p>19.青年文摘</p>
+<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
+<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
+<p>20.zcom</p>
+<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
+<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
+<p>21.读书网</p>
+<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
+<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
+<p>时不时看一些书，充实生活，很不错。</p>
+<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
+<p>22.我有閑書庫</p>
+<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
+<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
+<p>23.完美文库</p>
+<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
+<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
+<p>24.en8848</p>
+<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
+<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
+<p>二、网盘和种子搜索引擎</p>
+<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
+<p>1.盘搜</p>
+<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
+<p>目前最常用的一个网盘搜索引擎。</p>
+<p>2.哈兔网盘搜索</p>
+<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
+<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
+<p>3.ZHA FILE 搜索</p>
+<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
+<p>基于谷歌的网盘搜索引擎。</p>
+<p>4.百度网盘搜索引擎</p>
+<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
+<p>专搜百度网盘资源。</p>
+<p>5.海盗湾</p>
+<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
+]]></content>
+      <tags>
+        <tag>hidden</tag>
+        <tag>电子书</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>电子书合集-1</title>
     <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-1/</url>
     <content><![CDATA[<p><a href="https://www.zhihu.com/people/wang-rui-xiang-76" target="_blank" rel="noopener"><img src="https://pic3.zhimg.com/d382960d26a93ebfd0c36eef09bc8e02_xs.jpg" alt="北野狐狼"></a></p>
@@ -8071,105 +7964,6 @@ export default class Request {
 <p>txt 精排版资源</p>
 <p>6 寸 pdf 资源</p>
 <p><img src="https://pic2.zhimg.com/80/v2-bdbc90eacfc7027b230d80e18e189d65_hd.jpg" alt="img">浩瀚的星空 浩瀚的书海</p>
-]]></content>
-      <tags>
-        <tag>hidden</tag>
-        <tag>电子书</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>电子书合集-2</title>
-    <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/</url>
-    <content><![CDATA[<p>一、中文电子书网站</p>
-<p>1.好读网站</p>
-<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
-<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
-<p>2.亿年书海</p>
-<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
-<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
-<p>3.只有下载</p>
-<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
-<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
-<p>4.逛电驴</p>
-<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
-<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
-<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
-<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
-<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
-<p>6.浩扬电子书城</p>
-<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
-<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
-<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
-<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
-<p>中文杂志下载网站，下载方式为网盘。</p>
-<p>8.书格</p>
-<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
-<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
-<p>9.中国哲学书电子化计划</p>
-<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
-<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
-<p>10.古籍馆</p>
-<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
-<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
-<p>11.马克思主义文库</p>
-<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
-<p>12.凡人大传</p>
-<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
-<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
-<p>13.殆知阁古籍搜索引擎</p>
-<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
-<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
-<p>14.中国国家数字图书馆</p>
-<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
-<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
-<p>15.超星</p>
-<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
-<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
-<p>16.E 书联盟</p>
-<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
-<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
-<p>17.轻之国度轻小说文库</p>
-<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
-<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
-<p>18.SF 互动传媒</p>
-<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
-<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
-<p>19.青年文摘</p>
-<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
-<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
-<p>20.zcom</p>
-<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
-<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
-<p>21.读书网</p>
-<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
-<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
-<p>时不时看一些书，充实生活，很不错。</p>
-<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
-<p>22.我有閑書庫</p>
-<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
-<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
-<p>23.完美文库</p>
-<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
-<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
-<p>24.en8848</p>
-<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
-<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
-<p>二、网盘和种子搜索引擎</p>
-<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
-<p>1.盘搜</p>
-<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
-<p>目前最常用的一个网盘搜索引擎。</p>
-<p>2.哈兔网盘搜索</p>
-<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
-<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
-<p>3.ZHA FILE 搜索</p>
-<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
-<p>基于谷歌的网盘搜索引擎。</p>
-<p>4.百度网盘搜索引擎</p>
-<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
-<p>专搜百度网盘资源。</p>
-<p>5.海盗湾</p>
-<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
 ]]></content>
       <tags>
         <tag>hidden</tag>
@@ -9209,8 +9003,8 @@ name = Time.now.to_i.to_s + &quot;.png&quot;
 <h3 id="绑定快捷键"><a href="#绑定快捷键" class="headerlink" title="绑定快捷键"></a>绑定快捷键</h3><p><img src="http://ogbkru1bq.bkt.clouddn.com/1534739826.png" alt=""></p>
 ]]></content>
       <tags>
-        <tag>linux</tag>
         <tag>shutter</tag>
+        <tag>linux</tag>
         <tag>截屏</tag>
       </tags>
   </entry>
@@ -10795,8 +10589,8 @@ large_client_header_buffers 4 512k;</code></pre>
 <h3 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h3><pre><code class="shell">service nginx restart</code></pre>
 ]]></content>
       <tags>
-        <tag>rails</tag>
         <tag>nginx</tag>
+        <tag>rails</tag>
         <tag>http</tag>
       </tags>
   </entry>
