@@ -133,6 +133,103 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-搜索框示例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/26/%E6%90%9C%E7%B4%A2%E6%A1%86%E7%A4%BA%E4%BE%8B/">搜索框示例</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/26/%E6%90%9C%E7%B4%A2%E6%A1%86%E7%A4%BA%E4%BE%8B/" class="archive-article-date">
+  	<time datetime="2018-08-26T02:26:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="erb">&lt;%= form_tag( admin_overdue_path, method: &quot;get&quot;,class:&#39;form-inlin&#39;) do %&gt;
+  &lt;div class=&quot;input&quot;&gt;
+    &lt;%= label_tag(:buyer, &quot;buyer&quot;) %&gt;
+    &lt;%= text_field_tag(:buyer,params[:buyer] ,class:&#39;form-control&#39;)%&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;input&quot;&gt;
+    &lt;%= label_tag(:token_id, &quot;token id&quot;) %&gt;
+    &lt;%= text_field_tag(:token_id,params[:token_id] ,class:&#39;form-control&#39;)%&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;input&quot;&gt;
+    &lt;%= label_tag(:block_id, &quot;block_id&quot;) %&gt;
+    &lt;%= text_field_tag(:block_id,params[:block_id] ,class:&#39;form-control&#39;)%&gt;
+  &lt;/div&gt;
+  &lt;!--   单选按钮--&gt;
+  &lt;div class=&quot;input&quot;&gt;
+    &lt;%= label_tag(:state_NO, &quot;未收缴&quot;) %&gt;
+    &lt;%= radio_button_tag(:state,&quot;NO&quot;, &#39;NO&#39; == params[:state]) %&gt;
+    &lt;%= label_tag(:state_YES, &quot;已收缴&quot;) %&gt;
+    &lt;%= radio_button_tag(:state,&quot;YES&quot;,&#39;YES&#39; == params[:state]) %&gt;
+  &lt;/div&gt;
+  &lt;%= submit_tag(&quot;Search&quot;,class:&#39;btn btn-info&#39;) %&gt;
+  &lt;%= link_to &quot;all&quot;, admin_overdue_path, class:&#39;btn btn-success all&#39; %&gt;
+&lt;% end %&gt;</code></pre>
+<p><img src="http://ogbkru1bq.bkt.clouddn.com/1535251812.png" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/26/%E6%90%9C%E7%B4%A2%E6%A1%86%E7%A4%BA%E4%BE%8B/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-form_for" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1165,202 +1262,6 @@ name = Time.now.to_i.to_s + &quot;.png&quot;
 
 
   
-    <article id="post-wc命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/19/wc%E5%91%BD%E4%BB%A4/">wc命令</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/19/wc%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2018-08-19T08:35:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="Linux-系统中的-wc-Word-Count-命令的功能为统计指定文件中的字节数、字数、行数，并将统计结果显示输出。"><a href="#Linux-系统中的-wc-Word-Count-命令的功能为统计指定文件中的字节数、字数、行数，并将统计结果显示输出。" class="headerlink" title="Linux 系统中的 wc(Word Count)命令的功能为统计指定文件中的字节数、字数、行数，并将统计结果显示输出。"></a>Linux 系统中的 wc(Word Count)命令的功能为统计指定文件中的字节数、字数、行数，并将统计结果显示输出。</h3><h3 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h3><p>wc [选项]文件…</p>
-<h3 id="命令功能"><a href="#命令功能" class="headerlink" title="命令功能"></a>命令功能</h3><p>统计指定文件中的字节数、字数、行数，并将统计结果显示输出。该命令统计指定文件中的字节数、字数、行数。如果没有给出文件名，则从标准输入读取。wc 同时也给出所指定文件的总统计数。</p>
-<h3 id="命令参数"><a href="#命令参数" class="headerlink" title="命令参数"></a>命令参数</h3><table>
-<thead>
-<tr>
-<th>参数</th>
-<th>操作</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-c</td>
-<td>统计字节数。</td>
-</tr>
-<tr>
-<td>-l</td>
-<td>统计行数。</td>
-</tr>
-<tr>
-<td>-m</td>
-<td>统计字符数。这个标志不能与 -c 标志一起使用。</td>
-</tr>
-<tr>
-<td>-w</td>
-<td>统计字数。一个字被定义为由空白、跳格或换行字符分隔的字符串。</td>
-</tr>
-<tr>
-<td>-L</td>
-<td>打印最长行的长度。</td>
-</tr>
-<tr>
-<td>-help</td>
-<td>显示帮助信息</td>
-</tr>
-<tr>
-<td>–version</td>
-<td>显示版本信息</td>
-</tr>
-</tbody></table>
-<h3 id="使用实例"><a href="#使用实例" class="headerlink" title="使用实例"></a>使用实例</h3><h4 id="实例-1：查看文件的字节数、字数、行数"><a href="#实例-1：查看文件的字节数、字数、行数" class="headerlink" title="实例 1：查看文件的字节数、字数、行数"></a>实例 1：查看文件的字节数、字数、行数</h4><p>命令：</p>
-<pre><code class="shell">wc test.txt</code></pre>
-<p>输出：</p>
-<pre><code class="shell">[root@localhost test]#cat test.txt
-
-hnlinux
-
-peida.cnblogs.com
-
-ubuntu
-
-ubuntu linux
-
-redhat
-
-Redhat
-
-linuxmint
-
-[root@localhost test]#wc test.txt
-
-7 8 70test.txt
-
-[root@localhost test]#wc -l test.txt
-
-7test.txt
-
-[root@localhost test]#wc -c test.txt
-
-70test.txt
-
-[root@localhost test]#wc -w test.txt
-
-8test.txt
-
-[root@localhost test]#wc -m test.txt
-
-70test.txt
-
-[root@localhost test]#wc -L test.txt
-
-17 test.txt</code></pre>
-<p>说明：</p>
-<p>7 8 70 test.txt</p>
-<p>行数 单词数 字节数 文件名</p>
-<h4 id="实例-2：用-wc-命令怎么做到只打印统计数字不打印文件名"><a href="#实例-2：用-wc-命令怎么做到只打印统计数字不打印文件名" class="headerlink" title="实例 2：用 wc 命令怎么做到只打印统计数字不打印文件名"></a>实例 2：用 wc 命令怎么做到只打印统计数字不打印文件名</h4><pre><code class="shell">[root@localhost test]#wc -l test.txt
-
-7test.txt
-
-[root@localhost test]#cat test.txt |wc -l
-
-7[root@localhost test]#</code></pre>
-<p>说明：</p>
-<p>使用管道线，这在编写 shell 脚本时特别有用。</p>
-<h4 id="实例-3：用来统计当前目录下的文件数"><a href="#实例-3：用来统计当前目录下的文件数" class="headerlink" title="实例 3：用来统计当前目录下的文件数"></a>实例 3：用来统计当前目录下的文件数</h4><pre><code class="shell">ls -l | wc -l
-
-[root@localhost test]#cd test6
-
-[root@localhost test6]#ll
-
-总计 604
-
----xr--r-- 1 root mail 302108 11-30 08:39linklog.log
-
----xr--r-- 1 mail users 302108 11-30 08:39log2012.log
-
--rw-r--r-- 1 mail users 61 11-30 08:39log2013.log
-
--rw-r--r-- 1 root mail 0 11-30 08:39log2014.log
-
--rw-r--r-- 1 root mail 0 11-30 08:39log2015.log
-
--rw-r--r-- 1 root mail 0 11-30 08:39log2016.log
-
--rw-r--r-- 1 root mail 0 11-30 08:39log2017.log
-
-[root@localhost test6]#ls -l | wc -l
-
-[root@localhost test6]#</code></pre>
-<p>说明：</p>
-<p>数量中包含当前目录</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">wc</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/19/wc%E5%91%BD%E4%BB%A4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/17/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="page-number" href="/page/17/">17</a><span class="page-number current">18</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/19/">Next &amp;raquo;</a>
@@ -1454,7 +1355,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1462,15 +1363,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1482,7 +1383,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1491,14 +1400,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1526,11 +1427,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1539,6 +1440,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1558,11 +1463,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
+                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
+                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1662,7 +1567,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1671,10 +1580,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">恢复</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1690,19 +1595,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1722,14 +1627,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1746,11 +1643,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1826,6 +1723,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
@@ -1834,19 +1735,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gem</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1862,11 +1759,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1890,11 +1787,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1951,6 +1848,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
               </li>
             
             <div class="clearfix"></div>

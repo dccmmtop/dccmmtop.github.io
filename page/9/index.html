@@ -133,6 +133,114 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-java中对象副本的创建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/14/java%E4%B8%AD%E5%AF%B9%E8%B1%A1%E5%89%AF%E6%9C%AC%E7%9A%84%E5%88%9B%E5%BB%BA/">java中对象副本的创建</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/14/java%E4%B8%AD%E5%AF%B9%E8%B1%A1%E5%89%AF%E6%9C%AC%E7%9A%84%E5%88%9B%E5%BB%BA/" class="archive-article-date">
+  	<time datetime="2019-10-14T15:14:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="java">//: holding/ModifyingArraysAsList.java
+import java.util.*;
+
+public class ModifyingArraysAsList {
+  public static void main(String[] args) {
+    Random rand = new Random(47);
+    Integer[] ia = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    List&lt;Integer&gt; list1 =
+      new ArrayList&lt;Integer&gt;(Arrays.asList(ia));
+    System.out.println(&quot;Before shuffling: &quot; + list1);
+    Collections.shuffle(list1, rand);
+    //不会修改 ia
+    System.out.println(&quot;After shuffling: &quot; + list1);
+    System.out.println(&quot;array: &quot; + Arrays.toString(ia));
+
+    List&lt;Integer&gt; list2 = Arrays.asList(ia);
+    // 会修改 ia
+    System.out.println(&quot;Before shuffling: &quot; + list2);
+    Collections.shuffle(list2, rand);
+    System.out.println(&quot;After shuffling: &quot; + list2);
+    System.out.println(&quot;array: &quot; + Arrays.toString(ia));
+  }
+} /* Output:
+Before shuffling: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+After shuffling: [4, 6, 3, 1, 8, 7, 2, 5, 10, 9]
+array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Before shuffling: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+After shuffling: [9, 1, 6, 3, 7, 2, 5, 10, 4, 8]
+array: [9, 1, 6, 3, 7, 2, 5, 10, 4, 8]
+*///:~</code></pre>
+<p>在第一种情况中，Arrays.asList()的输出被传递给了ArrayList()的构造器，这将创建一个引用ia的元索的ArrayList,因此打乱这些引用不会修改该数组。但是，如果直接使用Arrays.asList(ia)的结果，这种打乱就会修改ia的顺序。<br>意到Arrays.asList()产生的List对象会使用底层数组作为其物理实现是很重要的。只要你执行的操作会修改这个List,并且你不想原来的数组被修改，那么你就应该在另一个容器中创建一个副本。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">拷贝</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/14/java%E4%B8%AD%E5%AF%B9%E8%B1%A1%E5%89%AF%E6%9C%AC%E7%9A%84%E5%88%9B%E5%BB%BA/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-redis实现分布式锁" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1286,162 +1394,6 @@ end
 
 
   
-    <article id="post-postgres窗口函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/05/postgres%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/">postgres窗口函数</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/05/postgres%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2019-03-05T01:29:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我们来看一个实际的问题： 有一张人员薪水表，这张表包含 人员编号，人员所在部门，薪水。现在需要选出每个部门薪水排名前10的员工信息。总结一下就是求每个分组的前N名信息。</p>
-<p>有一个思路是 按照部门进行分组，在组内按照薪水倒序，然后取出每组的前10条。</p>
-<h3 id="ROW-NUMBER"><a href="#ROW-NUMBER" class="headerlink" title="ROW_NUMBER"></a>ROW_NUMBER</h3><p>postgres 提供一个计算行号的函数 ROW_NUMBER(), 这个函数可以计算出当前行在分组中的位置,如果在分组内按照某个字段排序，那么 ROW_NUMBER() 计算的行号就代表着这个规则中的排名。需要特别注意的是，ROW_NUMBER() 必须使用窗口函数的语法才能够正常使用，也就是这个函数后面必须接 OVER() 子句。</p>
-<p>postgres 中内建了一些窗口函数，除了这些函数外，任何内建的或用户定义的普通聚集函数（但有序集或假想集聚集除外）都可以作为窗口函数。仅当调用跟着OVER子句时，聚集函数才会作为窗口函数；否则它们作为常规的聚集。</p>
-<p><strong>内建窗口函数</strong></p>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>返回类型</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>row_number()</code></td>
-<td><code>bigint</code></td>
-<td>当前行在其分区中的行号，从1计</td>
-</tr>
-<tr>
-<td><code>rank()</code></td>
-<td><code>bigint</code></td>
-<td>带间隙的当前行排名； 与该行的第一个同等行的<code>row_number</code>相同</td>
-</tr>
-<tr>
-<td><code>dense_rank()</code></td>
-<td><code>bigint</code></td>
-<td>不带间隙的当前行排名； 这个函数计数同等组</td>
-</tr>
-<tr>
-<td><code>percent_rank()</code></td>
-<td><code>double precision</code></td>
-<td>当前行的相对排名： (<code>rank</code>- 1) / (总行数 - 1)</td>
-</tr>
-<tr>
-<td><code>cume_dist()</code></td>
-<td><code>double precision</code></td>
-<td>当前行的相对排名： (当前行前面的行数 或 与当前行同等的行的行数)/(总行数)</td>
-</tr>
-<tr>
-<td><code>ntile(*num_buckets* integer)</code></td>
-<td><code>integer</code></td>
-<td>从1到参数值的整数范围，尽可能等分分区</td>
-</tr>
-<tr>
-<td><code>lag(*value* anyelement [, *offset* integer [, *default* anyelement ]])</code></td>
-<td><code>和*value*的类型相同</code></td>
-<td>返回<code>*value*</code>， 它在分区内当前行的之前<code>*offset*</code>个位置的行上计算；如果没有这样的行，返回<code>*default*</code>替代。 (作为<code>*value*</code>必须是相同类型)。 <code>*offset*</code>和<code>*default*</code>都是根据当前行计算的结果。如果忽略它们，则<code>*offset*</code>默认是1，<code>*default*</code>默认是空值</td>
-</tr>
-<tr>
-<td><code>lead(*value* anyelement [, *offset* integer [, *default* anyelement ]])</code></td>
-<td><code>和*value*类型相同</code></td>
-<td>返回<code>*value*</code>，它在分区内当前行的之后<code>*offset*</code>个位置的行上计算；如果没有这样的行，返回<code>*default*</code>替代。(作为<code>*value*</code>必须是相同类型)。<code>*offset*</code>和<code>*default*</code>都是根据当前行计算的结果。如果忽略它们，则<code>*offset*</code>默认是1，<code>*default*</code>默认是空值</td>
-</tr>
-<tr>
-<td><code>first_value(*value* any)</code></td>
-<td><code>same type as *value*</code></td>
-<td>返回在窗口帧中第一行上计算的<code>*value*</code></td>
-</tr>
-<tr>
-<td><code>last_value(*value* any)</code></td>
-<td><code>和*value*类型相同</code></td>
-<td>返回在窗口帧中最后一行上计算的<code>*value*</code></td>
-</tr>
-<tr>
-<td><code>nth_value(*value* any, *nth* integer)</code></td>
-<td><code>和*value*类型相同</code></td>
-<td>返回在窗口帧中第<code>*nth*</code>行（行从1计数）上计算的<code>*value*</code>；没有这样的行则返回空值</td>
-</tr>
-</tbody></table>
-<h3 id="OVER"><a href="#OVER" class="headerlink" title="OVER()"></a>OVER()</h3><p>一个<em>窗口函数</em>在一系列与当前行有某种关联的表行上执行一种计算。这与一个聚集函数所完成的计算有可比之处。但是与通常的聚集函数不同的是，使用窗口函数并不会导致行被分组成为一个单独的输出行–行保留它们独立的标识。在这些现象背后，窗口函数可以访问的不仅仅是查询结果的当前行。</p>
-<p>下面使用窗口函数 ROW_NUMBER() 来获取每个部门薪水排名前十的用户信息</p>
-<pre><code class="sql">SELECT * FROM
-(SELECT depname, empno, salary, ROW_NUMBER() OVER (PARTITION BY depname ORDER BY salary DESC) as row_index )
-WHERE(row_index &lt;= 10) FROM empsalary</code></pre>
-<p>使用 Rails 可以这样写</p>
-<pre><code class="ruby">user_group = User.select(&quot;id,depname, empno, salary, ROW_NUMBER() OVER (PARTITION BY depname ORDER BY salary DESC) as row_index&quot;).to_sql
-User.select(&quot;agg.*&quot;).joins(&quot;RIGHT JOIN (#{user_group}) as agg ON agg.id = user.id&quot;).where(&quot;agg.row_index &lt;= 10&quot;)</code></pre>
-<p>其中 <code>ROW_NUMBER() OVER (PARTITION BY depname ORDER BY salary DESC) as row_index</code> 的 <code>PARTITION BY depname</code> 意思是按照 <code>depname</code>  进行分区， <code>ORDER BY salary DESC</code> 在当前分区内按照薪水倒序， 然后 <code>ROW_NUMBER()</code> 计算出当前行在所在分区的行号然后作为 row_index 列显示。<strong>值得注意的是最后的输出结果是前十名，但并不是按照薪水的高低排序的</strong>如果想要有序的数据还需要在最后使用 <code>ORDER  BY salary DESC</code> 进行排序</p>
-<p>更多有关窗口函数的介绍请看手册 <a href="http://www.postgres.cn/docs/9.6/tutorial-window.html" target="_blank" rel="noopener">http://www.postgres.cn/docs/9.6/tutorial-window.html</a> <a href="http://www.postgres.cn/docs/9.6/functions-window.html" target="_blank" rel="noopener">http://www.postgres.cn/docs/9.6/functions-window.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">postgres</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">窗口函数</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/05/postgres%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
@@ -1535,7 +1487,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1543,15 +1495,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1563,7 +1515,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1572,14 +1532,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1607,11 +1559,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1620,6 +1572,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1639,11 +1595,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
+                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
+                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1743,7 +1699,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1752,10 +1712,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">恢复</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1771,19 +1727,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1803,14 +1759,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1827,11 +1775,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1907,6 +1855,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
@@ -1915,19 +1867,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gem</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1943,11 +1891,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1971,11 +1919,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2032,6 +1980,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
               </li>
             
             <div class="clearfix"></div>

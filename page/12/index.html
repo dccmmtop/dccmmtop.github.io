@@ -133,6 +133,226 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-用ruby执行系统命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/03/%E7%94%A8ruby%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/">用ruby执行系统命令</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/03/%E7%94%A8ruby%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+  	<time datetime="2019-01-03T01:50:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="反引号"><a href="#反引号" class="headerlink" title="反引号"></a>反引号</h3><ol>
+<li>返回标准输出</li>
+</ol>
+<pre><code class="ruby">output = `ls`
+puts &quot;output is #{output}&quot;</code></pre>
+<p>Result of above code is</p>
+<pre><code class="shell">$ ruby main.rb
+output is lab.rb</code></pre>
+<ol start="2">
+<li>反引号执行系统命令时，会把异常抛给主线程</li>
+</ol>
+<p>反引号会从主进程新开一个进程执行命令，如果子进程发生异常，会传递给主进程，如果主进程没有对异常进行处理，主进程就会终止。</p>
+<p>下面的例子中 执行一个‘xxxxx’非法的命令</p>
+<pre><code class="ruby">output = `xxxx`
+puts &quot;output is #{output}&quot;</code></pre>
+<p>执行结果：</p>
+<pre><code class="shell">$ ruby main.rb
+main.rb:1:in ``&#39;: No such file or directory - xxxxxxx (Errno::ENOENT)
+    from main.rb:1:in `&lt;main&gt;&#39;</code></pre>
+<ol start="3">
+<li>阻塞进程</li>
+</ol>
+<p>主进程会一直等待反引号中的子进程结束</p>
+<ol start="4">
+<li>检查命令的执行状态</li>
+</ol>
+<p>使用 <code>$?.success?</code> 来检查命令的执行状态</p>
+<pre><code class="ruby">output = `ls`
+puts &quot;output is #{output}&quot;
+puts $?.success?</code></pre>
+<p>结果:</p>
+<pre><code class="shell">$ ruby main.rb
+output is lab.rb
+main.rb
+true</code></pre>
+<ol start="5">
+<li>允许使用字符串插值</li>
+</ol>
+<p>例子：</p>
+<pre><code class="ruby">cmd = &#39;ls&#39;
+`#{cmd}`</code></pre>
+<ol start="6">
+<li><code>x%</code></li>
+</ol>
+<p><code>x%</code> 和反引号一样，它可以使用不同的分隔符</p>
+<pre><code class="ruby">output = %x[ ls ]
+output = %x{ ls }</code></pre>
+<h3 id="system"><a href="#system" class="headerlink" title="system"></a>system</h3><p>system 也可以执行系统命令，他和反引号有点相像。</p>
+<ol>
+<li><p>阻塞进程</p>
+</li>
+<li><p>隐藏异常</p>
+</li>
+</ol>
+<p>system 不会向主进程传递异常。</p>
+<pre><code class="ruby">output = system(&#39;xxxxxxx&#39;)
+puts &quot;output is #{output}&quot;</code></pre>
+<p>结果：</p>
+<pre><code class="shell">$ ruby main.rb
+output is</code></pre>
+<ol start="3">
+<li>检查命令的执行状态</li>
+</ol>
+<p>如果命令成功执行，则系统返回true（退出状态为零）。对于非零退出状态，它返回false, 如果命令执行失败，返回nil</p>
+<pre><code class="ruby">system(&quot;command that does not exist&quot;)  #=&gt; nil
+system(&quot;ls&quot;)                           #=&gt; true
+system(&quot;ls | grep foo&quot;)                #=&gt; false</code></pre>
+<h3 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h3><p>exec 会替换掉当前进程，请看下面的例子：</p>
+<p>在 irb 中执行exec(‘ls’)：</p>
+<pre><code class="shell">$ irb
+e1.9.3-p194 :001 &gt; exec(&#39;ls&#39;)
+lab.rb  main.rb
+
+nsingh ~/dev/lab 1.9.3
+$</code></pre>
+<p>可以发现，执行完exec(“ls”)命令以后，已经退出irb，回到shell。</p>
+<p>由于exec替换了当前进程，因此如果操作成功，则不会返回任何内容。如果操作失败，则引发<code>SystemCallError</code></p>
+<h3 id="sh"><a href="#sh" class="headerlink" title="sh"></a>sh</h3><p>sh实际上是在呼叫系统, FileUtils在rake中添加了此方法。它允许以简单的方式检查命令的退出状态。</p>
+<pre><code class="ruby">require &#39;rake&#39;
+sh %w(xxxxx) do |ok, res|
+   if !ok
+     abort &#39;the operation failed&#39;
+   end
+end</code></pre>
+<h3 id="popen3"><a href="#popen3" class="headerlink" title="popen3"></a>popen3</h3><p>如果你要捕获stdout和stderr，那么你应该使用popen3，因为这个方法允许你与stdin，stdout和stderr进行交互。</p>
+<p>我想以编程方式执行git push heroku master，我想捕获输出。这是我的代码。</p>
+<pre><code class="ruby">require &#39;open3&#39;
+cmd = &#39;git push heroku master&#39;
+Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+  puts &quot;stdout is:&quot; + stdout.read
+  puts &quot;stderr is:&quot; + stderr.read
+end</code></pre>
+<p>输出：</p>
+<pre><code class="shell">stdout is:
+stderr is:
+-----&gt; Heroku receiving push
+-----&gt; Ruby/Rails app detected
+-----&gt; Installing dependencies using Bundler version 1.2.1</code></pre>
+<p>这里需要注意的重要一点是，当我执行程序ruby lab.rb时，我的终端在前10秒内没有看到任何输出。然后我将整个输出视为一个转储。<br>另外需要注意的是，heroku正在将所有这些输出写入stderr而不是stdout。</p>
+<p>所以我们应该捕获来自heroku的输出，因为它正在流式传输而不是在处理结束时将整个输出转储为一个单个的字符串块。</p>
+<p>这是修改后的代码。</p>
+<pre><code class="ruby">require &#39;open3&#39;
+cmd = &#39;git push heroku master&#39;
+Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+  while line = stderr.gets
+    puts line
+  end
+end</code></pre>
+<p>现在，当我使用ruby lab.rb执行上述命令时，我会逐步获得终端输出，就好像我输入了git push heroku master一样。 这是捕获流输出的另一个例子。</p>
+<pre><code class="ruby">require &#39;open3&#39;
+cmd = &#39;ping www.google.com&#39;
+Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+  while line = stdout.gets
+    puts line
+  end
+end</code></pre>
+<p>在上面的例子中，您将在终端上获得ping的输出，就像您在终端上键入ping <a href="http://www.google.com一样。" target="_blank" rel="noopener">www.google.com一样。</a></p>
+<p>现在让我们看看如何检查命令是否成功</p>
+<pre><code class="ruby">require &#39;open3&#39;
+cmd = &#39;ping www.google.com&#39;
+Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+  exit_status = wait_thr.value
+  unless exit_status.success?
+    abort &quot;FAILED !!! #{cmd}&quot;
+  end
+end</code></pre>
+<h3 id="popen2e"><a href="#popen2e" class="headerlink" title="popen2e"></a>popen2e</h3><p>popen2e类似于popen3，但合并了标准输出和标准错误。</p>
+<pre><code class="ruby">require &#39;open3&#39;
+cmd = &#39;ping www.google.com&#39;
+Open3.popen2e(cmd) do |stdin, stdout_err, wait_thr|
+  while line = stdout_err.gets
+    puts line
+  end
+
+  exit_status = wait_thr.value
+  unless exit_status.success?
+    abort &quot;FAILED !!! #{cmd}&quot;
+  end
+end</code></pre>
+<p>在所有其他领域，此方法与popen3类似。</p>
+<h3 id="Process-spawn"><a href="#Process-spawn" class="headerlink" title="Process.spawn"></a>Process.spawn</h3><p>Kernel.spawn在子shell中执行给定的命令。它会立即返回进程ID。</p>
+<pre><code class="ruby">irb(main)&gt; pid = Process.spawn(&quot;ls -al&quot;)
+=&gt; 81001</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ruby</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">system</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/03/%E7%94%A8ruby%E6%89%A7%E8%A1%8C%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-xpath用法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1566,99 +1786,6 @@ uploadFile: (item, filename) -&gt;
 
 
   
-    <article id="post-错误消息闪现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/06/%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF%E9%97%AA%E7%8E%B0/">错误消息闪现</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/06/%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF%E9%97%AA%E7%8E%B0/" class="archive-article-date">
-  	<time datetime="2018-12-06T05:59:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>app/views/shared/error_messages.html.erb</p>
-</blockquote>
-<pre><code class="erb">&lt;% if target.errors.any? %&gt;
-  &lt;div class=&quot;alert alert-block alert-danger&quot;&gt;
-    &lt;a class=&quot;close&quot; data-dismiss=&#39;alert&#39; href=&quot;#&quot;&gt;×&lt;/a&gt;
-    &lt;p&gt;&lt;strong&gt;有 &lt;%= target.errors.count %&gt; 处问题导致无法提交:&lt;/strong&gt;&lt;/p&gt;
-    &lt;ul&gt;
-      &lt;% target.errors.full_messages.each do |msg| %&gt;
-       &lt;li&gt;&lt;%= msg %&gt;&lt;/li&gt;
-      &lt;% end %&gt;
-    &lt;/ul&gt;
-  &lt;/div&gt;
-&lt;% end %&gt;</code></pre>
-<h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><pre><code class="erb">&lt;%= render &quot;shared/error_messages&quot;, target: @passage %&gt;</code></pre>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p><img src="https://i.loli.net/2018/12/06/5c08bbf4b22f1.png?filename=1544076238.png" alt="1544076238.png"></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">代码片段</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">错误提示</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/06/%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF%E9%97%AA%E7%8E%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/11/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/13/">Next &amp;raquo;</a>
@@ -1752,7 +1879,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1760,15 +1887,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1780,7 +1907,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1789,14 +1924,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1824,11 +1951,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1837,6 +1964,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1856,11 +1987,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
+                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
+                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1960,7 +2091,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1969,10 +2104,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">恢复</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1988,19 +2119,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2020,14 +2151,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -2044,11 +2167,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2124,6 +2247,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
@@ -2132,19 +2259,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gem</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2160,11 +2283,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2188,11 +2311,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2249,6 +2372,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
               </li>
             
             <div class="clearfix"></div>

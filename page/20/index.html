@@ -133,6 +133,267 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vimrc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/09/vimrc/">vimrc</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/09/vimrc/" class="archive-article-date">
+  	<time datetime="2018-08-09T09:17:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="vim">&quot; curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+&quot; cp -r ~/.vim/plugged/gruvbox/colors ~/.vim/
+syntax enable
+set t_Co=256
+set background=dark
+&quot; Numbers
+set number
+set ts=2
+set expandtab
+set autoindent
+set formatoptions+=t
+set shiftwidth=2
+set showmatch
+set cursorline
+&quot; def end 跳转  括号跳转
+runtime macros/matchit.vim
+&quot; set tags=/home/mc/code/ctag_source/tags
+set tags=tags;
+let mapleader = &#39; &#39;
+&quot; 启用缩进折叠
+set fdm=indent
+&quot; 打开文件时，不折叠代码
+set foldlevel=99
+map ; :
+&quot; - 移动到一行末尾 _ 移动到行的第一个非空白字符
+map - $
+vmap - $h
+imap &lt;C-k&gt; &lt;Up&gt;&lt;End&gt;&lt;kEnter&gt;
+imap &lt;C-d&gt; &lt;Home&gt;&lt;Del&gt;
+nnoremap &lt;leader&gt;log :AnsiEsc&lt;cr&gt;
+nnoremap &lt;c-]&gt; &lt;c-]&gt;zz
+inoremap jk &lt;ESC&gt;
+&quot; noremap &lt;Up&gt; &lt;Nop&gt;
+&quot; noremap &lt;Down&gt; &lt;Nop&gt;
+&quot; noremap &lt;Left&gt; &lt;Nop&gt;
+&quot; noremap &lt;Right&gt; &lt;Nop&gt;
+&quot; nnoremap :e :w&lt;cr&gt;:e&lt;cr&gt;
+&quot; 删除至行首
+nnoremap d0 v0d==
+nnoremap d_ v0d==
+&quot; 屏幕行 与 真实行
+nnoremap k gk
+nnoremap gk k
+nnoremap j  gj
+nnoremap gj j
+&quot; 从系统剪切板粘贴
+nnoremap P &quot;+p
+&quot; &quot; 复制到系统剪切板
+vmap Y &quot;+y
+nmap Y &quot;+y
+&quot; 跳转到上次修改的位置，并移到屏幕中间
+nmap g, g,zz
+nmap g; g;zz
+nmap * *zz
+&quot; 快速编辑vimrc，灵感稍纵即逝
+nnoremap &lt;leader&gt;ev :vsplit $MYVIMRC&lt;cr&gt;
+nnoremap &lt;leader&gt;cn :set cursorcolumn!&lt;cr&gt;
+&quot; 切换窗口
+nnoremap &lt;leader&gt;w &lt;c-w&gt;w
+&quot; 打开折叠
+nnoremap &lt;leader&gt;o zozz
+&quot; 折叠
+nnoremap &lt;leader&gt;g zczz
+&quot; 删除末尾的空格
+nnoremap &lt;leader&gt;s :%s/\s\+$//g&lt;cr&gt;
+nnoremap &lt;leader&gt;rm :Emodel
+nnoremap &lt;leader&gt;rc :Econtroller
+nnoremap &lt;leader&gt;rv :Eview
+nnoremap &lt;leader&gt;rh :Ehelper
+nnoremap &lt;leader&gt;rj :Ejavascript
+nnoremap &lt;leader&gt;rs :Estylesheet
+nnoremap &lt;leader&gt;rt :Etask
+&quot; &quot; 映射切换buffer的键位
+nnoremap { :bp&lt;CR&gt;
+nnoremap } :bn&lt;CR&gt;
+nnoremap ]\ :bd&lt;CR&gt;
+
+
+&quot;colorscheme solarized
+colorscheme gruvbox
+&quot;colorscheme molokai
+
+&quot; Specify a directory for plugins
+&quot; - For Neovim: ~/.local/share/nvim/plugged
+&quot; - Avoid using standard Vim directory names like &#39;plugin&#39;
+call plug#begin(&#39;~/.vim/plugged&#39;)
+&quot; Plug &#39;chrisbra/csv.vim&#39;
+Plug &#39;vim-scripts/indentpython.vim&#39;
+&quot; 缩进线
+&quot; Plug &#39;Yggdroot/indentLine&#39;
+&quot; let g:indentLine_char = &#39;|&#39;
+&quot; 自动补全符号
+Plug &#39;Raimondi/delimitMate&#39;
+Plug &#39;dccmmtop/vim_script&#39;
+Plug &#39;powerman/vim-plugin-AnsiEsc&#39;
+Plug &#39;SirVer/ultisnips&#39;
+Plug &#39;isRuslan/vim-es6&#39;
+Plug &#39;terryma/vim-multiple-cursors&#39;
+Plug &#39;prettier/vim-prettier&#39;, { &#39;do&#39;: &#39;yarn install&#39; }
+Plug &#39;honza/vim-snippets&#39; &quot;optional
+Plug &#39;mattn/emmet-vim&#39;
+&quot; coffee script color
+Plug &#39;kchmck/vim-coffee-script&#39;
+&quot; Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug &#39;junegunn/vim-easy-align&#39;
+Plug &#39;morhetz/gruvbox&#39;
+Plug &#39;tomasr/molokai&#39;
+&quot; Multiple Plug commands can be written in a single line using | separators
+Plug &#39;SirVer/ultisnips&#39; | Plug &#39;honza/vim-snippets&#39;
+Plug &#39;tpope/vim-surround&#39;
+
+&quot; On-demand loading
+Plug &#39;scrooloose/nerdtree&#39;, { &#39;on&#39;:  &#39;NERDTreeToggle&#39; }
+Plug &#39;tpope/vim-fireplace&#39;, { &#39;for&#39;: &#39;clojure&#39; }
+&quot;注释
+Plug &#39;tomtom/tcomment_vim&#39;
+&quot;快速定位
+Plug &#39;easymotion/vim-easymotion&#39;
+let g:EasyMotion_smartcase = 1
+map  &lt;Tab&gt; &lt;Plug&gt;(easymotion-sn)
+omap / &lt;Plug&gt;(easymotion-tn)
+map  n &lt;Plug&gt;(easymotion-next)
+map  N &lt;Plug&gt;(easymotion-prev)
+&quot; Gif config
+&quot; 高亮本行光标之后所有单词的头和尾
+map fl &lt;Plug&gt;(easymotion-lineforward)
+map fj &lt;Plug&gt;(easymotion-j)
+map fk &lt;Plug&gt;(easymotion-k)
+&quot; 高亮本行光标之前所有单词的头和尾
+map fh &lt;Plug&gt;(easymotion-linebackward)
+let g:EasyMotion_startofline = 0 &quot; keep cursor column when JK motion
+Plug &#39;rking/ag.vim&#39;
+Plug &#39;airblade/vim-gitgutter&#39;
+Plug &#39;tpope/vim-rails&#39;
+Plug &#39;vim-airline/vim-airline&#39;
+Plug &#39;vim-airline/vim-airline-themes&#39;
+let g:airline_powerline_fonts = 1
+if g:airline_powerline_fonts == 0
+  if !exists(&#39;g:airline_symbols&#39;)
+    let g:airline_symbols = {}
+  endif
+  let g:airline_left_sep = &#39;▶&#39;
+  let g:airline_left_alt_sep = &#39;❯&#39;
+  let g:airline_right_sep = &#39;◀&#39;
+  let g:airline_right_alt_sep = &#39;❮&#39;
+  let g:airline_symbols.paste = &#39;ρ&#39;
+  let g:airline_symbols.linenr = &#39;¶&#39;
+  let g:airline_symbols.branch = &#39;§&#39;
+  let g:airline_symbols.whitespace = &#39;Ξ&#39;
+  let g:airline_symbols.readonly = &#39;&#39;
+endif
+let g:airline_mode_map = {
+      \ &#39;__&#39; : &#39;-&#39;,
+      \ &#39;n&#39;  : &#39;标准&#39;,
+      \ &#39;i&#39;  : &#39;插入&#39;,
+      \ &#39;R&#39;  : &#39;替换&#39;,
+      \ &#39;c&#39;  : &#39;命令行&#39;,
+      \ &#39;v&#39;  : &#39;可视&#39;,
+      \ &#39;V&#39;  : &#39;可视&#39;,
+      \ &#39;s&#39;  : &#39;选择&#39;,
+      \ &#39;S&#39;  : &#39;选择&#39;
+      \}
+set laststatus=2
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#fnamemod = &#39;:p:t&#39; &quot;只显示文件名，不显示路径内容。
+
+if g:airline_powerline_fonts == 0
+  let g:airline#extensions#tabline#left_sep = &#39;▶&#39;
+  let g:airline#extensions#tabline#left_alt_sep = &#39;❯&#39;
+  let g:airline#extensions#tabline#right_sep = &#39;◀&#39;
+  let g:airline#extensions#tabline#right_alt_sep = &#39;❮&#39;
+endif
+&quot; Initialize plugin system
+Plug &#39;kien/ctrlp.vim&#39;
+call plug#end()
+
+&quot;文件搜索&quot;
+&quot; set runtimepath^=~/.vim/plugged/ctrlp.vim
+let g:ctrlp_map = &#39;&lt;c-p&gt;&#39;
+let g:ctrlp_cmd = &#39;CtrlP&#39;
+&quot; 设置过滤不进行查找的后缀名
+&quot; let g:ctrlp_custom_ignore = &#39;\v[\/]\.(git|hg|svn|pyc)$&#39;
+&quot;end &quot;
+let g:NERDTreeWinPos = &quot;right&quot;
+&quot; NERDTree config&quot;
+map &lt;leader&gt;tt :NERDTreeToggle&lt;CR&gt;
+autocmd BufWritePost $MYVIMRC source $MYVIMRC</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">vimrc</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/09/vimrc/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-解决linux_unzip文件名乱码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1216,11 +1477,11 @@ large_client_header_buffers 4 512k;</code></pre>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -1235,158 +1496,6 @@ large_client_header_buffers 4 512k;</code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/08/08/414_Request_URI_Too_Large/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-博客创建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/08/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA/">博客创建</a>
-    </h1>
-  
-
-        
-        <a href="/2018/08/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA/" class="archive-article-date">
-  	<time datetime="2018-08-07T16:57:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
-require &quot;httparty&quot;
-include HTTParty
-def analysis(file)
-  content = File.open(file,&quot;r&quot;).read
-  content_array = content.split(/\n/)
-  tag,body,date = nil
-  title = file.split(&quot;.&quot;).first
-  if content_array[0] == &quot;---&quot;
-    (1..3).each do |i|
- [     if content_array[i] =~ /tags:/]
-        tag = content_array[i].split(/:/).last.gsub(/\s/,&quot;&quot;)
-      elsif content_array[i] =~ /date/
-        date = content_array[i].split(/date:/).last
-      elsif content_array[i] == &quot;---&quot;
-        length = content_array.length
-        body = content_array[i+1,length-1].join(&quot;\n&quot;)
-        break
-      end
-    end
-    return {:body =&gt; body,:tag =&gt; tag,:title =&gt; title,:created_at =&gt; date }
-  else
-    return {:body =&gt; content,:tag =&gt; nil,:title =&gt; title,:created_at =&gt; nil }
-  end
-end
-
-def add_files(files)
-  headers = {&quot;Access&quot; =&gt; ENV[&#39;SCRIPT_BLOG_ACCESS&#39;] }
-  files.each do |file|
-    blog = analysis(file)
-    query = {
-      &quot;title&quot; =&gt; blog[:title],
-      &quot;tag&quot; =&gt; blog[:tag],
-      &quot;body&quot; =&gt; blog[:body],
-      &quot;created_at&quot; =&gt; blog[:created_at]
-    }
-    puts &quot;正在创建 #{blog[:title]}&quot;
-    result = HTTParty.post(&quot;https://dccmm.world/api/topics/create&quot;,:query =&gt; query,:headers =&gt; headers)
-    #result = HTTParty.post(&quot;xxxx&quot;,:query =&gt; query,:headers =&gt; headers)
-    if result[&quot;status&quot;] == 0
-      puts &quot;#{result}                 \033[22;32m✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔✔\033[0m\n\n&quot;
-    else
-      puts &quot;#{result}                  \033[22;31m✗✗✗✗✗✗✗✗✗✗✗✗✗✗\033[0m\n\n&quot;
-    end
-  end
-  puts `git add #{files.join(&#39; &#39;)}`
-  puts `git commit -m &#39;#{files.join}&#39;`
-end
-
-def remove_file(files)
-  headers = {&quot;Access&quot; =&gt; ENV[&#39;SCRIPT_BLOG_ACCESS&#39;] }
-  files.each do |file|
-    title = file.split(&quot;.&quot;).first
-    query = {
-      &quot;title&quot; =&gt; title
-    }
-    puts &quot;正在删除#{title}&quot;
-    # result = HTTParty.delete(&quot;xxxx&quot;,:query =&gt; query,:headers =&gt; headers)
-    result = HTTParty.delete(&quot;https://dccmm.world/api/topics/delete&quot;,:query =&gt; query,:headers =&gt; headers)
-    if result[&quot;status&quot;] == 0
-      puts &quot;#{result}                 \033[22;32m✔\033[0m\n\n&quot;
-    else
-      puts &quot;#{result}                  \033[22;31m✗\033[0m\n\n&quot;
-    end
-  end
-end
-
-length = ARGV.length
-exit if length &lt; 2
-files = ARGV[1,length-1]
-if ARGV[0] == &quot;-a&quot;
-  add_files(files)
-else ARGV[0] == &quot;-d&quot;
-  remove_file(files)
-end</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">blog</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">script</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/08/08/%E5%8D%9A%E5%AE%A2%E5%88%9B%E5%BB%BA/">展开全文 >></a>
         </p>
       
 
@@ -1509,7 +1618,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1517,15 +1626,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1537,7 +1646,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1546,14 +1663,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">加密</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1581,11 +1690,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">contract</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1594,6 +1703,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1613,11 +1726,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
+                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">diy_script</a>
+                <a href="javascript:void(0)" class="js-tag color1">belongs_to</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1717,7 +1830,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1726,10 +1843,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">恢复</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1745,19 +1858,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">console</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">cable</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">console</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1777,14 +1890,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1801,11 +1906,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1881,6 +1986,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
@@ -1889,19 +1998,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">gem</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1917,11 +2022,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1945,11 +2050,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2006,6 +2111,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
               </li>
             
             <div class="clearfix"></div>
