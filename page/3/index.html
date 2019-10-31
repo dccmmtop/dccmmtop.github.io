@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -133,322 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-remove_nginx_from_ubuntu" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/remove_nginx_from_ubuntu/">remove_nginx_from_ubuntu</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/remove_nginx_from_ubuntu/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="shell">sudo apt-get remove nginx nginx-common # Removes all but config files.
-
-sudo apt-get purge nginx nginx-common # Removes everything.
-
-sudo apt-get autoremove # After using any of the above commands, use this in order to remove dependencies used by nginx which are no longer required.</code></pre>
-<p>or</p>
-<p><code>apt-get remove --purge nginx nginx-full nginx-common</code></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/remove_nginx_from_ubuntu/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ruby--require引用文件路径方法与问题总结" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/ruby--require%E5%BC%95%E7%94%A8%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E6%96%B9%E6%B3%95%E4%B8%8E%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">ruby--require引用文件路径方法与问题总结</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/ruby--require%E5%BC%95%E7%94%A8%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E6%96%B9%E6%B3%95%E4%B8%8E%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="ruby–require引用文件路径方法与问题总结"><a href="#ruby–require引用文件路径方法与问题总结" class="headerlink" title="ruby–require引用文件路径方法与问题总结"></a>ruby–require引用文件路径方法与问题总结</h3><p>同一目录下的文件，如<code>/usr/local/ruby/foo.rb</code>与<code>/usr/local/ruby/bar.rb</code>两个文件。<br>如果直接在foo.rb中<br><code>require &#39;bar&#39;</code><br>执行时会报找不到bar.rb错误。</p>
-<p>这是因为运行<br><code>$ ruby /usr/local/ruby/foo.rb</code>时会在ruby安装的lib目录和<code>/home/oldsong/</code>目录下查找bar.rb。而不会去rb文件的目录<code>/usr/local/ruby/</code>下查找。</p>
-<p>所以除引用系统rb外，<strong>require中不能用相对路径</strong></p>
-<p>下面结合我个人经验介绍几种引用单个和目录下所有rb的方法。</p>
-<p>1.引用一个文件<br>例: 引用当前rb同目录下的<code>file_to_require.rb</code><br>先介绍3种方法</p>
-<pre><code class="ruby">require File.join(__FILE_, &#39;../file_to_require&#39;)。
-require File.expand_path(&#39;../file_to_require&#39;, __FILE__)
-require File.dirname(__FILE__) + &#39;/file_to_require&#39; </code></pre>
-<p>其中，File.expand_path是Rails常用的做法。<br><code>__FILE__</code>为常量，表示当前文件的绝对路径，如<code>/home/oldsong/test.rb</code></p>
-<ul>
-<li>法四：<pre><code class="ruby">$LOAD_PATH.unshift(File.dirname(__FILE__))
-require &#39;bar&#39; </code></pre>
-先把目录加入LOAD_PATH变量中，然后可直接引用文件名。</li>
-</ul>
-<p>2.引用一个目录下所有文件</p>
-<p>Ruby没有Java中的import java.io.*;引用时不能用通配符，估计以后的版本有可能加上。</p>
-<p>例：引用当前rb相同目录下lib/文件下所有*.rb文件。</p>
-<ul>
-<li><p>法一</p>
-<pre><code class="ruby">Dir[File.dirname(__FILE__) + &#39;/lib/*.rb&#39;].each{\|file\| require file } </code></pre>
-</li>
-<li><p>法二：</p>
-</li>
-</ul>
-<p>一个gem搞定<br><a href="https://rubygems.org/gems/require_all" target="_blank" rel="noopener">https://rubygems.org/gems/require_all</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/ruby--require%E5%BC%95%E7%94%A8%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84%E6%96%B9%E6%B3%95%E4%B8%8E%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ruby命令行工具制作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/">ruby命令行工具制作</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">require &#39;optparse&#39;
-
-options = {}
-option_parser = OptionParser.new do |opts|
-  # 这里是这个命令行工具的帮助信息
-  opts.banner = &#39;here is help messages of the command line tool.&#39;
-
-  # Option 作为switch，不带argument，用于将 switch 设置成 true 或 false
-  options[:switch] = false
-  # 下面第一项是 Short option（没有可以直接在引号间留空），第二项是 Long option，第三项是对 Option 的描述
-  opts.on(&#39;-s&#39;, &#39;--switch&#39;, &#39;Set options as switch&#39;) do
-    # 这个部分就是使用这个Option后执行的代码
-    options[:switch] = true
-  end
-
-  # Option 作为 flag，带argument，用于将argument作为数值解析，比如&quot;name&quot;信息
-  #下面的“value”就是用户使用时输入的argument
-  opts.on(&#39;-n NAME&#39;, &#39;--name Name&#39;, &#39;Pass-in single name&#39;) do |value|
-    options[:name] = value
-  end
-
-  # Option 作为 flag，带一组用逗号分割的arguments，用于将arguments作为数组解析
-  opts.on(&#39;-a A B C&#39;, &#39;--array&#39;, String, &#39;List of arguments&#39;) do |value|
-    puts value
-    options[:array] = value.split(/\s|,/).map{|a| a if a.size &gt; 0}.compact
-  end
-end.parse!
-
-puts options.inspect</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/ruby%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7%E5%88%B6%E4%BD%9C/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-ruby数组排序,但是排序的字段可能为空" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">ruby数组排序,但是排序的字段可能为空</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="ruby数组排序-但是排序的字段可能为空"><a href="#ruby数组排序-但是排序的字段可能为空" class="headerlink" title="ruby数组排序,但是排序的字段可能为空"></a>ruby数组排序,但是排序的字段可能为空</h3><pre><code class="ruby">foo = [nil, -3, 100, 4, 6, nil, 4, nil, 23]
-
-foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
-
-=&gt; [-3, 4, 4, 6, 23, 100, nil, nil, nil]</code></pre>
-<pre><code class="ruby">children.sort_by {|child| [child.position ? 0 : 1,child.position || 0]}</code></pre>
-<p><a href="https://stackoverflow.com/questions/808318/sorting-a-ruby-array-of-objects-by-an-attribute-that-could-be-nil" target="_blank" rel="noopener">详情请看</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-ruby多层数组排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -456,13 +140,13 @@ foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">ruby多层数组排序</a>
+      <a class="article-title" href="/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">ruby多层数组排序</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.042Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -515,7 +199,7 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/">展开全文 >></a>
         </p>
       
 
@@ -545,27 +229,33 @@ end</code></pre>
 
 
   
-    <article id="post-ruby文件加载" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-ruby数组排序,但是排序的字段可能为空" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/ruby%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD/">ruby文件加载</a>
+      <a class="article-title" href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">ruby数组排序,但是排序的字段可能为空</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/ruby%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.042Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="ruby–-unshift-File-expand-path-‘-’-FILE-（转载）"><a href="#ruby–-unshift-File-expand-path-‘-’-FILE-（转载）" class="headerlink" title="ruby–$:.unshift File.expand_path(‘..’, FILE)（转载）"></a><a href="http://www.cnblogs.com/timsheng/archive/2013/04/13/3017911.html" target="_blank" rel="noopener">ruby–$:.unshift File.expand_path(‘..’, <strong>FILE</strong>)（转载）</a></h2><p>一直能看到一些gem里面会有这样一句代码：<br><code>$:.unshift File.expand_path(&#39;..&#39;, __FILE__)</code><br>这句话是干什么用的呢<br>$:就是ruby的一个全局变量，也叫$LOAD_PATH，功能就是java中的classpath，用来加载类库的，当你require某个文件时，ruby就会从这个变量的值去查找，找不到会报LoadError。这个值其实就是一个包含了类库绝对路径的数组。<br><code>__FILE__</code>这个变量代表文件自己的文件名，在foo.rb中puts__FILE__，结果就是foo.rb。<br><code>File.expand_path</code>可以把路径转换成绝对路径，假设有这样一个文件<code>/Users/kenshin/foo.rb</code>，里面有<code>File.expand_path(&#39;..&#39;, __FILE__)</code>，返回的结果就是<code>/Users/kenshin</code>。<br>unshift是数组的一个方法，功能就是把指定的值加到数组的最前面，<code>[3,4].unshift(1,2) =&gt; [1,2,3,4]</code><br>所以这段代码的意思就是把当前文件所在的目录加到ruby的loadpath的最前面，在require文件时，ruby就会先从当前目录下去查找了。</p>
+        <h3 id="ruby数组排序-但是排序的字段可能为空"><a href="#ruby数组排序-但是排序的字段可能为空" class="headerlink" title="ruby数组排序,但是排序的字段可能为空"></a>ruby数组排序,但是排序的字段可能为空</h3><pre><code class="ruby">foo = [nil, -3, 100, 4, 6, nil, 4, nil, 23]
+
+foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
+
+=&gt; [-3, 4, 4, 6, 23, 100, nil, nil, nil]</code></pre>
+<pre><code class="ruby">children.sort_by {|child| [child.position ? 0 : 1,child.position || 0]}</code></pre>
+<p><a href="https://stackoverflow.com/questions/808318/sorting-a-ruby-array-of-objects-by-an-attribute-that-could-be-nil" target="_blank" rel="noopener">详情请看</a></p>
 
       
 
@@ -578,7 +268,7 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/ruby%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/">展开全文 >></a>
         </p>
       
 
@@ -608,66 +298,29 @@ end</code></pre>
 
 
   
-    <article id="post-simple_form" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-README" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/simple_form/">simple_form</a>
+      <a class="article-title" href="/2019/10/31/README/">README</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/simple_form/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/README/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Simple-form"><a href="#Simple-form" class="headerlink" title="Simple_form"></a>Simple_form</h2><h4 id="安裝"><a href="#安裝" class="headerlink" title="安裝"></a>安裝</h4><p><code>gem &#39;simple_form&#39;</code></p>
-<p><code>bundle install</code></p>
-<p><code>rails generate simple_form:install --bootstrap</code></p>
-<p>基本使用方式</p>
-<p>只要输入f.input，simple_form會自動根據資料庫中該欄位的資料型態，判斷此input顯示的格式</p>
-<pre><code class="erb">&lt;%= simple_form_for @post do |f| %&gt;
-  &lt;div class=&quot;form-group&quot;&gt; 
-  &lt;%= f.input :username, label: &#39;Your username please&#39;, error: &#39;Username is mandatory, please specify one&#39; %&gt;
-  &lt;%= f.input :password, hint: &#39;No special characters.&#39; %&gt;  &lt;%= f.input :email, placeholder: &#39;user@domain.com&#39; %&gt; 
-  &lt;%= f.input :remember_me, inline_label: &#39;Yes, remember me&#39; %&gt;
-  &lt;/div&gt;
-  &lt;%= f.submit &quot;Submit&quot;, class: &quot;btn btn-primary&quot;, data: { disable_with: &quot;Submiting...&quot; } %&gt;
-&lt;% end %&gt;</code></pre>
-<p>若有錯誤，也可使用as手動調整欄位格式</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
-  &lt;%= f.input :username %&gt;
-  &lt;%= f.input :password %&gt;
-  &lt;%= f.input :description, as: :text %&gt;
-  &lt;%= f.input :accepts,     as: :radio_buttons %&gt;
-  &lt;%= f.button :submit %&gt;
-&lt;% end %&gt;</code></pre>
-<h4 id="排版"><a href="#排版" class="headerlink" title="排版"></a>排版</h4><p>為了排版，平常寫在後面的參數，也可以分開填寫</p>
-<p>例如</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt;
-  &lt;%= f.input :username, label: &#39;username&#39;, hint: &#39;No special characters, please!&#39;, error: &#39;username&#39;, id: &#39;user_name_error&#39;, full_error: &#39;token&#39;  %&gt;
-  &lt;%= f.submit &#39;Save&#39; %&gt;
-&lt;% end %&gt;</code></pre>
-<p>可調整為：</p>
-<pre><code class="erb">&lt;%= simple_form_for @user do |f| %&gt; 
-  &lt;%= f.label :username %&gt;
-  &lt;%= f.input_field :username %&gt; 
-  &lt;%= f.hint &#39;No special characters, please!&#39; %&gt; 
-  &lt;%= f.error :username, id: &#39;user_name_error&#39; %&gt; 
-  &lt;%= f.full_error :token %&gt;
-  &lt;%= f.submit &#39;Save&#39; %&gt;
-&lt;% end %&gt;</code></pre>
-<h4 id="疑難雜症"><a href="#疑難雜症" class="headerlink" title="疑難雜症"></a>疑難雜症</h4><p>關閉label</p>
-<p><code>label: false</code></p>
-<p>備註hint</p>
-<p><code>hint: &#39;文字&#39;</code></p>
+        <ul>
+<li>添加 pacman 源—待整理</li>
+</ul>
 
       
 
@@ -680,7 +333,7 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/simple_form/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/README/">展开全文 >></a>
         </p>
       
 
@@ -710,120 +363,270 @@ end</code></pre>
 
 
   
-    <article id="post-solidity中返回mapping数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-react_native_default_not_found" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">solidity中返回mapping数据</a>
+      <a class="article-title" href="/2019/10/31/react_native_default_not_found/">react_native_default_not_found</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/react_native_default_not_found/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>批量访问列表/数组/等在 Solidity 中很痛苦。你很少在合同中看到它。在您的情况下，一种可能的解决方案是提供一个函数来访问一个项目，使用它的索引，并让调用者从 0 循环到 id。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="solidity">//得到用户存款信息
-function getInfoByUser(address user) public view returns(uint[],uint[]){
-  uint[] memory money = new uint[](bank[user].depositRecordAmounts);
-  uint[] memory time = new uint[](bank[user].depositRecordAmounts);
-  for(uint i = 0; i&lt; bank[user].depositRecordAmounts; i++){
-    money[i] = bank[user].depositRecord[i].money;
-    time[i] = bank[user].depositRecord[i].time;
+        <h3 id="记录一下错误日志以及解决方法"><a href="#记录一下错误日志以及解决方法" class="headerlink" title="记录一下错误日志以及解决方法"></a>记录一下错误日志以及解决方法</h3><h4 id="错误信息"><a href="#错误信息" class="headerlink" title="错误信息"></a>错误信息</h4><pre><code>Error:Configuration with name &#39;default&#39; not found.</code></pre><h4 id="可能的原因"><a href="#可能的原因" class="headerlink" title="可能的原因"></a>可能的原因</h4><p>以前使用某个包，,并且进行了<code>link</code>操作，也许你是全局安装的，pakage.json 没有这个包的信息。</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>重新执行<code>npm i 包名 --save</code></p>
+<p>终于处理掉了这个问题，其实这个问题是很简单的问题，只是怪自己年少无知，故现在记录下这些曾经无知的过错，等以后反过来看自己也许会一笑而过。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/react_native_default_not_found/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-react_native_生命周期" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/react_native_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">react_native_生命周期</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/react_native_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>###<a href="https://www.jianshu.com/p/4784216b8194" target="_blank" rel="noopener">转载</a><br>简单地说，React Component 通过其定义的几个函数来控制组件在生命周期的各个阶段的动作。</p>
+<p>在 ES6 中，一个 React 组件是用一个 class 来表示的（具体可以参考官方文档），如下：</p>
+<pre><code class="js">// 定义一个TodoList的React组件，通过继承React.Component来实现
+class TodoList extends React.Component {
+  ...
+}</code></pre>
+<p>这几个生命周期相关的函数有：</p>
+<pre><code class="js">constructor(props, context)
+//构造函数，在创建组件的时候调用一次。
+void componentWillMount()
+//在组件挂载之前调用一次。如果在这个函数里面调用setState，本次的render函数可以看到更新后的state，并且只渲染一次。
+
+void componentDidMount()
+//在组件挂载之后调用一次。这个时候，子主键也都挂载好了，可以在这里使用refs。
+
+void componentWillReceiveProps(nextProps)
+//props是父组件传递给子组件的。父组件发生render的时候子组件就会调用componentWillReceiveProps（不管props有没有更新，也不管父子组件之间有没有数据交换）。
+
+bool shouldComponentUpdate(nextProps, nextState)
+//组件挂载之后，每次调用setState后都会调用shouldComponentUpdate判断是否需要重新渲染组件。默认返回true，需要重新render。在比较复杂的应用里，有一些数据的改变并不影响界面展示，可以在这里做判断，优化渲染效率。
+
+void componentWillUpdate(nextProps, nextState)
+//shouldComponentUpdate返回true或者调用forceUpdate之后，componentWillUpdate会被调用。
+
+void componentDidUpdate()
+//除了首次render之后调用componentDidMount，其它render结束之后都是调用componentDidUpdate。
+
+componentWillMount、componentDidMount和componentWillUpdate、componentDidUpdate可以对应起来。区别在于，前者只有在挂载的时候会被调用；而后者在以后的每次更新渲染之后都会被调用。
+
+ReactElement render()
+//render是一个React组件所必不可少的核心函数（上面的其它函数都不是必须的）。记住，不要在render里面修改state。
+
+void componentWillUnmount()
+//组件被卸载的时候调用。一般在componentDidMount里面注册的事件需要在这里删除。</code></pre>
+<p>更新方式<br>在 react 中，触发 render 的有 4 条路径。</p>
+<p>以下假设 shouldComponentUpdate 都是按照默认返回 true 的方式。</p>
+<p>首次渲染 Initial Render<br>调用 this.setState （并不是一次 setState 会触发一次 render，React 可能会合并操作，再一次性进行 render）<br>父组件发生更新（一般就是 props 发生改变，但是就算 props 没有改变或者父子组件之间没有数据交换也会触发 render）<br>调用 this.forceUpdate</p>
+<p>React 组件更新路径.png<br>注意，如果在 shouldComponentUpdate 里面返回 false 可以提前退出更新路径。</p>
+<p>一个 React 组件生命周期的测试例子</p>
+<pre><code class="js">class LifeCycle extends React.Component {
+  constructor(props) {
+    super(props);
+    alert(&#39;Initial render&#39;);
+    alert(&#39;constructor&#39;);
+    this.state = {str: &#39;hello&#39;};
   }
-  return(money,time);
-}</code></pre>
 
-      
+  componentWillMount() {
+    alert(&#39;componentWillMount&#39;);
+  }
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  componentDidMount() {
+    alert(&#39;componentDidMount&#39;);
+  }
 
-      
+  componentWillReceiveProps(nextProps) {
+    alert(&#39;componentWillReceiveProps&#39;);
+  }
 
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/solidity%E4%B8%AD%E8%BF%94%E5%9B%9Emapping%E6%95%B0%E6%8D%AE/">展开全文 >></a>
-        </p>
-      
+  shouldComponentUpdate() {
+    alert(&#39;shouldComponentUpdate&#39;);
+    return true; // 记得要返回true
+  }
 
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
+  componentWillUpdate() {
+    alert(&#39;componentWillUpdate&#39;);
+  }
 
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
+  componentDidUpdate() {
+    alert(&#39;componentDidUpdate&#39;);
+  }
 
+  componentWillUnmount() {
+    alert(&#39;componentWillUnmount&#39;);
+  }
 
+  setTheState() {
+    let s = &#39;hello&#39;;
+    if (this.state.str === s) {
+      s = &#39;HELLO&#39;;
+    }
+    this.setState({
+      str: s,
+    });
+  }
 
+  forceItUpdate() {
+    this.forceUpdate();
+  }
 
-  
-    <article id="post-solidity多个返回值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/solidity%E5%A4%9A%E4%B8%AA%E8%BF%94%E5%9B%9E%E5%80%BC/">solidity多个返回值</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/solidity%E5%A4%9A%E4%B8%AA%E8%BF%94%E5%9B%9E%E5%80%BC/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="solidity">function getAuction(uint256 _tokenId) external constant returns(
-    address seller,
-    uint256 sellPrice
-) {
-    Auction storage auction = tokenIdToAuction[_tokenId];
+  render() {
+    alert(&#39;render&#39;);
     return (
-        auction.seller,
-        auction.sellPrice
+      &lt;div&gt;
+        &lt;span&gt;
+          {&#39;Props:&#39;}
+          &lt;h2&gt;{parseInt(this.props.num)}&lt;/h2&gt;
+        &lt;/span&gt;
+        &lt;br /&gt;
+        &lt;span&gt;
+          {&#39;State:&#39;}
+          &lt;h2&gt;{this.state.str}&lt;/h2&gt;
+        &lt;/span&gt;
+      &lt;/div&gt;
     );
-}</code></pre>
+  }
+}
+
+class Container extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      num: Math.random() * 100,
+    };
+  }
+
+  propsChange() {
+    this.setState({
+      num: Math.random() * 100,
+    });
+  }
+
+  setLifeCycleState() {
+    this.refs.rLifeCycle.setTheState();
+  }
+
+  forceLifeCycleUpdate() {
+    this.refs.rLifeCycle.forceItUpdate();
+  }
+
+  unmountLifeCycle() {
+    // 这里卸载父组件也会导致卸载子组件
+    React.unmountComponentAtNode(document.getElementById(&#39;container&#39;));
+  }
+
+  parentForceUpdate() {
+    this.forceUpdate();
+  }
+
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;a
+          href=&quot;javascript:;&quot;
+          className=&quot;weui_btn weui_btn_primary&quot;
+          onClick={this.propsChange.bind(this)}&gt;
+          propsChange
+        &lt;/a&gt;
+        &lt;a
+          href=&quot;javascript:;&quot;
+          className=&quot;weui_btn weui_btn_primary&quot;
+          onClick={this.setLifeCycleState.bind(this)}&gt;
+          setState
+        &lt;/a&gt;
+        &lt;a
+          href=&quot;javascript:;&quot;
+          className=&quot;weui_btn weui_btn_primary&quot;
+          onClick={this.forceLifeCycleUpdate.bind(this)}&gt;
+          forceUpdate
+        &lt;/a&gt;
+        &lt;a
+          href=&quot;javascript:;&quot;
+          className=&quot;weui_btn weui_btn_primary&quot;
+          onClick={this.unmountLifeCycle.bind(this)}&gt;
+          unmount
+        &lt;/a&gt;
+        &lt;a
+          href=&quot;javascript:;&quot;
+          className=&quot;weui_btn weui_btn_primary&quot;
+          onClick={this.parentForceUpdate.bind(this)}&gt;
+          parentForceUpdateWithoutChange
+        &lt;/a&gt;
+        &lt;LifeCycle ref=&quot;rLifeCycle&quot; num={this.state.num} /&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+ReactDom.render(&lt;Container /&gt;, document.getElementById(&#39;container&#39;));</code></pre>
 
       
 
@@ -832,22 +635,11 @@ function getInfoByUser(address user) public view returns(uint[],uint[]){
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">solidity</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/solidity%E5%A4%9A%E4%B8%AA%E8%BF%94%E5%9B%9E%E5%80%BC/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/react_native_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">展开全文 >></a>
         </p>
       
 
@@ -877,78 +669,143 @@ function getInfoByUser(address user) public view returns(uint[],uint[]){
 
 
   
-    <article id="post-syn_data" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-react_native条件渲染" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/syn_data/">syn_data</a>
+      <a class="article-title" href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/">react_native条件渲染</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/syn_data/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <pre><code class="rb">#!/usr/bin/ruby
-require &quot;net/ssh&quot;
-require &quot;net/scp&quot;
-io = File.open(&quot;/home/mc/rubycode/logs_domestictrade/database.log&quot;,&#39;ab+&#39;)
-io.puts(&quot;================#{Time.now}====================&quot;)
-# 备份数据库
-io.puts(&quot;正在连接远程服务器...&quot;)
-puts(&quot;正在连接远程服务器...&quot;)
+        <p>根据不同的条件渲染不同的组件<br>一般的套路是把将要渲染的组件赋值给一个<code>const</code>，然后根据不同的条件使用不同的 const</p>
+<pre><code class="jsx"> render() {
+ const emptyImage = (
+  &lt;View
+    style={{
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  &gt;
+    &lt;Image source={require(&quot;../icons/empty.png&quot;)} style={styles.emptyImg} /&gt;
+    &lt;Text style={styles.text}&gt;你还没有任何土地&lt;/Text&gt;
+  &lt;/View&gt;
+);
+const List= &lt;FlatList.../&gt;
+    return (
+    &lt;View style={styles.container}&gt;
+        {/* 导航，返回按钮*/}
+        &lt;View style={[styles.back]}&gt;
+          &lt;TouchableOpacity
+            onPress={() =&gt; {
+              Actions.pop();
+            }}
+            style={styles.backBtn}
+          &gt;
+            &lt;Image
+              style={styles.backImg}
+              source={require(&quot;../icons/back.png&quot;)}
+            /&gt;
+          &lt;/TouchableOpacity&gt;
+          &lt;Text style={[styles.text, styles.title]}&gt;我的地块&lt;/Text&gt;
+        &lt;/View&gt;
+        {this.props.list ? List : emptyImage}
+      &lt;/View&gt;
+    );
+  }
+}</code></pre>
 
-Net::SSH.start(&#39;**ip**&#39;, &#39;root&#39;, :password =&gt; &quot;****************&quot;,:port =&gt; ****) do |ssh|
-  io.puts(&quot;连接成功&quot;)
-  puts(&quot;连接成功&quot;)
-  io.puts(&quot;备份数据库...&quot;)
-  puts(&quot;备份数据库...&quot;)
-  ssh.exec!(&quot;pg_dump -U root  DomesticTrade_development &gt; /tmp/test.sql&quot;)
-  io.puts(&quot;数据库备份完毕&quot;)
-  puts(&quot;数据库备份完毕&quot;)
-  io.puts(&quot;压缩备份文件...&quot;)
-  puts(&quot;压缩备份文件...&quot;)
-  ssh.exec!(&#39;cd /tmp &amp;&amp; zip test.sql.zip test.sql&#39;)
-  io.puts(&quot;压缩备份文件成功&quot;)
-  puts(&quot;压缩备份文件成功&quot;)
-  io.puts(&quot;删除源文件...&quot;)
-  puts(&quot;删除源文件...&quot;)
-  ssh.exec!(&quot;rm /tmp/test.sql&quot;)
-  io.puts(&quot;删除源文件成功&quot;)
-  puts(&quot;删除源文件成功&quot;)
-end
-io.puts(&quot;下载压缩后的备份文件...&quot;)
-puts(&quot;下载压缩后的备份文件...&quot;)
+      
 
-# # # 将数据下载到本地
-Net::SCP.download!(&quot;**ip**&quot;, &quot;root&quot;,
-                   &quot;/tmp/test.sql.zip&quot;, &quot;/tmp/&quot;,
-                   :ssh =&gt; { :password =&gt; &quot;****************&quot; ,:port =&gt; ****})
-io.puts(&quot;下载完毕&quot;)
-puts(&quot;下载完毕&quot;)
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">react-native</a>
+        		</li>
+      		
+		</ul>
+	</div>
 
-io.puts(&quot;删除远程备份文件&quot;)
-puts(&quot;删除远程备份文件&quot;)
-# # # 删除备份
-Net::SSH.start(&#39;**ip**&#39;, &#39;root&#39;, :password =&gt; &quot;****************&quot;,:port =&gt; ****) do |ssh|
-  ssh.exec!(&quot;rm /tmp/test.sql.zip&quot;)
-end
-io.puts(&quot;将本地数据库备份文件移到/home/mc/logs_domestictrade/下&quot;)
-puts(&quot;将本地数据库备份文件移到/home/mc/logs_domestictrade/下&quot;)
-`cd /tmp/ &amp;&amp; mv test.sql.zip /home/mc/rubycode/logs_domestictrade/`
-io.puts(&quot;重命名本分文件...&quot;)
-`cd /home/mc/rubycode/logs_domestictrade/ &amp;&amp; mv test.sql.zip &quot;./#{Time.now}.sql.zip&quot;`
-io.puts(&quot;完成\n\n\n\n&quot;)
-puts(&quot;完成&quot;)
-io.close</code></pre>
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/react_native%E6%9D%A1%E4%BB%B6%E6%B8%B2%E6%9F%93/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-remove_nginx_from_ubuntu" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/remove_nginx_from_ubuntu/">remove_nginx_from_ubuntu</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/remove_nginx_from_ubuntu/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="shell">sudo apt-get remove nginx nginx-common # Removes all but config files.
+
+sudo apt-get purge nginx nginx-common # Removes everything.
+
+sudo apt-get autoremove # After using any of the above commands, use this in order to remove dependencies used by nginx which are no longer required.</code></pre>
+<p>or</p>
+<p><code>apt-get remove --purge nginx nginx-full nginx-common</code></p>
 
       
 
@@ -961,7 +818,369 @@ io.close</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/syn_data/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/remove_nginx_from_ubuntu/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Rails中使用图表显示数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/Rails%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%9B%BE%E8%A1%A8%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE/">Rails中使用图表显示数据</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/Rails%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%9B%BE%E8%A1%A8%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Rails中使用图表-ChartJs-显示数据"><a href="#Rails中使用图表-ChartJs-显示数据" class="headerlink" title="Rails中使用图表(ChartJs)显示数据"></a>Rails中使用图表(ChartJs)显示数据</h2><p>利用图表将数据呈现出来，更直观，在Rails中有一个gem包叫做<a href="https://github.com/airblade/chartjs-ror" target="_blank" rel="noopener">chartjs-ror</a></p>
+<p>使用方法非常简单。按照github上装好以后，使用方法如下：</p>
+<ul>
+<li><p>曲线图</p>
+<p>在view中要显示图表的地方插入<code>&lt;%= line_chart @data,@options%&gt;</code>即可</p>
+<p><code>@data</code>和<code>@options</code>从哪里来？？ 当然从controller中来</p>
+<p>在controller中</p>
+<pre><code class="ruby">@data ={
+      labels: @time, # 横轴数据
+      datasets:[
+        {   
+          hidden: true # 默认不显示，可以手动点击，将曲线显示出来
+          label: &#39;ETC盈利率&#39;, #该条曲线的意思
+          borderColor: &quot;rgba( 112, 151, 152,1)&quot;, # 曲线的颜色 和透明度
+          data: etc_data # 该条曲线的数据
+        },  
+        {   
+          label: &#39;BTC盈利率&#39;,
+          borderColor: &quot;rgba( 131 ,111 ,255,1)&quot;,
+          data: btc_data
+        },  
+        {   
+          label: &#39;ETH盈利率&#39;,
+          borderColor: &quot;rgba(0 ,255, 0,1)&quot;,
+          data: eth_data
+        }
+      ]   
+    }   
+width = @time.size / 47 * 1797 # 计算图表的宽度，使其比例合适
+width = 1797 if width &lt; 1797
+@options = {width:&quot;#{width.to_i}px&quot;,height:&#39;800px&#39;}# 这里指定生成图标的宽度和高度
+</code></pre>
+<p>​</p>
+</li>
+</ul>
+<p>在view中</p>
+<pre><code class="ruby">&lt;div class = &quot;col-md-10&quot; style = &quot;overflow-x:scroll&quot;&gt; # 当图表横轴数据过多时，出现滚动条
+  &lt;div class=&quot;box&quot; style=&quot;width:@options[:width];height:@options[:height]&quot;&gt; # 放图表的容器的大小应该与图表一致
+      &lt;%= line_chart @data,@options %&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+<p>就这了，里面还有很多属性和图表样式，请参考<a href="http://www.bootcss.com/p/chart.js/docs/" target="_blank" rel="noopener">文档</a>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/Rails%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%9B%BE%E8%A1%A8%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Rails好用的gem包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/Rails%E5%A5%BD%E7%94%A8%E7%9A%84gem%E5%8C%85/">Rails好用的gem包</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/Rails%E5%A5%BD%E7%94%A8%E7%9A%84gem%E5%8C%85/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Rails-好用的gem包"><a href="#Rails-好用的gem包" class="headerlink" title="Rails 好用的gem包"></a>Rails 好用的gem包</h2><ul>
+<li>用户登录、权限:<pre><code class="text">devise - plataformatec/devise · GitHub
+</code></pre>
+</li>
+</ul>
+<p>rolify - RolifyCommunity/rolify · GitHub</p>
+<p>pundit - elabs/pundit · GitHub</p>
+<pre><code>* 状态机
+```text
+statesman - gocardless/statesman · GitHub</code></pre><ul>
+<li>分页<pre><code class="text">kaminari - amatsuda/kaminari · GitHub</code></pre>
+</li>
+<li>图表<pre><code class="text">chartkick - ankane/chartkick · GitHub</code></pre>
+</li>
+<li>表单<pre><code class="text">simple_form - plataformatec/simple_form · GitHub</code></pre>
+</li>
+<li>部署<pre><code class="text">mina - mina-deploy/mina · GitHub</code></pre>
+</li>
+<li>SEO<pre><code class="text">meta-tags - kpumuk/meta-tags · GitHub</code></pre>
+</li>
+<li>配置</li>
+</ul>
+<pre><code class="reStructuredText">settingslogic - binarylogic/settingslogic · GitHub</code></pre>
+<ul>
+<li><p>队列</p>
+<pre><code class="text">sidekiq - mperham/sidekiq · GitHub</code></pre>
+</li>
+<li><p>监控</p>
+<pre><code class="text">skylight - skylightio/skylight-ruby · GitHub</code></pre>
+</li>
+<li><p>错误处理</p>
+<pre><code class="text">better_errors - charliesome/better_errors · GitHub</code></pre>
+</li>
+<li><p>代码检查</p>
+<pre><code class="text">rubocop - bbatsov/rubocop · GitHub</code></pre>
+</li>
+<li><p>日志</p>
+<pre><code class="text">lograge - roidrage/lograge · GitHub</code></pre>
+</li>
+<li><p>树形结构</p>
+<pre><code class="text">closure_tree - mceachen/closure_tree · GitHub
+ElasticSearch
+searchkick - ankane/searchkick · GitHub</code></pre>
+</li>
+<li><p>统计分析</p>
+<pre><code class="text">mixpanel-ruby - mixpanel/mixpanel-ruby · GitHub
+meta_events - swiftype/meta_events · GitHub</code></pre>
+</li>
+<li><p>浏览器检测</p>
+<pre><code class="text">browser - fnando/browser · GitHub</code></pre>
+</li>
+<li><p>假数据</p>
+<pre><code class="text">fabrication - paulelliott/fabrication · GitHub</code></pre>
+</li>
+<li><p>测试相关</p>
+<pre><code class="text">capybara - jnicklas/capybara · GitHub
+mocha - freerange/mocha · GitHub
+poltergeist - teampoltergeist/poltergeist · GitHub
+database_cleaner - DatabaseCleaner/database_cleaner · GitHub
+timecop - travisjeffery/timecop · GitHub
+cucumber - cucumber/cucumber · GitHub</code></pre>
+</li>
+<li><p>bootstrap（bootstrap-sass）</p>
+<blockquote>
+<p>这个不用解释了吧，对于没有专业前端小伙伴的项目和团队是福音。而且对于想要学习前端技术的同学，bootstrap的源码非常值得进行深入的学习和理解。当然，缺点也是有的，就是大家的网站做出来都比较像，建议有条件的小伙伴使用的时候还是多进行一些个性化修改。</p>
+</blockquote>
+</li>
+<li><p>Capistrano（capistrano | RubyGems.org）</p>
+<blockquote>
+<p>Capistrano最初就是用来向服务器部署ruby应用的，当然现在也开始支持其他类型项目的部署。Capistrano是一种在多台服务器上运行脚本的开源工具，它主要用于部署web应用。它自动完成多台服务器上新版本的同步更新，包括数据库的改变。使用起来非常方便，基本也是Rails应用开发必备。</p>
+</blockquote>
+<p>​</p>
+</li>
+<li><p>bcrypt（bcrypt | RubyGems.org）</p>
+<blockquote>
+<p>bcrypt是一个跨平台的文件加密工具。由它加密的文件可在所有支持的操作系统和处理器上进行转移。它的口令必须是8至56个字符，并将在内部被转化为448位的密钥。在rails上使用起来相当简便，web开发一般是少不了的。</p>
+</blockquote>
+</li>
+<li><p>sprockets（sprockets | RubyGems.org）</p>
+<blockquote>
+<p>Sprockets 是一个 Ruby 库，用来检查 JavaScript 文件的相互依赖关系，用以优化网页中引入的js文件，以避免加载不必要的js文件，加快网页访问速度。这个现在貌似是rails工程默认自带gem，记不太清了，足见重要性。但是我在使用中发现有时候会跟bootstrap的js库发生冲突，主要是版本问题，有使用的小伙伴需要注意一下。</p>
+</blockquote>
+</li>
+<li><p>Paperclip（paperclip | RubyGems.org）</p>
+<blockquote>
+<p>paperclip基本上已经是rails的御用图片上传gem了，功能强大使用方便，但是唯一不太好的就是图片剪裁上面功能比较有限。paperclip依赖于ImageMagic，大部分linux包管理器（如apt yum portage等）中应该都能找到这个软件包。</p>
+</blockquote>
+</li>
+<li><p>rmagick（rmagick | RubyGems.org）</p>
+<blockquote>
+<p>这个gem弥补了paperclip在图片剪裁上的不足。功能十分十分十分的强大，文档也很齐全，只不过是全英文，中文资料比较少。如果项目有要开发头像剪裁上传，那么用rmagic剪裁，paperclip上传是比较好的解决方案。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>friendly_id（friendly_id | RubyGems.org）</p>
+<blockquote>
+<p>现在大部分网站都已经是友好的url地址了，如果你的rails项目还用数字作为id进行查询那就太low了。</p>
+</blockquote>
+</li>
+<li><p>will_paginate（will_paginate）</p>
+<blockquote>
+<p>老版本的will_paginate分业是基于plugin方式的，新版本的will_paginate已经抛弃了这样的做法，转而使用gem的方式。这样一来安装和使用更加方便，配合一些前端的分页加载库，会让分页加载功能开发非常快捷。</p>
+</blockquote>
+</li>
+<li><p>ransack（ransack | RubyGems.org）</p>
+<blockquote>
+<p>搜索功能一般分为分词和不分词的，如果你只想做用户和文章标题检索之类的功能，那么不分词的搜索gem比较合适，类似的gem挺多的，我常用的是这个。</p>
+</blockquote>
+</li>
+<li><p>sunspot（sunspot | RubyGems.org）</p>
+<blockquote>
+<p>接上面，全文搜索的gem也不少，sunspot对于小型项目的话，稍微有些重。如果没有那么多要求的话，sphinx也可以考虑，速度快，占用资源低。</p>
+</blockquote>
+</li>
+<li><p>Geocoder（geocoder | RubyGems.org）</p>
+<blockquote>
+<p>说实话在web上做定位确实比较乏力，尽量还是用手机客户端吧</p>
+</blockquote>
+</li>
+<li><p>puma（puma/puma · GitHub）</p>
+<blockquote>
+<p>对于想要处理并发请求的web项目，Puma 是和 Unicorn相竞争的 Web 服务器，它能够处理并发请求。Puma 使用线程，以及工作者进程，能够更多的利用可用的 CPU。在 Puma 中，如果整个基础代码是线程安全的，那么你可用利用线程。否则，在使用 Puma 的时候，你只能使用工作者进程进行拓展。Puma的设置也比较简单，官方有详细的使用文档，RubyChina也使用Puma，个人推荐。</p>
+</blockquote>
+</li>
+<li><p>Emoji（wpeterson/emoji · GitHub）</p>
+<blockquote>
+<p>现在只要涉及社交的项目估计很少有不用表情的了，Emoji是个集成度比较高的Emoji表情转码库，使用方便，当然大部分情况下还是要配合前端使用。</p>
+</blockquote>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/Rails%E5%A5%BD%E7%94%A8%E7%9A%84gem%E5%8C%85/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Rails对测试数据库的操作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/Rails%E5%AF%B9%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C/">Rails对测试数据库的操作</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/Rails%E5%AF%B9%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Rails-对测试数据库的操作"><a href="#Rails-对测试数据库的操作" class="headerlink" title="Rails 对测试数据库的操作"></a>Rails 对测试数据库的操作</h2><pre><code class="ruby">bundle exec rake db:drop RAILS_ENV=test
+bundle exec rake db:create RAILS_ENV=test
+bundle exec rake db:schema:load RAILS_ENV=test</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/Rails%E5%AF%B9%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C/">展开全文 >></a>
         </p>
       
 
@@ -993,7 +1212,7 @@ io.close</code></pre>
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1037,12 +1256,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1088,6 +1308,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1097,10 +1321,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1116,7 +1336,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1124,19 +1344,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1152,15 +1360,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1184,19 +1392,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1216,15 +1420,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1232,11 +1432,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1245,6 +1453,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1257,10 +1473,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1288,6 +1500,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1297,10 +1513,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1316,15 +1528,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1337,6 +1553,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1353,14 +1573,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1408,6 +1620,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -1417,10 +1633,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1452,15 +1664,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1476,11 +1696,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1488,15 +1704,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1508,11 +1720,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1524,10 +1740,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1536,11 +1748,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1576,18 +1788,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1596,7 +1796,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>

@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -132,430 +132,6 @@
           </div>
           <div id="js-content" class="content-ll">
             
-  
-    <article id="post-Rails连接多个数据库" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/03/Rails%E8%BF%9E%E6%8E%A5%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/">Rails连接多个数据库</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/03/Rails%E8%BF%9E%E6%8E%A5%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/" class="archive-article-date">
-  	<time datetime="2019-04-03T03:48:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>假如已经连接的的数据库名是 <code>word_development</code>, 现在需要添加一个名为 <code>trademark_development</code> 和 <code>trademark_test</code> 的本地数据库</p>
-<p>步骤如下:</p>
-<h3 id="添加配置信息"><a href="#添加配置信息" class="headerlink" title="添加配置信息"></a>添加配置信息</h3><p>在 <code>config/database.yml</code> 添加如下信息</p>
-<pre><code class="yml">trademark_default: &amp;trademark_default
-  adapter: postgresql
-  encoding: unicode
-  pool: &lt;%= ENV.fetch(&quot;RAILS_MAX_THREADS&quot;) { 5 } %&gt;
-
-trademark_development:
-  &lt;&lt;: *trademark_default
-  database: trademark_development
-
-  # 如果是远程的数据库添加如下信息
-  #username: username
-  #password: 123456
-  #host: xxxx
-  #port: xxx
-
-trademark_test:
-  &lt;&lt;: *trademark_default
-  database: trademark_test</code></pre>
-<h3 id="关联-model"><a href="#关联-model" class="headerlink" title="关联 model"></a>关联 model</h3><p>模仿 <code>ApplicationRecord</code> 这个抽象类，新建一个 <code>TrademarkBase</code> 抽象类，然后指明这个类连接的数据库的配置</p>
-<pre><code class="ruby">class TrademarkBase &lt; ActiveRecord::Base
-  self.abstract_class = true
-  establish_connection &quot;trademark_#{Rails.env}&quot;.to_sym
-end</code></pre>
-<h3 id="继承抽象类"><a href="#继承抽象类" class="headerlink" title="继承抽象类"></a>继承抽象类</h3><p>新建的 model 继承该类，然后指定表名</p>
-<pre><code class="ruby">class TrademarkUser &lt; TrademarkBase
-  self.table_name = :users
-end</code></pre>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>进入控制台中</p>
-<pre><code class="txt">pry(main)&gt; TrademarkUser
-=&gt; TrademarkUser (call &#39;TrademarkUser.connection&#39; to establish a connection)</code></pre>
-<p>可以看到成功关联另一个数据库中的表对象</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/03/Rails%E8%BF%9E%E6%8E%A5%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-快速搜索所有常见文档" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/30/%E5%BF%AB%E9%80%9F%E6%90%9C%E7%B4%A2%E6%89%80%E6%9C%89%E5%B8%B8%E8%A7%81%E6%96%87%E6%A1%A3/">快速搜索所有常见文档</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/30/%E5%BF%AB%E9%80%9F%E6%90%9C%E7%B4%A2%E6%89%80%E6%9C%89%E5%B8%B8%E8%A7%81%E6%96%87%E6%A1%A3/" class="archive-article-date">
-  	<time datetime="2019-03-30T03:55:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为一个程序员会查阅 api 文档是一项必备的技能，下面就来看看如何快速的查阅常用的文档</p>
-<p>有一个在线的 API 文档 <a href="https://devdocs.io/" target="_blank" rel="noopener">https://devdocs.io/</a> ，这里集成了大多数语言的文档，本身查阅就已经非常方便了，还可以利用谷歌搜索让查阅更加快捷</p>
-<p>以 ruby 为例</p>
-<p>打开 <a href="https://devdocs.io/" target="_blank" rel="noopener">devdocs.io</a> ,点击搜索框右边的菜单，然后点击 Preference，找到 ruby 语言，选择一个版本，就会自动下载该语言的文档了</p>
-<ol>
-<li>右键谷歌搜索框,点击修改搜索引擎</li>
-</ol>
-<p><img src="https://i.loli.net/2019/03/30/5c9ee8d51c8e0.png?filename=1553918110.png" alt="1553918110.png"></p>
-<ol start="2">
-<li>点击添加按钮</li>
-</ol>
-<p><img src="https://i.loli.net/2019/03/30/5c9ee9dfdc352.png?filename=1553918375.png" alt="1553918375.png"></p>
-<ol start="3">
-<li>如上图示例，在文本框内输入相应字段，点击保存即可</li>
-</ol>
-<p>下面我们在地址栏中输入 ruby ,然后按一个空格，地址栏发生如下变化</p>
-<p><img src="https://i.loli.net/2019/03/30/5c9eea81319e7.png?filename=1553918575.png" alt="1553918575.png"></p>
-<p>然后我们查询 <code>compact</code> 的用法，继续在地址栏输入 compact ,回车,就会跳到 devdocs.io 网站内，并自动搜索 ruby 下的 compact 方法,如下</p>
-<p><img src="https://i.loli.net/2019/03/30/5c9eeb31c44b0.png?filename=1553918682.png" alt="1553918682.png"></p>
-<p>其他的文档类似</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">API</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/%E5%BF%AB%E9%80%9F%E6%90%9C%E7%B4%A2%E6%89%80%E6%9C%89%E5%B8%B8%E8%A7%81%E6%96%87%E6%A1%A3/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-触发器创建示例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/30/%E8%A7%A6%E5%8F%91%E5%99%A8%E5%88%9B%E5%BB%BA%E7%A4%BA%E4%BE%8B/">触发器创建示例</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/30/%E8%A7%A6%E5%8F%91%E5%99%A8%E5%88%9B%E5%BB%BA%E7%A4%BA%E4%BE%8B/" class="archive-article-date">
-  	<time datetime="2019-03-30T01:15:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>摘抄自 《posrgreSQL 修炼之道 从小工到专家》</p>
-</blockquote>
-<p>触发器（trigger）是一种由事件自动触发执行的特殊的存储过程，这些事件可以是对一个表进行 INSERT,UPDATE,DELETE 等操作</p>
-<p>触发器经常用于加强数据库的完整性约束和业务规则上的约束等</p>
-<h3 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h3><p>创建触发器的语法如下</p>
-<pre><code class="sql">CREATE [ CONSTRAINT ] TRIGGER name { BEFORE | AFTER | INSTEAD OF } { event [ OR ... ] }
-    ON table_name
-    [ FROM referenced_table_name ]
-    [ NOT DEFERRABLE | [ DEFERRABLE ] [ INITIALLY IMMEDIATE | INITIALLY DEFERRED ] ]
-    [ REFERENCING { { OLD | NEW } TABLE [ AS ] transition_relation_name } [ ... ] ]
-    [ FOR [ EACH ] { ROW | STATEMENT } ]
-    [ WHEN ( condition ) ]
-    EXECUTE PROCEDURE function_name ( arguments )</code></pre>
-<h3 id="创建触发器的步骤"><a href="#创建触发器的步骤" class="headerlink" title="创建触发器的步骤"></a>创建触发器的步骤</h3><ul>
-<li>创建执行函数</li>
-</ul>
-<p>先为触发器创建一个执行函数，此函数的返回类型为触发器类型，然后即可创建相应的触发器</p>
-<p>下面使用一个例子来讲解触发器的使用，假设有一张学生表（student），和一张考试成绩表（score）</p>
-<pre><code class="sql">CREATE TABLE student(
-    student_no int primary key,
-    student_name varchar(40),
-    age int
-)
-
-CREATE TABLE score(
-    student_no int,
-    chinese_no int,
-    math_score int,
-    test_date date
-)</code></pre>
-<p>如果想删除学生表的一条记录时，把这个学生在成绩表中的成绩也删除掉，这时就可以使用触发器。先建触发器的执行函数：</p>
-<pre><code class="sql">CREATE OR REPLACE FUNCTION student_delete_trigger()
-RETURNS TRIGGER AS $$
-BEGIN
-    DELETE FROM score WHERE student_no = OLD.student_no;
-    RETURN OLD;
-END;
-$$
-LANGUAGE plpgsql;</code></pre>
-<ul>
-<li>创建触发器</li>
-</ul>
-<pre><code class="sql">CREATE TRIGGER delete_student_trigger
-    AFTER DELETE ON student
-    FOR EACH ROW EXECUTE PROCEDURE student_delete_trigger();</code></pre>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>按照上面的语句创建好触发器后还需要相应的测试，先插入一些测试数据：</p>
-<pre><code class="sql">INSERT INTO student VALUES(1, &#39;张三&#39;, 14);
-INSERT INTO student VALUES(2, &#39;李四&#39;, 13);
-INSERT INTO student VALUES(3, &#39;王二&#39;, 15);
-
-INSERT INTO score VALUES(1, 85, 75, date &#39;2013-05-23&#39;);
-INSERT INTO score VALUES(1, 89, 73, date &#39;2013-09-18&#39;);
-INSERT INTO score VALUES(2, 68, 83, date &#39;2013-05-23&#39;);
-INSERT INTO score VALUES(2, 73, 85, date &#39;2013-09-18&#39;);
-INSERT INTO score VALUES(3, 72, 79, date &#39;2013-05-23&#39;);
-INSERT INTO score VALUES(3, 78, 82, date &#39;2013-05-23&#39;);</code></pre>
-<p>现在把学好为 3 的学生 “王二” 从表 “student” 删掉：</p>
-<pre><code class="sql">DELETE FROM stduent WHERE student_no = 3;</code></pre>
-<p>这时可以查询成绩表 ‘score’ 可以发现学号（student_no ） 为 3 的学生成绩记录也被删除掉了</p>
-<h3 id="语句级触发器与行级触发器"><a href="#语句级触发器与行级触发器" class="headerlink" title="语句级触发器与行级触发器"></a>语句级触发器与行级触发器</h3><h4 id="语句级触发器"><a href="#语句级触发器" class="headerlink" title="语句级触发器"></a>语句级触发器</h4><p>语句级触发器是指执行每个 SQL 时，只执行一次，行级触发器是指每行就会执行一次。一个修改 0 行的操作任然会导致合适的语句级触发器被执行。下面来看看相应的示例。</p>
-<p>假设对 student 的更新情况记录 log。可以为 student 建一张 log 表，如下：</p>
-<pre><code class="sql">CREATE TABLE log_student(
-    update_time timetamp, --操作的时间
-    db_user varchar(40), --操作的数据库用户名
-    opr_type varchar(6), --操作类型：insert delete udate
-);</code></pre>
-<p>创建记录 log 的触发器函数：</p>
-<pre><code class="sql">CREATE FUNCTION log_student_trigger()
-RETURNS trigger AS
-$$
-BEGIN
-    INSERT INTO log_student values(now(), user, TG_OP);
-    RETURN NULL;
-END;
-$$
-LANGUAGE &quot;plpgsql&quot;;</code></pre>
-<p>上面函数中的 “TG_OP” 是触发器中的特殊变量，代表 DML 操作类型。</p>
-<p>然后在 student 表上创建一个语句级触发器：</p>
-<pre><code class="sql">CREATE TRIGGER log_student_trigger
-    AFTER INSERT OR UPDATE OR DELETE ON student
-    FOR STATEMENT
-    EXECUTE PROCEDURE log_student_trigger();</code></pre>
-<ul>
-<li>删除触发器</li>
-</ul>
-<pre><code class="sql">drop trigger log_student_log on student;</code></pre>
-<p><strong>语句级触发器即使在没有更新到数据时，也会被触发</strong></p>
-<h4 id="行级触发器"><a href="#行级触发器" class="headerlink" title="行级触发器"></a>行级触发器</h4><pre><code class="sql">CREATE TRIGGER log_student_trigger_2
-    AFTER INSERT OR UPDATE OR DELETE ON student
-    FOR ROW
-    EXECUTE PROCEDURE log_student_trigger();</code></pre>
-<p><strong>行级触发器即使在没有更新到数据时，不会被触发</strong></p>
-<h3 id="BEFORE-触发器和-AFTER-触发器"><a href="#BEFORE-触发器和-AFTER-触发器" class="headerlink" title="BEFORE 触发器和 AFTER 触发器"></a>BEFORE 触发器和 AFTER 触发器</h3><p>通常，语句级别的 “before” 触发器是在语句开始做任何事之前被触发，而语句级别的”after” 触发器是在语句结束时才触发的。行级别的”before” 触发器是在对特定行进行操作之前触发的，而行级别的 “after” 触发器是在语句结束时才触发的，但是它会在任何语句级别的 “after” 触发器被触发之前触发</p>
-<p>BEFORE 触发器可以直接修改 “NEW” 值以改变实际更新的值，具体例子如下：</p>
-<p>先建一个触发器函数：</p>
-<pre><code class="sql">CREATE FUNCTION student_new_name_trigger()
-RETURNS trigger AS &#39;
-BEGIN
-    NEW.student_name = NEW.student_name || NEW.student_no;
-    RETURN NEW;
-END;
-&#39;
-LANGUAGE &quot;plpgsql&quot;;</code></pre>
-<p>这个函数的作用是，插入或者更新时，在 “student_name” 后面加上 “student_no” 学号。也就是直接修改 “NEW.student_name” ,语句如下：</p>
-<pre><code class="sql">NEW.student_name = NEW.student_name||NEW.student_no</code></pre>
-<p>在这中情况下只能使用 BEFORE 触发器，因为 BEFORE 触发器是在更新数据之前触发的，所以这时修改了”NEW.student_name”, 后面实际更新到数据库中的值就变成了 “student_name||student_no”</p>
-<p>如果使用了 AFTER ，则修改 “NEW” 是没用的</p>
-<h3 id="删除触发器"><a href="#删除触发器" class="headerlink" title="删除触发器"></a>删除触发器</h3><p>删除触发器的语法如下：</p>
-<p>DROP TRIGGER [ IF EXISTS ] name ON table [CASCADE | RESTRICT ];</p>
-<p>其中的语法说明如下。</p>
-<ul>
-<li>IF EXISTS: 如果指定的触发器不存在，那么发出一个 notice 而不是跑出一个错误</li>
-<li>CASCADE: 级联删除依赖此触发器的对象</li>
-<li>RESTRICT: 这是默认值，如果有任何依赖对象存在，那么拒绝删除</li>
-</ul>
-<p>*<em>在 PostgresSQL 中要在删除触发器的语法中指定 “ON table”，而在其他一些数据库的语发可能直接是 “DROP TRIGGER name” *</em></p>
-<p><strong>删除触发器时，触发器的函数不会被删除。不过，当表删除时，表上的触发器也会被删除</strong></p>
-<h3 id="触发器的行为"><a href="#触发器的行为" class="headerlink" title="触发器的行为"></a>触发器的行为</h3><p>触发器函数与返回值。<strong>语句级触发器总是返回 NULL</strong>。 即必须显式的在触发器函数中写上 “RETURN NULL”, 如果没有写，将导致出错。</p>
-<p>对于 “BEFORE” 和 “INSTEAD OF” 这类行级触发器函数来说，如果返回的是 NULL， 则表示忽略对当前行的操作，如果返回的是非 NULL 行，对与 INSERT 和 UPDATE 来说，返回的行将成为被插入的行或将要是更新的行。</p>
-<p>对于　 AFTER 这类行级触发器来说，其返回值将会被忽略。</p>
-<p>如果同一时间上有多个触发器，则将按触发器名字的顺序来触发。　如果是　“BEFORE” 和　“INTEAD OF” 行级触发器，每个触发器所返回的行（可能已经被修改）将成为下一个触发器的输入，如果”BEFORE” 和　“INSTEAD OF” 行级触发器返回的内容为空，那么该行上的其他行级触发器也不会被触发。</p>
-<h3 id="触发器函数中的特殊变量"><a href="#触发器函数中的特殊变量" class="headerlink" title="触发器函数中的特殊变量"></a>触发器函数中的特殊变量</h3><p>当把一个 PL/pgSQL 函数当做触发器函数调用的时候，系统会在顶层生命字段里自动创建几个特殊变量，比如在之前的几个例子当中　“NEW”, “OLD”, “TG_OP”, 变量等。可以使用的变量如下这些：</p>
-<ul>
-<li><p>NEW: 该变量为 INSERT/UPDATE 操作触发的行级触发器中存储的新数据行，数据类型是　“RECORD” ,在语句级别的触发器里没有分配次变量，　 DELETE 操作触发的行级触发器中也没有分配此变量</p>
-</li>
-<li><p>OLD：数据类型是 record。在 update、delete 操作触发时存储旧的数据行。</p>
-</li>
-<li><p>TG_NAME：数据类型是 name。触发器名称。</p>
-</li>
-<li><p>TG_WHEN：内容为”BEFORE”或“AFTER”，可以用来判断是 BEFORE 触发器还是 AFTER 触发器。</p>
-</li>
-<li><p>TG_LEVEL：内容为“ROW”或“STATEMENT”，可以用来判断是语句级触发器还是行级触发器。</p>
-</li>
-<li><p>TG_OP：内容为“INSERT”、“UPDATE”、“DELETE”、“TRUNCATE”，用于指定 DML 语句类型。</p>
-</li>
-<li><p>TG_RELID：触发器所在表的 oid。</p>
-</li>
-<li><p>TG_TABLE_NAME：触发器所在表的表名称。</p>
-</li>
-<li><p>TG_SCHEMA_NAME：触发器所在表的模式。</p>
-</li>
-<li><p>TG_NARGS：在创建触发器语句中赋予触发器过程的参数个数。</p>
-</li>
-<li><p>TG_ARGV[]：text 类型的一个数组。创建触发器语句中指定的参数。</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SQL</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">触发器</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/30/%E8%A7%A6%E5%8F%91%E5%99%A8%E5%88%9B%E5%BB%BA%E7%A4%BA%E4%BE%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
     <article id="post-postgresql中文模糊查询性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1469,9 +1045,271 @@ sudo chmod 700 data</code></pre>
 
 
   
+    <article id="post-Linux_shadowsocks代理转化为Http代理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/14/Linux_shadowsocks%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8C%96%E4%B8%BAHttp%E4%BB%A3%E7%90%86/">Linux_shadowsocks代理转化为Http代理</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/14/Linux_shadowsocks%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8C%96%E4%B8%BAHttp%E4%BB%A3%E7%90%86/" class="archive-article-date">
+  	<time datetime="2019-02-14T09:09:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装-polipo"><a href="#安装-polipo" class="headerlink" title="安装 polipo"></a>安装 polipo</h3><pre><code class="shell">yay -s polipo</code></pre>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>打开 <code>/etc/polipo/config</code> 添加如下配置</p>
+<pre><code class="config">proxyAddress = &quot;0.0.0.0&quot;  # 监听地址
+socksParentProxy = &quot;127.0.0.1:1080&quot;  # socks 代理地址
+socksProxyType = socks5  # 类型
+proxyPort = 8118 # 设置端口</code></pre>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><pre><code class="ruby">curl --proxy http://127.0.0.1:8118 http://ip.gs</code></pre>
+<p>输出</p>
+<pre><code class="txt">Current IP / 当前 IP: xxxxx
+ISP / 运营商: it7.net leaseweb.com
+City / 城市: Los Angeles California
+Country / 国家: United States</code></pre>
+<p>示例：</p>
+<p><img src="https://i.loli.net/2019/02/14/5c65324b1c1d1.png?filename=1550135740.png" alt="1550135740.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">proxy</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/14/Linux_shadowsocks%E4%BB%A3%E7%90%86%E8%BD%AC%E5%8C%96%E4%B8%BAHttp%E4%BB%A3%E7%90%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux_截图工具shutter" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/14/Linux_%E6%88%AA%E5%9B%BE%E5%B7%A5%E5%85%B7shutter/">Linux_截图工具shutter</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/14/Linux_%E6%88%AA%E5%9B%BE%E5%B7%A5%E5%85%B7shutter/" class="archive-article-date">
+  	<time datetime="2019-02-14T09:05:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code class="shell">yay -s shutter</code></pre>
+<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><pre><code class="shell">yay -s perl-goo-canvas # 使用编辑图片功能</code></pre>
+<h3 id="快捷键脚本运行"><a href="#快捷键脚本运行" class="headerlink" title="快捷键脚本运行"></a>快捷键脚本运行</h3><pre><code class="ruby">
+#!/usr/bin/ruby
+# shutter 默认复制了图片到剪切板
+# require &quot;clipboard&quot;
+name = Time.now.to_i.to_s + &quot;.png&quot;
+`shutter -s -o ~/图片/#{name}`
+# Clipboard.copy(&quot;/home/mc/图片/#{name}&quot;)</code></pre>
+<h4 id="博客截图专用"><a href="#博客截图专用" class="headerlink" title="博客截图专用"></a>博客截图专用</h4><pre><code class="ruby">#!/usr/bin/ruby
+# 本来想复制文件名到剪切板，与原来的功能冲突了
+# shutter 默认复制了图片到剪切板
+picture_path = &quot;#{ENV[&quot;HOME&quot;]}/blog/picture/&quot;
+`mkdir -p #{picture_path}` unless Dir.exist?(picture_path)
+name = &quot;#{picture_path}#{Time.now.to_i.to_s}.png&quot;
+`shutter -s -o #{name}`</code></pre>
+<p>将以上保存脚本，系统添加快捷键运行此脚本</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">shutter</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/14/Linux_%E6%88%AA%E5%9B%BE%E5%B7%A5%E5%85%B7shutter/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-arch自动挂载硬盘" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/14/arch%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD%E7%A1%AC%E7%9B%98/">arch自动挂载硬盘</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/14/arch%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD%E7%A1%AC%E7%9B%98/" class="archive-article-date">
+  	<time datetime="2019-02-14T08:57:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本机是双硬盘，系统在固态中装着，每次开机需要手动挂载机械硬盘，很是麻烦。</p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><h3 id="安装ntfs-3g"><a href="#安装ntfs-3g" class="headerlink" title="安装ntfs-3g"></a>安装ntfs-3g</h3><pre><code class="shell">sudo pacman -S ntfs-3g</code></pre>
+<h3 id="修改fstab"><a href="#修改fstab" class="headerlink" title="修改fstab"></a>修改fstab</h3><pre><code class="shell">sudo vim /etc/fstab</code></pre>
+<pre><code class="config">#
+# /etc/fstab: static file system information
+#
+# &lt;file system&gt;    &lt;dir&gt;    &lt;type&gt;    &lt;options&gt;    &lt;dump&gt;    &lt;pass&gt;
+/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+/dev/sda1       /mnt/tmp ntfs-3g defaults 0 0</code></pre>
+<p>说明，把/dev/sda1 挂在到/mnt/tmp 目录下，type为ntfs-3g</p>
+<p>示例：</p>
+<p><img src="https://i.loli.net/2019/02/14/5c652d91f0f7b.png?filename=1550134609.png" alt="1550134609.png"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">arch</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/14/arch%E8%87%AA%E5%8A%A8%E6%8C%82%E8%BD%BD%E7%A1%AC%E7%9B%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/11/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/11/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1515,12 +1353,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1566,6 +1405,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1575,10 +1418,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1594,7 +1433,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1602,19 +1441,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1630,15 +1457,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1662,19 +1489,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1694,15 +1517,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1710,11 +1529,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1723,6 +1550,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1735,10 +1570,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1766,6 +1597,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1775,10 +1610,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1794,15 +1625,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1815,6 +1650,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1831,14 +1670,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1886,6 +1717,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -1895,10 +1730,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1930,15 +1761,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1954,11 +1793,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1966,15 +1801,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1986,11 +1817,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2002,10 +1837,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -2014,11 +1845,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2054,18 +1885,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -2074,7 +1893,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>

@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -133,86 +133,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-rails返回json数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/">rails返回json数据</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">def current_contract
-  respond_to do |format|
-    u = User.where(isCurrentContract: true).first
-    cs = {token: u.address, auction: u.nickname, type: u.email.split(&#39;@&#39;)[0]}
-    format.json { render json: cs.to_json }
-  end
-end</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/rails%E8%BF%94%E5%9B%9Ejson%E6%95%B0%E6%8D%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-rails部署启用es6语法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -220,13 +140,13 @@ end</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/">rails部署启用es6语法</a>
+      <a class="article-title" href="/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/">rails部署启用es6语法</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -250,7 +170,7 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/">展开全文 >></a>
         </p>
       
 
@@ -287,13 +207,13 @@ end</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/rails%E9%AA%8C%E8%AF%81%E7%A0%81/">rails验证码</a>
+      <a class="article-title" href="/2019/10/31/rails%E9%AA%8C%E8%AF%81%E7%A0%81/">rails验证码</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/rails%E9%AA%8C%E8%AF%81%E7%A0%81/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/rails%E9%AA%8C%E8%AF%81%E7%A0%81/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -335,7 +255,7 @@ gem &#39;dalli&#39;</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/rails%E9%AA%8C%E8%AF%81%E7%A0%81/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/rails%E9%AA%8C%E8%AF%81%E7%A0%81/">展开全文 >></a>
         </p>
       
 
@@ -365,129 +285,152 @@ gem &#39;dalli&#39;</code></pre>
 
 
   
-    <article id="post-rails字体加载问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-react_native模态框的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/">rails字体加载问题</a>
+      <a class="article-title" href="/2019/10/31/react_native%E6%A8%A1%E6%80%81%E6%A1%86%E7%9A%84%E4%BD%BF%E7%94%A8/">react_native模态框的使用</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/react_native%E6%A8%A1%E6%80%81%E6%A1%86%E7%9A%84%E4%BD%BF%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
-<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
-<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
-<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
-<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
-<p><strong>The default asset pipeline</strong></p>
-<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
-<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
-<pre><code>|-app/
-|---assets/
-|-----fonts/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
-<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
-<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
-<p><strong>Fonts path in your Sass</strong></p>
-<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
-<pre><code>@font-face {
-    font-family: &#39;icofonts&#39;;
-    src:url(&#39;fonts/icofonts.eot&#39;);
-    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
-        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
-        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
-    font-weight: normal;
-    font-style: normal;
-}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:font-url(&#39;icofonts.eot&#39;);
-  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+        <h4 id="模态框是父容器的一个组件，关闭和显示应该由父容器决定"><a href="#模态框是父容器的一个组件，关闭和显示应该由父容器决定" class="headerlink" title="模态框是父容器的一个组件，关闭和显示应该由父容器决定"></a>模态框是父容器的一个组件，关闭和显示应该由父容器决定</h4><h3 id="父容器"><a href="#父容器" class="headerlink" title="父容器"></a>父容器</h3><p>mapInfo.js</p>
+<pre><code class="js">import BaseModal from &#39;./baseModal&#39;;
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDialogVisible: false,
+      setAlert: {
+        // 向弹出框传递 签到成功或失败的信息
+        alertInfo: &#39;&#39;,
+        // 签到是否成功
+        isSuccess: true
+      }
+    };
+  }
+  showDialog() {
+    this.setState({ isDialogVisible: true });
+  }
 
-  ...
-} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src: url(/assets/icofonts.eot);
-  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
-    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
-    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
-    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
-  font-weight: normal;
-  font-style: normal;
-}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
-<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
-<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/
-|-------fonts/</code></pre><p><strong>The Sass</strong></p>
-<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
-  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
+  hideDialog() {
+    this.setState({ isDialogVisible: false });
+  }
 
-  ...
-}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  // 视图部分
+  &lt;View style={[styles.viewLocation, styles.flex]}&gt;
+    &lt;TouchableOpacity
+      onPress={() =&gt; {
+        this.showDialog();
+          //改变模态对话框内容
+          this.setState({ setAlert: { isSuccess: true, alertInfo: &#39;签到成功 积分 +&#39; + addScore } });
+        }).catch(error =&gt; {
+          this.setState({ setAlert: { isSuccess: false, alertInfo: &#39;签到失败&#39; + &quot;\n&quot; + error } })
+        })
+      }}&gt;
+      &lt;BaseModal
+        hide={() =&gt; { this.hideDialog() }}
+        modalVisible={this.state.isDialogVisible}
+        isSuccess={this.state.setAlert.isSuccess}
+        info={this.state.setAlert.alertInfo}
+      /&gt;
+    &lt;/TouchableOpacity&gt;
+  &lt;/View&gt;</code></pre>
+<h3 id="模态框部分"><a href="#模态框部分" class="headerlink" title="模态框部分"></a>模态框部分</h3><pre><code class="js">import React, {Component} from &#39;react&#39;;
+import {
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Image,
+} from &#39;react-native&#39;;
 
-  ...
-}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
-<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
-<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
-<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
-  ...
-}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
-<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
-<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
-<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
+let Dimensions = require(&#39;Dimensions&#39;);
+let SCREEN_WIDTH = Dimensions.get(&#39;window&#39;).width; //宽
+let SCREEN_HEIGHT = Dimensions.get(&#39;window&#39;).height; //高
+
+export default class ModalDialog extends Component {
+  // 构造
+  constructor(props) {
+    super(props);
+    this.props.modalVisible = false;
+    // 此属性是一个方法
+    this.props.hide = () =&gt; {};
+    this.props.info = &#39;&#39;;
+    this.props.isSuccess = true;
+  }
+
+  render() {
+    return (
+      &lt;Modal
+        visible={this.props.modalVisible}
+        transparent={true}
+        onRequestClose={() =&gt; {}} //如果是Android设备 必须有此方法
+      &gt;
+        &lt;View style={styles.bg}&gt;
+          &lt;View style={styles.dialog}&gt;
+            {/* onPress事件直接与父组件传递进来的属性挂接 */}
+            &lt;TouchableOpacity
+              style={styles.dialogBtnViewItem}
+              onPress={this.props.hide}&gt;
+              &lt;View style={{alignItems: 'center'}}&gt;
+                &lt;Image
+                  style={[styles.icon, {marginBottom: 20}]}
+                  source={
+                    this.props.isSuccess
+                      ? require(&#39;../icons/success.png&#39;)
+                      : require(&#39;../icons/fail.png&#39;)
+                  }
+                /&gt;
+                &lt;Text&gt;{this.props.info}&lt;/Text&gt;
+              &lt;/View&gt;
+            &lt;/TouchableOpacity&gt;
+          &lt;/View&gt;
+        &lt;/View&gt;
+      &lt;/Modal&gt;
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  //全屏显示 半透明 可以看到之前的控件但是不能操作了
+  bg: {
+    backgroundColor: &#39;rgba(52,52,52,0.5)&#39;, //rgba  a0-1  其余都是16进制数
+    justifyContent: &#39;center&#39;,
+    alignItems: &#39;center&#39;,
+    flex: 1,
+  },
+  dialog: {
+    width: SCREEN_WIDTH * 0.65,
+    height: SCREEN_HEIGHT * 0.2,
+    backgroundColor: &#39;white&#39;,
+    justifyContent: &#39;center&#39;,
+    alignContent: &#39;center&#39;,
+    borderRadius: 4,
+  },
+  dialogBtnViewItem: {
+    flex: 1,
+    backgroundColor: &#39;white&#39;,
+    borderRadius: 4,
+    justifyContent: &#39;center&#39;,
+    alignItems: &#39;center&#39;,
+  },
+  icon: {
+    width: 50,
+    height: 50,
+  },
+});</code></pre>
 
       
 
@@ -500,7 +443,7 @@ gem &#39;dalli&#39;</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/react_native%E6%A8%A1%E6%80%81%E6%A1%86%E7%9A%84%E4%BD%BF%E7%94%A8/">展开全文 >></a>
         </p>
       
 
@@ -530,76 +473,61 @@ gem &#39;dalli&#39;</code></pre>
 
 
   
-    <article id="post-rails国际化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-react_native点击空白处输入法隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/rails%E5%9B%BD%E9%99%85%E5%8C%96/">rails国际化</a>
+      <a class="article-title" href="/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/">react_native点击空白处输入法隐藏</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/rails%E5%9B%BD%E9%99%85%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
-<pre><code class="yml">zh-CN:
-  menu:
-    home: &#39;首页&#39;
-    team: &#39;团队&#39;
-    projects: &#39;项目&#39;
-    careers: &#39;招聘&#39;
-    blog: &#39;博客&#39;</code></pre>
-<p>与之对应新建翻译文本<code>en.yml</code><br>文件内容参考如下</p>
-<pre><code class="yml">en:
-  menu:
-    home: &#39;About&#39;
-    team: &#39;Team&#39;
-    projects: &#39;Projects&#39;
-    careers: &#39;Careers&#39;
-    blog: &#39;Blog&#39;</code></pre>
-<h2 id="在console中测试"><a href="#在console中测试" class="headerlink" title="在console中测试"></a>在console中测试</h2><h4 id="查看可用的语言"><a href="#查看可用的语言" class="headerlink" title="查看可用的语言"></a>查看可用的语言</h4><p><code>I18n.available_locales</code></p>
-<h4 id="设置当前语言"><a href="#设置当前语言" class="headerlink" title="设置当前语言"></a>设置当前语言</h4><p><code>I18n.locale = &#39;en&#39;</code></p>
-<h4 id="测试翻译"><a href="#测试翻译" class="headerlink" title="测试翻译"></a>测试翻译</h4><p><code>I18n.t(&#39;menu.home&#39;)</code></p>
-<h2 id="在view中使用"><a href="#在view中使用" class="headerlink" title="在view中使用"></a>在view中使用</h2><pre><code class="erb">&lt;%= t(&quot;menu.home&quot;)%&gt;</code></pre>
-<h2 id="设置网站的语言环境"><a href="#设置网站的语言环境" class="headerlink" title="设置网站的语言环境"></a>设置网站的语言环境</h2><h4 id="view"><a href="#view" class="headerlink" title="view"></a>view</h4><p>在helper中编写生成语言选择的下拉列表框的辅助方法，方便在view中使用，尽量不要把ruby语言部分过多的写在html中</p>
-<pre><code class="ruby">  def language(language_category)
-    case language_category
-    when :&#39;en&#39;
-      &#39;English&#39;
-    when :&#39;zh-CN&#39;
-      &#39;简体中文&#39;
-    end
-  end
+        <h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
+    this.refs.textInput1.blur();
+    this.refs.textInput2.blur();
+  };
 
-  def language_tag
-    request_url = request.url
-    I18n.available_locales.map do |la|
-      content_tag(:li,content_tag(:a ,language(la),href:&quot;#{request_url}?&amp;locale=#{la.to_s}&quot;,data: {remote: true},class:&#39;language&#39;))
-      # &lt;li&gt;&lt;a class=&#39;language&#39; href= &quot;xxxx?&amp;local=en&quot; data-remote=&#39;true&#39;&gt;English&lt;/a&gt;&lt;/li&gt;
-    end.join.html_safe
-  end</code></pre>
-<p>注意<code>content_tag</code>的用法<br>当选择语言时，需要异步提交到后台设置语言环境，然后重新加载本页面</p>
-<h4 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h4><p>每个页面都需要检查一下当前的语言环境，所以在每个页面跳转之前都到先设置正确的语言，因此在<code>ApplicationController</code>中如下</p>
-<pre><code class="ruby">  before_action :set_language
+  render() {
+    return (
+      &lt;TouchableWithoutFeedback
+        style={styles.container}
+        onPress={() =&gt; {
+          this.hideInputBox();
+        }}
+      &gt;
+        &lt;View style={styles.container}&gt;
+          &lt;View style={styles.inputGroup}&gt;
 
-  def set_language
-    session[:locale] = params[:locale] if params[:locale]
-    I18n.locale = session[:locale] || I18n.default_locale
-  end</code></pre>
-<h4 id="刷新当前页面"><a href="#刷新当前页面" class="headerlink" title="刷新当前页面"></a>刷新当前页面</h4><p>由于是异步提交到后台中，所以页面不会刷新。对语言选择的超链接添加<code>ajax:success</code>监听，当成功设置语言环境后，使用前端的方法刷新本页面</p>
-<pre><code class="javascript">function set_language(){
-  $(&quot;.language&quot;).on(&#39;ajax:success&#39;, function(event, data, status, xhr) {
-    location.reload();
-  });</code></pre>
+            &lt;TextInput
+              ref=&quot;textInput1&quot;
+            /&gt;
+          &lt;/View&gt;
+          &lt;View style={[styles.inputGroup]}&gt;
+            &lt;TextInput
+              ref=&quot;textInput2&quot;
+            /&gt;
+          &lt;/View&gt;
+        &lt;/View&gt;
+      &lt;/TouchableWithoutFeedback&gt;
+    );
+    const styles = StyleSheet.create({
+  container: {
+    justifyContent: &quot;center&quot;,
+    flex: 1
+  },
+    })</code></pre>
 
       
 
@@ -612,7 +540,7 @@ gem &#39;dalli&#39;</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/rails%E5%9B%BD%E9%99%85%E5%8C%96/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/">展开全文 >></a>
         </p>
       
 
@@ -649,13 +577,13 @@ gem &#39;dalli&#39;</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/">JQuery为动态添加的元素绑定事件</a>
+      <a class="article-title" href="/2019/10/31/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/">JQuery为动态添加的元素绑定事件</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -678,7 +606,7 @@ gem &#39;dalli&#39;</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/">展开全文 >></a>
         </p>
       
 
@@ -715,13 +643,13 @@ gem &#39;dalli&#39;</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/Linux%E4%B8%8BLC_ALL=C%E7%9A%84%E5%90%AB%E4%B9%89/">Linux下LC_ALL=C的含义</a>
+      <a class="article-title" href="/2019/10/31/Linux%E4%B8%8BLC_ALL=C%E7%9A%84%E5%90%AB%E4%B9%89/">Linux下LC_ALL=C的含义</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/Linux%E4%B8%8BLC_ALL=C%E7%9A%84%E5%90%AB%E4%B9%89/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/Linux%E4%B8%8BLC_ALL=C%E7%9A%84%E5%90%AB%E4%B9%89/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -801,7 +729,7 @@ LC_ALL=en_US.UTF-8</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/Linux%E4%B8%8BLC_ALL=C%E7%9A%84%E5%90%AB%E4%B9%89/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/Linux%E4%B8%8BLC_ALL=C%E7%9A%84%E5%90%AB%E4%B9%89/">展开全文 >></a>
         </p>
       
 
@@ -838,13 +766,13 @@ LC_ALL=en_US.UTF-8</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/MetaMask/">MetaMask</a>
+      <a class="article-title" href="/2019/10/31/MetaMask/">MetaMask</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/MetaMask/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/MetaMask/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -864,7 +792,7 @@ LC_ALL=en_US.UTF-8</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/MetaMask/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/MetaMask/">展开全文 >></a>
         </p>
       
 
@@ -901,13 +829,13 @@ LC_ALL=en_US.UTF-8</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/Postgres%E5%B0%86%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%88%B6/">Postgres将时间间隔转化为日期制</a>
+      <a class="article-title" href="/2019/10/31/Postgres%E5%B0%86%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%88%B6/">Postgres将时间间隔转化为日期制</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/Postgres%E5%B0%86%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%88%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/Postgres%E5%B0%86%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%88%B6/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -930,7 +858,106 @@ LC_ALL=en_US.UTF-8</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/Postgres%E5%B0%86%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%88%B6/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/Postgres%E5%B0%86%E6%97%B6%E9%97%B4%E9%97%B4%E9%9A%94%E8%BD%AC%E5%8C%96%E4%B8%BA%E6%97%A5%E6%9C%9F%E5%88%B6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-js字符串转时间" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/js%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%97%B6%E9%97%B4/">js字符串转时间</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/js%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%97%B6%E9%97%B4/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><code>new Date(dateString)</code>由于 dateString 不规范，会引起<code>Invalid Date</code>错误<br>dateString 有以下类型</p>
+<pre><code class="js">new Date(&#39;month dd,yyyy hh:mm:ss&#39;);
+new Date(&#39;month dd,yyyy&#39;);
+new Date(yyyy, mth, dd, hh, mm, ss);
+new Date(yyyy, mth, dd);
+new Date(ms);</code></pre>
+<p>month：用英文表示月份名称；</p>
+<p>mth：用整数表示月份；</p>
+<p>dd：表示一个月中的第几天；</p>
+<p>yyyy：四位数表示的年份；</p>
+<p>hh：小时数；</p>
+<p>mm：分钟数；</p>
+<p>ss：秒数；</p>
+<p>ms：毫秒数；</p>
+<h3 id="解决方式如下："><a href="#解决方式如下：" class="headerlink" title="解决方式如下："></a>解决方式如下：</h3><p>dateString = “2019-01-23 15:12:12”</p>
+<pre><code class="js">export default class Utils {
+  static toDate = dateString =&gt; {
+    time = dateString.replace(/-|\s/g, &#39;:&#39;).split(/:/);
+    time = new Date(time[0], time[1] - 1, time[2], time[3], time[4], time[5]);
+    return time;
+  };
+}</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">js</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Date</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/js%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%97%B6%E9%97%B4/">展开全文 >></a>
         </p>
       
 
@@ -967,13 +994,13 @@ LC_ALL=en_US.UTF-8</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/">linux下文件的加密与解密</a>
+      <a class="article-title" href="/2019/10/31/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/">linux下文件的加密与解密</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.046Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.032Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -997,7 +1024,7 @@ LC_ALL=en_US.UTF-8</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/linux%E4%B8%8B%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86/">展开全文 >></a>
         </p>
       
 
@@ -1029,7 +1056,7 @@ LC_ALL=en_US.UTF-8</code></pre>
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1073,12 +1100,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1124,6 +1152,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1133,10 +1165,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1152,7 +1180,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1160,19 +1188,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1188,15 +1204,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1220,19 +1236,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1252,15 +1264,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1268,11 +1276,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1281,6 +1297,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1293,10 +1317,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1324,6 +1344,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1333,10 +1357,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1352,15 +1372,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1373,6 +1397,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1389,14 +1417,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1444,6 +1464,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -1453,10 +1477,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1488,15 +1508,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1512,11 +1540,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1524,15 +1548,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1544,11 +1564,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1560,10 +1584,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1572,11 +1592,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1612,18 +1632,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1632,7 +1640,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>

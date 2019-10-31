@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -132,334 +132,6 @@
           </div>
           <div id="js-content" class="content-ll">
             
-  
-    <article id="post-rails发送qq邮件的配置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/28/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/">rails发送qq邮件的配置</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/28/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/" class="archive-article-date">
-  	<time datetime="2018-11-28T09:26:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>rails 中使用邮件服务是非常方便的，直接加配置文件就可以，参考<a href="https://ruby-china.github.io/rails-guides/action_mailer_basics.html" target="_blank" rel="noopener">指南</a></p>
-<p>qq 邮箱正确的配置如下</p>
-<p>production.rb / development.rb</p>
-<pre><code class="ruby">ActionMailer::Base.delivery_method = :smtp
-config.action_mailer.perform_deliveries = true
-config.action_mailer.raise_delivery_errors = true
-config.action_mailer.default :charset =&gt; &quot;utf-8&quot;
-ActionMailer::Base.smtp_settings = {
-  :address              =&gt; &#39;smtp.qq.com&#39;,
-  :port                 =&gt; 465,
-  :domain               =&gt; &#39;qq.com&#39;,
-  :user_name            =&gt; ENV[&#39;qq_mail_address&#39;]
-  # 授权码
-  :password             =&gt;  ENV[&#39;qq_mail_address&#39;]
-  :authentication       =&gt; &#39;plain&#39;,
-  :ssl =&gt; true,
-  :enable_starttls_auto =&gt; true
-}</code></pre>
-<p>切记，qq 邮箱后台要开启 POP3/SMTP 服务，开启的时候需要通过发送短信息启用，启用的时候会生成一个授权码，配置文件的 password 只需要填写授权码即可。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">email</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/28/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-括号中的可选与必选的表示方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/25/%E6%8B%AC%E5%8F%B7%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E4%B8%8E%E5%BF%85%E9%80%89%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95/">括号中的可选与必选的表示方法</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/25/%E6%8B%AC%E5%8F%B7%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E4%B8%8E%E5%BF%85%E9%80%89%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95/" class="archive-article-date">
-  	<time datetime="2018-11-25T15:57:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>[]：内的内容意思是：可写可不写<br>例如：/home 下就一个 list 文件，使用 ls –help 中的 Usage: ls [OPTION]… [FILE]…</li>
-<li>{}：那就必须要在{}内给出的选择里选一个。</li>
-<li>&lt; &gt;：表示必选</li>
-</ol>
-<h3 id="在数据库中"><a href="#在数据库中" class="headerlink" title="在数据库中"></a>在数据库中</h3><p>大写  Transact-SQL  关键字。</p>
-<p>斜体  Transact-SQL  语法中用户提供的参数。</p>
-<p>| （竖线）  分隔括号或大括号内的语法项目。只能选择一个项目。</p>
-<p>[ ] （方括号）  可选语法项目。不必键入方括号。</p>
-<p>{}（大括号）  必选语法项。不要键入大括号。</p>
-<p>[ ,…n ]  表示前面的项可重复  n  次。每一项由逗号分隔。</p>
-<p>[ …n ]  表示前面的项可重复  n  次。每一项由空格分隔。</p>
-<p>加粗   数据库名、表名、列名、索引名、存储过程、实用工具、数据类型名以及必须按所显示的原样键入的文本。</p>
-<h3 id="命令行语法字符"><a href="#命令行语法字符" class="headerlink" title="命令行语法字符"></a>命令行语法字符</h3><p>在命令行语法中，某些字符与格式有着特殊的意义与含义。 本文档中的命令行语法使用以下字符格式：</p>
-<ul>
-<li>方括号 [ ]</li>
-</ul>
-<p>方括号 ( [ ] ) 表示里面的元素（参数、值或信息）是可选的。 您可以选择一个或多个条目，也可以不选。 不要将方括号本身也输入到命令行中。</p>
-<p>示例：[global options]、[source arguments]、[destination arguments]</p>
-<ul>
-<li>尖括号 &lt; &gt;<br>尖括号 ( &lt; &gt; ) 表示里面的元素(参数、值或信息）是必需的。 您需要用相应的信息来替换尖括号里面的文本。 不要将尖括号本身也输入到命令行中。</li>
-</ul>
-<p>示例：-f <file name>、-printer <printer name>、-repeat <months> <days> <hours> <minutes>、date access &lt;mm/dd/yyyy&gt;</p>
-<ul>
-<li>省略号 CA ARCserve Backup…<br>由三个句点 ( … ) 组成的省略号含义是“等等”，表示前述元素（参数、值或信息）可以在命令行中多次重复。</li>
-</ul>
-<p>示例：-jobid &lt;job id1, job id2, job id3,…&gt;、[-exitcode &lt;exit code 1&gt;、<exit code2>、<exit code3> …]</p>
-<ul>
-<li>管道 |<br>管道符号（竖线）含义是“或者”，它表示在一个元素内的一个选项。 如果两个参数由管道符号分隔开，您可以选择分隔符左边的元素，也可选择分隔符右边的元素。 在一次命令使用中不可同时选择两个元素。 在方括号中，这些选项是可选的。 在尖括号中，至少需要一个选项。</li>
-</ul>
-<p>示例：-ca_backup [-custom|-rotation|-gfsrotation]、-excludeday &lt;Sun|Mon|Tue|Wed|Thu|Fri|Sat&gt;、-runjob &lt;start|stop&gt;</p>
-<ul>
-<li>斜体<br>斜体文本表示您必须通过相应的值提供的信息。 它是一个要用值来替换的选项或参数。</li>
-</ul>
-<p>示例：-sessionpassword session password、-f <file name>、-printer <printer name></p>
-<p>注意：命令行语法（包括在 UNIX 和 Linux 平台中使用的用户名、密码和文件名）是区分大小写的。 例如，commandline、CommandLine 和 COMMANDLINE 是不一样的。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">tools</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/25/%E6%8B%AC%E5%8F%B7%E4%B8%AD%E7%9A%84%E5%8F%AF%E9%80%89%E4%B8%8E%E5%BF%85%E9%80%89%E7%9A%84%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-postgres系列之用户及权限管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/25/postgres%E7%B3%BB%E5%88%97%E4%B9%8B%E7%94%A8%E6%88%B7%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/">postgres系列之用户及权限管理</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/25/postgres%E7%B3%BB%E5%88%97%E4%B9%8B%E7%94%A8%E6%88%B7%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" class="archive-article-date">
-  	<time datetime="2018-11-25T14:58:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在初始化数据库系统时，有一个预定义的超级用户，这用户的名称与初始化该数据库的操作系统用户名相同，默认是 postgres，在这个超级用户连接数据库，然后创建出更多的用户。</p>
-<h3 id="创建用户和角色"><a href="#创建用户和角色" class="headerlink" title="创建用户和角色"></a>创建用户和角色</h3><p>创建用户与角色的语法如下：</p>
-<pre><code class="sql">CREATE ROLE name [ [ WITH] option [ ... ] ]
-// 或
-
-CREATE ROLE name [ [ WITH] option [ ... ] ]</code></pre>
-<p>在 postgres 中，用户与角色是没有区别的，除了 “CREATE USER” 默认创建出来的用户具有登录（LOGIN）权限，而 “CREATE ROLE”创建出来的用户默认没有登录权限之外，没有任何不同。</p>
-<p>上面的 option 可以是以下内容：</p>
-<ul>
-<li>SUPERUSER | NOSUPERUSER: 表示创建出来的用户是否是超级用户，只能是超级用户才能创建超级用户。</li>
-<li>CREATEDB | NOCREATEDB: 指定创建出来的用户是否具有执行 “CREATE DATABASE”的权限</li>
-<li>CREATEROLE | NOCREATEROLE: 指定创建出来的用户是否具有创建其他角色的权限</li>
-<li>CREATEUSER | NOCREATEUSER: 指定创建出来的用户是否具有创建其他用户的权限</li>
-<li>INHERIT | NOINHERIT: 如果创建的用户拥有某一个或者某几个角色，这是若是指定 INHERIT，则表示用户自动拥有相应角色的权限，否则这个用户没有该角色的权限。</li>
-<li>LOGIN|NOLOGIN：指定创建出来的用户是否有“LOGIN 的权限，可以临时地禁止一个用户的“LOGIN”权限，这时这个用户就不能连接到数据库了。</li>
-<li>CONNECTION LIMIT connlimit：指定该用户可以使用的并发连接数量。默认值是-1， 表示没有限制</li>
-<li>[ENCRYPTED | UNENCRYPTED] PASSWORD ‘password’：用于控制存储在系统表里面的口令是否加密。</li>
-<li>VALID UNTIL ‘timestamp’：密码失效时间，如果不指定这个子句，那么口令将永远有效。</li>
-<li>IN ROLE rolename[，…]：指定用户成为哪些角色的成员，请注意没有任何选项可以把新角色添加为管理员，必须使用独立的 GRANT 命令来做这件事情。</li>
-<li>ROLE rolename[，…]：rolename 将成为这个新建的角色的成员。</li>
-<li>ADMIN rolename[,．．．]：rolename 将有这个新建角色的 WITH ADMIN OPTION 权限。</li>
-</ul>
-<h3 id="权限的管理"><a href="#权限的管理" class="headerlink" title="权限的管理"></a>权限的管理</h3><p>在数据库中，每个数据库的逻辑结构对象（包括数据库）都有一个所有者， 也就是说任何数据库对象都是属于某个用户的，所有者默认就拥有所有权限。所以不需要把 对象的权限再赋给所有者。这也很好理解，自己创建的数据库对象，自己当然有全部的权限 了。当然，所有者出于安全考虑也可以选择废弃一些自己的权限。在 PostsgreSQL 数据库中， 删除一个对象及任意修改它的权力都不能赋予别人，它是所有者固有的，不能被赋予或撤销。 所有者也隐含地拥有把操作该对象的权限赋给别人的权利。</p>
-<p>一个用户的权限分为两类，一类是在创建用户时就指定的权限，这些权限如下：</p>
-<ul>
-<li>超级用户的权限</li>
-<li>创建数据库的权限</li>
-<li>是否允许 LOGIN 的权限</li>
-</ul>
-<p>这些权限是创建用户时指定的，后面可使用 ALTER ROLE 命令来修改。<br>还有一类权限，是由命令 GRANT 和 REVOKE 来管理的，这些权限如下：</p>
-<ul>
-<li>在数据库中创建模式(SCHEMA)</li>
-<li>允许在指定的数据库中创建临时表</li>
-<li>连接某个数据库</li>
-<li>在模式中创建数据库对象，如创建表、视图、函数等 在一些表中做 SELECT、UPDATE、INSERT、DELETE 等操作</li>
-<li>在一张表的具体列上进行 SELECT、UPDATE、INSERT 操作</li>
-<li>对序列进行查询（执行序列的 currval 函数）、使用（执行序列的 currval 函数和 nextval 函数）、更新等操作</li>
-<li>在声明表上创建触发器</li>
-<li>可以把表、索引等建到指定的表空间</li>
-</ul>
-<p>在使用时，需要分清楚上述两类权限，如果要给用户赋予创建数据库的权限，则需要使用“ALTER ROLE”命令，而要给用户赋予创建模式的权限时，需要使用“GRANT”命令。</p>
-<p>“ALTER ROLE”命令的格式如下：<br>ALTER ROLE name [ [ WITH ] option] 命令中的”option’与“CREATEROLE”中的含义相同，这里就不再重复叙述了。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>PostgreSQL 中的权限是按以下几个层次进行管理的：</p>
-<ul>
-<li>首先管理赋在用户特殊属性上的权限，如超级用户的权限、创建数据库的权限、创建 用户的权限、Login 的权限，等等。</li>
-<li>然后是在数据库中创建模式的权限。</li>
-<li>接着是在模式中创建数据库对象的权限，如创建表、创建索引，等等。</li>
-<li>之后是查询表、往表中插人数据、更新表、删除表中数据的权限。</li>
-<li>最后是操作表中某些字段的权限。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">postgres</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/25/postgres%E7%B3%BB%E5%88%97%E4%B9%8B%E7%94%A8%E6%88%B7%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
     <article id="post-ruby_heredoc的用法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1614,9 +1286,296 @@ end</code></pre>
 
 
   
+    <article id="post-vim脚本插件化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/28/vim%E8%84%9A%E6%9C%AC%E6%8F%92%E4%BB%B6%E5%8C%96/">vim脚本插件化</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/28/vim%E8%84%9A%E6%9C%AC%E6%8F%92%E4%BB%B6%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2018-10-28T07:48:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-28</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>日积月累，自己写的 vim 脚本越来越多，大大的方便了日常编写任务，但是这些脚本没有做成插件的形式，导致换一台新机器时，不方便下载使用，下面就介绍一下如何把<br>自己写的脚本做成一个插件，可以在<code>vimrc</code>中使用<code>Plug xxx</code>安装。</p>
+<h3 id="begin"><a href="#begin" class="headerlink" title="begin"></a>begin</h3><ol>
+<li>新建文件夹，命名为<code>vim_script</code></li>
+<li>进入文件价，执行 <code>git init</code>初始化一个仓库</li>
+<li>去 github 新建一个仓库，<code>vim_scipt</code></li>
+<li>设置本地仓库的 remote 信息</li>
+<li>在 vim_script 下新建 autoload 文件夹，把自己写的 vim 脚本放到 autoload 下</li>
+<li>在 vim_script 下新建 plugin 文件夹，新建<code>script.vim</code>(名字随意)，在该文件内设置脚本执行的命令，或者设置执行脚本的快捷键</li>
+</ol>
+<p>如图：</p>
+<p><img src="https://i.loli.net/2018/10/29/5bd692e0333fa.png" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/28/vim%E8%84%9A%E6%9C%AC%E6%8F%92%E4%BB%B6%E5%8C%96/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-gems收集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/25/gems%E6%94%B6%E9%9B%86/">gems收集</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/25/gems%E6%94%B6%E9%9B%86/" class="archive-article-date">
+  	<time datetime="2018-10-25T09:34:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="delayed-job-recurring"><a href="#delayed-job-recurring" class="headerlink" title="delayed_job_recurring"></a><a href="https://github.com/amitree/delayed_job_recurring" target="_blank" rel="noopener">delayed_job_recurring</a></h3><p>有一个写定时任务的神器，比 whenever 好用</p>
+<h3 id="dentaku"><a href="#dentaku" class="headerlink" title="dentaku"></a><a href="https://github.com/rubysolo/dentaku" target="_blank" rel="noopener">dentaku</a></h3><p>数学表达式解析</p>
+<h3 id="ruby2d"><a href="#ruby2d" class="headerlink" title="ruby2d"></a><a href="http://www.ruby2d.com/learn/get-started/" target="_blank" rel="noopener">ruby2d</a></h3>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">gems</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/25/gems%E6%94%B6%E9%9B%86/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vim自定义命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/23/vim%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4/">vim自定义命令</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/23/vim%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+  	<time datetime="2018-10-23T06:29:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>本文章为转载内容，点击查看原文章<a href="https://zhuanlan.zhihu.com/p/27389503" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27389503</a></em></p>
+<p>使用脚本语言，可以更灵活地定制编辑器以完成复杂的任务。</p>
+<h2 id="自定义命令"><a href="#自定义命令" class="headerlink" title="自定义命令"></a><strong>自定义命令</strong></h2><p>Vim 编辑器允许定义自己的命令，我们可以像执行内置命令一样来执行我们自己定义的命令。</p>
+<p>使用以下:command 命令自定义命令：</p>
+<pre><code class="vim">:command Delete_first :1delete</code></pre>
+<p>注意自定义命令的名称，必须以大写字母开头，而且不能包含下划线；如果我们执行:Delete_first 自定义命令，那么 Vim 就会执行:1delete 命令，从而删除第一行。</p>
+<p>可以使用!来强制重新定义同名的自定义命令：</p>
+<pre><code class="text">:command! -nargs=+ Say :echo &lt;args&gt;</code></pre>
+<p>用户定义的命令可以指定一系列的参数，参数的个数由-nargs 选项在命令行中指定。例如定义 Delete_one 命令没有参数：</p>
+<pre><code class="vim">:command Delete_one -nargs=0 1delete</code></pre>
+<p>默认情况下-nargs=0，所以可以省略。其他-nargs 选项值如下：</p>
+<p>-nargs=0 没有参数</p>
+<p>-nargs=1 1 个参数</p>
+<p>-nargs=* 任何个数的参数</p>
+<p>-nargs=? 零个或是一个参数</p>
+<p>-nargs=+ 一个或是更多个参数</p>
+<p>在命令定义中，参数是由关键字<args>指定的：</p>
+<pre><code class="text">:command -nargs=+ Say :echo &quot;&lt;args&gt;&quot;</code></pre>
+<p>输入以下自定义命令：</p>
+<pre><code class="vim">:Say Hello World</code></pre>
+<p>命令的执行结果显示：</p>
+<pre><code class="text">Hello World</code></pre>
+<p>使用-range 选项，可以指定一个范围作为自定义命令的参数。-range 选项值如下：</p>
+<p>-range 允许范围，默认为当前行</p>
+<p>-range=%允许范围，默认为当前文件(while file)</p>
+<p>-range=count 允许范围，单一的数字</p>
+<p>当指定范围之后，就可以用关键字<line1>和<line2>得到这个范围的第一行和最后一行。</p>
+<p>例如以下定义了 SaveIt 命令，用于将指定范围的文件写入文件 save_file：</p>
+<pre><code class="vim">:command -range=% SaveIt :&lt;line1&gt;,&lt;line2&gt;write! save_file</code></pre>
+<p>关键字<f-args>含有与关键字<args>相同的信息，所不同的是它用于调用函数。例如以下自定义命令：</p>
+<pre><code class="text">:command -nargs=* DoIt :call AFunction(&lt;f-args&gt;)</code></pre>
+<p>执行自定义命令：</p>
+<pre><code class="vim">:DoIt a b c</code></pre>
+<p>将会传递参数给调用的函数：</p>
+<pre><code class="vim">:call AFunction(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;)</code></pre>
+<p>其他选项和关键字包括：</p>
+<p>-count=number 指定数量保存在关键字<count>中</p>
+<p>-bang 指定!修饰符存放在关键字<bang>中</p>
+<p>-register 指定寄存器，默认为未命名寄存器，寄存器的定义保存在关键字<register>中</p>
+<p>-bar 其他命令可以用|跟随在此命令之后</p>
+<p>-buffer 命令仅对当前缓冲区有效</p>
+<p>使用以下命令，首先分别创建一个用户自定义命令，然后再将两个命令组合起来。</p>
+<pre><code class="vim">command! -bar DelTab %s/    //
+command! DelLF %s/\n//
+command! FmtCode DelTab|DelLF</code></pre>
+<p>view raw</p>
+<p>ScriptCommandMulti.vim</p>
+<p>hosted with ❤ by</p>
+<p>GitHub</p>
+<h2 id="列示自定义命令"><a href="#列示自定义命令" class="headerlink" title="列示自定义命令"></a><strong>列示自定义命令</strong></h2><p>使用以下命令，可以列出用户定义的命令：</p>
+<pre><code class="vim">:command</code></pre>
+<h2 id="删除自定义命令"><a href="#删除自定义命令" class="headerlink" title="删除自定义命令"></a><strong>删除自定义命令</strong></h2><p>使用以下:delcommand 命令，可以删除用户定义的命令：</p>
+<pre><code class="vim">:delcommand Delete_one</code></pre>
+<p>使用以下命令，清除所有的用户定义的命令：</p>
+<pre><code class="vim">:comclear</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/23/vim%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/13/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/15/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/13/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/15/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1660,12 +1619,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1711,6 +1671,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1720,10 +1684,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1739,7 +1699,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1747,19 +1707,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1775,15 +1723,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1807,19 +1755,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1839,15 +1783,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1855,11 +1795,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1868,6 +1816,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1880,10 +1836,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1911,6 +1863,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1920,10 +1876,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1939,15 +1891,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1960,6 +1916,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1976,14 +1936,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2031,6 +1983,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -2040,10 +1996,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2075,15 +2027,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2099,11 +2059,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2111,15 +2067,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2131,11 +2083,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2147,10 +2103,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -2159,11 +2111,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2199,18 +2151,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -2219,7 +2159,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>

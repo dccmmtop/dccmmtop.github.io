@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -133,34 +133,28 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-adb获取手机应用的apk安装包文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-crontab" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/adb%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%BA%94%E7%94%A8%E7%9A%84apk%E5%AE%89%E8%A3%85%E5%8C%85%E6%96%87%E4%BB%B6/">adb获取手机应用的apk安装包文件</a>
+      <a class="article-title" href="/2019/10/31/crontab/">crontab</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/adb%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%BA%94%E7%94%A8%E7%9A%84apk%E5%AE%89%E8%A3%85%E5%8C%85%E6%96%87%E4%BB%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/crontab/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <ol>
-<li><p>查看手机已经安装的应用<br><code>adb shell pm list packages</code></p>
-</li>
-<li><p>获得安装包的路径<br>假如安装包额名称是 ‘com.reactnativemixedland’<br><code>adb shell pm path com.reactnativemixedland</code></p>
-</li>
-<li><p>将安装包文件导出到计算机<br><code>adb pull apk_path</code></p>
-</li>
-</ol>
+        <h3 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h3><p>Ubuntu安装crontab</p>
+<p><code>apt-get install crontab</code></p>
 
       
 
@@ -173,106 +167,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/adb%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%BA%94%E7%94%A8%E7%9A%84apk%E5%AE%89%E8%A3%85%E5%8C%85%E6%96%87%E4%BB%B6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/blog/">blog</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/blog/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">#!/usr/bin/ruby
-# linux系统安装 ag ,可以利用本脚本在固定的文件下搜索文章,
-# 本地博客检索使用
-re = `ag #{ARGV[0]} ~/blog/`.split(&quot;\n&quot;)
-title = &quot;&quot;
-i = 1
-content = []
-re.each do |r|
-   info =  r.split(/:[0-9]{1,100}:/)
-   if title != info[0]
-     title = info[0]
-     puts &quot;\n\e[1;40;37m#{info[0]}\e[0m  \e[1;43m#{i}\e[0m&quot;
-     content &lt;&lt; &quot;#{info[0]}&quot;
-     i += 1
-   end
-   r =~ /:[0-9]{1,100}:/
-   num = &quot;\t\e[36m#{$&amp;.gsub(/:/,&quot;&quot;)}\e[0m &quot;
-   info[1] =~ /#{ARGV[0]}/i
-   info[1].gsub!(/#{ARGV[0]}/i,&quot;\e[41m#{$&amp;}\e[0m&quot;)
-   puts &quot;#{num}#{info[1]}\n &quot;
- end
-File.open(&quot;/tmp/blogsearch&quot;,&#39;w+&#39;) do |io|
-  content.each do |co|
-    io.puts(co)
-  end
-end</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">diy_script</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/blog/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/crontab/">展开全文 >></a>
         </p>
       
 
@@ -309,13 +204,13 @@ end</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">css定制响应式</a>
+      <a class="article-title" href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">css定制响应式</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -355,224 +250,7 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-crontab" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/crontab/">crontab</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/crontab/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="crontab"><a href="#crontab" class="headerlink" title="crontab"></a>crontab</h3><p>Ubuntu安装crontab</p>
-<p><code>apt-get install crontab</code></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/crontab/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-curl用法指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/curl%E7%94%A8%E6%B3%95%E6%8C%87%E5%8D%97/">curl用法指南</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/curl%E7%94%A8%E6%B3%95%E6%8C%87%E5%8D%97/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>curl 是常用的命令行工具，用来请求 Web 服务器。它的名字就是客户端（client）的 URL 工具的意思。</p>
-<p>它的功能非常强大，命令行参数多达几十种。如果熟练的话，完全可以取代 Postman 这一类的图形界面工具。</p>
-<p>本文介绍它的主要命令行参数，作为日常的参考，方便查阅。内容主要翻译自《curl cookbook》。为了节约篇幅，下面的例子不包括运行时的输出，初学者可以先看我以前写的《curl 初学者教程》。</p>
-<p>不带有任何参数时，curl 就是发出 GET 请求。</p>
-<pre><code>$ curl https://www.example.com</code></pre><p>上面命令向<a href="http://www.example.com发出" target="_blank" rel="noopener">www.example.com发出</a> GET 请求，服务器返回的内容会在命令行输出。</p>
-<p><strong>-A</strong></p>
-<p>-A参数指定客户端的用户代理标头，即User-Agent。curl 的默认用户代理字符串是curl/[version]。</p>
-<pre><code>$ curl -A &#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36&#39; https://google.com</code></pre><p>上面命令将User-Agent改成 Chrome 浏览器。</p>
-<pre><code>$ curl -A &#39;&#39; https://google.com</code></pre><p>上面命令会移除User-Agent标头。</p>
-<p>也可以通过-H参数直接指定标头，更改User-Agent。</p>
-<pre><code>$ curl -H &#39;User-Agent: php/1.0&#39; https://google.com</code></pre><p><strong>-b</strong></p>
-<p>-b参数用来向服务器发送 Cookie。</p>
-<pre><code>$ curl -b &#39;foo=bar&#39; https://google.com</code></pre><p>上面命令会生成一个标头Cookie: foo=bar，向服务器发送一个名为foo、值为bar的 Cookie。</p>
-<pre><code>$ curl -b &#39;foo1=bar&#39; -b &#39;foo2=baz&#39; https://google.com</code></pre><p>上面命令发送两个 Cookie。</p>
-<pre><code>$ curl -b cookies.txt https://www.google.com</code></pre><p>上面命令读取本地文件cookies.txt，里面是服务器设置的 Cookie（参见-c参数），将其发送到服务器。</p>
-<p><strong>-c</strong></p>
-<p>-c参数将服务器设置的 Cookie 写入一个文件。</p>
-<pre><code>$ curl -c cookies.txt https://www.google.com</code></pre><p>上面命令将服务器的 HTTP 回应所设置 Cookie 写入文本文件cookies.txt。</p>
-<p><strong>-d</strong></p>
-<p>-d参数用于发送 POST 请求的数据体。</p>
-<pre><code>$ curl -d&#39;login=emma＆password=123&#39;-X POST https://google.com/login# 或者$ curl -d &#39;login=emma&#39; -d &#39;password=123&#39; -X POST  https://google.com/login</code></pre><p>使用-d参数以后，HTTP 请求会自动加上标头Content-Type : application/x-www-form-urlencoded。并且会自动将请求转为 POST 方法，因此可以省略-X POST。</p>
-<p>-d参数可以读取本地文本文件的数据，向服务器发送。</p>
-<pre><code>$ curl -d &#39;@data.txt&#39; https://google.com/login</code></pre><p>上面命令读取data.txt文件的内容，作为数据体向服务器发送。</p>
-<p><strong>–data-urlencode</strong></p>
-<p>–data-urlencode参数等同于-d，发送 POST 请求的数据体，区别在于会自动将发送的数据进行 URL 编码。</p>
-<pre><code>$ curl --data-urlencode &#39;comment=hello world&#39; https://google.com/login</code></pre><p>上面代码中，发送的数据hello world之间有一个空格，需要进行 URL 编码。</p>
-<p><strong>-e</strong></p>
-<p>-e参数用来设置 HTTP 的标头Referer，表示请求的来源。</p>
-<pre><code>curl -e &#39;https://google.com?q=example&#39; https://www.example.com</code></pre><p>上面命令将Referer标头设为<a href="https://google.com?q=example。" target="_blank" rel="noopener">https://google.com?q=example。</a></p>
-<p>-H参数可以通过直接添加标头Referer，达到同样效果。</p>
-<pre><code>curl -H &#39;Referer: https://google.com?q=example&#39; https://www.example.com</code></pre><p><strong>-F</strong></p>
-<p>-F参数用来向服务器上传二进制文件。</p>
-<pre><code>$ curl -F &#39;file=@photo.png&#39; https://google.com/profile</code></pre><p>上面命令会给 HTTP 请求加上标头Content-Type: multipart/form-data，然后将文件photo.png作为file字段上传。</p>
-<p>-F参数可以指定 MIME 类型。</p>
-<pre><code>$ curl -F &#39;file=@photo.png;type=image/png&#39; https://google.com/profile</code></pre><p>上面命令指定 MIME 类型为image/png，否则 curl 会把 MIME 类型设为application/octet-stream。</p>
-<p>-F参数也可以指定文件名。</p>
-<pre><code>$ curl -F &#39;file=@photo.png;filename=me.png&#39; https://google.com/profile</code></pre><p>上面命令中，原始文件名为photo.png，但是服务器接收到的文件名为me.png。</p>
-<p><strong>-G</strong></p>
-<p>-G参数用来构造 URL 的查询字符串。</p>
-<pre><code>$ curl -G -d &#39;q=kitties&#39; -d &#39;count=20&#39; https://google.com/search</code></pre><p>上面命令会发出一个 GET 请求，实际请求的 URL 为<a href="https://google.com/search?q=kitties&amp;count=20。如果省略--G，会发出一个" target="_blank" rel="noopener">https://google.com/search?q=kitties&amp;count=20。如果省略--G，会发出一个</a> POST 请求。</p>
-<p>如果数据需要 URL 编码，可以结合–data–urlencode参数。</p>
-<pre><code>$ curl -G --data-urlencode &#39;comment=hello world&#39; https://www.example.com</code></pre><p><strong>-H</strong></p>
-<p>-H参数添加 HTTP 请求的标头。</p>
-<pre><code>$ curl -H &#39;Accept-Language: en-US&#39; https://google.com</code></pre><p>上面命令添加 HTTP 标头Accept-Language: en-US。</p>
-<pre><code>$ curl -H &#39;Accept-Language: en-US&#39; -H &#39;Secret-Message: xyzzy&#39; https://google.com</code></pre><p>上面命令添加两个 HTTP 标头。</p>
-<pre><code>$ curl -d &#39;{&quot;login&quot;: &quot;emma&quot;, &quot;pass&quot;: &quot;123&quot;}&#39; -H &#39;Content-Type: application/json&#39; https://google.com/login</code></pre><p>上面命令添加 HTTP 请求的标头是Content-Type: application/json，然后用-d参数发送 JSON 数据。</p>
-<p><strong>-i</strong></p>
-<p>-i参数打印出服务器回应的 HTTP 标头。</p>
-<pre><code>$ curl -i https://www.example.com</code></pre><p>上面命令收到服务器回应后，先输出服务器回应的标头，然后空一行，再输出网页的源码。</p>
-<p><strong>-I</strong></p>
-<p>-I参数向服务器发出 HEAD 请求，然会将服务器返回的 HTTP 标头打印出来。</p>
-<pre><code>$ curl -I https://www.example.com</code></pre><p>上面命令输出服务器对 HEAD 请求的回应。</p>
-<p>–head参数等同于-I。</p>
-<pre><code>$ curl --head https://www.example.com</code></pre><p><strong>-k</strong></p>
-<p>-k参数指定跳过 SSL 检测。</p>
-<pre><code>$ curl -k https://www.example.com</code></pre><p>上面命令不会检查服务器的 SSL 证书是否正确。</p>
-<p><strong>-L</strong></p>
-<p>-L参数会让 HTTP 请求跟随服务器的重定向。curl 默认不跟随重定向。</p>
-<pre><code>$ curl -L -d &#39;tweet=hi&#39; https://api.twitter.com/tweet</code></pre><p><strong>–limit-rate</strong></p>
-<p>–limit-rate用来限制 HTTP 请求和回应的带宽，模拟慢网速的环境。</p>
-<pre><code>$ curl --limit-rate 200k https://google.com</code></pre><p>上面命令将带宽限制在每秒 200K 字节。</p>
-<p><strong>-o</strong></p>
-<p>-o参数将服务器的回应保存成文件，等同于wget命令。</p>
-<pre><code>$ curl -o example.html https://www.example.com</code></pre><p>上面命令将<a href="http://www.example.com保存成example.html。" target="_blank" rel="noopener">www.example.com保存成example.html。</a></p>
-<p><strong>-O</strong></p>
-<p>-O参数将服务器回应保存成文件，并将 URL 的最后部分当作文件名。</p>
-<pre><code>$ curl -O https://www.example.com/foo/bar.html</code></pre><p>上面命令将服务器回应保存成文件，文件名为bar.html。</p>
-<p><strong>-s</strong></p>
-<p>-s参数将不输出错误和进度信息。</p>
-<pre><code>$ curl -s https://www.example.com</code></pre><p>上面命令一旦发生错误，不会显示错误信息。不发生错误的话，会正常显示运行结果。</p>
-<p>如果想让 curl 不产生任何输出，可以使用下面的命令。</p>
-<pre><code>$ curl -s -o /dev/null https://google.com</code></pre><p><strong>-S</strong></p>
-<p>-S参数指定只输出错误信息，通常与-o一起使用。</p>
-<pre><code>$ curl -s -o /dev/null https://google.com</code></pre><p>上面命令没有任何输出，除非发生错误。</p>
-<p><strong>-u</strong></p>
-<p>-u参数用来设置服务器认证的用户名和密码。</p>
-<pre><code>$ curl -u &#39;bob:12345&#39; https://google.com/login</code></pre><p>上面命令设置用户名为bob，密码为12345，然后将其转为 HTTP 标头Authorization: Basic Ym9iOjEyMzQ1。</p>
-<p>curl 能够识别 URL 里面的用户名和密码。</p>
-<pre><code>$ curl https://bob:12345@google.com/login</code></pre><p>上面命令能够识别 URL 里面的用户名和密码，将其转为上个例子里面的 HTTP 标头。</p>
-<pre><code>$ curl -u &#39;bob&#39; https://google.com/login</code></pre><p>上面命令只设置了用户名，执行后，curl 会提示用户输入密码。</p>
-<p><strong>-v</strong></p>
-<p>-v参数输出通信的整个过程，用于调试。</p>
-<pre><code>$ curl -v https://www.example.com</code></pre><p>–trace参数也可以用于调试，还会输出原始的二进制数据。</p>
-<pre><code>$ curl --trace - https://www.example.com</code></pre><p><strong>-x</strong></p>
-<p>-x参数指定 HTTP 请求的代理。</p>
-<pre><code>$ curl -x socks5://james:cats@myproxy.com:8080 https://www.example.com</code></pre><p>上面命令指定 HTTP 请求通过myproxy.com:8080的 socks5 代理发出。</p>
-<p>如果没有指定代理协议，默认为 HTTP。</p>
-<pre><code>$ curl -x james:cats@myproxy.com:8080 https://www.example.com</code></pre><p>上面命令中，请求的代理使用 HTTP 协议。</p>
-<p><strong>-X</strong></p>
-<p>-X参数指定 HTTP 请求的方法。</p>
-<pre><code>$ curl -X POST https://www.example.com</code></pre><p>上面命令对<a href="https://www.example.com发出" target="_blank" rel="noopener">https://www.example.com发出</a> POST 请求。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/curl%E7%94%A8%E6%B3%95%E6%8C%87%E5%8D%97/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">展开全文 >></a>
         </p>
       
 
@@ -609,13 +287,13 @@ end</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">git_status中文文件名编码问题解决</a>
+      <a class="article-title" href="/2019/10/31/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">git_status中文文件名编码问题解决</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -654,7 +332,77 @@ $ git status -s</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-adb获取手机应用的apk安装包文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/adb%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%BA%94%E7%94%A8%E7%9A%84apk%E5%AE%89%E8%A3%85%E5%8C%85%E6%96%87%E4%BB%B6/">adb获取手机应用的apk安装包文件</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/adb%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%BA%94%E7%94%A8%E7%9A%84apk%E5%AE%89%E8%A3%85%E5%8C%85%E6%96%87%E4%BB%B6/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.026Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>查看手机已经安装的应用<br><code>adb shell pm list packages</code></p>
+</li>
+<li><p>获得安装包的路径<br>假如安装包额名称是 ‘com.reactnativemixedland’<br><code>adb shell pm path com.reactnativemixedland</code></p>
+</li>
+<li><p>将安装包文件导出到计算机<br><code>adb pull apk_path</code></p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/adb%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%BA%94%E7%94%A8%E7%9A%84apk%E5%AE%89%E8%A3%85%E5%8C%85%E6%96%87%E4%BB%B6/">展开全文 >></a>
         </p>
       
 
@@ -691,13 +439,13 @@ $ git status -s</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8AHelloWorld%E5%90%88%E7%BA%A6/">智能合约开发环境搭建及HelloWorld合约</a>
+      <a class="article-title" href="/2019/10/31/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8AHelloWorld%E5%90%88%E7%BA%A6/">智能合约开发环境搭建及HelloWorld合约</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8AHelloWorld%E5%90%88%E7%BA%A6/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.043Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8AHelloWorld%E5%90%88%E7%BA%A6/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.022Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -847,7 +595,7 @@ var hello = helloContract.new(
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8AHelloWorld%E5%90%88%E7%BA%A6/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8F%8AHelloWorld%E5%90%88%E7%BA%A6/">展开全文 >></a>
         </p>
       
 
@@ -877,57 +625,59 @@ var hello = helloContract.new(
 
 
   
-    <article id="post-修改postgres的登录密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-为异步提交的表单添加返回成功监听" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">修改postgres的登录密码</a>
+      <a class="article-title" href="/2019/10/31/%E4%B8%BA%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4%E7%9A%84%E8%A1%A8%E5%8D%95%E6%B7%BB%E5%8A%A0%E8%BF%94%E5%9B%9E%E6%88%90%E5%8A%9F%E7%9B%91%E5%90%AC/">为异步提交的表单添加返回成功监听</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/%E4%B8%BA%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4%E7%9A%84%E8%A1%A8%E5%8D%95%E6%B7%BB%E5%8A%A0%E8%BF%94%E5%9B%9E%E6%88%90%E5%8A%9F%E7%9B%91%E5%90%AC/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
-<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
-<blockquote>
-<p><code>local   all             postgres                                peer</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                trust</code></p>
-</blockquote>
+        <h2 id="为异步提交的表单添加返回成功监听"><a href="#为异步提交的表单添加返回成功监听" class="headerlink" title="为异步提交的表单添加返回成功监听"></a>为异步提交的表单添加返回成功监听</h2><ul>
+<li><p>view</p>
+<pre><code class="erb">&lt;%= simple_form_for Photo.new,remote: true,class:&quot;pull-right&quot; do |f|%&gt; 
+   &lt;%= f.file_field :image %&gt;
+   &lt;%= f.submit &quot;提交图片&quot;,class:&#39; btn btn-primary btn-xs submit-picture&#39;%&gt;
+&lt;% end%&gt;</code></pre>
 </li>
-<li><p>restart the server</p>
+<li><p>controller</p>
+<pre><code class="ruby">class PhotosController &lt; ApplicationController
+  def create
+    @pc = Photo.new(image: params[:photo][:image])
+    if @pc.save
+      render json: {url: @pc.image_url}
+    else
+      render json: {:url =&gt; &quot;error&quot;}
+    end
+  end
+end</code></pre>
 </li>
-</ol>
-<blockquote>
-<pre><code>sudo service postgresql restart</code></pre></blockquote>
-<ol start="3">
-<li><p>Login into psql and set your password</p>
-<blockquote>
-<p><code>psql -U postgres</code></p>
-<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
-</blockquote>
+<li><p>coffee</p>
+<pre><code class="coffeescript">$(document).on(&quot;turbolinks:load&quot; ,-&gt;
+  $(&quot;form#new_photo&quot;).on &quot;ajax:success&quot; , (data) -&gt; #异步提交的表单
+    url = data.detail[0].url
+    console.log(url)
+)</code></pre>
+<p>指南示例</p>
+<pre><code class="coffee">$(document).ready -&gt;
+  $(&quot;#new_article&quot;).on(&quot;ajax:success&quot;, (e, data, status, xhr) -&gt;
+    $(&quot;#new_article&quot;).append xhr.responseText
+  ).on &quot;ajax:error&quot;, (e, xhr, status, error) -&gt;
+    $(&quot;#new_article&quot;).append &quot;&lt;p&gt;ERROR&lt;/p&gt;&quot;</code></pre>
 </li>
-</ol>
-<ol start="4">
-<li><p>Finally change the <code>pg_hba.conf</code> </p>
-<blockquote>
-<p><code>local   all             postgres                                trust</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                md5</code>to</p>
-</blockquote>
-</li>
-</ol>
-<p>After restarting the postgresql server, you can access it with your own password</p>
+</ul>
 
       
 
@@ -940,115 +690,7 @@ var hello = helloContract.new(
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-修饰符moifier的作用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">修饰符moifier的作用</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
-<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
-<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
-<pre><code class="js">modifier isOwner() {
-   if (msg.sender != owner) {
-        throw;
-    }
-
-    _; // continue executing rest of method body
-}
-
-doSomething() isOwner { //直接写在方法后面作为函数的一部分
-  // will first check if caller is owner
-
-  // code
-}</code></pre>
-<p>您还可以堆叠多个修改器以简化您的过程</p>
-<pre><code class="js">enum State { Created, Locked, Inactive }
-
-modifier isState(State _state) {
-    require(state == _state);
-
-    _; // run rest of code
-}
-
-modifier cleanUp() {
-    _; // finish running rest of method body
-
-    // clean up code
-}
-
-doSomething() isOwner isState(State.Created) cleanUp {
-  // code
-}</code></pre>
-<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">soliity，contract</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/%E4%B8%BA%E5%BC%82%E6%AD%A5%E6%8F%90%E4%BA%A4%E7%9A%84%E8%A1%A8%E5%8D%95%E6%B7%BB%E5%8A%A0%E8%BF%94%E5%9B%9E%E6%88%90%E5%8A%9F%E7%9B%91%E5%90%AC/">展开全文 >></a>
         </p>
       
 
@@ -1085,13 +727,13 @@ doSomething() isOwner isState(State.Created) cleanUp {
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">以太坊客户端Geth命令用法-参数详解</a>
+      <a class="article-title" href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">以太坊客户端Geth命令用法-参数详解</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.039Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -1225,7 +867,282 @@ help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETH
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-修改postgres的登录密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">修改postgres的登录密码</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
+<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
+<blockquote>
+<p><code>local   all             postgres                                peer</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                trust</code></p>
+</blockquote>
+</li>
+<li><p>restart the server</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>sudo service postgresql restart</code></pre></blockquote>
+<ol start="3">
+<li><p>Login into psql and set your password</p>
+<blockquote>
+<p><code>psql -U postgres</code></p>
+<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
+</blockquote>
+</li>
+</ol>
+<ol start="4">
+<li><p>Finally change the <code>pg_hba.conf</code> </p>
+<blockquote>
+<p><code>local   all             postgres                                trust</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                md5</code>to</p>
+</blockquote>
+</li>
+</ol>
+<p>After restarting the postgresql server, you can access it with your own password</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-修饰符moifier的作用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">修饰符moifier的作用</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
+<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
+<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
+<pre><code class="js">modifier isOwner() {
+   if (msg.sender != owner) {
+        throw;
+    }
+
+    _; // continue executing rest of method body
+}
+
+doSomething() isOwner { //直接写在方法后面作为函数的一部分
+  // will first check if caller is owner
+
+  // code
+}</code></pre>
+<p>您还可以堆叠多个修改器以简化您的过程</p>
+<pre><code class="js">enum State { Created, Locked, Inactive }
+
+modifier isState(State _state) {
+    require(state == _state);
+
+    _; // run rest of code
+}
+
+modifier cleanUp() {
+    _; // finish running rest of method body
+
+    // clean up code
+}
+
+doSomething() isOwner isState(State.Created) cleanUp {
+  // code
+}</code></pre>
+<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">soliity，contract</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-划过父元素时子元素或者兄弟元素更改样式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/">划过父元素时子元素或者兄弟元素更改样式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
+<pre><code class="scss">
+.btn-right:hover{ // .btn-right 是父元素
+    transform: translate(.3rem,0);
+    border-bottom: 1px solid transparent;
+    i{ //i 是 .brn-right 的子元素
+      margin-left: 30px;
+    }
+    ~ .underline{ // .underline 是 .btn-right的兄弟元素
+      width:28%;
+    }
+  }</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/">展开全文 >></a>
         </p>
       
 
@@ -1257,7 +1174,7 @@ help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETH
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1301,12 +1218,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1352,6 +1270,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1361,10 +1283,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1380,7 +1298,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1388,19 +1306,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1416,15 +1322,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1448,19 +1354,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1480,15 +1382,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1496,11 +1394,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1509,6 +1415,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1521,10 +1435,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1552,6 +1462,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1561,10 +1475,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1580,15 +1490,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1601,6 +1515,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1617,14 +1535,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1672,6 +1582,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -1681,10 +1595,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1716,15 +1626,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1740,11 +1658,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1752,15 +1666,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1772,11 +1682,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1788,10 +1702,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1800,11 +1710,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1840,18 +1750,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1860,7 +1758,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>

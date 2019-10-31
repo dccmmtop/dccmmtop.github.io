@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -132,441 +132,6 @@
           </div>
           <div id="js-content" class="content-ll">
             
-  
-    <article id="post-自定义range对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/27/%E8%87%AA%E5%AE%9A%E4%B9%89range%E5%AF%B9%E8%B1%A1/">自定义range对象</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/27/%E8%87%AA%E5%AE%9A%E4%B9%89range%E5%AF%B9%E8%B1%A1/" class="archive-article-date">
-  	<time datetime="2018-09-27T01:10:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>ruby 中有个 range 对象，可以自动推测范围内的数据，比如：</p>
-<pre><code class="ruby">(1..100).each do |i|
-  puts i
-end</code></pre>
-<p>会输出 1 到 100 内的所有数字</p>
-<h3 id="自定义"><a href="#自定义" class="headerlink" title="自定义"></a>自定义</h3><p>如果我们有一个自定义的对象，假如名字为<code>Ym</code></p>
-<pre><code class="ruby">class Ym
-  attr_accessor :year, :month
-  def initialize
-    @year, @month = year, month
-  end
-end</code></pre>
-<p>若是想在<code>Ym</code>上使用<code>((Ym.new(2009,1))..(Ym.new(2010,1))).each {|i| puts i}</code>,输出的结果按照正常的年月逻辑来显示，该如何实现呢？</p>
-<p>其实要实现类似<code>(1..100)</code>的方法很容易，只需在该类中<code>include Compareable</code>然后实现 <code>succ</code>和<code>&lt;=&gt;</code>方法就行了。</p>
-<pre><code class="ruby">class Ym
-  include Comparable
-  attr_accessor :year, :month
-
-  def initialize(year, month)
-    @year, @month = year, month
-  end
-
-  def succ
-    #如果月份满12，则年份增加一，月份再从一开始。
-    # 可以按需求定制更复杂的推测方法
-    yyy, mmm = @month == 12 ? [@year + 1, 1] : [@year, @month + 1]
-    Ym.new(yyy, mmm)
-  end
-
-  def &lt;=&gt;(other)
-    # 定义大小规则
-    (@year * 12 + @month) &lt;=&gt; (other.year * 12 + other.month)
-  end
-
-  def to_s
-    sprintf &quot;%4d-%02d&quot;, @year, @month
-  end
-end
-
-(Ym.new(2008,8)..(Ym.new(2019,9))).each do |y|
-  puts y
-end</code></pre>
-<p>结果如图:</p>
-<p><img src="http://ogbkru1bq.bkt.clouddn.com/1538011494.png" alt=""></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">ruby</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">range</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/27/%E8%87%AA%E5%AE%9A%E4%B9%89range%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-在vim中查看日志--显示ANSI的转义字符" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/26/%E5%9C%A8vim%E4%B8%AD%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97--%E6%98%BE%E7%A4%BAANSI%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/">在vim中查看日志--显示ANSI的转义字符</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/26/%E5%9C%A8vim%E4%B8%AD%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97--%E6%98%BE%E7%A4%BAANSI%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/" class="archive-article-date">
-  	<time datetime="2018-09-26T09:48:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>用 vim 查看日志时，有的查询语句以及其他信息是经过特殊的 ANSI 字符修饰的，如果正常显示可以看出颜色，以及加粗样式。但是，默认没有任何样式，很难分辨,如图：</p>
-<p><img src="http://ogbkru1bq.bkt.clouddn.com/1537955317.png" alt=""></p>
-<h3 id="powerman-vim-plugin-AnsiEsc"><a href="#powerman-vim-plugin-AnsiEsc" class="headerlink" title="powerman/vim-plugin-AnsiEsc"></a>powerman/vim-plugin-AnsiEsc</h3><p>借助此插件可以让转义的字符正常显示</p>
-<p>vim 中执行<code>:AnsiEsc</code></p>
-<p><img src="http://ogbkru1bq.bkt.clouddn.com/1537955874.png" alt=""></p>
-<h3 id="绑定快捷键"><a href="#绑定快捷键" class="headerlink" title="绑定快捷键"></a>绑定快捷键</h3><pre><code class="vim">nnoremap &lt;leader&gt;log :AnsiEsc&lt;cr&gt;</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/26/%E5%9C%A8vim%E4%B8%AD%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97--%E6%98%BE%E7%A4%BAANSI%E7%9A%84%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-命令行工具zsh" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/26/%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7zsh/">命令行工具zsh</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/26/%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7zsh/" class="archive-article-date">
-  	<time datetime="2018-09-26T03:50:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="转载内容"><a href="#转载内容" class="headerlink" title="转载内容"></a>转载内容</h2><pre><code class="txt">请访问文末的“原文链接”获得可点击的文内链接、全尺寸原图和相关文章。
-编译自　|　 https://opensource.com/article/18/9/tips-productivity-zsh
-　作者　|　Ricardo Gerardi
-　译者　|　Y.C.S.M (tnuoccalanosrep) 🌟🌟共计翻译：3.0 篇 贡献时间：1124 天</code></pre>
-<hr>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>Z shell（zsh[1]）是 Linux 和类 Unix 系统中的一个命令解析器[2]。 它跟 sh (Bourne shell) 家族的其它解析器（如 bash 和 ksh）有着相似的特点，但它还提供了大量的高级特性以及强大的命令行编辑功能，如增强版 Tab 补全。</p>
-<p>在这里不可能涉及到 zsh 的所有功能，描述[3]它的特性需要好几百页。在本文中，我会列出 5 个技巧，让你通过在命令行使用 zsh 来提高你的生产力。</p>
-<h3 id="主题和插件"><a href="#主题和插件" class="headerlink" title="主题和插件"></a>主题和插件</h3><p>多年来，开源社区已经为 zsh 开发了数不清的主题和插件。主题是一个预定义提示符的配置，而插件则是一组常用的别名命令和函数，可以让你更方便的使用一种特定的命令或者编程语言。</p>
-<p>如果你现在想开始用 zsh 的主题和插件，那么使用一种 zsh 的配置框架是你最快的入门方式。在众多的配置框架中，最受欢迎的则是 Oh My Zsh[4]。在默认配置中，它就已经为 zsh 启用了一些合理的配置，同时它也自带上百个主题和插件。</p>
-<p>主题会在你的命令行提示符之前添加一些有用的信息，比如你 Git 仓库的状态，或者是当前使用的 Python 虚拟环境，所以它会让你的工作更高效。只需要看到这些信息，你就不用再敲命令去重新获取它们，而且这些提示也相当酷炫。下图就是我选用的主题 Powerlevel9k[5]：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/W9DqKgFsc68qIEW4jnCq8k4G02ML5k72jy9HZ6aCcp2UKacFbP9saD938kS0juiaLom2mFhZ3IyNSNumVVyHgOQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="zsh 主题 Powerlevel9k"></p>
-<p><em>zsh 主题 Powerlevel9k</em></p>
-<p>除了主题，Oh my Zsh 还自带了大量常用的 zsh 插件。比如，通过启用 Git 插件，你可以用一组简便的命令别名操作 Git， 比如</p>
-<pre><code class="shell">$ alias | grep -i git | sort -R | head -10
-g=git
-ga=&#39;git add&#39;
-gapa=&#39;git add --patch&#39;
-gap=&#39;git apply&#39;
-gdt=&#39;git diff-tree --no-commit-id --name-only -r&#39;
-gau=&#39;git add --update&#39;
-gstp=&#39;git stash pop&#39;
-gbda=&#39;git branch --no-color --merged | command grep -vE &quot;^(\*|\s*(master|develop|dev)\s*$)&quot; | command xargs -n 1 git branch -d&#39;
-gcs=&#39;git commit -S&#39;
-glg=&#39;git log --stat&#39;</code></pre>
-<p>zsh 还有许多插件可以用于许多编程语言、打包系统和一些平时在命令行中常用的工具。以下是我 Ferdora 工作站中用到的插件表：</p>
-<pre><code class="shell">git golang fedora docker oc sudo vi-mode virtualenvwrapper</code></pre>
-<h3 id="智能的命令别名"><a href="#智能的命令别名" class="headerlink" title="智能的命令别名"></a>智能的命令别名</h3><p>命令别名在 zsh 中十分有用。为你常用的命令定义别名可以节省你的打字时间。Oh My Zsh 默认配置了一些常用的命令别名，包括目录导航命令别名，为常用的命令添加额外的选项，比如：</p>
-<pre><code class="shell">ls=&#39;ls --color=tty&#39;
-grep=&#39;grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}&#39;</code></pre>
-<p>除了命令别名以外， zsh 还自带两种额外常用的别名类型：后缀别名和全局别名。</p>
-<p>后缀别名可以让你基于文件后缀，在命令行中利用指定程序打开这个文件。比如，要用 vim 打开 YAML 文件，可以定义以下命令行别名：</p>
-<pre><code class="shell">alias -s {yml,yaml}=vim</code></pre>
-<p>现在，如果你在命令行中输入任何后缀名为 <code>yml</code> 或 <code>yaml</code> 文件， zsh 都会用 vim 打开这个文件。</p>
-<pre><code class="shell">$ playbook.yml
-# Opens file playbook.yml using vim</code></pre>
-<p>全局别名可以让你创建一个可在命令行的任何地方展开的别名，而不仅仅是在命令开始的时候。这个在你想替换常用文件名或者管道命令的时候就显得非常有用了。比如：</p>
-<pre><code class="shell">alias -g G=&#39;| grep -i&#39;</code></pre>
-<p>要使用这个别名，只要你在想用管道命令的时候输入 <code>G</code> 就好了：</p>
-<pre><code class="shell">$ ls -l G do
-drwxr-xr-x.  5 rgerardi rgerardi 4096 Aug  7 14:08 Documents
-drwxr- r-x.  6 rgerardi rgerardi 4096 Aug 24 14:51 Downloads</code></pre>
-<p>接着，我们就来看看 zsh 是如何导航文件系统的。</p>
-<h3 id="便捷的目录导航"><a href="#便捷的目录导航" class="headerlink" title="便捷的目录导航"></a>便捷的目录导航</h3><p>当你使用命令行的时候，在不同的目录之间切换访问是最常见的工作了。 zsh 提供了一些十分有用的目录导航功能来简化这个操作。这些功能已经集成到 Oh My Zsh 中了， 而你可以用以下命令来启用它</p>
-<pre><code class="shell">setopt  autocd autopushd \ pushdignoredups</code></pre>
-<p>使用了上面的配置后，你就不用输入 <code>cd</code> 来切换目录了，只需要输入目录名称，zsh 就会自动切换到这个目录中：</p>
-<pre><code class="shell">$ pwd/home/rgerardi$ /tmp$ pwd/tmp</code></pre>
-<p>如果想要回退，只要输入 <code>-</code>:</p>
-<p>zsh 会记录你访问过的目录，这样下次你就可以快速切换到这些目录中。如果想要看这个目录列表，只要输入 <code>dirs -v</code>：</p>
-<pre><code class="shell">$ dirs -v
-0       ~
-1       /var/log
-2       /var/opt
-3       /usr/bin
-4       /usr/local
-5       /usr/lib
-6       /tmp
-7       ~/Projects/Opensource.com/zsh-5tips
-8       ~/Projects
-9       ~/Projects/ansible
-10      ~/Documents</code></pre>
-<p>如果想要切换到这个列表中的其中一个目录，只需输入 <code>~#</code> （<code>#</code> 代表目录在列表中的序号）就可以了。比如</p>
-<pre><code class="shell">$ pwd
-/home/rgerardi
-$ ~4
-$ pwd
-/usr/local</code></pre>
-<p>你甚至可以用别名组合这些命令，这样切换起来就变得更简单：</p>
-<pre><code class="shell">d=&#39;dirs -v | head -10&#39;
-1=&#39;cd -&#39;
-2=&#39;cd -2&#39;
-3=&#39;cd -3&#39;
-4=&#39;cd -4&#39;
-5=&#39;cd -5&#39;
-6=&#39;cd -6&#39;
-7=&#39;cd -7&#39;
-8=&#39;cd -8&#39;
-9=&#39;cd -9&#39;</code></pre>
-<p>现在你可以通过输入 <code>d</code> 来查看这个目录列表的前 10 个，然后用目录的序号来进行切换：</p>
-<pre><code class="shell">$ d
-0       /usr/local
-1       ~
-2       /var/log
-3       /var/opt
-4       /usr/bin
-5       /usr/lib
-6       /tmp
-7       ~/Projects/Opensource.com/zsh-5tips
-8       ~/Projects
-9       ~/Projects/ansible
-$ pwd
-/usr/local
-$ 6
-/tmp
-$ pwd
-/tmp</code></pre>
-<p>最后，你可以在 zsh 中利用 Tab 来自动补全目录名称。你可以先输入目录的首字母，然后按 <code>TAB</code> 键来补全它们：</p>
-<pre><code class="shell">$ pwd
-/home/rgerardi
-$ p/o/z (TAB)
-$ Projects/Opensource.com/zsh-5tips/</code></pre>
-<p>以上仅仅是 zsh 强大的 Tab 补全系统中的一个功能。接来下我们来探索它更多的功能。</p>
-<h3 id="先进的-Tab-补全"><a href="#先进的-Tab-补全" class="headerlink" title="先进的 Tab 补全"></a>先进的 Tab 补全</h3><p>zsh 强大的补全系统是它的卖点之一。为了简便起见，我称它为 Tab 补全，然而在系统底层，它起到了几个作用。这里通常包括展开以及命令补全，我会在这里用讨论它们。如果想了解更多，详见 用户手册[6]。</p>
-<p>在 Oh My Zsh 中，命令补全是默认启用的。要启用它，你只要在 <code>.zshrc</code> 文件中添加以下命令：</p>
-<pre><code class="shell">autoload -U compinit
-compinit</code></pre>
-<p>zsh 的补全系统非常智能。它会尝试唯一提示可用在当前上下文环境中的项目 —— 比如，你输入了 <code>cd</code> 和 <code>TAB</code>，zsh 只会为你提示目录名，因为它知道其它的项目放在 <code>cd</code> 后面没用。</p>
-<p>反之，如果你使用与用户相关的命令便会提示用户名，而 <code>ssh</code> 或者 <code>ping</code> 这类则会提示主机名。</p>
-<p>zsh 拥有一个巨大而又完整的库，因此它能识别许多不同的命令。比如，如果你使用 <code>tar</code> 命令， 你可以按 <code>TAB</code> 键，它会为你展示一个可以用于解压的文件列表：</p>
-<pre><code class="shell">$ tar -xzvf test1.tar.gz test1/file1 (TAB)
-file1 file2</code></pre>
-<p>如果使用 <code>git</code> 的话，这里有个更高级的示例。在这个示例中，当你按 <code>TAB</code> 键， zsh 会自动补全当前库可以操作的文件：</p>
-<pre><code class="shell">$ ls
-original  plan.txt  zsh-5tips.md  zsh_theme_small.png
-$ git status
-On branch master
-Your branch is up to date with &#39;origin/master&#39;.
-Changes not staged for commit:
-  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
-  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)
-        modified:   zsh-5tips.md
-no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
-$ git add (TAB)
-$ git add zsh-5tips.md</code></pre>
-<p>zsh 还能识别命令行选项，同时它只会提示与选中子命令相关的命令列表：</p>
-<pre><code class="shell">$ git commit - (TAB)
---all                  -a       -- stage all modified and deleted paths
---allow-empty                   -- allow recording an empty commit
---allow-empty-message           -- allow recording a commit with an empty message
---amend                         -- amend the tip of the current branch
---author                        -- override the author name used in the commit
---branch                        -- show branch information
---cleanup                       -- specify how the commit message should be cleaned up
---date                          -- override the author date used in the commit
---dry-run                       -- only show the list of paths that are to be committed or not, and any untracked
---edit                 -e       -- edit the commit message before committing
---file                 -F       -- read commit message from given file
---gpg-sign             -S       -- GPG-sign the commit
---include              -i       -- update the given files and commit the whole index
---interactive                   -- interactively update paths in the index file
---message              -m       -- use the given message as the commit message
-... TRUNCATED ...</code></pre>
-<p>在按 <code>TAB</code> 键之后，你可以使用方向键来选择你想用的命令。现在你就不用记住所有的 <code>git</code> 命令项了。</p>
-<p>zsh 还有很多有用的功能。当你用它的时候，你就知道哪些对你才是最有用的。</p>
-<h3 id="命令行编辑与历史记录"><a href="#命令行编辑与历史记录" class="headerlink" title="命令行编辑与历史记录"></a>命令行编辑与历史记录</h3><p>zsh 的命令行编辑功能也十分有用。默认条件下，它是模拟 emacs 编辑器的。如果你是跟我一样更喜欢用 vi/vim，你可以用以下命令启用 vi 的键绑定。</p>
-<pre><code class="shell">$ bindkey -v</code></pre>
-<p>如果你使用 Oh My Zsh，<code>vi-mode</code> 插件可以启用额外的绑定，同时会在你的命令提示符上增加 vi 的模式提示 —— 这个非常有用。</p>
-<p>当启用 vi 的绑定后，你可以在命令行中使用 vi 命令进行编辑。比如，输入 <code>ESC+/</code> 来查找命令行记录。在查找的时候，输入 <code>n</code> 来找下一个匹配行，输入 <code>N</code> 来找上一个。输入 <code>ESC</code> 后，常用的 vi 命令都可以使用，如输入 <code>0</code> 跳转到行首，输入 <code>$</code> 跳转到行尾，输入 <code>i</code> 来插入文本，输入 <code>a</code> 来追加文本等等，即使是跟随的命令也同样有效，比如输入 <code>cw</code> 来修改单词。</p>
-<p>除了命令行编辑，如果你想修改或重新执行之前使用过的命令，zsh 还提供几个常用的命令行历史功能。比如，你打错了一个命令，输入 <code>fc</code>，你可以在你偏好的编辑器中修复最后一条命令。使用哪个编辑是参照 <code>$EDITOR</code> 变量的，而默认是使用 vi。</p>
-<p>另外一个有用的命令是 <code>r</code>， 它会重新执行上一条命令；而 <code>r &lt;WORD&gt;</code> 则会执行上一条包含 <code>WORD</code> 的命令。</p>
-<p>最后，输入两个感叹号（<code>!!</code>），可以在命令行中回溯最后一条命令。这个十分有用，比如，当你忘记使用 <code>sudo</code> 去执行需要权限的命令时：</p>
-<pre><code class="shell">$ less /var/log/dnf.log
-/var/log/dnf.log: Permission denied
-$ sudo !!
-$ sudo less /var/log/dnf.log</code></pre>
-<p>这个功能让查找并且重新执行之前命令的操作更加方便。</p>
-<hr>
-<pre><code class="txt">via: https://opensource.com/article/18/9/tips-productivity-zsh
-
-作者：Ricardo Gerardi[12] 选题：lujun9972 译者：tnuoccalanosrep 校对：wxy
-
-本文由 LCTT 原创编译，Linux中国 荣誉推出</code></pre>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MjM5NjQ4MjYwMQ==&mid=2664612122&idx=1&sn=29a76fde141c70f0708f5aa6123b7f97&chksm=bdcefa5c8ab9734aaa966fc0e14178dbbc1f30f118b7e8eae15e4167c92c1227dffb82fe502a&scene=0&pass_ticket=aIHa057c%2Bl%2FaAIdBIGMRe1PhwTFhwsrJggVhHNtJhtR0CPlLRz5aTpEwVYLbL8KX##" target="_blank" rel="noopener">阅读原文</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">zsh</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/26/%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%B7%A5%E5%85%B7zsh/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
     <article id="post-ssh远程查看日志" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1539,9 +1104,372 @@ export default class Request {
 
 
   
+    <article id="post-disabled与readonly的区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/17/disabled%E4%B8%8Ereadonly%E7%9A%84%E5%8C%BA%E5%88%AB/">disabled与readonly的区别</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/17/disabled%E4%B8%8Ereadonly%E7%9A%84%E5%8C%BA%E5%88%AB/" class="archive-article-date">
+  	<time datetime="2018-09-17T08:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这两种写法都会使显示出来的文本框不能输入文字，都能做到使用户不能够更改表单域中的内容，但：</p>
+<ul>
+<li><p>readonly 只针对 input 和 textarea 有效，而 disabled 对于所有的表单元素都有效。</p>
+</li>
+<li><p>将表单以 POST 或 GET 的方式提交的话，使用了 disabled 后，<strong>这个元素的值不会被传递出去，而 readonly 会将该值传递出去</strong></p>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">html</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/17/disabled%E4%B8%8Ereadonly%E7%9A%84%E5%8C%BA%E5%88%AB/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-ubuntu录屏和动图制作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/11/ubuntu%E5%BD%95%E5%B1%8F%E5%92%8C%E5%8A%A8%E5%9B%BE%E5%88%B6%E4%BD%9C/">ubuntu录屏和动图制作</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/11/ubuntu%E5%BD%95%E5%B1%8F%E5%92%8C%E5%8A%A8%E5%9B%BE%E5%88%B6%E4%BD%9C/" class="archive-article-date">
+  	<time datetime="2018-09-11T07:25:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="获取-peek-的-ppa-源"><a href="#获取-peek-的-ppa-源" class="headerlink" title="获取 peek 的 ppa 源"></a>获取 peek 的 ppa 源</h3><pre><code class="shell">sudo add-apt-repository ppa:peek-developers/stable</code></pre>
+<h3 id="更新源"><a href="#更新源" class="headerlink" title="更新源"></a>更新源</h3><pre><code class="shell">sudo apt-get update</code></pre>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code class="shell">sudo apt-get install peek</code></pre>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p><img src="http://ogbkru1bq.bkt.clouddn.com/76684793437928754548857.gif" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">gif</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/11/ubuntu%E5%BD%95%E5%B1%8F%E5%92%8C%E5%8A%A8%E5%9B%BE%E5%88%B6%E4%BD%9C/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-电子书合集-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-1/">电子书合集-1</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-1/" class="archive-article-date">
+  	<time datetime="2018-09-09T07:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://www.zhihu.com/people/wang-rui-xiang-76" target="_blank" rel="noopener"><img src="https://pic3.zhimg.com/d382960d26a93ebfd0c36eef09bc8e02_xs.jpg" alt="北野狐狼"></a></p>
+<p><a href="https://www.zhihu.com/people/wang-rui-xiang-76" target="_blank" rel="noopener">北野狐狼</a></p>
+<p>一切只为了学习，闲暇无事还会更新下“爱运营爱成长”微信公众号！！！</p>
+<p>16 人赞了该文章</p>
+<p>经常苦恼于自己知识储备不够 、薪资待遇、职业发展不够好，想要获得更好的发展就要拥有很强的能力。提高个人能力的重要方法、途径就是多读书，个人比较喜欢阅读电子书，快速、高效、便捷。偶然看到豆瓣 “一只睡狐”做的汇总十分的详尽，搬运到知乎和大家分享一下，共同发展、共同进步。</p>
+<p>【适合个人常用的 11 个网站】</p>
+<p>鸠摩搜索<br><a href="https://link.zhihu.com/?target=https%3A//www.jiumodiary.com/">https://www.jiumodiary.com</a></p>
+<p>读远<br><a href="https://link.zhihu.com/?target=http%3A//readcolor.com/">http://readcolor.com/</a></p>
+<p>Kindle 伴侣<br><a href="https://link.zhihu.com/?target=http%3A//kindlefere.com/ebook%3Furl_type%3D39%26object_type%3Dwebpage%26pos%3D1">http://kindlefere.com/ebook?url_type=39&amp;object_type=webpage&amp;pos=1</a></p>
+<p>Readfree<br><a href="https://link.zhihu.com/?target=http%3A//readfree.me/">http://readfree.me/</a></p>
+<p>苦瓜书盘<br><a href="https://link.zhihu.com/?target=http%3A//kgbook.com/">http://kgbook.com/</a></p>
+<p>mLook<br><a href="https://link.zhihu.com/?target=https%3A//www.mlook.mobi/">https://www.mlook.mobi/</a></p>
+<p>Kindle 精读书库<br><a href="https://link.zhihu.com/?target=http%3A//www.kindlemi.com/books">http://www.kindlemi.com/books</a></p>
+<p>掌上书苑<br><a href="https://link.zhihu.com/?target=https%3A//www.soepub.com/store">https://www.soepub.com/store</a></p>
+<p>益书网：<br><a href="https://link.zhihu.com/?target=http%3A//www.kindbook.cn/portal.php">http://www.kindbook.cn/portal.php</a></p>
+<p>看 Kindle<br><a href="https://link.zhihu.com/?target=http%3A//kankindle.com/">http://kankindle.com/</a></p>
+<p>Gitbook<br><a href="https://link.zhihu.com/?target=https%3A//www.gitbook.com/explore">https://www.gitbook.com/explore</a></p>
+<p><img src="https://pic2.zhimg.com/80/v2-4c3a2daff54ec0b4430565789cd681b5_hd.jpg" alt="img">书本 · 承载着知识与能力的传承</p>
+<p>=======================================================</p>
+<p>【8 个网盘和种子搜索引擎】</p>
+<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
+<p>1.百度网盘搜索引擎</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//so.baiduyun.me/">http://so.baiduyun.me/</a></p>
+<p>2.盘搜</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//www.pansou.com/">http://www.pansou.com/</a></p>
+<p>目前最常用的一个</p>
+<p>3.网盘搜搜</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//wpsoso.com/search.html">http://wpsoso.com/search.html</a> 金山提供</p>
+<p>4.哈兔网盘搜索</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//www.haatoo.com/">http://www.haatoo.com/</a></p>
+<p>百度网盘, Dbank 网盘 or 迅雷快盘 and More</p>
+<p>5.ZHA FILE 搜索</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//www.zhaofile.com/">http://www.zhaofile.com/</a></p>
+<p>基于谷歌的网盘搜索引擎，建议各位将这几个网站搭配使用</p>
+<p>6.麦库搜索</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//www.baidu10.net/">http://www.baidu10.net/</a></p>
+<p>麦库搜索是利用 Google 创建的一系列垂直搜索引擎，所以 Google 的一些使用技巧同样适合于麦库搜索。</p>
+<p>7.AvaxSearch 搜索引擎</p>
+<p><a href="https://link.zhihu.com/?target=http%3A//www.avaxsearch.com/">http://www.avaxsearch.com/</a></p>
+<p>俄罗斯 AvaxSearch 搜索引擎是俄罗斯一个资源类搜索引擎，用户可以通过关键词来搜索任何互联网上的资源，所搜索的内容广泛，可针对不同国家进行有效的资源搜索。</p>
+<p>8.海盗湾</p>
+<p>thepiratebay.se</p>
+<p>种子搜索引擎实在太多了，这里只推荐一些比较好用的</p>
+<p><img src="https://pic3.zhimg.com/80/v2-91553a5396ac8e2089a2f28c317acbed_hd.jpg" alt="img">网盘 你值得拥有</p>
+<p>【123 个免费电子书网站汇总】</p>
+<p>一、36 个中文电子书网站</p>
+<p>1.百年千书<br><a href="https://link.zhihu.com/?target=https%3A//readmoo.com/">https://readmoo.com/</a></p>
+<p>繁体电子书网站，需要注册，可购买付费电子书，也能找到大量免费资源</p>
+<p>2.好读网站<br><a href="https://link.zhihu.com/?target=http%3A//haodoo.net/">http://haodoo.net/</a></p>
+<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
+<p>3.亿年书海<br><a href="https://link.zhihu.com/?target=http%3A//www.inien.com/">http://www.inien.com/</a></p>
+<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边</p>
+<p>4.只有下载<br><a href="https://link.zhihu.com/?target=http%3A//www.zhiyouxiazai.com/">http://www.zhiyouxiazai.com/</a></p>
+<p>文档类的资源还是不错的，只是都是城通网盘的。。。推荐各位把他掏空，都传到其他网盘</p>
+<p>5.牛档搜索<br><a href="https://link.zhihu.com/?target=http%3A//www.niudown.com/">http://www.niudown.com/</a></p>
+<p><img src="https://pic2.zhimg.com/80/v2-334cfb0d31162807f6135a73041d9306_hd.jpg" alt="img">灯下阅读也是种幸福</p>
+<p>6.爱问共享资料<br><a href="https://link.zhihu.com/?target=http%3A//ishare.iask.sina.com.cn">http://ishare.iask.sina.com.cn</a></p>
+<p>新浪旗下文库，下载需积分，只要注册微盘，将资料转存微盘之中，便可以免费下载。爱问上有众多资源图书达人，这里推荐人人网@方亮 Faith 提供的日志《福利帖，总结下网上的电子书宝库》也可以翻翻日志下的评论，也推荐了不少优秀的资源。</p>
+<p>7.逛电驴<br><a href="https://link.zhihu.com/?target=http%3A//verycd.gdajie.com/book/computer/page">http://verycd.gdajie.com/book/computer/page</a></p>
+<p>比电驴要更新晚，但不会有无法下载的情况，广告较多</p>
+<p>8.潇哥资源_电子书资源外链发布站专业书籍<br><a href="https://link.zhihu.com/?target=http%3A//www.staffempire.com/">http://www.staffempire.com/</a></p>
+<p>专业书籍网站，下载方式为网盘和其他网站的下载链接</p>
+<p>9.Chnxp 免费 PDF 电子书籍下载站<br><a href="https://link.zhihu.com/?target=http%3A//www.chnxp.com.cn/">http://www.chnxp.com.cn/</a></p>
+<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
+<p>10.杂志馆 PDF 电子杂志电子书籍免费下载网站<br><a href="https://link.zhihu.com/?target=http%3A//bucee.net/">http://bucee.net/</a></p>
+<p>中文杂志下载网站，下载方式为网盘</p>
+<p><img src="https://pic3.zhimg.com/80/v2-0c5e2bb9cedf15004ca3619dd2c92376_hd.jpg" alt="img">完全沉浸于知识之中</p>
+<p>11.书格<br><a href="https://link.zhihu.com/?target=http%3A//shuge.org/%3Ffrom%3Dinf%26">http://shuge.org/?from=inf&amp;amp</a>;wvr=5&amp;loc=infblog</p>
+<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
+<p>12.中国哲学书电子化计划<br><a href="https://link.zhihu.com/?target=http%3A//ctext.org/zh">http://ctext.org/zh</a></p>
+<p>本計劃的目的在於開發一個在線電子書系統，試圖將中國的古代哲學書及其相關的原典文獻加以電子化，用交叉索引等技術充分利用電腦的功能， 給中外的學者提供更方便的方式來學習和研究這些古書。您可以打開先秦兩漢或漢代之後的目錄，也可以參考系統簡介、常見問答集、使用說明和相關工具。若想要尋找某一部著作的相關訊息，您可以使用書名檢索功能同時檢索本站各種主要原典資料。</p>
+<p>13.古籍馆<br><a href="https://link.zhihu.com/?target=http%3A//www.gujiguan.com/">http://www.gujiguan.com/</a></p>
+<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
+<p>14.马克思主义文库<br><a href="https://link.zhihu.com/?target=http%3A//marxists.anu.edu.au/chinese/index.html">http://marxists.anu.edu.au/chinese/index.html</a></p>
+<p>15.凡人大传<br><a href="https://link.zhihu.com/?target=http%3A//www.fanren8.com/index.php">http://www.fanren8.com/index.php</a></p>
+<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载</p>
+<p><img src="https://pic3.zhimg.com/80/v2-87b7f85d59df70a25ce8e4f2abf6cc35_hd.jpg" alt="img">经过知识的洗礼、冲刷，才能更加从容的应对生活</p>
+<p>16.殆知阁古籍搜索引擎<br><a href="https://link.zhihu.com/?target=http%3A//wenxian.fanren8.com/">http://wenxian.fanren8.com/</a></p>
+<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载</p>
+<p>17.中国国家数字图书馆<br><a href="https://link.zhihu.com/?target=http%3A//www.nlc.gov.cn/index.htm">http://www.nlc.gov.cn/index.htm</a></p>
+<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册</p>
+<p>18.超星<br><a href="https://link.zhihu.com/?target=http%3A//www.chaoxing.com/">http://www.chaoxing.com/</a></p>
+<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址 可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验</p>
+<p>19.海南省文献中心电子图书库<br><a href="https://link.zhihu.com/?target=http%3A//210.37.32.28/index.asp%3Fword%3D">http://210.37.32.28/index.asp?word=</a></p>
+<p>一个很不错的中文电子图书下载阅读网站，数量 20 余万册，需要 djvu 阅读器</p>
+<p>20.E 书联盟<br><a href="https://link.zhihu.com/?target=http%3A//www.book118.com/">http://www.book118.com/</a></p>
+<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
+<p>书香门第 · 不再遥远</p>
+<p>21.CssaBook 美国大学教科书比价搜索网<br><a href="https://link.zhihu.com/?target=http%3A//www.cssabook.com/">http://www.cssabook.com/</a></p>
+<p>美国大学教科书比价搜索网为是一个在美中国留学生提供美国教科书比价搜索，电子书搜索以及学术搜索服务， 电子书搜索效果超级好，而且对于图书的比价也很棒。</p>
+<p>买书比价: 针对留学生设计，CSSA Book 在美国数千家网络书店超过八百万种新旧教科书、图书中帮你找到最令您心动的折扣书籍， 从此不必再为教科书价格贵而发愁。</p>
+<p>NEW!卖书比价: 您知道 CSSA Book 也有卖书的比价吗? 我们在各大网络书店中为您精挑细选出最佳收购价格，您只需将书籍寄出即可轻松得到现金，而且全部包邮!</p>
+<p>电子书搜索: 内置最优秀的电子书搜索引擎，轻松搜索几千万中英文电子书、教科书，电子版书籍一站解决最佳方案</p>
+<p>学术搜索: 聚集十大英文文献搜索平台，为您解决找不到资料的困扰。</p>
+<p>22.轻之国度轻小说文库<br><a href="https://link.zhihu.com/?target=http%3A//lknovel.lightnovel.cn/">http://lknovel.lightnovel.cn/</a></p>
+<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册</p>
+<p>23.SF 互动传媒<br><a href="https://link.zhihu.com/?target=http%3A//book.sfacg.com/">http://book.sfacg.com/</a></p>
+<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt</p>
+<p>24.《读者》杂志在线阅读<br><a href="https://link.zhihu.com/?target=http%3A//www.85nian.net/">http://www.85nian.net/</a></p>
+<p>主要收集了读者 2005 年到 2014 年的电子版，包括 txt、PDF 和 exe 类型的。</p>
+<p>《读者》杂志上的文章多以 txt 格式提供给网友在线阅读，并且提供打包下载！如文章：《读者》2013 年第 1 期至 10 期 txt 合集下载 （注意解压密码说明：密码为<a href="https://link.zhihu.com/?target=http%3A//85nian.net">http://85nian.net</a>）</p>
+<p>25.畅读 360<br><a href="https://link.zhihu.com/?target=http%3A//www.changdu360.com/">http://www.changdu360.com/</a></p>
+<p>可以在线看各种类型的杂志</p>
+<p>在线看，简单的页面，清晰的画面（需注册登录，值得）</p>
+<p>30 天后提供免费下载（30 天内为锁定期，vip 可下载）</p>
+<p>26.青年文摘<br><a href="https://link.zhihu.com/?target=http%3A//www.qnwz.cn/html/ebookdown/">http://www.qnwz.cn/html/ebookdown/</a></p>
+<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了</p>
+<p><img src="https://pic2.zhimg.com/80/v2-57f4e5d851ac7c7044732a31d5e907f7_hd.jpg" alt="img">读者 · 心灵的盛宴</p>
+<p>27.zcom<br><a href="https://link.zhihu.com/?target=http%3A//online.zcom.com/">http://online.zcom.com/</a></p>
+<p>格式为 exe，阅读体验还可以，提供多个下载地址</p>
+<p>28.读书网<br><a href="https://link.zhihu.com/?target=http%3A//www.dushuba.net/">http://www.dushuba.net/</a></p>
+<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的</p>
+<p>时不时看一些书，充实生活，很不错的</p>
+<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘</p>
+<p>29.我有閑書庫<br><a href="https://link.zhihu.com/?target=http%3A//www.woyouxian.com/index.html">http://www.woyouxian.com/index.html</a></p>
+<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著</p>
+<p>30.完美文库<br><a href="https://link.zhihu.com/?target=http%3A//www.wmwk.org/Home.aspx">http://www.wmwk.org/Home.aspx</a></p>
+<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
+<p>31.威锋电子书分享<br><a href="https://link.zhihu.com/?target=http%3A//bbs.weiphone.com/forum.php%3Fmod%3Dforumdisplay%26fid%3D224%26page%3D1%26filter%3Dtypeid%26typeid%3D299">http://bbs.weiphone.com/forum.php?mod=forumdisplay&amp;fid=224&amp;page=1&amp;filter=typeid&amp;typeid=299</a></p>
+<p>威锋论坛电子书分享频道，多为 epub 和 pdf 格式。 无需注册。</p>
+<p>32.Hi PDA 论坛<br><a href="https://link.zhihu.com/?target=http%3A//www.hi-pda.com/forum/index.php">http://www.hi-pda.com/forum/index.php</a></p>
+<p>Amazon Kindle 论坛资源汇总检索帖</p>
+<p>txt 精排版资源</p>
+<p>6 寸 pdf 资源</p>
+<p><img src="https://pic2.zhimg.com/80/v2-bdbc90eacfc7027b230d80e18e189d65_hd.jpg" alt="img">浩瀚的星空 浩瀚的书海</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">hidden</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">电子书</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/15/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/17/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/15/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/17/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1585,12 +1513,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1636,6 +1565,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1645,10 +1578,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1664,7 +1593,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1672,19 +1601,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1700,15 +1617,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1732,19 +1649,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1764,15 +1677,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1780,11 +1689,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1793,6 +1710,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1805,10 +1730,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1836,6 +1757,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1845,10 +1770,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1864,15 +1785,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1885,6 +1810,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1901,14 +1830,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1956,6 +1877,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -1965,10 +1890,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2000,15 +1921,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2024,11 +1953,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2036,15 +1961,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2056,11 +1977,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2072,10 +1997,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -2084,11 +2005,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2124,18 +2045,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -2144,7 +2053,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>

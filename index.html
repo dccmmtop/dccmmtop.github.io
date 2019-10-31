@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.2.0/styles/github.min.css">
+  <link rel="stylesheet" href="/plugins/highlight/gruvbox-dark.css">
 
   <title>梦里不知身是客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -133,133 +133,27 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-pacman源添加及yaourt安装" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-text" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/pacman%E6%BA%90%E6%B7%BB%E5%8A%A0%E5%8F%8Ayaourt%E5%AE%89%E8%A3%85/">pacman源添加及yaourt安装</a>
+      <a class="article-title" href="/2019/10/31/text/">text</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/pacman%E6%BA%90%E6%B7%BB%E5%8A%A0%E5%8F%8Ayaourt%E5%AE%89%E8%A3%85/" class="archive-article-date">
-  	<time datetime="2019-10-30T15:01:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/text/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>2018年01月13日 19:37:48 <a href="https://me.csdn.net/sticky_rice" target="_blank" rel="noopener">sticky_rice</a> 阅读数：3844</p>
-<p>1.添加源</p>
-<p>源，是软件源的简称，是互联网上存放软件包和库的服务器，这些服务器一般都是由官方维护，不少高校、互联网公司等权威机构有自己的镜像源，也有开发者自己的社区软件源，这里的软件比较常用，但暂时还没有被官方收入。</p>
-<p>软件包工具，是使用这些源的工具，多是终端里的一种命令，如apt-get 、yum、dpkg、pacman等，在这些工具中，分为高级和低级，低级工具（dpkg、rpm）执行安装删除等任务，高级工具（apt-get、yum、pacman）提供依赖关系解决等功能。每种工具都有相对应的软件包格式、相对应的源。</p>
-<p>pacman源的设置在/etc/pacman.conf和/etc/pacman.d/mirrorlist里， 如果有内容可以全部删除，添加内容如下：</p>
-<pre><code class="perl">Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
-Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch
-Server = http://mirrors.163.com/archlinux/$repo/os/$arch
-Server = http://mirrors.hust.edu.cn/archlinux/$repo/os/$arch
-Server = http://run.hit.edu.cn/archlinux/$repo/os/$arch
-Server = http://ftp.kaist.ac.kr/ArchLinux/$repo/os/$arch
-Server = http://mirrors.hustunique.com/archlinux/$repo/os/$arch
-Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch
-Server = http://mirror.premi.st/archlinux/$repo/os/$arch
-Server = http://mirror.its.dal.ca/archlinux/$repo/os/$arch
-Server = http://mirror.de.leaseweb.net/archlinux/$repo/os/$arch
-Server = http://mirror.clibre.uqam.ca/archlinux/$repo/os/$arch</code></pre>
-<p>在/etc/pacman.conf文件中最后一行添加如下内容：</p>
-<pre><code class="txt"># USTC
-[archlinuxcn]
-
-SigLevel = Optional TrustedOnly
-Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch</code></pre>
-<p>2.安装yaourt</p>
-<p>pacman -S yaourt</p>
-<p>终端中执行sudo pacman -Syu 进行更新</p>
-<h2 id="zsh-安装"><a href="#zsh-安装" class="headerlink" title="zsh 安装"></a>zsh 安装</h2><pre><code>$ sudo pacman -S zsh</code></pre><hr>
-<p>配置默认shell：</p>
-<pre><code>$ sudo vim /etc/passwd</code></pre><p>将指定用户的shell路径改为 <code>/usr/bin/zsh</code> 即可，也就是将 bash 改为 zsh</p>
-<hr>
-<h2 id="on-my-zsh-安装"><a href="#on-my-zsh-安装" class="headerlink" title="on-my-zsh 安装"></a>on-my-zsh 安装</h2><p>保证安装了git ，curl (或 wget )</p>
-<pre><code>$ sudo pacman -S git wget curl #curl 一般都有了，装 git wget 即可</code></pre><ul>
-<li>curl 方式：</li>
-</ul>
-<pre><code>$ sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&quot;</code></pre><ul>
-<li>wget 方式</li>
-</ul>
-<pre><code>$ sh -c &quot;$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)&quot;</code></pre><hr>
-<p><strong>修改主题</strong></p>
-<pre><code>$ sudo vim ~/.zshrc</code></pre><p>找到 <code>ZSH_THEME=&quot;robbyrussell&quot;</code></p>
-<p>修改为 <code>ZSH_THEME=&quot;random&quot;</code> 为随机主题，要换其他主题，修改此处即可</p>
-<p>修改完后打开终端即为 <code>on-my-zsh</code></p>
-<p>作者：mfiaqv</p>
-<p>链接：<a href="https://www.jianshu.com/p/e8f976447506" target="_blank" rel="noopener">https://www.jianshu.com/p/e8f976447506</a></p>
-<p>來源：简书</p>
-<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
-<h1 id="How-to-copy-Docker-Images-to-Another-Host"><a href="#How-to-copy-Docker-Images-to-Another-Host" class="headerlink" title="How to copy Docker Images to Another Host?"></a>How to copy Docker Images to Another Host?</h1><p><a href="https://www.techietown.info/2017/02/copy-docker-images-another-host/" target="_blank" rel="noopener"> February 8, 2017</a>  <a href="https://www.techietown.info/author/admin/" target="_blank" rel="noopener">admin    </a><a href="https://www.techietown.info/2017/02/copy-docker-images-another-host/#respond" target="_blank" rel="noopener"> 0 Comments</a> <a href="https://www.techietown.info/tag/docker/" target="_blank" rel="noopener">docker</a></p>
-<p><strong>How to copy Docker Images to Another Host?</strong></p>
-<p>Sometimes you might need to copy your docker container image to another docker Host. One way is to commit the image to a Private or Public Docker Repository and on the second host, run the “docker pull ” command. This will work most of the times, but if you dont have a private docker registry, you will have to look for other options.</p>
-<p>Docker has “save” feature which is used to persist an image. First we need to get the Docker image ID .</p>
-<p><strong>Use the following command to see the image ID</strong></p>
-<p><em>docker images</em></p>
-<p><strong>To save one image</strong></p>
-<p><em>docker save myimage-1 &gt; /home/myimage-1.tar</em></p>
-<p>This command will save the image to tar archive /home/myimage-1.tar</p>
-<p>Now we can copy this tar file to destination using any of the linux tools like “scp” or “rsync”.</p>
-<p><strong>To load this image to Docker on Destination Host</strong> </p>
-<p>Run the following command</p>
-<p><em>docker load &lt; /home/myimage-1.tar</em></p>
-<p>This will take few seconds depending on the image size. Once the command finished, we can verify the image is loaded to Docker on new server , by running the following command</p>
-<p><em># check the available images</em><br><em>docker images</em></p>
-<p>The Image “myimage-1” should be listed in the output. Please see the image below</p>
-<p><img src="https://www.techietown.info/wp-content/uploads/2017/02/docker-save-copy-image.png" alt="docker-save-copy-image"></p>
-<p>You can see the image “myimage-1” listed .</p>
-<p>Now we can start container using these images.</p>
-<p>This way we copied docker image to another host without using Docker registry. There is one more feature called “export” , this is used to persist the running containers (not images). This feature also allows us to create tar archive of the running container ,  but we will loss the history of the particular image.</p>
-<p>以arch的基本系统为基础，我们可以对其进行各种配置操作，让其更符合个人喜好。下面介绍了一些常用的配置。</p>
-<h1 id="1-用户管理"><a href="#1-用户管理" class="headerlink" title="1.用户管理"></a>1.用户管理</h1><p>新安装的arch只有一个root用户，使用root用户来进行日常系统管理是很危险的事情，说不定哪天手抖输了个rm -rf /*然后你就呵呵了。所以我们通常用普通用户来进行日常使用，有需要的时候就用sudo来获取root权限。</p>
-<p>首先添加一个用户，并把它加到wheel组</p>
-<pre><code>useradd -m -G wheel -s /bin/bash  [用户名]</code></pre><p>然后为这个用户设置密码</p>
-<pre><code>passwd [用户名]</code></pre><p>最后设置wheel组的用户能用sudo获取root权限:</p>
-<pre><code>visudo
-    #找到这样的一行,把前面的#去掉:
-    #%wheel ALL=(ALL) ALL
-按ESC键，输入x!回车就可以保存并退出</code></pre><p>现在我们就可以使用这个新用户了。执行exit退出root用户登录，然后用新的用户重新登录系统。</p>
-<hr>
-<h1 id="2-软件管理"><a href="#2-软件管理" class="headerlink" title="2.软件管理"></a>2.软件管理</h1><p>arch采用pacman来管理软件，常用的命令有:</p>
-<pre><code>#安装软件/软件组
-pacman -S [软件1] [软件2] ...
-
-#卸载软件/软件组
-pacman -R [软件1] [软件2] ...
-
-#刷新数据库
-pacman -Syy
-
-#升级整个系统
-pacman -Syyu</code></pre><p>记住pacman前面要加sudo。<br> archlinux采用滚动更新，也就是说只要配置好系统，以后就只需要隔三差五地Syyu一下就行了。这样你的arch永远都是最新版,一劳永逸，所以用arch的人都比较懒。</p>
-<p>作为pacman的应用我们来玩两个简单的例子</p>
-<pre><code>sudo pacman -S bash-completion</code></pre><p>安装完成后重新登录，输命令的时候就可以感受到效果咯，Tab补全大法好。如果还觉得不够的话可以试试zsh。</p>
-<p>现在我们来安装一个小玩意</p>
-<pre><code>sudo pacman -S screenfetch</code></pre><p>至于它是干啥的，试试就知道了</p>
-<pre><code>screenfetch</code></pre><hr>
-<h1 id="3-图形界面"><a href="#3-图形界面" class="headerlink" title="3.图形界面"></a>3.图形界面</h1><p>单纯的命令行看着总会很无聊，大多数人都希望安装图形界面吧。这里以Gnome3桌面为例介绍一下，其他如KDE Xfce LXDE的安装大同小异。</p>
-<p>首先安装xorg-server，这是图形界面的基础。</p>
-<pre><code>sudo pacman -S xorg-server</code></pre><p>然后安装对应的驱动程序，比如安装nvidia的显卡驱动:</p>
-<pre><code>sudo pacman -S xf86-video-nouveau</code></pre><p>具体的驱动程序请看<a href="https://link.jianshu.com?t=https://wiki.archlinux.org/index.php/Xorg_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)" target="_blank" rel="noopener">archwiki</a>。</p>
-<p>当然，如果你觉得麻烦也可以把软件组xorg中的软件一股脑安上。</p>
-<pre><code>sudo pacman -S xorg</code></pre><p>另外如果是你的arch是在virtualbox中安装的，那么你可以安装virtualbox-guest-utils这个软件组:</p>
-<pre><code>sudo pacman -S virtualbox-guest-utils</code></pre><p>现在可以安装Gnome3桌面了。这一步当然是直接安装gnome这个软件组啦</p>
-<pre><code>sudo pacman -S gnome</code></pre><p>为了让我们开机时能够进入图形界面，还需要把显示管理器GDM设置为开机启动。</p>
-<pre><code>sudo systemctl enable gdm.service</code></pre><p>现在重启系统，进入GDM,然后是输密码登录，就可以看到Gnome桌面了，就像这样:</p>
-<p>作者：Air_WaWei</p>
-<p>链接：<a href="https://www.jianshu.com/p/6eaf642a94ed" target="_blank" rel="noopener">https://www.jianshu.com/p/6eaf642a94ed</a></p>
-<p>來源：简书</p>
-<p>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
-
+        
       
 
       
@@ -267,22 +161,11 @@ pacman -Syyu</code></pre><p>记住pacman前面要加sudo。<br> archlinux采用�
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">arch</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/pacman%E6%BA%90%E6%B7%BB%E5%8A%A0%E5%8F%8Ayaourt%E5%AE%89%E8%A3%85/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/text/">展开全文 >></a>
         </p>
       
 
@@ -312,28 +195,114 @@ pacman -Syyu</code></pre><p>记住pacman前面要加sudo。<br> archlinux采用�
 
 
   
-    <article id="post-vim中插入当前文件名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Truffle" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">vim中插入当前文件名</a>
+      <a class="article-title" href="/2019/10/31/Truffle/">Truffle</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/Truffle/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="vim中插入当前文件名"><a href="#vim中插入当前文件名" class="headerlink" title="vim中插入当前文件名"></a>vim中插入当前文件名</h2><p>再插入模式下<code>ctrl + r</code>,然后在按<code>%</code>即可。</p>
+        <h2 id="安装-Truffle-4-0"><a href="#安装-Truffle-4-0" class="headerlink" title="安装 Truffle 4.0"></a>安装 Truffle 4.0</h2><pre><code class="shell">npm install -g truffle@4.0.0</code></pre>
+<p>查看安装的版本：</p>
+<pre><code class="shell">truffle version
+Truffle v4.0.0 (core: 4.0.0)
+Solidity v0.4.18 (solc-js)</code></pre>
+<h2 id="安装-TestRPC"><a href="#安装-TestRPC" class="headerlink" title="安装 TestRPC"></a>安装 TestRPC</h2><pre><code class="shell">npm install -g ethereumjs-testrpc
+/usr/local/bin/testrpc -&gt; /usr/local/lib/node_modules/ethereumjs-testrpc/build/cli.node.js
++ ethereumjs-testrpc@6.0.1
+added 1 package and updated 2 packages in 10.648s</code></pre>
+<h2 id="初始化一个-Truffle-项目"><a href="#初始化一个-Truffle-项目" class="headerlink" title="初始化一个 Truffle 项目"></a>初始化一个 Truffle 项目</h2><pre><code class="shell">mkdir test_truffle
+cd test_truffle
+truffle init
 
+Downloading...
+Unpacking...
+Setting up...
+Unbox successful. Sweet!
+
+Commands:
+
+  Compile:        truffle compile
+  Migrate:        truffle migrate
+  Test contracts: truffle test</code></pre>
+<p>完成后，你将拥有如下目录：</p>
+<ul>
+<li><p><code>contracts</code> 智能合约目录</p>
+</li>
+<li><p><code>migrations</code> 发布脚本目录</p>
+</li>
+<li><p><code>test</code> 存放测试文件</p>
+</li>
+<li><p><code>truffle.js</code> Truffle 的配置文件</p>
+</li>
+</ul>
+<h2 id="编译合约"><a href="#编译合约" class="headerlink" title="编译合约"></a>编译合约</h2><p>要编译合约，使用<code>truffle compile</code>命令，可以将原始代码编译成以太坊认可的字节码</p>
+<p><code>Truffle</code>仅默认编译自上次编译后被修改过的文件，来减少不必要的编译。如果你想编译全部文件，可以使用<code>--compile-all</code>选项</p>
+<pre><code>truffle compile --compile-all</code></pre><p><code>Truffle</code>需要定义的合约名称和文件名准确匹配,这种匹配是区分大小写的，也就是说大小写也要一致。推荐大写每一个开头字母。</p>
+<p>文件之间的相互依赖，可以使用<code>import</code>进行合约间的引用，Truffle 将会按正确顺序依次编译合约，并在需要的时候自动关联库。例如：</p>
+<pre><code>import &quot;./AnotherContract.sol&quot;;</code></pre><h1 id="部署智能合约"><a href="#部署智能合约" class="headerlink" title="部署智能合约"></a>部署智能合约</h1><p>编辑<code>truffle.js</code>配置文件，设置我们稍后要部署智能合约的位置，内容如下：</p>
+<pre><code class="js">module.exports = {
+    networks: {
+        development: {
+          host: &quot;localhost&quot;,
+          port: 8545,
+          network_id: &quot;*&quot;
+        }
+    }</code></pre>
+<p>接下来，我们会使用上面的智能合约，分别在<code>testRPC</code>和<code>geth</code>中进行部署测试。</p>
+<p><code>truffle</code>的智能合约项目部署，使用下面的命令：</p>
+<pre><code class="shell">truffle migrate</code></pre>
+<blockquote>
+<p>这个命令会执行所有<code>migrations</code>目录下的 js 文件。如果之前执行过<code>truffle migrate</code>命令，再次执行，只会部署新的 js 文件，如果没有新的 js 文件，不会起任何作用。如果使用<code>--reset</code>参数，则会重新的执行所有脚本的部署。</p>
+</blockquote>
+<p>如果要部署到指定的网络，可以使用<code>--network</code>参数，例如：</p>
+<pre><code class="shell">truffle migrate --network live</code></pre>
+<p>多个网络的配置格式如下：</p>
+<pre><code class="js">networks: {
+  development: {
+    host: &quot;localhost&quot;,
+    port: 8545,
+    network_id: &quot;*&quot; // match any network
+  },
+  live: {
+    host: &quot;178.25.19.88&quot;, // Random IP for example purposes (do not use)
+    port: 80,
+    network_id: 1,        // Ethereum public network
+    // optional config values:
+    // gas  Gas limit used for deploys. Default is 4712388
+    // gasPrice Gas price used for deploys. Default is 100000000000 (100 Shannon).
+    // from - default address to use for any transaction Truffle makes during migrations
+    // provider - web3 provider instance Truffle should use to talk to the Ethereum network.
+    //          - if specified, host and port are ignored.
+  }
+}</code></pre>
+<h3 id="通过-truffle-migrate-命令，对合约进行部署"><a href="#通过-truffle-migrate-命令，对合约进行部署" class="headerlink" title="通过 truffle migrate 命令，对合约进行部署"></a>通过 truffle migrate 命令，对合约进行部署</h3><p>使用<code>truffle migrate</code>命令，发布项目：</p>
+<pre><code>➜ /Users/lion/my_project/_eth/test_truffle &gt;truffle migrate
+Using network &#39;development&#39;.
+
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0xd9e5fa242d29362e57e3da7b0bf6f71b72767972fc15240ed3a02d341e814a44
+  Migrations: 0x4bedd1bb517ff9a54f6f3df8eba821ff16a4109b
+  Deploying Hello_mshk_top...
+  ... 0xc22ff050e189c2561d40250077ee4bf628f957899dfa8d0b5fa50e3ab7a896b0
+  Hello_mshk_top: 0xa7ef5037ff81d7932e01b68a503ca4587f00b35c
+Saving successful migration to network...
+  ... 0x49505a54042f5f74146fbfafef63dd408cb0a7a0c66214ebbaa3217e443d792a
+Saving artifacts...</code></pre>
       
 
       
@@ -341,11 +310,26 @@ pacman -Syyu</code></pre><p>记住pacman前面要加sudo。<br> archlinux采用�
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">contract</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">truffle</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/Truffle/">展开全文 >></a>
         </p>
       
 
@@ -382,13 +366,13 @@ pacman -Syyu</code></pre><p>记住pacman前面要加sudo。<br> archlinux采用�
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">vim中与系统的粘贴和复制</a>
+      <a class="article-title" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">vim中与系统的粘贴和复制</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -424,7 +408,70 @@ vmap Y &quot;+y</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B2%98%E8%B4%B4%E5%92%8C%E5%A4%8D%E5%88%B6/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vim中插入当前文件名" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">vim中插入当前文件名</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="vim中插入当前文件名"><a href="#vim中插入当前文件名" class="headerlink" title="vim中插入当前文件名"></a>vim中插入当前文件名</h2><p>再插入模式下<code>ctrl + r</code>,然后在按<code>%</code>即可。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/vim%E4%B8%AD%E6%8F%92%E5%85%A5%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%90%8D/">展开全文 >></a>
         </p>
       
 
@@ -461,13 +508,13 @@ vmap Y &quot;+y</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">vim插件surround常用命令</a>
+      <a class="article-title" href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">vim插件surround常用命令</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -494,7 +541,7 @@ vmap Y &quot;+y</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vim%E6%8F%92%E4%BB%B6surround%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
         </p>
       
 
@@ -531,13 +578,13 @@ vmap Y &quot;+y</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">vim脚本_生成图片外链</a>
+      <a class="article-title" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">vim脚本_生成图片外链</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -578,7 +625,7 @@ endfunction</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vim%E8%84%9A%E6%9C%AC_%E7%94%9F%E6%88%90%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BE/">展开全文 >></a>
         </p>
       
 
@@ -615,13 +662,13 @@ endfunction</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vps/">vps</a>
+      <a class="article-title" href="/2019/10/31/vps/">vps</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/vps/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/vps/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -737,142 +784,7 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vps/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vs_keybinding" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vs_keybinding/">vs_keybinding</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/vs_keybinding/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="json">[
-  {
-    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
-    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
-    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
-    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
-    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
-    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-editor.action.rename&quot;,
-    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
-    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-debug.setVariable&quot;,
-    &quot;when&quot;: &quot;variablesFocused&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;-renameFile&quot;,
-    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f2&quot;,
-    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+b&quot;,
-    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
-    &quot;when&quot;: &quot;editorFocus&quot;
-  },
-  {
-    &quot;key&quot;: &quot;f3&quot;,
-    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
-  },
-  {
-    &quot;key&quot;: &quot;ctrl+`&quot;,
-    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
-  }
-]</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">vscode</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vs_keybinding/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vps/">展开全文 >></a>
         </p>
       
 
@@ -909,13 +821,13 @@ sudo apt-get install shadowsocks-qt5</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/vs_config/">vs_config</a>
+      <a class="article-title" href="/2019/10/31/vs_config/">vs_config</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/vs_config/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/vs_config/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -1073,7 +985,142 @@ sudo apt-get install shadowsocks-qt5</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/vs_config/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/vs_config/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vs_keybinding" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/vs_keybinding/">vs_keybinding</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/vs_keybinding/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="json">[
+  {
+    &quot;key&quot;: &quot;ctrl+shift+alt+down&quot;,
+    &quot;command&quot;: &quot;editor.action.copyLinesDownAction&quot;,
+    &quot;when&quot;: &quot;editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+alt+up&quot;,
+    &quot;command&quot;: &quot;editor.action.copyLinesUpAction&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+shift+i&quot;,
+    &quot;command&quot;: &quot;editor.action.formatSelection&quot;,
+    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+k ctrl+f&quot;,
+    &quot;command&quot;: &quot;-editor.action.formatSelection&quot;,
+    &quot;when&quot;: &quot;editorHasSelection &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-editor.action.rename&quot;,
+    &quot;when&quot;: &quot;editorHasRenameProvider &amp;&amp; editorTextFocus &amp;&amp; !editorReadonly&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-debug.renameWatchExpression&quot;,
+    &quot;when&quot;: &quot;watchExpressionsFocused&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-debug.setVariable&quot;,
+    &quot;when&quot;: &quot;variablesFocused&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;-renameFile&quot;,
+    &quot;when&quot;: &quot;explorerViewletVisible &amp;&amp; filesExplorerFocus &amp;&amp; !explorerResourceIsRoot &amp;&amp; !explorerResourceReadonly &amp;&amp; !inputFocus&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f2&quot;,
+    &quot;command&quot;: &quot;workbench.action.toggleSidebarVisibility&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+b&quot;,
+    &quot;command&quot;: &quot;-workbench.action.toggleSidebarVisibility&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f3&quot;,
+    &quot;command&quot;: &quot;-editor.action.nextMatchFindAction&quot;,
+    &quot;when&quot;: &quot;editorFocus&quot;
+  },
+  {
+    &quot;key&quot;: &quot;f3&quot;,
+    &quot;command&quot;: &quot;workbench.action.terminal.toggleTerminal&quot;
+  },
+  {
+    &quot;key&quot;: &quot;ctrl+`&quot;,
+    &quot;command&quot;: &quot;-workbench.action.terminal.toggleTerminal&quot;
+  }
+]</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">vscode</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/vs_keybinding/">展开全文 >></a>
         </p>
       
 
@@ -1110,13 +1157,13 @@ sudo apt-get install shadowsocks-qt5</code></pre>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">whenever使用方式</a>
+      <a class="article-title" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">whenever使用方式</a>
     </h1>
   
 
         
-        <a href="/2019/10/30/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.056Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
+        <a href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.049Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
       </header>
@@ -1199,69 +1246,7 @@ end</code></pre>
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-text" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/text/">text</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/30/text/" class="archive-article-date">
-  	<time datetime="2019-10-30T13:55:45.053Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/30/text/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">展开全文 >></a>
         </p>
       
 
@@ -1293,7 +1278,7 @@ end</code></pre>
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1337,12 +1322,13 @@ if(!isFinite(o.call(this)))throw RangeError("Invalid time value");var t=this,n=t
 return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.get,u=e.key;e.exp({getOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(32),u=e.has,c=e.key,f=function(t,n,r){if(u(t,n,r))return!0;var e=o(n);return null!==e&&f(t,e,r)};e.exp({hasMetadata:function(t,n){return f(t,i(n),arguments.length<3?void 0:c(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=e.has,u=e.key;e.exp({hasOwnMetadata:function(t,n){return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){var e=r(54),i=r(2),o=r(26),u=e.key,c=e.set;e.exp({metadata:function(t,n){return function(r,e){c(t,n,(void 0!==e?i:o)(r),u(e))}}})},function(t,n,r){var e=r(1);e(e.P+e.R,"Set",{toJSON:r(165)("Set")})},function(t,n,r){"use strict";var e=r(1),i=r(147)(!0);e(e.P,"String",{at:function(t){return i(this,t)}})},function(t,n,r){"use strict";var e=r(1),i=r(46),o=r(16),u=r(122),c=r(120),f=RegExp.prototype,a=function(t,n){this._r=t,this._s=n};r(139)(a,"RegExp String",function(){var t=this._r.exec(this._s);return{value:t,done:null===t}}),e(e.P,"String",{matchAll:function(t){if(i(this),!u(t))throw TypeError(t+" is not a regexp!");var n=String(this),r="flags"in f?String(t.flags):c.call(t),e=new RegExp(t.source,~r.indexOf("g")?r:"g"+r);return e.lastIndex=o(t.lastIndex),new a(e,n)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padEnd:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!1)}})},function(t,n,r){"use strict";var e=r(1),i=r(181);e(e.P,"String",{padStart:function(t){return i(this,t,arguments.length>1?arguments[1]:void 0,!0)}})},function(t,n,r){"use strict";r(82)("trimLeft",function(t){return function(){return t(this,1)}},"trimStart")},function(t,n,r){"use strict";r(82)("trimRight",function(t){return function(){return t(this,2)}},"trimEnd")},function(t,n,r){r(153)("asyncIterator")},function(t,n,r){r(153)("observable")},function(t,n,r){var e=r(1);e(e.S,"System",{global:r(3)})},function(t,n,r){for(var e=r(155),i=r(28),o=r(3),u=r(27),c=r(80),f=r(7),a=f("iterator"),s=f("toStringTag"),l=c.Array,h=["NodeList","DOMTokenList","MediaList","StyleSheetList","CSSRuleList"],v=0;v<5;v++){var p,d=h[v],y=o[d],g=y&&y.prototype;if(g){g[a]||u(g,a,l),g[s]||u(g,s,d),c[d]=l;for(p in e)g[p]||i(g,p,e[p],!0)}}},function(t,n,r){var e=r(1),i=r(151);e(e.G+e.B,{setImmediate:i.set,clearImmediate:i.clear})},function(t,n,r){var e=r(3),i=r(1),o=r(121),u=r(207),c=e.navigator,f=!!c&&/MSIE .\./.test(c.userAgent),a=function(t){return f?function(n,r){return t(o(u,[].slice.call(arguments,2),"function"==typeof n?n:Function(n)),r)}:t};i(i.G+i.B+i.F*f,{setTimeout:a(e.setTimeout),setInterval:a(e.setInterval)})},function(t,n,r){r(330),r(269),r(271),r(270),r(273),r(275),r(280),r(274),r(272),r(282),r(281),r(277),r(278),r(276),r(268),r(279),r(283),r(284),r(236),r(238),r(237),r(286),r(285),r(256),r(266),r(267),r(257),r(258),r(259),r(260),r(261),r(262),r(263),r(264),r(265),r(239),r(240),r(241),r(242),r(243),r(244),r(245),r(246),r(247),r(248),r(249),r(250),r(251),r(252),r(253),r(254),r(255),r(317),r(322),r(329),r(320),r(312),r(313),r(318),r(323),r(325),r(308),r(309),r(310),r(311),r(314),r(315),r(316),r(319),r(321),r(324),r(326),r(327),r(328),r(231),r(233),r(232),r(235),r(234),r(220),r(218),r(224),r(221),r(227),r(229),r(217),r(223),r(214),r(228),r(212),r(226),r(225),r(219),r(222),r(211),r(213),r(216),r(215),r(230),r(155),r(302),r(307),r(184),r(303),r(304),r(305),r(306),r(287),r(183),r(185),r(186),r(342),r(331),r(332),r(337),r(340),r(341),r(335),r(338),r(336),r(339),r(333),r(334),r(288),r(289),r(290),r(291),r(292),r(295),r(293),r(294),r(296),r(297),r(298),r(299),r(301),r(300),r(343),r(369),r(372),r(371),r(373),r(374),r(370),r(375),r(376),r(354),r(357),r(353),r(351),r(352),r(355),r(356),r(346),r(368),r(377),r(345),r(347),r(349),r(348),r(350),r(359),r(360),r(362),r(361),r(364),r(363),r(365),r(366),r(367),r(344),r(358),r(380),r(379),r(378),t.exports=r(52)},function(t,n){function r(t,n){if("string"==typeof n)return t.insertAdjacentHTML("afterend",n);var r=t.nextSibling;return r?t.parentNode.insertBefore(n,r):t.parentNode.appendChild(n)}t.exports=r},,,,,,,,,function(t,n,r){(function(n,r){!function(n){"use strict";function e(t,n,r,e){var i=n&&n.prototype instanceof o?n:o,u=Object.create(i.prototype),c=new p(e||[]);return u._invoke=s(t,r,c),u}function i(t,n,r){try{return{type:"normal",arg:t.call(n,r)}}catch(t){return{type:"throw",arg:t}}}function o(){}function u(){}function c(){}function f(t){["next","throw","return"].forEach(function(n){t[n]=function(t){return this._invoke(n,t)}})}function a(t){function n(r,e,o,u){var c=i(t[r],t,e);if("throw"!==c.type){var f=c.arg,a=f.value;return a&&"object"==typeof a&&m.call(a,"__await")?Promise.resolve(a.__await).then(function(t){n("next",t,o,u)},function(t){n("throw",t,o,u)}):Promise.resolve(a).then(function(t){f.value=t,o(f)},u)}u(c.arg)}function e(t,r){function e(){return new Promise(function(e,i){n(t,r,e,i)})}return o=o?o.then(e,e):e()}"object"==typeof r&&r.domain&&(n=r.domain.bind(n));var o;this._invoke=e}function s(t,n,r){var e=P;return function(o,u){if(e===F)throw new Error("Generator is already running");if(e===M){if("throw"===o)throw u;return y()}for(r.method=o,r.arg=u;;){var c=r.delegate;if(c){var f=l(c,r);if(f){if(f===A)continue;return f}}if("next"===r.method)r.sent=r._sent=r.arg;else if("throw"===r.method){if(e===P)throw e=M,r.arg;r.dispatchException(r.arg)}else"return"===r.method&&r.abrupt("return",r.arg);e=F;var a=i(t,n,r);if("normal"===a.type){if(e=r.done?M:j,a.arg===A)continue;return{value:a.arg,done:r.done}}"throw"===a.type&&(e=M,r.method="throw",r.arg=a.arg)}}}function l(t,n){var r=t.iterator[n.method];if(r===g){if(n.delegate=null,"throw"===n.method){if(t.iterator.return&&(n.method="return",n.arg=g,l(t,n),"throw"===n.method))return A;n.method="throw",n.arg=new TypeError("The iterator does not provide a 'throw' method")}return A}var e=i(r,t.iterator,n.arg);if("throw"===e.type)return n.method="throw",n.arg=e.arg,n.delegate=null,A;var o=e.arg;return o?o.done?(n[t.resultName]=o.value,n.next=t.nextLoc,"return"!==n.method&&(n.method="next",n.arg=g),n.delegate=null,A):o:(n.method="throw",n.arg=new TypeError("iterator result is not an object"),n.delegate=null,A)}function h(t){var n={tryLoc:t[0]};1 in t&&(n.catchLoc=t[1]),2 in t&&(n.finallyLoc=t[2],n.afterLoc=t[3]),this.tryEntries.push(n)}function v(t){var n=t.completion||{};n.type="normal",delete n.arg,t.completion=n}function p(t){this.tryEntries=[{tryLoc:"root"}],t.forEach(h,this),this.reset(!0)}function d(t){if(t){var n=t[w];if(n)return n.call(t);if("function"==typeof t.next)return t;if(!isNaN(t.length)){var r=-1,e=function n(){for(;++r<t.length;)if(m.call(t,r))return n.value=t[r],n.done=!1,n;return n.value=g,n.done=!0,n};return e.next=e}}return{next:y}}function y(){return{value:g,done:!0}}var g,b=Object.prototype,m=b.hasOwnProperty,x="function"==typeof Symbol?Symbol:{},w=x.iterator||"@@iterator",S=x.asyncIterator||"@@asyncIterator",_=x.toStringTag||"@@toStringTag",O="object"==typeof t,E=n.regeneratorRuntime;if(E)return void(O&&(t.exports=E));E=n.regeneratorRuntime=O?t.exports:{},E.wrap=e;var P="suspendedStart",j="suspendedYield",F="executing",M="completed",A={},N={};N[w]=function(){return this};var T=Object.getPrototypeOf,I=T&&T(T(d([])));I&&I!==b&&m.call(I,w)&&(N=I);var k=c.prototype=o.prototype=Object.create(N);u.prototype=k.constructor=c,c.constructor=u,c[_]=u.displayName="GeneratorFunction",E.isGeneratorFunction=function(t){var n="function"==typeof t&&t.constructor;return!!n&&(n===u||"GeneratorFunction"===(n.displayName||n.name))},E.mark=function(t){return Object.setPrototypeOf?Object.setPrototypeOf(t,c):(t.__proto__=c,_ in t||(t[_]="GeneratorFunction")),t.prototype=Object.create(k),t},E.awrap=function(t){return{__await:t}},f(a.prototype),a.prototype[S]=function(){return this},E.AsyncIterator=a,E.async=function(t,n,r,i){var o=new a(e(t,n,r,i));return E.isGeneratorFunction(n)?o:o.next().then(function(t){return t.done?t.value:o.next()})},f(k),k[_]="Generator",k.toString=function(){return"[object Generator]"},E.keys=function(t){var n=[];for(var r in t)n.push(r);return n.reverse(),function r(){for(;n.length;){var e=n.pop();if(e in t)return r.value=e,r.done=!1,r}return r.done=!0,r}},E.values=d,p.prototype={constructor:p,reset:function(t){if(this.prev=0,this.next=0,this.sent=this._sent=g,this.done=!1,this.delegate=null,this.method="next",this.arg=g,this.tryEntries.forEach(v),!t)for(var n in this)"t"===n.charAt(0)&&m.call(this,n)&&!isNaN(+n.slice(1))&&(this[n]=g)},stop:function(){this.done=!0;var t=this.tryEntries[0],n=t.completion;if("throw"===n.type)throw n.arg;return this.rval},dispatchException:function(t){function n(n,e){return o.type="throw",o.arg=t,r.next=n,e&&(r.method="next",r.arg=g),!!e}if(this.done)throw t;for(var r=this,e=this.tryEntries.length-1;e>=0;--e){var i=this.tryEntries[e],o=i.completion;if("root"===i.tryLoc)return n("end");if(i.tryLoc<=this.prev){var u=m.call(i,"catchLoc"),c=m.call(i,"finallyLoc");if(u&&c){if(this.prev<i.catchLoc)return n(i.catchLoc,!0);if(this.prev<i.finallyLoc)return n(i.finallyLoc)}else if(u){if(this.prev<i.catchLoc)return n(i.catchLoc,!0)}else{if(!c)throw new Error("try statement without catch or finally");if(this.prev<i.finallyLoc)return n(i.finallyLoc)}}}},abrupt:function(t,n){for(var r=this.tryEntries.length-1;r>=0;--r){var e=this.tryEntries[r];if(e.tryLoc<=this.prev&&m.call(e,"finallyLoc")&&this.prev<e.finallyLoc){var i=e;break}}i&&("break"===t||"continue"===t)&&i.tryLoc<=n&&n<=i.finallyLoc&&(i=null);var o=i?i.completion:{};return o.type=t,o.arg=n,i?(this.method="next",this.next=i.finallyLoc,A):this.complete(o)},complete:function(t,n){if("throw"===t.type)throw t.arg;return"break"===t.type||"continue"===t.type?this.next=t.arg:"return"===t.type?(this.rval=this.arg=t.arg,this.method="return",this.next="end"):"normal"===t.type&&n&&(this.next=n),A},finish:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.finallyLoc===t)return this.complete(r.completion,r.afterLoc),v(r),A}},catch:function(t){for(var n=this.tryEntries.length-1;n>=0;--n){var r=this.tryEntries[n];if(r.tryLoc===t){var e=r.completion;if("throw"===e.type){var i=e.arg;v(r)}return i}}throw new Error("illegal catch attempt")},delegateYield:function(t,n,r){return this.delegate={iterator:d(t),resultName:n,nextLoc:r},"next"===this.method&&(this.arg=g),A}}}("object"==typeof n?n:"object"==typeof window?window:"object"==typeof self?self:this)}).call(n,function(){return this}(),r(158))}])</script><script src="/./main.0cf68a.js"></script><script>!function(){!function(e){var t=document.createElement("script");document.getElementsByTagName("body")[0].appendChild(t),t.setAttribute("src",e)}("/slider.e37972.js")}()</script>
 
 
-<script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
-<script type="text/javascript">
-$(window).load(function(){
-   hljs.initHighlightingOnLoad();
-})
-</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- <script type="text/javascript"> -->
+<!-- $(window).load(function(){ -->
+<!--    hljs.initHighlightingOnLoad(); -->
+<!-- }) -->
+<!-- </script> -->
 
     
 <div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
@@ -1388,6 +1374,10 @@ $(window).load(function(){
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1397,10 +1387,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1416,7 +1402,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1424,19 +1410,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">json</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">对象序列化</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1452,15 +1426,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">rake</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">task</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">自动加载</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1484,19 +1458,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">arch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1516,15 +1486,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">bundle</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">cnblogs</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1532,11 +1498,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
+                <a href="javascript:void(0)" class="js-tag color4">vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">form-for</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1545,6 +1519,14 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">证书</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1557,10 +1539,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">shell</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1588,6 +1566,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">模糊查询</a>
               </li>
              
@@ -1597,10 +1579,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">pg_trgm</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1616,15 +1594,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">postgres</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">窗口函数</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">pryrc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1637,6 +1619,10 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1653,14 +1639,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">content_for</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1708,6 +1686,10 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -1717,10 +1699,6 @@ $(window).load(function(){
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1752,15 +1730,23 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">vs</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">vscode</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">wc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1776,11 +1762,7 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">xpath</a>
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1788,15 +1770,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">geth</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1808,11 +1786,15 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1824,10 +1806,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
@@ -1836,11 +1814,11 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1876,18 +1854,6 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1896,7 +1862,19 @@ $(window).load(function(){
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">部署</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
               </li>
             
             <div class="clearfix"></div>
