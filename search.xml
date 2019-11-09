@@ -1,6 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>windows下一些快捷操作</title>
+    <url>/2019/11/09/windows%E4%B8%8B%E4%B8%80%E4%BA%9B%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h3 id="整理自-https-www-v2ex-com-t-617347-reply91"><a href="#整理自-https-www-v2ex-com-t-617347-reply91" class="headerlink" title="整理自 https://www.v2ex.com/t/617347#reply91"></a>整理自 <a href="https://www.v2ex.com/t/617347#reply91" target="_blank" rel="noopener">https://www.v2ex.com/t/617347#reply91</a></h3><p>路径栏中输入cmd的方式打开后是在当前目录下的，win + r 输入cmd打开的方式是在user目录下的。 另外此处打开是到%PATH%中查找，也就是说%PATH%中的东西都能用这种方式打开，win + r中输入同理，据此有老哥将应用快捷方式改个易输入名称，然后放置到%PATH%中的某个文件夹下，之后即可在win + r中输入名称打开自定义应用。</p>
+<ul>
+<li><p>cmd中输入start .：打开处于当前目录的资源管理器</p>
+</li>
+<li><p>记事本第一行写上.LOG：关闭时会在最后一行插入编辑时间</p>
+</li>
+<li><p>win + s或直接 win 打开开始菜单后输入名称可快捷搜索打开应用、文件</p>
+</li>
+<li><p>路径栏输入shell:startup：启动目录</p>
+</li>
+<li><p>路径栏输入shell:appsfolder：应用程序目录</p>
+</li>
+<li><p>路径栏输入shell:appsfolder{UWP ID}：启动对应的 uwp 应用，id 在注册表或者拖到桌面的快捷方式的 target 里面</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<ul>
+<li><p>路径栏输入启动与shell:startup命令一样</p>
+</li>
+<li><p>文件夹空白处按住shift然后点击右键，右键菜单会多出来“在 Powershell 打开” 和 “在 linux shell 打开”两个选项</p>
+</li>
+<li><p>Windows自带的那些程序窗口除了点击右上角的叉关闭，还可以双击窗口左上角的图标关闭</p>
+</li>
+<li><p>桌面 alt + f4：可以弹出关机菜单</p>
+</li>
+<li><p>win + ↑↓←→：调整窗口布局</p>
+</li>
+<li><p>win + e：打开文件资源管理器</p>
+</li>
+<li><p>win + r：打开运行对话框</p>
+</li>
+<li><p>win + l：锁定计算机</p>
+</li>
+<li><p>win + 1234等数字键：按任务栏上的顺序快捷切换窗口</p>
+</li>
+<li><p>win + g可用Xbox提供的便捷工具截屏、录屏</p>
+</li>
+<li><p>通过shutdown命令可以进行定时关机、重启、休眠、注销等操作，cmd中输入shutdown /?查看命令具体支持的参数</p>
+</li>
+<li><p>按住 shift 并点重启可以使重启后进入 BIOS</p>
+</li>
+<li><p>cmd 里面按下 ‘F7’ 可以显示历史记录</p>
+</li>
+<li><p>文件上shift+右键会多出来一个“复制为路径选项”</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux内存查看</title>
+    <url>/2019/11/09/Linux%E5%86%85%E5%AD%98%E6%9F%A5%E7%9C%8B/</url>
+    <content><![CDATA[<h3 id="摘抄自-https-www-2daygeek-com-linux-find-top-memory-consuming-processes"><a href="#摘抄自-https-www-2daygeek-com-linux-find-top-memory-consuming-processes" class="headerlink" title="摘抄自 https://www.2daygeek.com/linux-find-top-memory-consuming-processes/"></a>摘抄自 <a href="https://www.2daygeek.com/linux-find-top-memory-consuming-processes/" target="_blank" rel="noopener">https://www.2daygeek.com/linux-find-top-memory-consuming-processes/</a></h3><p>使用 top 命令 和 ps 命令 可以轻松的识别这种情况。我过去经常同时使用这两个命令，两个命令得到的结果是相同的。所以我建议你从中选择一个喜欢的使用就可以。</p>
+<p>1) 如何使用 ps 命令在 Linux 中查找内存消耗最大的进程<br>ps 命令用于报告当前进程的快照。ps 命令的意思是“进程状态”。这是一个标准的 Linux 应用程序，用于查找有关在 Linux 系统上运行进程的信息。</p>
+<p>它用于列出当前正在运行的进程及其进程 ID（PID）、进程所有者名称、进程优先级（PR）以及正在运行的命令的绝对路径等。</p>
+<p>下面的 ps 命令格式为你提供有关内存消耗最大进程的更多信息。</p>
+<a id="more"></a>
+
+<pre><code class="shell">ps aux --sort -rss | head
+
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+mysql     1064  3.2  5.4 886076 209988 ?       Ssl  Oct25  62:40 /usr/sbin/mysqld
+varnish  23396  0.0  2.9 286492 115616 ?       SLl  Oct25   0:42 /usr/sbin/varnishd -P /var/run/varnish.pid -f /etc/varnish/default.vcl -a :82 -T 127.0.0.1:6082 -S /etc/varnish/secret -s malloc,256M
+named     1105  0.0  2.7 311712 108204 ?       Ssl  Oct25   0:16 /usr/sbin/named -u named -c /etc/named.conf
+nobody   23377  0.2  2.3 153096 89432 ?        S    Oct25   4:35 nginx: worker process
+nobody   23376  0.1  2.1 147096 83316 ?        S    Oct25   2:18 nginx: worker process
+root     23375  0.0  1.7 131028 66764 ?        Ss   Oct25   0:01 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+nobody   23378  0.0  1.6 130988 64592 ?        S    Oct25   0:00 nginx: cache manager process
+root      1135  0.0  0.9  86708 37572 ?        S    05:37   0:20 cwpsrv: worker process
+root      1133  0.0  0.9  86708 37544 ?        S    05:37   0:05 cwpsrv: worker process</code></pre>
+<pre><code class="shell">ps -eo pid,ppid,%mem,%cpu,cmd --sort=-%mem | head
+
+PID  PPID %MEM %CPU CMD
+1064     1  5.4  3.2 /usr/sbin/mysqld
+23396 23386  2.9  0.0 /usr/sbin/varnishd -P /var/run/varnish.pid -f /etc/varnish/default.vcl -a :82 -T 127.0.0.1:6082 -S /etc/varnish/secret -s malloc,256M
+1105     1  2.7  0.0 /usr/sbin/named -u named -c /etc/named.conf
+23377 23375  2.3  0.2 nginx: worker process
+23376 23375  2.1  0.1 nginx: worker process
+3625   977  1.9  0.0 /usr/local/bin/php-cgi /home/daygeekc/public_html/index.php
+23375     1  1.7  0.0 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+23378 23375  1.6  0.0 nginx: cache manager process
+ 1135  3034  0.9  0.0 cwpsrv: worker process</code></pre>
+<p>如果你只想查看命令名称而不是命令的绝对路径，请使用下面的 ps 命令格式。</p>
+<pre><code class="shell">ps -eo pid,ppid,%mem,%cpu,comm --sort=-%mem | head
+
+PID  PPID %MEM %CPU COMMAND
+1064     1  5.4  3.2 mysqld
+23396 23386  2.9  0.0 cache-main
+1105     1  2.7  0.0 named
+23377 23375  2.3  0.2 nginx
+23376 23375  2.1  0.1 nginx
+23375     1  1.7  0.0 nginx
+23378 23375  1.6  0.0 nginx
+ 1135  3034  0.9  0.0 cwpsrv
+ 1133  3034  0.9  0.0 cwpsrv</code></pre>
+<p>如何使用 top 命令在 Linux 中查找内存消耗最大的进程</p>
+<p>Linux 的 top 命令是用来监视 Linux 系统性能的最好和最知名的命令。它在交互界面上显示运行的系统进程的实时视图。但是，如果要查找内存消耗最大的进程，请 在批处理模式下使用 top 命令。</p>
+<pre><code class="shell">top -c -b -o +%MEM | head -n 20 | tail -15
+
+PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+1064 mysql     20   0  886076 209740   8388 S   0.0  5.4  62:41.20 /usr/sbin/mysqld
+23396 varnish   20   0  286492 115616  83572 S   0.0  3.0   0:42.24 /usr/sbin/varnishd -P /var/run/varnish.pid -f /etc/varnish/default.vcl -a :82 -T 127.0.0.1:6082 -S /etc/varnish/secret -s malloc,256M
+1105 named     20   0  311712 108204   2424 S   0.0  2.8   0:16.41 /usr/sbin/named -u named -c /etc/named.conf
+23377 nobody    20   0  153240  89432   2432 S   0.0  2.3   4:35.74 nginx: worker process
+23376 nobody    20   0  147096  83316   2416 S   0.0  2.1   2:18.09 nginx: worker process
+23375 root      20   0  131028  66764   1616 S   0.0  1.7   0:01.07 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+23378 nobody    20   0  130988  64592    592 S   0.0  1.7   0:00.51 nginx: cache manager process
+1135 root      20   0   86708  37572   2252 S   0.0  1.0   0:20.18 cwpsrv: worker process
+1133 root      20   0   86708  37544   2212 S   0.0  1.0   0:05.94 cwpsrv: worker process
+3034 root      20   0   86704  36740   1452 S   0.0  0.9   0:00.09 cwpsrv: master process /usr/local/cwpsrv/bin/cwpsrv
+1067 nobody    20   0 1356200  31588   2352 S   0.0  0.8   0:56.06 /usr/local/apache/bin/httpd -k start
+977 nobody    20   0 1356088  31268   2372 S   0.0  0.8   0:30.44 /usr/local/apache/bin/httpd -k start
+968 nobody    20   0 1356216  30544   2348 S   0.0  0.8   0:19.95 /usr/local/apache/bin/httpd -k start</code></pre>
+<p>如果你只想查看命令名称而不是命令的绝对路径，请使用下面的 top 命令格式。</p>
+<pre><code class="shell">top -b -o +%MEM | head -n 20 | tail -15
+
+PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+1064 mysql     20   0  886076 210340   8388 S   6.7  5.4  62:40.93 mysqld
+23396 varnish   20   0  286492 115616  83572 S   0.0  3.0   0:42.24 cache-main
+1105 named     20   0  311712 108204   2424 S   0.0  2.8   0:16.41 named
+23377 nobody    20   0  153240  89432   2432 S  13.3  2.3   4:35.74 nginx
+23376 nobody    20   0  147096  83316   2416 S   0.0  2.1   2:18.09 nginx
+23375 root      20   0  131028  66764   1616 S   0.0  1.7   0:01.07 nginx
+23378 nobody    20   0  130988  64592    592 S   0.0  1.7   0:00.51 nginx
+1135 root      20   0   86708  37572   2252 S   0.0  1.0   0:20.18 cwpsrv
+1133 root      20   0   86708  37544   2212 S   0.0  1.0   0:05.94 cwpsrv
+3034 root      20   0   86704  36740   1452 S   0.0  0.9   0:00.09 cwpsrv
+1067 nobody    20   0 1356200  31588   2352 S   0.0  0.8   0:56.04 httpd
+977 nobody    20   0 1356088  31268   2372 S   0.0  0.8   0:30.44 httpd
+968 nobody    20   0 1356216  30544   2348 S   0.0  0.8   0:19.95 httpd</code></pre>
+<p>奖励技巧：如何使用 ps_mem 命令在 Linux 中查找内存消耗最大的进程<br>ps_mem 程序 用于显示每个程序（而不是每个进程）使用的核心内存。该程序允许你检查每个程序使用了多少内存。它根据程序计算私有和共享内存的数量，并以最合适的方式返回已使用的总内存。</p>
+<p>它使用以下逻辑来计算内存使用量。总内存使用量 = sum(用于程序进程的专用内存使用量) + sum(用于程序进程的共享内存使用量)。</p>
+<pre><code class="shell">ps_mem
+
+ Private  +   Shared  =  RAM used    Program
+128.0 KiB +  27.5 KiB = 155.5 KiB    agetty
+228.0 KiB +  47.0 KiB = 275.0 KiB    atd
+284.0 KiB +  53.0 KiB = 337.0 KiB    irqbalance
+380.0 KiB +  81.5 KiB = 461.5 KiB    dovecot
+364.0 KiB + 121.5 KiB = 485.5 KiB    log
+520.0 KiB +  65.5 KiB = 585.5 KiB    auditd
+556.0 KiB +  60.5 KiB = 616.5 KiB    systemd-udevd
+732.0 KiB +  48.0 KiB = 780.0 KiB    crond
+296.0 KiB + 524.0 KiB = 820.0 KiB    avahi-daemon (2)
+772.0 KiB +  51.5 KiB = 823.5 KiB    systemd-logind
+940.0 KiB + 162.5 KiB =   1.1 MiB    dbus-daemon
+  1.1 MiB +  99.0 KiB =   1.2 MiB    pure-ftpd
+  1.2 MiB + 100.5 KiB =   1.3 MiB    master
+  1.3 MiB + 198.5 KiB =   1.5 MiB    pickup
+  1.3 MiB + 198.5 KiB =   1.5 MiB    bounce
+  1.3 MiB + 198.5 KiB =   1.5 MiB    pipe
+  1.3 MiB + 207.5 KiB =   1.5 MiB    qmgr
+  1.4 MiB + 198.5 KiB =   1.6 MiB    cleanup
+  1.3 MiB + 299.5 KiB =   1.6 MiB    trivial-rewrite
+  1.5 MiB + 145.0 KiB =   1.6 MiB    config
+  1.4 MiB + 291.5 KiB =   1.6 MiB    tlsmgr
+  1.4 MiB + 308.5 KiB =   1.7 MiB    local
+  1.4 MiB + 323.0 KiB =   1.8 MiB    anvil (2)
+  1.3 MiB + 559.0 KiB =   1.9 MiB    systemd-journald
+  1.8 MiB + 240.5 KiB =   2.1 MiB    proxymap
+  1.9 MiB + 322.5 KiB =   2.2 MiB    auth
+  2.4 MiB +  88.5 KiB =   2.5 MiB    systemd
+  2.8 MiB + 458.5 KiB =   3.2 MiB    smtpd
+  2.9 MiB + 892.0 KiB =   3.8 MiB    bash (2)
+  3.3 MiB + 555.5 KiB =   3.8 MiB    NetworkManager
+  4.1 MiB + 233.5 KiB =   4.3 MiB    varnishd
+  4.0 MiB + 662.0 KiB =   4.7 MiB    dhclient (2)
+  4.3 MiB + 623.5 KiB =   4.9 MiB    rsyslogd
+  3.6 MiB +   1.8 MiB =   5.5 MiB    sshd (3)
+  5.6 MiB + 431.0 KiB =   6.0 MiB    polkitd
+ 13.0 MiB + 546.5 KiB =  13.6 MiB    tuned
+ 22.5 MiB +  76.0 KiB =  22.6 MiB    lfd - sleeping
+ 30.0 MiB +   6.2 MiB =  36.2 MiB    php-fpm (6)
+  5.7 MiB +  33.5 MiB =  39.2 MiB    cwpsrv (3)
+ 20.1 MiB +  25.3 MiB =  45.4 MiB    httpd (5)
+104.7 MiB + 156.0 KiB = 104.9 MiB    named
+112.2 MiB + 479.5 KiB = 112.7 MiB    cache-main
+ 69.4 MiB +  58.6 MiB = 128.0 MiB    nginx (4)
+203.4 MiB + 309.5 KiB = 203.7 MiB    mysqld
+---------------------------------
+                        775.8 MiB
+=================================</code></pre>
+]]></content>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>去除重复行</title>
+    <url>/2019/11/09/%E5%8E%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E8%A1%8C/</url>
+    <content><![CDATA[<h3 id="摘抄自-https-www-linuxidc-com-Linux-2014-01-94571-htm"><a href="#摘抄自-https-www-linuxidc-com-Linux-2014-01-94571-htm" class="headerlink" title="摘抄自 https://www.linuxidc.com/Linux/2014-01/94571.htm"></a>摘抄自 <a href="https://www.linuxidc.com/Linux/2014-01/94571.htm" target="_blank" rel="noopener">https://www.linuxidc.com/Linux/2014-01/94571.htm</a></h3><h3 id="先sort排序，再去重"><a href="#先sort排序，再去重" class="headerlink" title="先sort排序，再去重"></a>先sort排序，再去重</h3><pre><code class="shell">:sort  //直接排序
+:g/^\(.*\)$\n\1$/d                      //去除重复行
+:g/\%(^\1$\n\)\@&lt;=\(.*\)$/d    //功能同上，也是去除重复行
+:g/\%(^\1\&gt;.*$\n\)\@&lt;=\(\k\+\).*$/d  //功能同上，也是去除重复行</code></pre>
+<h3 id="使用awk"><a href="#使用awk" class="headerlink" title="使用awk"></a>使用awk</h3><p><code>awk &#39;!a[$0]++&#39; file</code></p>
+<p>解析：</p>
+<p>awk流程是逐行处理的，默认从文件的第一行一直处理到文件最后一行<br>还要知道awk的基本命令格式是<code>&#39;pattern{action}&#39;</code>先匹配各种各样的样式，然后大括号里处理如何打印输出，<br>默认的只要匹配了pattern就<code>{print $0}</code>，如果pattern未命中其判断值为假（0）那么就不会再去处理{action}了<br>pattern命中则为判断值为真（非0）就去处理{action}。<br>举个最简单的例子：<code>awk &#39;1&#39; file和awk &#39;{print $0}&#39; file</code> 是一个道理，都是从头到尾依次打印文件的每一行。</p>
+<a id="more"></a>
+
+
+<p><code>&#39;!a[$0]++&#39;</code><br>分成几个部分简单解释下吧。<br>这个命令没有{action}也就是说，只要pattern部分判断值为真（非0）就打印该行，否则就跳过不打印<br>！在awk是取相反的意思，就是把对的变成错的把真的变成假的，放在这个命令中是神马作用一会解释；<br><code>a[$0]</code> 这个非常好理解，建立数组a，其变量是文本中的每一行，awk里<code>$1</code>是第一列，<code>$2</code>是第二列，以此类推<code>$NF</code>是最后一列，而<code>$0</code>是代表所有列及分隔符，也就是一整行，这样如果pattern是真的那就打印一整行<br>++的意思是a数组取变量完毕后，对该数组值+1<br>找个最简单的文档来解释一下</p>
+<pre><code class="shell">cat file
+xxx
+yyy
+xxx
+zzz</code></pre>
+<p>这个文件有4行，其中第一、三行是重复的。套用这个命令处理流程如下：<br>获取第一行a[xxx]，因为这是第一行，数组a里从没见过xxx这个变量，那么自然他的值就是假（0）也就是说a[xxx]=0，这个时候！就有大作用了，他把a[xxx]假（0）变成了a[xxx]为真（!0）这个时候原本不该打印的第一行就变成了应该打印了，取逻辑反后对a[xxx]的值+1然后处理第二行<br>第二行a[yyy]这个情况跟刚才第一行的a[xxx]一样，也应该打印他<br>到第三行的时候情况变了，因为第一行已经出现过a[xxx]并且已经++过了，他的值已经是非0而不是前两行的0了，本应打印但这时候再由！取逻辑反就不必打印了<br>第四行a[zzz]就又和第一、二两行一样了。<br>所以执行完就是这个结果</p>
+<pre><code class="shell">awk &#39;!a[$0]++&#39; file
+xxx
+yyy
+zzz</code></pre>
+<p>再把file搞稍微复杂点</p>
+<pre><code class="shell">awk &#39;{print NR,$0}&#39; file
+1 xxx
+2 yyy
+3 zzz
+4 xxx
+5 yyy
+6 zzz
+7 xxx
+8 yyy
+9 zzz</code></pre>
+<p>一共9行文本，3行一次重复。为了看得更清楚，本来默认的<code>{print $0}</code>稍微改下，变成<code>{print NR,$0}</code> NR表示行号。<br>那么现在来执行下刚才讲的试试看</p>
+<pre><code class="shell">awk &#39;!a[$0]++{print NR,$0}&#39; file
+1 xxx
+2 yyy
+3 zzz
+
+awk &#39;a[$0]++{print NR,$0}&#39; file
+4 xxx
+5 yyy
+6 zzz
+7 xxx
+8 yyy
+9 zzz</code></pre>
+]]></content>
+      <tags>
+        <tag>awk</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>curl用法</title>
     <url>/2019/10/31/curl%E7%94%A8%E6%B3%95/</url>
     <content><![CDATA[<p>整理自 <a href="https://mp.weixin.qq.com/s/0UR1UijHiSe0QgevlQY6TA" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/0UR1UijHiSe0QgevlQY6TA</a></p>
@@ -1760,96 +2006,6 @@ Client.exists?([1,2,3])</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>rails使用markdown显示文本</title>
-    <url>/2019/10/31/rails%E4%BD%BF%E7%94%A8markdown%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC/</url>
-    <content><![CDATA[<h2 id="rails使用markdown显示文本"><a href="#rails使用markdown显示文本" class="headerlink" title="rails使用markdown显示文本"></a>rails使用markdown显示文本</h2><ul>
-<li>在Gemgfile中</li>
-</ul>
-<pre><code class="ruby"># markdown
-gem &#39;redcarpet&#39;
-# # 代码颜色高亮
-gem &#39;coderay&#39;</code></pre>
-<ul>
-<li>执行 <code>bundle install</code> 安装包</li>
-<li>在<code>application_helper</code>中添加如下代码</li>
-</ul>
-<pre><code class="ruby">class CodeRayify &lt; Redcarpet::Render::HTML
-    def block_code(code, language)
-      language=&quot;c&quot; if language==&quot;c++&quot;
-      language ||= :plaintext
-      begin
-        CodeRay.scan(code, language).div
-      rescue Exception =&gt; e
-        language=&quot;markdown&quot;
-        retry
-      end
-    end
-  end
-
-  def markdown(text)
-    coderayified = CodeRayify.new(:filter_html =&gt; true,
-                                  :hard_wrap =&gt; true)
-    render_options = {
-      # will remove from the output HTML tags inputted by user
-      filter_html:     true,
-      # will insert &lt;br /&gt; tags in paragraphs where are newlines
-      # (ignored by default)
-      hard_wrap: true,
-      # hash for extra link options, for example &#39;nofollow&#39;
-      link_attributes: { rel: &#39;nofollow&#39; }
-      # more
-      # will remove &lt;img&gt; tags from output
-      # no_images: true
-      # will remove &lt;a&gt; tags from output
-      # no_links: true
-      # will remove &lt;style&gt; tags from output
-      # no_styles: true
-      # generate links for only safe protocols
-      # safe_links_only: true
-      # and more ... (prettify, with_toc_data, xhtml)
-    }
-    renderer = Redcarpet::Render::HTML.new(render_options)
-
-    extensions = {
-      #will parse links without need of enclosing them
-      autolink:     true,
-      # blocks delimited with 3 ` or ~ will be considered as code block.
-      # No need to indent.  You can provide language name too.
-      # ```ruby
-      # block of code
-      # ```
-      fenced_code_blocks: true,
-      # will ignore standard require for empty lines surrounding HTML blocks
-      lax_spacing:  true,
-      # will not generate emphasis inside of words, for example no_emph_no
-      no_intra_emphasis:  true,
-      # will parse strikethrough from ~~, for example: ~~bad~~
-      strikethrough:      true,
-      # will parse superscript after ^, you can wrap superscript in ()
-      superscript:  true
-      # will require a space after # in defining headers
-      # space_after_headers: true
-    }
-    Redcarpet::Markdown.new(coderayified, extensions).render(text).html_safe
-  end</code></pre>
-<ul>
-<li>在view中要显示markdown文本的地方添加<code>&lt;%= markdown(text)%&gt;</code></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>rails健壮参数</title>
-    <url>/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/</url>
-    <content><![CDATA[<pre><code class="ruby">def user_params
-  params.require(:user).permit(:nickname, :email, :address)
-end</code></pre>
-]]></content>
-      <tags>
-        <tag>rails</tag>
-        <tag>健壮参数</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>rails国际化</title>
     <url>/2019/10/31/rails%E5%9B%BD%E9%99%85%E5%8C%96/</url>
     <content><![CDATA[<h2 id="配置翻译文本"><a href="#配置翻译文本" class="headerlink" title="配置翻译文本"></a>配置翻译文本</h2><p>在<code>config/locales</code>文件夹下，新建翻译文本<code>zh-CN.yml</code>,这里的文件名根据自己的需要随便命名，最好见名知意<br>文件内容参考如下</p>
@@ -1939,114 +2095,6 @@ end</code></pre>
 <p>with</p>
 <pre><code class="ruby">config.assets.js_compressor = Uglifier.new(harmony: true)</code></pre>
 <p>in <code>config/environments/production.rb</code></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>rails字体加载问题</title>
-    <url>/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
-<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
-<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
-<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
-<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
-<p><strong>The default asset pipeline</strong></p>
-<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
-<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
-<pre><code>|-app/
-|---assets/
-|-----fonts/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
-<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
-<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
-<p><strong>Fonts path in your Sass</strong></p>
-<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
-<pre><code>@font-face {
-    font-family: &#39;icofonts&#39;;
-    src:url(&#39;fonts/icofonts.eot&#39;);
-    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
-        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
-        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
-    font-weight: normal;
-    font-style: normal;
-}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:font-url(&#39;icofonts.eot&#39;);
-  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-
-  ...
-} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src: url(/assets/icofonts.eot);
-  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
-    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
-    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
-    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
-  font-weight: normal;
-  font-style: normal;
-}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
-<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
-<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/
-|-------fonts/</code></pre><p><strong>The Sass</strong></p>
-<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
-  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
-
-  ...
-}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-
-  ...
-}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
-<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
-<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
-<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
-  ...
-}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
-<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
-<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
-<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
 ]]></content>
   </entry>
   <entry>
@@ -2249,6 +2297,204 @@ const styles = StyleSheet.create({
 ]]></content>
   </entry>
   <entry>
+    <title>rails字体加载问题</title>
+    <url>/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
+<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
+<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
+<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
+<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
+<p><strong>The default asset pipeline</strong></p>
+<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
+<pre><code>|-app/
+|---assets/
+|-----images/
+|-----javascripts/
+|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
+<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
+<pre><code>|-app/
+|---assets/
+|-----fonts/
+|-----images/
+|-----javascripts/
+|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
+<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
+<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
+<p><strong>Fonts path in your Sass</strong></p>
+<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
+<pre><code>@font-face {
+    font-family: &#39;icofonts&#39;;
+    src:url(&#39;fonts/icofonts.eot&#39;);
+    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
+        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
+        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
+    font-weight: normal;
+    font-style: normal;
+}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:font-url(&#39;icofonts.eot&#39;);
+  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+
+  ...
+} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
+<pre><code>@font-face {
+  font-family: &#39;icofonts&#39;;
+  src: url(/assets/icofonts.eot);
+  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
+    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
+    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
+    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
+  font-weight: normal;
+  font-style: normal;
+}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
+<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
+<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
+<pre><code>|-app/
+|---assets/
+|-----images/
+|-----javascripts/
+|-----stylesheets/
+|-------fonts/</code></pre><p><strong>The Sass</strong></p>
+<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
+  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
+
+  ...
+}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
+  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+
+  ...
+}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
+<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
+  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  ...
+}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:url(&#39;fonts/icofonts.eot&#39;);
+  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  ...
+}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
+<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
+<pre><code>@font-face {
+  font-family: &#39;icofonts&#39;;
+  src:url(&#39;fonts/icofonts.eot&#39;);
+  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  ...
+}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
+<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
+<pre><code>@font-face {
+  font-family: &#39;icofonts&#39;;
+  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
+  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
+  ...
+}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
+<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
+<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
+<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>rails使用markdown显示文本</title>
+    <url>/2019/10/31/rails%E4%BD%BF%E7%94%A8markdown%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC/</url>
+    <content><![CDATA[<h2 id="rails使用markdown显示文本"><a href="#rails使用markdown显示文本" class="headerlink" title="rails使用markdown显示文本"></a>rails使用markdown显示文本</h2><ul>
+<li>在Gemgfile中</li>
+</ul>
+<pre><code class="ruby"># markdown
+gem &#39;redcarpet&#39;
+# # 代码颜色高亮
+gem &#39;coderay&#39;</code></pre>
+<ul>
+<li>执行 <code>bundle install</code> 安装包</li>
+<li>在<code>application_helper</code>中添加如下代码</li>
+</ul>
+<pre><code class="ruby">class CodeRayify &lt; Redcarpet::Render::HTML
+    def block_code(code, language)
+      language=&quot;c&quot; if language==&quot;c++&quot;
+      language ||= :plaintext
+      begin
+        CodeRay.scan(code, language).div
+      rescue Exception =&gt; e
+        language=&quot;markdown&quot;
+        retry
+      end
+    end
+  end
+
+  def markdown(text)
+    coderayified = CodeRayify.new(:filter_html =&gt; true,
+                                  :hard_wrap =&gt; true)
+    render_options = {
+      # will remove from the output HTML tags inputted by user
+      filter_html:     true,
+      # will insert &lt;br /&gt; tags in paragraphs where are newlines
+      # (ignored by default)
+      hard_wrap: true,
+      # hash for extra link options, for example &#39;nofollow&#39;
+      link_attributes: { rel: &#39;nofollow&#39; }
+      # more
+      # will remove &lt;img&gt; tags from output
+      # no_images: true
+      # will remove &lt;a&gt; tags from output
+      # no_links: true
+      # will remove &lt;style&gt; tags from output
+      # no_styles: true
+      # generate links for only safe protocols
+      # safe_links_only: true
+      # and more ... (prettify, with_toc_data, xhtml)
+    }
+    renderer = Redcarpet::Render::HTML.new(render_options)
+
+    extensions = {
+      #will parse links without need of enclosing them
+      autolink:     true,
+      # blocks delimited with 3 ` or ~ will be considered as code block.
+      # No need to indent.  You can provide language name too.
+      # ```ruby
+      # block of code
+      # ```
+      fenced_code_blocks: true,
+      # will ignore standard require for empty lines surrounding HTML blocks
+      lax_spacing:  true,
+      # will not generate emphasis inside of words, for example no_emph_no
+      no_intra_emphasis:  true,
+      # will parse strikethrough from ~~, for example: ~~bad~~
+      strikethrough:      true,
+      # will parse superscript after ^, you can wrap superscript in ()
+      superscript:  true
+      # will require a space after # in defining headers
+      # space_after_headers: true
+    }
+    Redcarpet::Markdown.new(coderayified, extensions).render(text).html_safe
+  end</code></pre>
+<ul>
+<li>在view中要显示markdown文本的地方添加<code>&lt;%= markdown(text)%&gt;</code></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>rails健壮参数</title>
+    <url>/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/</url>
+    <content><![CDATA[<pre><code class="ruby">def user_params
+  params.require(:user).permit(:nickname, :email, :address)
+end</code></pre>
+]]></content>
+      <tags>
+        <tag>rails</tag>
+        <tag>健壮参数</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JQuery为动态添加的元素绑定事件</title>
     <url>/2019/10/31/JQuery%E4%B8%BA%E5%8A%A8%E6%80%81%E6%B7%BB%E5%8A%A0%E7%9A%84%E5%85%83%E7%B4%A0%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6/</url>
     <content><![CDATA[<h2 id="on-：适用于当前及未来的元素（比如由脚本创建的新元素"><a href="#on-：适用于当前及未来的元素（比如由脚本创建的新元素" class="headerlink" title="on()：适用于当前及未来的元素（比如由脚本创建的新元素)"></a>on()：适用于当前及未来的元素（比如由脚本创建的新元素)</h2><pre><code class="js">  $(selector).on(event,childSelector,data,function,map)</code></pre>
@@ -2399,19 +2645,6 @@ new Date(ms);</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>linux添加新用户</title>
-    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
-    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
-<li>adduser username</li>
-<li>输入密码</li>
-<li>再次输密码</li>
-<li>输入电话号等，按enter使用默认值</li>
-<li>新用户创建成功</li>
-</ol>
-<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
-]]></content>
-  </entry>
-  <entry>
     <title>liunx用命令行的方式更换桌面背景</title>
     <url>/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/</url>
     <content><![CDATA[<h2 id="liunx用命令行的方式更换桌面背景"><a href="#liunx用命令行的方式更换桌面背景" class="headerlink" title="liunx用命令行的方式更换桌面背景"></a>liunx用命令行的方式更换桌面背景</h2><pre><code class="shell"> gsettings set org.gnome.desktop.background picture-uri &quot;file:/home/mc/桌面/disco-75c0c1ef.png&quot;</code></pre>
@@ -2456,55 +2689,24 @@ new Date(ms);</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>linux添加新用户</title>
+    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
+    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
+<li>adduser username</li>
+<li>输入密码</li>
+<li>再次输密码</li>
+<li>输入电话号等，按enter使用默认值</li>
+<li>新用户创建成功</li>
+</ol>
+<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
+]]></content>
+  </entry>
+  <entry>
     <title>nginx_passenger安装</title>
     <url>/2019/10/31/nginx_passenger%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<h1 id="Install-our-PGP-key-and-add-HTTPS-support-for-APT"><a href="#Install-our-PGP-key-and-add-HTTPS-support-for-APT" class="headerlink" title="Install our PGP key and add HTTPS support for APT"></a>Install our PGP key and add HTTPS support for APT</h1><p>sudo apt-key adv –keyserver hkp://keyserver.ubuntu.com:80 –recv-keys<br>561F9B9CAC40B2F7<br>sudo apt-get install -y apt-transport-https ca-certificates</p>
 <h1 id="Add-our-APT-repository"><a href="#Add-our-APT-repository" class="headerlink" title="Add our APT repository"></a>Add our APT repository</h1><p>sudo sh -c ‘echo deb <a href="https://oss-binaries.phusionpassenger.com/apt/passenger" target="_blank" rel="noopener">https://oss-binaries.phusionpassenger.com/apt/passenger</a><br>xenial main &gt; /etc/apt/sources.list.d/passenger.list’<br>sudo apt-get update</p>
 <h1 id="Install-Passenger-Nginx"><a href="#Install-Passenger-Nginx" class="headerlink" title="Install Passenger + Nginx"></a>Install Passenger + Nginx</h1><p>sudo apt-get install -y nginx-extras passenger</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>CSS3实现鼠标移动到图片上图片变大</title>
-    <url>/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/</url>
-    <content><![CDATA[<h2 id="CSS3实现鼠标移动到图片上图片变大"><a href="#CSS3实现鼠标移动到图片上图片变大" class="headerlink" title="CSS3实现鼠标移动到图片上图片变大"></a>CSS3实现鼠标移动到图片上图片变大</h2><h3 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://blog.csdn.net/u014175572/article/details/51535768" target="_blank" rel="noopener">转载</a></h3><h6 id="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"><a href="#SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）" class="headerlink" title="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"></a>SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）</h6><p>CSS3的transform:scale()可以实现按比例放大或者缩小功能。</p>
-<p>CSS3的transition允许CSS的属性值在一定的时间区间内平滑地过渡。这种效果可以在鼠标单击、获得焦点、被点击或对元素任何改变中触发，并圆滑地以动画效果改变CSS的属性值。</p>
-<p>效果如下图所示：</p>
-<p>1、当未鼠标未放到图片上的效果：</p>
-<p><img src="https://img-blog.csdn.net/20160530100006074" alt="img"></p>
-<p>2、当鼠标放到图片上后(放大的过程是有动画过渡的，这个过渡的时间可以自定义)：</p>
-<p><img src="https://img-blog.csdn.net/20160530100059753" alt="img"></p>
-<p>代码如下：</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;  
-&lt;html&gt;  
-    &lt;head&gt;  
-        &lt;meta charset=&quot;UTF-8&quot;&gt;  
-        &lt;title&gt;&lt;/title&gt;  
-        &lt;style type=&quot;text/css&quot;&gt;  
-            div{  
-                width: 300px;  
-                height: 300px;  
-                border: #000 solid 1px;  
-                margin: 50px auto;  
-                overflow: hidden;  
-            }  
-            div img{  
-                cursor: pointer;  
-                transition: all 0.6s;  
-            }  
-            div img:hover{  
-                transform: scale(1.4);  
-            }  
-        &lt;/style&gt;  
-    &lt;/head&gt;  
-    &lt;body&gt;  
-        &lt;div&gt;  
-            &lt;img src=&quot;img/focus.png&quot; /&gt;  
-        &lt;/div&gt;  
-    &lt;/body&gt;  
-&lt;/html&gt;  </code></pre>
-<p>其中：</p>
-<p>transition: all 0.6s;表示所有的属性变化在0.6s的时间段内完成。</p>
-<p>transform: scale(1.4);表示在鼠标放到图片上的时候图片按比例放大1.4倍。</p>
 ]]></content>
   </entry>
   <entry>
@@ -2644,6 +2846,50 @@ $ git status -s</code></pre>
 <p>输出: </p>
 <p>说明.txt</p>
 </blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>CSS3实现鼠标移动到图片上图片变大</title>
+    <url>/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/</url>
+    <content><![CDATA[<h2 id="CSS3实现鼠标移动到图片上图片变大"><a href="#CSS3实现鼠标移动到图片上图片变大" class="headerlink" title="CSS3实现鼠标移动到图片上图片变大"></a>CSS3实现鼠标移动到图片上图片变大</h2><h3 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://blog.csdn.net/u014175572/article/details/51535768" target="_blank" rel="noopener">转载</a></h3><h6 id="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"><a href="#SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）" class="headerlink" title="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"></a>SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）</h6><p>CSS3的transform:scale()可以实现按比例放大或者缩小功能。</p>
+<p>CSS3的transition允许CSS的属性值在一定的时间区间内平滑地过渡。这种效果可以在鼠标单击、获得焦点、被点击或对元素任何改变中触发，并圆滑地以动画效果改变CSS的属性值。</p>
+<p>效果如下图所示：</p>
+<p>1、当未鼠标未放到图片上的效果：</p>
+<p><img src="https://img-blog.csdn.net/20160530100006074" alt="img"></p>
+<p>2、当鼠标放到图片上后(放大的过程是有动画过渡的，这个过渡的时间可以自定义)：</p>
+<p><img src="https://img-blog.csdn.net/20160530100059753" alt="img"></p>
+<p>代码如下：</p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;  
+&lt;html&gt;  
+    &lt;head&gt;  
+        &lt;meta charset=&quot;UTF-8&quot;&gt;  
+        &lt;title&gt;&lt;/title&gt;  
+        &lt;style type=&quot;text/css&quot;&gt;  
+            div{  
+                width: 300px;  
+                height: 300px;  
+                border: #000 solid 1px;  
+                margin: 50px auto;  
+                overflow: hidden;  
+            }  
+            div img{  
+                cursor: pointer;  
+                transition: all 0.6s;  
+            }  
+            div img:hover{  
+                transform: scale(1.4);  
+            }  
+        &lt;/style&gt;  
+    &lt;/head&gt;  
+    &lt;body&gt;  
+        &lt;div&gt;  
+            &lt;img src=&quot;img/focus.png&quot; /&gt;  
+        &lt;/div&gt;  
+    &lt;/body&gt;  
+&lt;/html&gt;  </code></pre>
+<p>其中：</p>
+<p>transition: all 0.6s;表示所有的属性变化在0.6s的时间段内完成。</p>
+<p>transform: scale(1.4);表示在鼠标放到图片上的时候图片按比例放大1.4倍。</p>
 ]]></content>
   </entry>
   <entry>
@@ -2820,6 +3066,102 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>修改postgres的登录密码</title>
+    <url>/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
+<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
+<blockquote>
+<p><code>local   all             postgres                                peer</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                trust</code></p>
+</blockquote>
+</li>
+<li><p>restart the server</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>sudo service postgresql restart</code></pre></blockquote>
+<ol start="3">
+<li><p>Login into psql and set your password</p>
+<blockquote>
+<p><code>psql -U postgres</code></p>
+<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
+</blockquote>
+</li>
+</ol>
+<ol start="4">
+<li><p>Finally change the <code>pg_hba.conf</code> </p>
+<blockquote>
+<p><code>local   all             postgres                                trust</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                md5</code>to</p>
+</blockquote>
+</li>
+</ol>
+<p>After restarting the postgresql server, you can access it with your own password</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>修饰符moifier的作用</title>
+    <url>/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/</url>
+    <content><![CDATA[<p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
+<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
+<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
+<pre><code class="js">modifier isOwner() {
+   if (msg.sender != owner) {
+        throw;
+    }
+
+    _; // continue executing rest of method body
+}
+
+doSomething() isOwner { //直接写在方法后面作为函数的一部分
+  // will first check if caller is owner
+
+  // code
+}</code></pre>
+<p>您还可以堆叠多个修改器以简化您的过程</p>
+<pre><code class="js">enum State { Created, Locked, Inactive }
+
+modifier isState(State _state) {
+    require(state == _state);
+
+    _; // run rest of code
+}
+
+modifier cleanUp() {
+    _; // finish running rest of method body
+
+    // clean up code
+}
+
+doSomething() isOwner isState(State.Created) cleanUp {
+  // code
+}</code></pre>
+<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
+]]></content>
+      <tags>
+        <tag>soliity，contract</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>划过父元素时子元素或者兄弟元素更改样式</title>
+    <url>/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
+<pre><code class="scss">
+.btn-right:hover{ // .btn-right 是父元素
+    transform: translate(.3rem,0);
+    border-bottom: 1px solid transparent;
+    i{ //i 是 .brn-right 的子元素
+      margin-left: 30px;
+    }
+    ~ .underline{ // .underline 是 .btn-right的兄弟元素
+      width:28%;
+    }
+  }</code></pre>
+]]></content>
+  </entry>
+  <entry>
     <title>以太坊客户端Geth命令用法-参数详解</title>
     <url>/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options/" target="_blank" rel="noopener">转载</a></h2><p>Geth 在以太坊智能合约开发中最常用的工具（必备开发工具），一个多用途的命令行工具。<br>熟悉 Geth 可以让我们有更好的效率，大家可收藏起来作为 Geth 命令用法手册。 本文主要是对 geth help 的翻译，基于最新的 geth 1.7.3-stable 版本。</p>
@@ -2929,102 +3271,6 @@ help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETH
       </tags>
   </entry>
   <entry>
-    <title>修改postgres的登录密码</title>
-    <url>/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/</url>
-    <content><![CDATA[<h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
-<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
-<blockquote>
-<p><code>local   all             postgres                                peer</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                trust</code></p>
-</blockquote>
-</li>
-<li><p>restart the server</p>
-</li>
-</ol>
-<blockquote>
-<pre><code>sudo service postgresql restart</code></pre></blockquote>
-<ol start="3">
-<li><p>Login into psql and set your password</p>
-<blockquote>
-<p><code>psql -U postgres</code></p>
-<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
-</blockquote>
-</li>
-</ol>
-<ol start="4">
-<li><p>Finally change the <code>pg_hba.conf</code> </p>
-<blockquote>
-<p><code>local   all             postgres                                trust</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                md5</code>to</p>
-</blockquote>
-</li>
-</ol>
-<p>After restarting the postgresql server, you can access it with your own password</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>划过父元素时子元素或者兄弟元素更改样式</title>
-    <url>/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
-<pre><code class="scss">
-.btn-right:hover{ // .btn-right 是父元素
-    transform: translate(.3rem,0);
-    border-bottom: 1px solid transparent;
-    i{ //i 是 .brn-right 的子元素
-      margin-left: 30px;
-    }
-    ~ .underline{ // .underline 是 .btn-right的兄弟元素
-      width:28%;
-    }
-  }</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>修饰符moifier的作用</title>
-    <url>/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/</url>
-    <content><![CDATA[<p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
-<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
-<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
-<pre><code class="js">modifier isOwner() {
-   if (msg.sender != owner) {
-        throw;
-    }
-
-    _; // continue executing rest of method body
-}
-
-doSomething() isOwner { //直接写在方法后面作为函数的一部分
-  // will first check if caller is owner
-
-  // code
-}</code></pre>
-<p>您还可以堆叠多个修改器以简化您的过程</p>
-<pre><code class="js">enum State { Created, Locked, Inactive }
-
-modifier isState(State _state) {
-    require(state == _state);
-
-    _; // run rest of code
-}
-
-modifier cleanUp() {
-    _; // finish running rest of method body
-
-    // clean up code
-}
-
-doSomething() isOwner isState(State.Created) cleanUp {
-  // code
-}</code></pre>
-<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
-]]></content>
-      <tags>
-        <tag>soliity，contract</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>判断浏览器类型</title>
     <url>/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<pre><code class="js">var Browser = new Object();
@@ -3122,6 +3368,35 @@ end  </code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>强制重启Linux系统的几种方法</title>
+    <url>/2019/10/31/%E5%BC%BA%E5%88%B6%E9%87%8D%E5%90%AFLinux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="强制重启Linux系统的几种方法"><a href="#强制重启Linux系统的几种方法" class="headerlink" title="强制重启Linux系统的几种方法"></a>强制重启Linux系统的几种方法</h1><p> <a href="https://zohead.com/archives/linux-force-reboot/" target="_blank" rel="noopener">2014年01月26日 星期日</a>  <a href="https://zohead.com/archives/author/admin/" target="_blank" rel="noopener">Uranus Zhou</a> <a href="https://zohead.com/archives/category/technology/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/category/technology/" target="_blank" rel="noopener">技术</a></p>
+<p>实际生产环境中某些情况下 Linux 服务器系统在出现致命错误需要远程进行重启，通过常规的 <code>reboot</code>、<code>init 6</code> 等方法无法正常重启（例如重启时卡在驱动程序里等情况），这时就需要通过下面介绍的几种特殊的方法进行强制重启。</p>
+<blockquote>
+<p><strong>注意</strong></p>
+<p>下面这些强制重启 Linux 的方法都是直接跳过 umount 文件系统及 sync 等操作，可能导致数据损坏，不在特殊情况下请勿使用。另外当然这些都是需要 root 超级用户权限的哦。</p>
+</blockquote>
+<h2 id="reboot-命令"><a href="#reboot-命令" class="headerlink" title="reboot 命令"></a>reboot 命令</h2><p>直接通过运行 <code>reboot -nf</code> 命令，这样重启时可以指定跳过 init 的处理和 sync 操作，这样可以避免大多数情况下的问题。</p>
+<h2 id="magic-SysRq-key-方法"><a href="#magic-SysRq-key-方法" class="headerlink" title="magic SysRq key 方法"></a>magic SysRq key 方法</h2><p>magic SysRq key 通过 proc 接口提供用户直接发底层命令给 kernel 的功能，可以实现关机、重启、宕机等操作，Linux kernel 需要开启 <code>CONFIG_MAGIC_SYSRQ</code> 才可以支持 magic SysRq key。</p>
+<p>运行下面两条命令就可以直接强制重启系统：</p>
+<p>相应的直接强制关机的命令：</p>
+<h2 id="watchdog-方法"><a href="#watchdog-方法" class="headerlink" title="watchdog 方法"></a>watchdog 方法</h2><p>如果 Linux kernel 未开启 magic SysRq key 或者不起作用，可以尝试使用 watchdog 重启方法。watchdog 通过监控数据输入是否正常可以实现在系统出现异常时自动重启系统，这里我们刚好可以借用的。</p>
+<p>首先需要加载 watchdog 支持，这个和主板硬件设备有关，如果只需要软件模拟的，可以运行：</p>
+<p>命令加载软件 watchdog 支持，接着再运行：</p>
+<p>命令，该命令会马上退出并报错，同时系统日志中就会提示：</p>
+<p>这就表示 watchdog 设备是被意外关闭的而不是正常停止的，大约等待 60 秒之后你就会发现 Linux 系统自动重启了。Linux watchdog 的异常等待时间是通过 <code>/proc/sys/kernel/watchdog_thresh</code> 设置的，一般默认为 60 秒。</p>
+<h2 id="IPMI-方法"><a href="#IPMI-方法" class="headerlink" title="IPMI 方法"></a>IPMI 方法</h2><p>上面几种方法都不能用？如果你的主板刚好支持 IPMI 管理接口的话，那可以直接通过 IPMI 实现硬件上的强制关机或重启。</p>
+<p>首先加载 IPMI 支持：</p>
+<p>确认 IPMI 设备是否已找到：</p>
+<p>如果输出正常的话表示 IPMI 被正确加载了，接着安装 <code>ipmitool</code> 管理工具。<code>ipmitool</code> 可以通过 IPMI 接口完成对本机或远程主机的一系列管理操作。</p>
+<p>这里我们就用直接电源管理的，重启系统：</p>
+<p>运行完成后主机就会马上重启，相应的关闭主机可以运行命令：</p>
+<p><code>ipmitool</code> 还可以实现在系统未启动时远程查看监控主板硬件状态等功能，在 IPMI 可用的情况下 <code>ipmitool</code> 还是比较方便好用的。</p>
+<p>无相关文章.</p>
+<p> <a href="https://zohead.com/archives/tag/ipmi/" target="_blank" rel="noopener">IPMI</a>, <a href="https://zohead.com/archives/tag/ipmitool/" target="_blank" rel="noopener">ipmitool</a>, <a href="https://zohead.com/archives/tag/kernel/" target="_blank" rel="noopener">kernel</a>, <a href="https://zohead.com/archives/tag/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/tag/sysrq/" target="_blank" rel="noopener">SysRq</a>, <a href="https://zohead.com/archives/tag/watchdog/" target="_blank" rel="noopener">watchdog</a>, <a href="https://zohead.com/archives/tag/reboot/" target="_blank" rel="noopener">重启</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>得到图片外链vim脚本</title>
     <url>/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/</url>
     <content><![CDATA[<h3 id="选中的图片地址，将图片上传到七牛云，并得到外链"><a href="#选中的图片地址，将图片上传到七牛云，并得到外链" class="headerlink" title="选中的图片地址，将图片上传到七牛云，并得到外链"></a>选中的图片地址，将图片上传到七牛云，并得到外链</h3><p>配合自定义命令<a href="https://dccmm.world/topics/qiniu_upload_file" target="_blank" rel="noopener">qiniu</a>使用</p>
@@ -3151,35 +3426,6 @@ endfunction</code></pre>
         <tag>vim</tag>
         <tag>DIY_script</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>强制重启Linux系统的几种方法</title>
-    <url>/2019/10/31/%E5%BC%BA%E5%88%B6%E9%87%8D%E5%90%AFLinux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<h1 id="强制重启Linux系统的几种方法"><a href="#强制重启Linux系统的几种方法" class="headerlink" title="强制重启Linux系统的几种方法"></a>强制重启Linux系统的几种方法</h1><p> <a href="https://zohead.com/archives/linux-force-reboot/" target="_blank" rel="noopener">2014年01月26日 星期日</a>  <a href="https://zohead.com/archives/author/admin/" target="_blank" rel="noopener">Uranus Zhou</a> <a href="https://zohead.com/archives/category/technology/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/category/technology/" target="_blank" rel="noopener">技术</a></p>
-<p>实际生产环境中某些情况下 Linux 服务器系统在出现致命错误需要远程进行重启，通过常规的 <code>reboot</code>、<code>init 6</code> 等方法无法正常重启（例如重启时卡在驱动程序里等情况），这时就需要通过下面介绍的几种特殊的方法进行强制重启。</p>
-<blockquote>
-<p><strong>注意</strong></p>
-<p>下面这些强制重启 Linux 的方法都是直接跳过 umount 文件系统及 sync 等操作，可能导致数据损坏，不在特殊情况下请勿使用。另外当然这些都是需要 root 超级用户权限的哦。</p>
-</blockquote>
-<h2 id="reboot-命令"><a href="#reboot-命令" class="headerlink" title="reboot 命令"></a>reboot 命令</h2><p>直接通过运行 <code>reboot -nf</code> 命令，这样重启时可以指定跳过 init 的处理和 sync 操作，这样可以避免大多数情况下的问题。</p>
-<h2 id="magic-SysRq-key-方法"><a href="#magic-SysRq-key-方法" class="headerlink" title="magic SysRq key 方法"></a>magic SysRq key 方法</h2><p>magic SysRq key 通过 proc 接口提供用户直接发底层命令给 kernel 的功能，可以实现关机、重启、宕机等操作，Linux kernel 需要开启 <code>CONFIG_MAGIC_SYSRQ</code> 才可以支持 magic SysRq key。</p>
-<p>运行下面两条命令就可以直接强制重启系统：</p>
-<p>相应的直接强制关机的命令：</p>
-<h2 id="watchdog-方法"><a href="#watchdog-方法" class="headerlink" title="watchdog 方法"></a>watchdog 方法</h2><p>如果 Linux kernel 未开启 magic SysRq key 或者不起作用，可以尝试使用 watchdog 重启方法。watchdog 通过监控数据输入是否正常可以实现在系统出现异常时自动重启系统，这里我们刚好可以借用的。</p>
-<p>首先需要加载 watchdog 支持，这个和主板硬件设备有关，如果只需要软件模拟的，可以运行：</p>
-<p>命令加载软件 watchdog 支持，接着再运行：</p>
-<p>命令，该命令会马上退出并报错，同时系统日志中就会提示：</p>
-<p>这就表示 watchdog 设备是被意外关闭的而不是正常停止的，大约等待 60 秒之后你就会发现 Linux 系统自动重启了。Linux watchdog 的异常等待时间是通过 <code>/proc/sys/kernel/watchdog_thresh</code> 设置的，一般默认为 60 秒。</p>
-<h2 id="IPMI-方法"><a href="#IPMI-方法" class="headerlink" title="IPMI 方法"></a>IPMI 方法</h2><p>上面几种方法都不能用？如果你的主板刚好支持 IPMI 管理接口的话，那可以直接通过 IPMI 实现硬件上的强制关机或重启。</p>
-<p>首先加载 IPMI 支持：</p>
-<p>确认 IPMI 设备是否已找到：</p>
-<p>如果输出正常的话表示 IPMI 被正确加载了，接着安装 <code>ipmitool</code> 管理工具。<code>ipmitool</code> 可以通过 IPMI 接口完成对本机或远程主机的一系列管理操作。</p>
-<p>这里我们就用直接电源管理的，重启系统：</p>
-<p>运行完成后主机就会马上重启，相应的关闭主机可以运行命令：</p>
-<p><code>ipmitool</code> 还可以实现在系统未启动时远程查看监控主板硬件状态等功能，在 IPMI 可用的情况下 <code>ipmitool</code> 还是比较方便好用的。</p>
-<p>无相关文章.</p>
-<p> <a href="https://zohead.com/archives/tag/ipmi/" target="_blank" rel="noopener">IPMI</a>, <a href="https://zohead.com/archives/tag/ipmitool/" target="_blank" rel="noopener">ipmitool</a>, <a href="https://zohead.com/archives/tag/kernel/" target="_blank" rel="noopener">kernel</a>, <a href="https://zohead.com/archives/tag/linux/" target="_blank" rel="noopener">Linux</a>, <a href="https://zohead.com/archives/tag/sysrq/" target="_blank" rel="noopener">SysRq</a>, <a href="https://zohead.com/archives/tag/watchdog/" target="_blank" rel="noopener">watchdog</a>, <a href="https://zohead.com/archives/tag/reboot/" target="_blank" rel="noopener">重启</a></p>
-]]></content>
   </entry>
   <entry>
     <title>消息闪现</title>
@@ -7856,105 +8102,6 @@ export default class Request {
       </tags>
   </entry>
   <entry>
-    <title>电子书合集-2</title>
-    <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/</url>
-    <content><![CDATA[<p>一、中文电子书网站</p>
-<p>1.好读网站</p>
-<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
-<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
-<p>2.亿年书海</p>
-<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
-<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
-<p>3.只有下载</p>
-<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
-<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
-<p>4.逛电驴</p>
-<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
-<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
-<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
-<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
-<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
-<p>6.浩扬电子书城</p>
-<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
-<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
-<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
-<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
-<p>中文杂志下载网站，下载方式为网盘。</p>
-<p>8.书格</p>
-<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
-<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
-<p>9.中国哲学书电子化计划</p>
-<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
-<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
-<p>10.古籍馆</p>
-<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
-<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
-<p>11.马克思主义文库</p>
-<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
-<p>12.凡人大传</p>
-<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
-<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
-<p>13.殆知阁古籍搜索引擎</p>
-<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
-<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
-<p>14.中国国家数字图书馆</p>
-<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
-<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
-<p>15.超星</p>
-<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
-<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
-<p>16.E 书联盟</p>
-<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
-<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
-<p>17.轻之国度轻小说文库</p>
-<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
-<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
-<p>18.SF 互动传媒</p>
-<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
-<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
-<p>19.青年文摘</p>
-<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
-<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
-<p>20.zcom</p>
-<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
-<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
-<p>21.读书网</p>
-<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
-<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
-<p>时不时看一些书，充实生活，很不错。</p>
-<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
-<p>22.我有閑書庫</p>
-<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
-<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
-<p>23.完美文库</p>
-<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
-<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
-<p>24.en8848</p>
-<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
-<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
-<p>二、网盘和种子搜索引擎</p>
-<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
-<p>1.盘搜</p>
-<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
-<p>目前最常用的一个网盘搜索引擎。</p>
-<p>2.哈兔网盘搜索</p>
-<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
-<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
-<p>3.ZHA FILE 搜索</p>
-<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
-<p>基于谷歌的网盘搜索引擎。</p>
-<p>4.百度网盘搜索引擎</p>
-<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
-<p>专搜百度网盘资源。</p>
-<p>5.海盗湾</p>
-<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
-]]></content>
-      <tags>
-        <tag>hidden</tag>
-        <tag>电子书</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>电子书合集-1</title>
     <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-1/</url>
     <content><![CDATA[<p><a href="https://www.zhihu.com/people/wang-rui-xiang-76" target="_blank" rel="noopener"><img src="https://pic3.zhimg.com/d382960d26a93ebfd0c36eef09bc8e02_xs.jpg" alt="北野狐狼"></a></p>
@@ -8082,6 +8229,105 @@ export default class Request {
 <p>txt 精排版资源</p>
 <p>6 寸 pdf 资源</p>
 <p><img src="https://pic2.zhimg.com/80/v2-bdbc90eacfc7027b230d80e18e189d65_hd.jpg" alt="img">浩瀚的星空 浩瀚的书海</p>
+]]></content>
+      <tags>
+        <tag>hidden</tag>
+        <tag>电子书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>电子书合集-2</title>
+    <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/</url>
+    <content><![CDATA[<p>一、中文电子书网站</p>
+<p>1.好读网站</p>
+<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
+<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
+<p>2.亿年书海</p>
+<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
+<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
+<p>3.只有下载</p>
+<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
+<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
+<p>4.逛电驴</p>
+<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
+<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
+<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
+<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
+<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
+<p>6.浩扬电子书城</p>
+<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
+<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
+<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
+<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
+<p>中文杂志下载网站，下载方式为网盘。</p>
+<p>8.书格</p>
+<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
+<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
+<p>9.中国哲学书电子化计划</p>
+<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
+<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
+<p>10.古籍馆</p>
+<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
+<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
+<p>11.马克思主义文库</p>
+<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
+<p>12.凡人大传</p>
+<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
+<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
+<p>13.殆知阁古籍搜索引擎</p>
+<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
+<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
+<p>14.中国国家数字图书馆</p>
+<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
+<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
+<p>15.超星</p>
+<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
+<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
+<p>16.E 书联盟</p>
+<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
+<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
+<p>17.轻之国度轻小说文库</p>
+<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
+<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
+<p>18.SF 互动传媒</p>
+<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
+<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
+<p>19.青年文摘</p>
+<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
+<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
+<p>20.zcom</p>
+<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
+<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
+<p>21.读书网</p>
+<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
+<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
+<p>时不时看一些书，充实生活，很不错。</p>
+<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
+<p>22.我有閑書庫</p>
+<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
+<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
+<p>23.完美文库</p>
+<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
+<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
+<p>24.en8848</p>
+<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
+<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
+<p>二、网盘和种子搜索引擎</p>
+<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
+<p>1.盘搜</p>
+<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
+<p>目前最常用的一个网盘搜索引擎。</p>
+<p>2.哈兔网盘搜索</p>
+<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
+<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
+<p>3.ZHA FILE 搜索</p>
+<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
+<p>基于谷歌的网盘搜索引擎。</p>
+<p>4.百度网盘搜索引擎</p>
+<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
+<p>专搜百度网盘资源。</p>
+<p>5.海盗湾</p>
+<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
 ]]></content>
       <tags>
         <tag>hidden</tag>
@@ -8461,8 +8707,8 @@ Saving successful migration to network...
   ... 0x49505a54042f5f74146fbfafef63dd408cb0a7a0c66214ebbaa3217e443d792a
 Saving artifacts...</code></pre>]]></content>
       <tags>
-        <tag>contract</tag>
         <tag>truffle</tag>
+        <tag>contract</tag>
       </tags>
   </entry>
   <entry>

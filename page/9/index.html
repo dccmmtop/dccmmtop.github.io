@@ -133,6 +133,318 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-参数路由与路由冲突解决与筛选路由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/">参数路由与路由冲突解决与筛选路由</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.012Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="参数路由与路由冲突解决与筛选路由"><a href="#参数路由与路由冲突解决与筛选路由" class="headerlink" title="参数路由与路由冲突解决与筛选路由"></a>参数路由与路由冲突解决与筛选路由</h3><p>有时候我需要写一个页面能向show edit 那样可以接受参数的路由,弄了好久不知道怎样解决,今天恍然大悟</p>
+<p>我们执行 <code>rake routes</code> 就会看到如下</p>
+<pre><code class="ruby">                     wechat_nodes GET      /wechat/nodes(.:format)                                  wechat/nodes#index
+                                  POST     /wechat/nodes(.:format)                                  wechat/nodes#create
+                  new_wechat_node GET      /wechat/nodes/new(.:format)                              wechat/nodes#new
+                 edit_wechat_node GET      /wechat/nodes/:id/edit(.:format)                         wechat/nodes#edit
+                      wechat_node GET      /wechat/nodes/:id(.:format)                              wechat/nodes#show
+                                  PATCH    /wechat/nodes/:id(.:format)                              wechat/nodes#update
+                                  PUT      /wechat/nodes/:id(.:format)                              wechat/nodes#update
+                                  DELETE   /wechat/nodes/:id(.:format)                              wechat/nodes#destroy
+</code></pre>
+<p>这是使用resources 生成一些路由,我们可以模仿写出自己的路由</p>
+<p>我们看最后一列的内容,  对于show 来说 他的格式为<code>/wechat/nodes/:id</code> 再看edit 他的格式是<code>/wechat/nodes/:id/edit</code> </p>
+<p>加入我们要想写一个/wechat/node/edit/34/topic/23 类似的路由,我们可以直接这样写</p>
+<pre><code class="ruby">resources nodes do 
+  collection do 
+    get &#39;edit/:id/topic/:node_id&#39;, to: &#39;nodes#topic&#39; , as: &#39;topic_edit&#39;
+  end
+end</code></pre>
+<p>这里为什么会有一个<code>as</code>呢,因为没有<code>as</code>和其后面的名称的话,这样是没有前面的路由信息的.</p>
+<h3 id="筛选路由-路由冲突的解决方案"><a href="#筛选路由-路由冲突的解决方案" class="headerlink" title="筛选路由-路由冲突的解决方案"></a>筛选路由-路由冲突的解决方案</h3><p>Rails项目有一个Article模型,对应ArticlesController控制器,其路由设置如下:</p>
+<pre><code class="ruby">resources :articles do
+end</code></pre>
+<p>这样它的CRUD路径就都自动创建出来了 ;)</p>
+<p>现在我想再添加一个对Article模型搜索的页面,那么首先要在控制器中添加对应的search方法:</p>
+<pre><code class="ruby">def search   
+  render text:&quot;hello search!!!&quot;
+end</code></pre>
+<p>然后在Article默认路由集合后面添加一行新路由:</p>
+<p><code>get &quot;articles/search&quot;,to:&quot;articles#search&quot;</code>1</p>
+<p>现在我们访问一下articles/search页面,咦?怎么出错了:</p>
+<p><img src="http://img.blog.csdn.net/20170310112802687?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbXlkbw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>仔细看出错信息,原来Article之前的show路由恰恰可以匹配新的search路由,只不过原来的:id变成了search这个字符串哦.这就是为什么报Couldn’t find Article with id=search的原因了!</p>
+<p>下面给出解决,我们只需要先禁用默认的show路由:</p>
+<pre><code class="ruby">resources :articles,except:[:show] do    
+  resources :comments
+end</code></pre>
+<p>然后再生成一条筛选路由即可,所谓筛选路由就是对该路由内容进行细粒度匹配的方法:</p>
+<pre><code class="ruby">get &quot;articles/:id&quot;,to:&quot;articles#show&quot;,constraints:{id:/\d+/}</code></pre>
+<p>路由都是从上之下依次匹配的,如果上面一条被匹配则路由匹配结束!这里只匹配id为数字的articles/xxx路径,所以search就会默认被忽略从而被后面search正确的路由所匹配!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%86%B2%E7%AA%81%E8%A7%A3%E5%86%B3%E4%B8%8E%E7%AD%9B%E9%80%89%E8%B7%AF%E7%94%B1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-处理Gradle中的这个文件下载慢的问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">处理Gradle中的这个文件下载慢的问题</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.012Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用阿里云的国内镜像仓库地址，就可以快速的下载需要的文件修改项目根目录下的文件</p>
+<pre><code class="text">build.gradle ：buildscript {
+    repositories {
+        maven{ url &#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;}
+    }
+}
+
+allprojects {
+    repositories {
+        maven{ url &#39;http://maven.aliyun.com/nexus/content/groups/public/&#39;}
+    }
+}</code></pre>
+<p>然后选择重新构建</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">android</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E5%A4%84%E7%90%86Gradle%E4%B8%AD%E7%9A%84%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-maven常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/16/maven%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">maven常用命令</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/16/maven%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+  	<time datetime="2019-10-15T16:06:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-创建Maven的普通Java项目："><a href="#1-创建Maven的普通Java项目：" class="headerlink" title="1. 创建Maven的普通Java项目："></a><strong>1. 创建Maven的普通Java项目：</strong></h3><pre><code>mvn archetype:create
+    -DgroupId=packageName
+    -DartifactId=projectName</code></pre><h3 id="2-创建Maven的Web项目："><a href="#2-创建Maven的Web项目：" class="headerlink" title="2. 创建Maven的Web项目："></a><strong>2. 创建Maven的Web项目：</strong></h3><pre><code>mvn archetype:create
+    -DgroupId=packageName
+    -DartifactId=webappName
+    -DarchetypeArtifactId=maven-archetype-webapp</code></pre><h3 id="3-反向生成-maven-项目的骨架："><a href="#3-反向生成-maven-项目的骨架：" class="headerlink" title="3. 反向生成 maven 项目的骨架："></a><strong>3. 反向生成 maven 项目的骨架：</strong></h3><pre><code>mvn archetype:generate</code></pre><p>你是怎么创建你的maven项目的?是不是像这样:</p>
+<pre><code>mvn archetype:create -DarchetypeArtifactId=maven-archetype-quickstart -DgroupId=com.ryanote -Dartifact=common</code></pre><p>如果你还再用的话,那你就out了,现代人都用mvn archetype:generate了,它将创建项目这件枯燥的事更加人性化,你再也不需要记那么多的archetypeArtifactId,你只需输入archetype:generate,剩下的就是做”选择题”了</p>
+<h3 id="4-编译源代码："><a href="#4-编译源代码：" class="headerlink" title="4. 编译源代码："></a><strong>4. 编译源代码：</strong></h3><pre><code>mvn compile</code></pre><h3 id="5-编译测试代码："><a href="#5-编译测试代码：" class="headerlink" title="5. 编译测试代码："></a><strong>5. 编译测试代码：</strong></h3><pre><code>mvn test-compile</code></pre><h3 id="6-运行测试"><a href="#6-运行测试" class="headerlink" title="6. 运行测试:"></a><strong>6. 运行测试:</strong></h3><pre><code>mvn test</code></pre><h3 id="7-产生site："><a href="#7-产生site：" class="headerlink" title="7. 产生site："></a><strong>7. 产生site：</strong></h3><pre><code>mvn site</code></pre><h3 id="8-打包："><a href="#8-打包：" class="headerlink" title="8. 打包："></a><strong>8. 打包：</strong></h3><pre><code>mvn package</code></pre><h3 id="9-在本地Repository中安装jar："><a href="#9-在本地Repository中安装jar：" class="headerlink" title="9. 在本地Repository中安装jar："></a><strong>9. 在本地Repository中安装jar：</strong></h3><pre><code>mvn install
+例：installing D:\xxx\xx.jar to D:\xx\xxxx</code></pre><h3 id="10-清除产生的项目："><a href="#10-清除产生的项目：" class="headerlink" title="10. 清除产生的项目："></a><strong>10. 清除产生的项目：</strong></h3><pre><code>mvn clean</code></pre><h3 id="11-生成eclipse项目："><a href="#11-生成eclipse项目：" class="headerlink" title="11. 生成eclipse项目："></a><strong>11. 生成eclipse项目：</strong></h3><pre><code>mvn eclipse:eclipse</code></pre><h3 id="12-生成idea项目："><a href="#12-生成idea项目：" class="headerlink" title="12. 生成idea项目："></a><strong>12. 生成idea项目：</strong></h3><pre><code>mvn idea:idea</code></pre><h3 id="13-组合使用goal命令，如只打包不测试："><a href="#13-组合使用goal命令，如只打包不测试：" class="headerlink" title="13. 组合使用goal命令，如只打包不测试："></a><strong>13. 组合使用goal命令，如只打包不测试：</strong></h3><pre><code>mvn -Dtest package</code></pre><h3 id="14-编译测试的内容："><a href="#14-编译测试的内容：" class="headerlink" title="14. 编译测试的内容："></a><strong>14. 编译测试的内容：</strong></h3><pre><code>mvn test-compile</code></pre><h3 id="15-只打jar包"><a href="#15-只打jar包" class="headerlink" title="15. 只打jar包:"></a><strong>15. 只打jar包:</strong></h3><pre><code>mvn jar:jar</code></pre><h3 id="16-只测试而不编译，也不测试编译："><a href="#16-只测试而不编译，也不测试编译：" class="headerlink" title="16. 只测试而不编译，也不测试编译："></a><strong>16. 只测试而不编译，也不测试编译：</strong></h3><pre><code>mvn test -skipping compile -skipping test-compile
+ ( -skipping 的灵活运用，当然也可以用于其他组合命令)</code></pre><h3 id="17-清除eclipse的一些系统设置"><a href="#17-清除eclipse的一些系统设置" class="headerlink" title="17. 清除eclipse的一些系统设置:"></a><strong>17. 清除eclipse的一些系统设置:</strong></h3><pre><code>mvn eclipse:clean</code></pre><h3 id="18-查看当前项目已被解析的依赖："><a href="#18-查看当前项目已被解析的依赖：" class="headerlink" title="18.查看当前项目已被解析的依赖："></a><strong>18.查看当前项目已被解析的依赖：</strong></h3><pre><code>mvn dependency:list</code></pre><h3 id="19-上传到私服："><a href="#19-上传到私服：" class="headerlink" title="19.上传到私服："></a><strong>19.上传到私服：</strong></h3><pre><code>mvn deploy</code></pre><h3 id="20-强制检查更新，由于快照版本的更新策略-一天更新几次、隔段时间更新一次-存在，如果想强制更新就会用到此命令"><a href="#20-强制检查更新，由于快照版本的更新策略-一天更新几次、隔段时间更新一次-存在，如果想强制更新就会用到此命令" class="headerlink" title="20. 强制检查更新，由于快照版本的更新策略(一天更新几次、隔段时间更新一次)存在，如果想强制更新就会用到此命令:"></a><strong>20. 强制检查更新，由于快照版本的更新策略(一天更新几次、隔段时间更新一次)存在，如果想强制更新就会用到此命令:</strong></h3><pre><code>mvn clean install-U</code></pre><h3 id="21-源码打包："><a href="#21-源码打包：" class="headerlink" title="21. 源码打包："></a><strong>21. 源码打包：</strong></h3><pre><code>mvn source:jar
+或
+mvn source:jar-no-fork</code></pre><h3 id="mvn-compile与mvn-install、mvn-deploy的区别"><a href="#mvn-compile与mvn-install、mvn-deploy的区别" class="headerlink" title="mvn compile与mvn install、mvn deploy的区别"></a>mvn compile与mvn install、mvn deploy的区别</h3><ol>
+<li>mvn compile，编译类文件</li>
+<li>mvn install，包含mvn compile，mvn package，然后上传到本地仓库</li>
+<li>mvn deploy,包含mvn install,然后，上传到私服</li>
+</ol>
+<hr>
+<p>　　一般使用情况是这样，首先通过cvs或svn下载代码到本机，然后执行mvn eclipse:eclipse生成ecllipse项目文件，然后导入到eclipse就行了；修改代码后执行mvn compile或mvn test检验，也可以下载eclipse的maven插件。</p>
+<h3 id="1-显示版本信息"><a href="#1-显示版本信息" class="headerlink" title="1. 显示版本信息 :"></a><strong>1. 显示版本信息 :</strong></h3><pre><code>mvn -version/-v</code></pre><h3 id="2-创建mvn项目"><a href="#2-创建mvn项目" class="headerlink" title="2. 创建mvn项目:"></a><strong>2. 创建mvn项目:</strong></h3><pre><code>mvn archetype:create -DgroupId=com.oreilly -DartifactId=my-app</code></pre><h3 id="3-生成target目录，编译、测试代码，生成测试报告，生成jar-war文件"><a href="#3-生成target目录，编译、测试代码，生成测试报告，生成jar-war文件" class="headerlink" title="3. 生成target目录，编译、测试代码，生成测试报告，生成jar/war文件 :"></a><strong>3. 生成target目录，编译、测试代码，生成测试报告，生成jar/war文件 :</strong></h3><pre><code>mvn package</code></pre><h3 id="4-运行项目于jetty上"><a href="#4-运行项目于jetty上" class="headerlink" title="4. 运行项目于jetty上:"></a><strong>4. 运行项目于jetty上:</strong></h3><pre><code>mvn jetty:run</code></pre><h3 id="5-显示详细错误-信息"><a href="#5-显示详细错误-信息" class="headerlink" title="5. 显示详细错误 信息:"></a><strong>5. 显示详细错误 信息:</strong></h3><pre><code>mvn -e</code></pre><h3 id="6-验证工程是否正确，所有需要的资源是否可用"><a href="#6-验证工程是否正确，所有需要的资源是否可用" class="headerlink" title="6. 验证工程是否正确，所有需要的资源是否可用:"></a><strong>6. 验证工程是否正确，所有需要的资源是否可用:</strong></h3><pre><code>mvn validate</code></pre><h3 id="7-在集成测试可以运行的环境中处理和发布包"><a href="#7-在集成测试可以运行的环境中处理和发布包" class="headerlink" title="7. 在集成测试可以运行的环境中处理和发布包:"></a><strong>7. 在集成测试可以运行的环境中处理和发布包:</strong></h3><pre><code>mvn integration-test</code></pre><h3 id="8-运行任何检查，验证包是否有效且达到质量标准"><a href="#8-运行任何检查，验证包是否有效且达到质量标准" class="headerlink" title="8. 运行任何检查，验证包是否有效且达到质量标准:"></a><strong>8. 运行任何检查，验证包是否有效且达到质量标准:</strong></h3><pre><code>mvn verify</code></pre><h3 id="9-产生应用需要的任何额外的源代码，如xdoclet"><a href="#9-产生应用需要的任何额外的源代码，如xdoclet" class="headerlink" title="9. 产生应用需要的任何额外的源代码，如xdoclet :"></a><strong>9. 产生应用需要的任何额外的源代码，如xdoclet :</strong></h3><pre><code>mvn generate-sources</code></pre><h3 id="10-使用-help-插件的-describe-目标来输出-Maven-Help-插件的信息"><a href="#10-使用-help-插件的-describe-目标来输出-Maven-Help-插件的信息" class="headerlink" title="10. 使用 help 插件的  describe 目标来输出 Maven Help 插件的信息:"></a><strong>10. 使用 help 插件的  describe 目标来输出 Maven Help 插件的信息:</strong></h3><pre><code>mvn help:describe -Dplugin=help</code></pre><h3 id="11-使用Help-插件输出完整的带有参数的目标列"><a href="#11-使用Help-插件输出完整的带有参数的目标列" class="headerlink" title="11. 使用Help 插件输出完整的带有参数的目标列 :"></a><strong>11. 使用Help 插件输出完整的带有参数的目标列 :</strong></h3><pre><code>mvn help:describe -Dplugin=help -Dfull</code></pre><h3 id="12-获取单个目标的信息-设置-mojo-参数和-plugin-参数。此命令列出了Compiler-插件的compile-目标的所有信息"><a href="#12-获取单个目标的信息-设置-mojo-参数和-plugin-参数。此命令列出了Compiler-插件的compile-目标的所有信息" class="headerlink" title="12. 获取单个目标的信息,设置  mojo 参数和  plugin 参数。此命令列出了Compiler 插件的compile 目标的所有信息 :"></a><strong>12. 获取单个目标的信息,设置  mojo 参数和  plugin 参数。此命令列出了Compiler 插件的compile 目标的所有信息 :</strong></h3><pre><code>mvn help:describe -Dplugin=compiler -Dmojo=compile -Dfull</code></pre><h3 id="13-列出所有-Maven-Exec-插件可用的目标"><a href="#13-列出所有-Maven-Exec-插件可用的目标" class="headerlink" title="13. 列出所有 Maven Exec 插件可用的目标:"></a><strong>13. 列出所有 Maven Exec 插件可用的目标:</strong></h3><pre><code>mvn help:describe -Dplugin=exec -Dfull</code></pre><h3 id="14-看这个“有效的-effective-”POM，它暴露了-Maven的默认设置"><a href="#14-看这个“有效的-effective-”POM，它暴露了-Maven的默认设置" class="headerlink" title="14. 看这个“有效的 (effective)”POM，它暴露了 Maven的默认设置 :"></a><strong>14. 看这个“有效的 (effective)”POM，它暴露了 Maven的默认设置 :</strong></h3><pre><code>mvn help:effective-pom</code></pre><h3 id="15-想要查看完整的依赖踪迹，包含那些因为冲突或者其它原因而被拒绝引入的构件，打开-Maven-的调试标记运行"><a href="#15-想要查看完整的依赖踪迹，包含那些因为冲突或者其它原因而被拒绝引入的构件，打开-Maven-的调试标记运行" class="headerlink" title="15. 想要查看完整的依赖踪迹，包含那些因为冲突或者其它原因而被拒绝引入的构件，打开 Maven 的调试标记运行 :"></a><strong>15. 想要查看完整的依赖踪迹，包含那些因为冲突或者其它原因而被拒绝引入的构件，打开 Maven 的调试标记运行 :</strong></h3><pre><code>mvn install -X</code></pre><h3 id="16-给任何目标添加maven-test-skip-属性就能跳过测试"><a href="#16-给任何目标添加maven-test-skip-属性就能跳过测试" class="headerlink" title="16. 给任何目标添加maven.test.skip 属性就能跳过测试 :"></a><strong>16. 给任何目标添加maven.test.skip 属性就能跳过测试 :</strong></h3><pre><code>mvn install -Dmaven.test.skip=true</code></pre><h3 id="17-构建装配Maven-Assembly-插件是一个用来创建你应用程序特有分发包的插件"><a href="#17-构建装配Maven-Assembly-插件是一个用来创建你应用程序特有分发包的插件" class="headerlink" title="17. 构建装配Maven Assembly 插件是一个用来创建你应用程序特有分发包的插件 :"></a><strong>17. 构建装配Maven Assembly 插件是一个用来创建你应用程序特有分发包的插件 :</strong></h3><pre><code>mvn install assembly:assembly</code></pre><h3 id="18-生成Wtp插件的Web项目"><a href="#18-生成Wtp插件的Web项目" class="headerlink" title="18. 生成Wtp插件的Web项目 :"></a><strong>18. 生成Wtp插件的Web项目 :</strong></h3><pre><code>mvn -Dwtpversion=1.0 eclipse:eclipse</code></pre><h3 id="19-清除Eclipse项目的配置信息-Web项目"><a href="#19-清除Eclipse项目的配置信息-Web项目" class="headerlink" title="19. 清除Eclipse项目的配置信息(Web项目) :"></a><strong>19. 清除Eclipse项目的配置信息(Web项目) :</strong></h3><pre><code>mvn -Dwtpversion=1.0 eclipse:clean</code></pre><h3 id="20-将项目转化为Eclipse项目"><a href="#20-将项目转化为Eclipse项目" class="headerlink" title="20. 将项目转化为Eclipse项目 :"></a><strong>20. 将项目转化为Eclipse项目 :</strong></h3><pre><code>mvn eclipse:eclipse</code></pre><h3 id="21-mvn-exec命令可以执行项目中的main函数"><a href="#21-mvn-exec命令可以执行项目中的main函数" class="headerlink" title="21. mvn exec命令可以执行项目中的main函数 :"></a>21. mvn exec命令可以执行项目中的main函数 :</h3><pre><code>首先需要编译java工程：mvn compile
+不存在参数的情况下：mvn exec:java -Dexec.mainClass=&quot;***.Main&quot;
+存在参数：mvn exec:java -Dexec.mainClass=&quot;***.Main&quot; -Dexec.args=&quot;arg0 arg1 arg2&quot;
+指定运行时库：mvn exec:java -Dexec.mainClass=&quot;***.Main&quot; -Dexec.classpathScope=runtime</code></pre><h3 id="22-打印出已解决依赖的列表"><a href="#22-打印出已解决依赖的列表" class="headerlink" title="22. 打印出已解决依赖的列表 :"></a><strong>22. 打印出已解决依赖的列表 :</strong></h3><pre><code>mvn dependency:resolve</code></pre><h3 id="23-打印整个依赖树"><a href="#23-打印整个依赖树" class="headerlink" title="23. 打印整个依赖树 :"></a><strong>23. 打印整个依赖树 :</strong></h3><pre><code>mvn dependency:tree</code></pre><h3 id="在应用程序用使用多个存储库"><a href="#在应用程序用使用多个存储库" class="headerlink" title="在应用程序用使用多个存储库"></a>在应用程序用使用多个存储库</h3><pre><code>&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;id&gt;Ibiblio&lt;/id&gt;
+        &lt;name&gt;Ibiblio&lt;/name&gt;
+        &lt;url&gt;http://www.ibiblio.org/maven/&lt;/url&gt;
+    &lt;/repository&gt;
+    &lt;repository&gt;
+        &lt;id&gt;PlanetMirror&lt;/id&gt;
+        &lt;name&gt;Planet Mirror&lt;/name&gt;
+        &lt;url&gt;http://public.planetmirror.com/pub/maven/&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
+
+mvn deploy:deploy-file -DgroupId=com -DartifactId=client -Dversion=0.1.0 -Dpackaging=jar -Dfile=d:\client-0.1.0.jar -DrepositoryId=maven-repository-inner -Durl=ftp://xxxxxxx/opt/maven/repository/</code></pre><h3 id="发布第三方Jar到本地库中"><a href="#发布第三方Jar到本地库中" class="headerlink" title="发布第三方Jar到本地库中"></a><strong>发布第三方Jar到本地库中</strong></h3><pre><code>mvn install:install-file -DgroupId=com -DartifactId=client -Dversion=0.1.0 -Dpackaging=jar -Dfile=d:\client-0.1.0.jar
+
+
+-DdownloadSources=true
+
+-DdownloadJavadocs=true</code></pre><h2 id="三，附加"><a href="#三，附加" class="headerlink" title="三，附加"></a>三，附加</h2><pre><code>mvn help:describe</code></pre><p>你是否因为记不清某个插件有哪些goal而痛苦过,你是否因为想不起某个goal有哪些参数而苦恼,那就试试这个命令吧,它会告诉你一切的.</p>
+<p>参数: 1. -Dplugin=pluginName   2. -Dgoal(或-Dmojo)=goalName:与-Dplugin一起使用,它会列出某个插件的goal信息,</p>
+<p>如果嫌不够详细,同样可以加-Ddetail.(注:一个插件goal也被认为是一个 “Mojo”)</p>
+<p>下面大家就运行mvn help:describe -Dplugin=help -Dmojo=describe感受一下吧!</p>
+<pre><code>mvn tomcat:run</code></pre><p>用了maven后,你再也不需要用eclipse里的tomcat来运行web项目(实际工作中经常会发现用它会出现不同步更新的情况),只需在对应目录里运行 mvn tomat:run命令,然后就可在浏览器里运行查看了.如果你想要更多的定制,可以在pom.xml文件里加下面配置:</p>
+<p>01 02 03 04 org.codehaus.mojo 05 tomcat-maven-plugin 06 07 /web 08 9090 09 10 11 12 当然你也可以在命令里加参数来实现特定的功能,</p>
+<p>下面几个比较常用:</p>
+<p>　　1&gt;. 跳过测试:-Dmaven.test.skip(=true)</p>
+<p>　　2&gt;. 指定端口:-Dmaven.tomcat.port=9090</p>
+<p>　　3&gt;. 忽略测试失败:-Dmaven.test.failure.ignore=true 当然,如果你的其它关联项目有过更新的话,一定要在项目根目录下运行mvn clean install来执行更新,再运行mvn tomcat:run使改动生效.</p>
+<pre><code>mvnDebug tomcat:run</code></pre><p>这条命令主要用来远程测试,它会监听远程测试用的8000端口,在eclipse里打开远程测试后,它就会跑起来了,设断点,调试,一切都是这么简单.上面提到的那几个参数在这里同样适用.</p>
+<pre><code>mvn dependency:sources</code></pre><p>故名思义,有了它,你就不用到处找源码了,运行一下,你项目里所依赖的jar包的源码就都有了</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">maven</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/16/maven%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-java中对象副本的创建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -974,429 +1286,9 @@ LANGUAGE &quot;plpgsql&quot;;</code></pre>
 
 
   
-    <article id="post-postgresql中文模糊查询性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">postgresql中文模糊查询性能优化</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="archive-article-date">
-  	<time datetime="2019-03-24T02:05:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文记录中文模糊查询优化的方向是 <strong>使模式匹配使用索引</strong></p>
-<p>有一张 2 千万多的 user 表，其中需要按照 users.chinese_name 字段进行模糊查找。</p>
-<h3 id="启用-pg-trgm-扩展"><a href="#启用-pg-trgm-扩展" class="headerlink" title="启用 pg_trgm 扩展"></a>启用 pg_trgm 扩展</h3><p>pg_trgm 模块提供函数和操作符测定字母，数字，文本基于三元模型匹配的相似性， 还有支持快速搜索相似字符串的索引操作符类。</p>
-<p>这里提到了一个三元模型，其实很简单。打个比方 foo 的三元模型的集合为{“ f”,” fo”,”foo”,”oo “}, foo|bar 的三元模型的集合为{“ f”,” fo”,”foo”,”oo “,” b”,” ba”,”bar”,”ar “}。也就是说将字符串拆解成三个字符一组，每个字符串被认为有两个空格前缀和一个空格后缀。</p>
-<p>Postgres 使用 trigram 将字符串分解成更小的单元便于有效地索引它们。pg_trgm 模块支持 GIST 或 GIN 索引，从 9.1 开始，这些索引支持 LIKE/ILIKE 查询。</p>
-<p>要使用 pg_trgm 模块，首先要启用该扩展，然后使用 gin_trgm_ops 创建索引</p>
-<pre><code class="sql">CREATE EXTENSION pg_trgm;</code></pre>
-<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><p>在字段上创建 GIN 类型的索引可以处理包含多个键的值，如数组等. 与 GIST 类似， GIN支持用户定义的索引策略，可以通过定义GIN索引的特定操作符类型实现不同的功能。 PostgreSQL的标准中发布了用于一维数组的GIN操作符类， 比如它支持 包含操作符 ‘@&gt;’、被包含操作符 ‘&lt;@’、相等操作符 ‘=’、重叠操作符 ‘&amp;&amp;’,等等。</p>
-<p>但是这种索引对中文不起作用，需要把中文转换成字节（ASCII码），然后使用函数索引</p>
-<pre><code class="sql">create or replace function textsend_i (text) returns bytea as
-$$
-
-  select textsend($1);
-
-$$
-language sql strict immutable;
-CREATE INDEX trgm_idx_users_chinese_name ON users USING GIN(text(textsend_i(chinese_name)) gin_trgm_ops);</code></pre>
-<h3 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h3><pre><code class="sql">SELECT chinese_name FROM users WHERE text(textsend_i(chinese_name)) ~ ltrim(text(textsend_i(&#39;深圳&#39;)), &#39;\x&#39;);</code></pre>
-<h3 id="再优化"><a href="#再优化" class="headerlink" title="再优化"></a>再优化</h3><p>添加 GIN 索引后，查询性能提升很多。如上所说，GIN 不支持中文，在查询的时候，先把 chinese_name 字段转化为 bytea，然后进行匹配。这里也耽误了不少时间，我们可以在users 表上在添加一个 chinese_name_bytea 字段，存储 chinese_name 的字节形式，然后直接在该字段上进行创建 GIN 索引。也算是一种空间换取时间的方式。</p>
-<pre><code class="sql">ALTER TABLE users;
-ADD COLUMN chinese_name_bytea VARCHAR;
-UPDATE users SET chinese_name_bytes = textsend(chinese_name);
-CREATE INDEX trgm_idx_users_chinese_name_bytea ON users USING GIN(chinese_name_bytea gin_trgm_ops);</code></pre>
-<p>查询时：</p>
-<pre><code class="sql">SELECT chinese_name FROM users WHERE chinese_name_bytea ~ ltrim(text(textsend_i(&#39;深圳&#39;)), &#39;\x&#39;);</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">模糊查询</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">postgesql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pg_trgm</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-网页全屏背景图实现方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">网页全屏背景图实现方式</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2019-03-23T14:31:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>原文： <a href="https://molunerfinn.com/FullScreenBackground(css)" target="_blank" rel="noopener">https://molunerfinn.com/FullScreenBackground(css)</a></p>
-</blockquote>
-<p>全屏背景的意思就是背景图占满整个浏览器视窗，在没有 body 其他内容的时候不出现滚动条。就算有滚动条的时候，背景也是固定的，不跟随滚动。<br>对于这类的全屏背景图片的实现，我们需要注意的是，有五种情况：</p>
-<ul>
-<li>图片很小重复铺满整个视窗</li>
-<li>被浏览器视窗大小截断</li>
-<li>宽度占满浏览器视窗而高度被截断</li>
-<li>根据浏览器视窗大小长宽按比例缩放</li>
-<li>根据图片与浏览器视窗的相对大小进行缩放或者截断</li>
-</ul>
-<p>为此我准备了三张图片作为代表。一张是小图，100px*100px；一张是横向的背景图，1920px*1080px；一张纵向背景图,2062px*3000px。这三张背景图基本上涵盖了我们需要做全屏背景图的需要了。</p>
-<h3 id="1-图片很小重复铺满整个视窗"><a href="#1-图片很小重复铺满整个视窗" class="headerlink" title="1. 图片很小重复铺满整个视窗"></a>1. 图片很小重复铺满整个视窗</h3><p>这种情况下，图片一般都是比较简单的，能做到边缘接触后也看不出痕迹的。比如类似羊皮纸背景，你不需要做一张特别大的羊皮纸，只需要做一小张，边缘接触的时候看不出边界就行，然后让它们重复铺满整个浏览器就好了。这样能很大的程度上减轻浏览器以及服务器端的负担。对于用户来说，实际上他只加载了一张很小的图片就实现了全屏背景。<br>这种情况是最简单的：</p>
-<pre><code class="css">body {
-  background: url(&#39;xxx.jpg&#39;); //图片地址和格式依自己存放的图片而定。这边都是以 jpg 格式为例。下同。
-}</code></pre>
-<p>当然以上的这种简易写法在 PC 端的高版本浏览器里一般没有问题，但是在低版本浏览器以及某些手机的浏览器里就会出现问题。究其原因一般是浏览器解析的时候，若 body 没有设置高度，那么浏览器将会 body 的高度解析成 body 内部子元素所占的高度。也就是当子元素的高度不够的情况下，你页面的背景也就只能填充子元素，而剩下的部分就是默认的白色背景色了。</p>
-<p>这要如何解决呢？解决办法也很简单。</p>
-<pre><code class="css">html,
-body {
-  height: 100%;
-}</code></pre>
-<p>只需将 html 和 body 的高度设为 100%就行。这样的话背景就能完整填充了。</p>
-<h3 id="2-被浏览器视窗大小截断"><a href="#2-被浏览器视窗大小截断" class="headerlink" title="2. 被浏览器视窗大小截断"></a>2. 被浏览器视窗大小截断</h3><p>注意：如果你的背景图片的分辨率比普通的屏幕尺寸大(例如 14 寸笔记本通常的分辨率是 1366*768)，那么这种方法设置的全屏背景将会被浏览器视窗截掉大于浏览器视窗的其他部分。</p>
-<pre><code class="css">body {
-  background: url(&#39;xxx.jpg&#39;);
-}</code></pre>
-<p>实现的方法和第一种是一样的，但是效果却不一样。</p>
-<p><strong>注意：这种情况下，当你的浏览器的宽度比你的图片还宽，高度也高过你的图片，那么这样的情况同样会出现第一种情况，就是浏览器将会将这张图复制平铺。</strong></p>
-<h3 id="3-宽度占满浏览器视窗而高度被截断"><a href="#3-宽度占满浏览器视窗而高度被截断" class="headerlink" title="3. 宽度占满浏览器视窗而高度被截断"></a>3. 宽度占满浏览器视窗而高度被截断</h3><p>这种方式很好理解，这种图一般是长图，也就是高度大于宽度的图。通常在 PC 端浏览的时候你只能看到这张图片的上半部分（多余浏览器高度的部分就会被截断），而在手机端浏览的时候，由于手机屏幕是竖持，所以能够将这展示出这张背景图的大部分内容。而如果背景图设计合适的话，这种方式的背景图是能够全平台适应的，从宽屏的 PC，到窄屏的手机。</p>
-<p>下面说一下这种背景图片的实现方式。</p>
-<p>在 body 下新建一行标签。</p>
-<pre><code class="css">&lt;img id=&quot;background&quot; src=&quot;background.jpg&quot;&gt;</code></pre>
-<p>然后在 CSS 内我们选中这个 ID 叫做 background 的元素。</p>
-<pre><code class="css">#background {
-  width: 100%;
-  position: fixed;
-  z-index: -1;
-}</code></pre>
-<p>原理分析一下，最关键还是这个 position: fixed;，这句话将 img 这个行脱离了文档流，独立出来，然后通过 z-index: -1 将背景图下沉。由于它不属于 body 里，并且它的高度高于浏览器的高度，所以就会占满整个屏幕。</p>
-<p>注意：不过需要注意的是这种方法将会在屏幕的高宽比&gt;图片的高宽比的时候（比如屏幕高宽比为 2:1，若图片为 3:2），那么背景将会宽度占满宽度，而高度不够，就会留白。不过一般情况下只要选图比例恰当就不会出现这种情况。</p>
-<h3 id="4-根据浏览器视窗大小长宽按比例缩放"><a href="#4-根据浏览器视窗大小长宽按比例缩放" class="headerlink" title="4. 根据浏览器视窗大小长宽按比例缩放"></a>4. 根据浏览器视窗大小长宽按比例缩放</h3><p>这种方式的背景图推荐为 PC 或者手机端单独准备的背景图。<br>同样在 body 下新建一行标签。</p>
-<pre><code class="css">&lt;img id=&quot;background&quot; src=&quot;background.jpg&quot;&gt;</code></pre>
-<p>在 CSS 内我们选中这个 ID 叫做 background 的元素。</p>
-<pre><code class="css">#background {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: -1;
-}</code></pre>
-<p>实际上，这种方法的原理就是将图片的四周粘死在浏览器的四边，浏览器视窗怎么变化图片也怎么变化。所以最好是宽屏对应宽图，手机端就配长图。这样的话比例也不会失真太多。不过缺点就是需要分别给手机和 PC 配图。</p>
-<h3 id="5-根据图片与浏览器视窗的相对大小进行缩放或者截断"><a href="#5-根据图片与浏览器视窗的相对大小进行缩放或者截断" class="headerlink" title="5. 根据图片与浏览器视窗的相对大小进行缩放或者截断"></a>5. 根据图片与浏览器视窗的相对大小进行缩放或者截断</h3><p>这种方法是适配程度最高的。也就是不管是长图宽图，它都能适配整个屏幕。<br>这里需要用到 background-size 属性的 cover 值。</p>
-<p>实现方法如下：</p>
-<pre><code class="css">body,
-html {
-  height: 100%;
-}
-body{
-  background: url(&#39;xxx.jpg&#39;) no-repeat fixed;
-  background-size：cover;
-}</code></pre>
-<p>它实现的效果是：当浏览器的视窗比例和背景图片的长宽比差不多的情况下，那么整张图会自动计算比例贴合整个屏幕。当视窗长宽比&gt;图片长宽比的时候，会自动抛去图片右侧的部分使剩下的部分的长宽比契合屏幕的长宽比。同样，当视窗的长宽比&lt;图片长宽比的时候，也就是屏幕宽度太宽而高度太小的时候，将会自动抛去图片底部的部分使剩下的部分的长宽比契合屏幕的长宽比。也就是这种做法将会能够最好的契合各种设备都能显示出背景图。当然如果背景图里有些重要的消息，需要实时呈现出来的话，还是用上面的方法来展示。如果背景图并不是很重要的话，只是作为一个衬底，那么这种方法将是适配的最好方法。不需要 JS 也能做到全平台适配。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">css</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-postgreSQL分区表在rails的应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/20/postgreSQL%E5%88%86%E5%8C%BA%E8%A1%A8%E5%9C%A8rails%E7%9A%84%E5%BA%94%E7%94%A8/">postgreSQL分区表在rails的应用</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/20/postgreSQL%E5%88%86%E5%8C%BA%E8%A1%A8%E5%9C%A8rails%E7%9A%84%E5%BA%94%E7%94%A8/" class="archive-article-date">
-  	<time datetime="2019-03-20T07:19:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>postgerSQL 是通过表继承来实现分区表的。表分区就是把逻辑上的一个大表分割成物理上的几个小块，分区可以提供若干好处。</p>
-<ul>
-<li><p>删除历史数据更快，如果是按时间分区的，在删除历史数据时，直接删除历史分区就可以了，如果没有分区，通过 DELETE 删除数据时会比较慢，还容易导致 VACUUM 超载；</p>
-</li>
-<li><p>某些类型的查询性能可以得到极大的提升，特别是表中访问率较高的行位于一个单独分区或少数几个分区的情况下。如果在按时间分区的表中，大多数查询发生在时间最近的一个分区或几个分区中，而较早时间分区比较少查询，那么，在建分区表后各个分区表会有各自的索引，使用率较高的分区表的索引就可能完全缓存在内存中，这样效率就会高很多；</p>
-</li>
-<li><p>当查询或更新一个分区的大部分记录时，连续扫描那个分区而不是使用索引离散的访问整个表，可以获得巨大的性能提升；</p>
-</li>
-<li><p>很少用到的历史数据可以使用表空间的技术移动到便宜一些的慢速存储介质上，因为使用分区表可以将不同的分区安置在不同的物理介质上。</p>
-</li>
-</ul>
-<h3 id="什么时候该使用分区表？"><a href="#什么时候该使用分区表？" class="headerlink" title="什么时候该使用分区表？"></a>什么时候该使用分区表？</h3><p>一般取决于具体应用，不过也有个基本的简单原则，即表的大小超过了数据库服务器的物理内存大小则应该使用</p>
-<p><strong>使用分区表时，一般都让父表为空，数据都存在子表中</strong></p>
-<h3 id="建分区表的步骤"><a href="#建分区表的步骤" class="headerlink" title="建分区表的步骤"></a>建分区表的步骤</h3><ol>
-<li><p>创建父表，所有的分区都从它继承。这个表中没有数据，不要在这个表上定义任何检查约束，除非你希望约束所有的分区。同样，在其上定义任何索引或唯一约束也没有任何意义。</p>
-</li>
-<li><p>创建几个子表，每个都是从主表上继承的。通常，这些表不会增加任何字段。我们把子表称作分区，实际上他们就是普通的 postgreSQL 表</p>
-</li>
-<li><p>给分区表增加约束，定义每隔分区允许的键值。</p>
-</li>
-<li><p>对于每个分区，在关键字字段上创建一个索引，也可以创建其它你想创建的索引。严格来说，关键字索引并非是必须的，但是大多情况下他是很有帮助的，如果你希望关键字是唯一的，那么应该总是给每个分区创建一个唯一约束或主键约束。</p>
-</li>
-<li><p>定义一个规则或者触发器，把对主表的数据插入重定向到合适的分区表。</p>
-</li>
-<li><p>确保 postgresql.conf 里的配置参数 constaint_exclusion(约束排除) 是打开的。打开后，如果查询中的 WHERE 子句的过滤条件与分区的约束条件匹配，那么这个查询会智能的只查询这个分区，而不会查询其他分区。 在 9.2.4 以后的版本中， 参数 constaint_exclusion 默认就是 partition。 如果设置成 off 则会扫描每张分区子表。</p>
-</li>
-</ol>
-<h3 id="在-rails-中的应用"><a href="#在-rails-中的应用" class="headerlink" title="在 rails 中的应用"></a>在 rails 中的应用</h3><p>rails 没有提供专有的方法来设置分区表，需要我们编写 SQL 语句手动设置。分区表与触发器的创建自然是写在迁移文件中</p>
-<p>下面是 按商标的长度不同，把商标数据存入不同的表中 的例子</p>
-<h3 id="创建父表"><a href="#创建父表" class="headerlink" title="创建父表"></a>创建父表</h3><pre><code class="ruby">class CreateTrademarkWords &lt; ActiveRecord::Migration[5.2]
-  def change
-    create_table :trademark_words do |t|
-      t.string :name
-      t.integer :length
-      t.string :origin
-
-      t.timestamps
-    end
-  end
-end</code></pre>
-<h3 id="创建子表及触发器"><a href="#创建子表及触发器" class="headerlink" title="创建子表及触发器"></a>创建子表及触发器</h3><pre><code class="ruby">class CreatePartitionTableOfTrademarkWords &lt; ActiveRecord::Migration[5.2]
-  def up
-    # 注意如何在 rails 中编写 SQL
-    execute &lt;&lt;~SQL
-    CREATE TABLE trademark_words_1 (CHECK (length = 1)) INHERITS (trademark_words);
-    CREATE INDEX length_1_index_name ON trademark_words_1 (name);
-    CREATE INDEX length_1_index_origin ON trademark_words_1 (origin);
-
-    CREATE TABLE trademark_words_2 (CHECK (length = 2))   INHERITS (trademark_words);
-    CREATE INDEX length_2_index_name ON trademark_words_2 (name);
-    CREATE INDEX length_2_index_origin ON trademark_words_2 (origin);
-
-    CREATE TABLE trademark_words_3 (CHECK (length = 3))   INHERITS (trademark_words);
-    CREATE INDEX length_3_index_name ON trademark_words_3(name);
-    CREATE INDEX length_3_index_origin ON trademark_words_3 (origin);
-
-    CREATE TABLE trademark_words_4 (CHECK (length = 4))   INHERITS (trademark_words);
-    CREATE INDEX length_4_index_name ON trademark_words_4(name);
-    CREATE INDEX length_4_index_origin ON trademark_words_4 (origin);
-
-    CREATE TABLE trademark_words_5 (CHECK (length = 5))   INHERITS (trademark_words);
-    CREATE INDEX length_5_index_name ON trademark_words_5(name);
-    CREATE INDEX length_5_index_origin ON trademark_words_5 (origin);
-
-    # 触发器
-    CREATE OR REPLACE FUNCTION trademark_words_insert_trigger()
-    RETURNS TRIGGER AS $$
-    BEGIN
-        IF ( NEW.length = 1 ) THEN
-             INSERT INTO trademark_words_1 VALUES (NEW.*);
-        ELSIF ( NEW.length = 2) THEN
-             INSERT INTO trademark_words_2 VALUES (NEW.*);
-        ELSIF ( NEW.length = 3) THEN
-             INSERT INTO trademark_words_3 VALUES (NEW.*);
-        ELSIF ( NEW.length = 4) THEN
-             INSERT INTO trademark_words_4 VALUES (NEW.*);
-        ELSIF ( NEW.length = 5) THEN
-             INSERT INTO trademark_words_5 VALUES (NEW.*);
-        ELSE
-        RAISE EXCEPTION &#39;Length out of range. Fix the trademark_words_insert_trigger() function!&#39;;
-        END IF;
-        RETURN NULL;
-    END;
-    $$
-    LANGUAGE plpgsql;
-    CREATE TRIGGER insert_trademark_words
-        BEFORE INSERT ON trademark_words
-        FOR EACH ROW EXECUTE PROCEDURE trademark_words_insert_trigger();
-    SQL
-
-  end
-
-  # 回滚操作
-  def down
-    execute &lt;&lt;~SQL
-            DROP TABLE trademark_words_1;
-            DROP TABLE trademark_words_2;
-            DROP TABLE trademark_words_3;
-            DROP TABLE trademark_words_4;
-            DROP TABLE trademark_words_5;
-            DROP TRIGGER insert_trademark_words ON trademark_words;
-          SQL
-
-  end
-end
-</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分区表</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/20/postgreSQL%E5%88%86%E5%8C%BA%E8%A1%A8%E5%9C%A8rails%E7%9A%84%E5%BA%94%E7%94%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/8/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/10/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1411,7 +1303,7 @@ end
     		&copy; 2019 邓超
     	</div>
       	<div class="footer-right">
-      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1305
+      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1314
       	</div>
     </div>
   </div>
@@ -1491,6 +1383,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1504,10 +1400,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1559,15 +1451,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1580,14 +1472,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">axel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1635,15 +1519,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1659,6 +1543,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">图片处理</a>
               </li>
              
@@ -1667,15 +1555,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">pacman</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1723,6 +1607,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">axel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1763,10 +1655,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1783,11 +1671,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1807,15 +1695,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1859,6 +1747,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">windows</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">yakuake</a>
               </li>
              
@@ -1883,11 +1775,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1899,15 +1791,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">awk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1927,11 +1823,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1983,11 +1879,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
             
             <div class="clearfix"></div>

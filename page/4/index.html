@@ -133,6 +133,292 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-push_blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/push_blog/">push_blog</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/push_blog/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="推送博客"><a href="#推送博客" class="headerlink" title="推送博客"></a>推送博客</h3><pre><code class="ruby">#!/home/dccmmtop/.rbenv/shims/ruby
+require &quot;net/ssh&quot;
+require &quot;net/scp&quot;
+require &quot;optparse&quot;
+
+def add_files(files)
+  puts &quot;连接服务器...&quot;
+  Net::SSH.start(&quot;ip&quot;, &quot;username&quot;,:password =&gt; nil,:port =&gt; &#39;port&#39;) do |ssh|
+    file_count = files.size
+    puts &quot;需要推送#{file_count}个文件&quot;
+    (0...file_count).each do |i|
+      puts &quot;正在上传#{files[i]}...&quot;
+      ssh.scp.upload!(&quot;#{files[i]}&quot;,&quot;/home/dccmmtop/rails_app/script_blog/public/blogs/&quot;)
+      puts &quot;\n\ngit add #{files[i]}&quot;
+      puts ` git add #{files[i]}`
+      puts &quot;git commit -m &#39; #{files[i]}&#39;&quot;
+      puts ` git commit -m &#39;#{files[i]}&#39;`
+    end
+    if file_count &gt; 0
+      puts &quot;所有文件上传成功\n解析博客中...&quot;
+      puts ssh.exec!(&quot;cd /home/dccmmtop/rails_app/script_blog &amp;&amp; RAILS_ENV=production /home/dccmmtop/.rbenv/shims/bundle exec rake analysis_blog&quot;)
+
+      puts &quot;\n\n\n备份到github\n&quot;
+      puts &quot;git push origin master&quot;   
+      puts `git push origin master`
+    end
+    puts &quot;\e[32mdone!\e[0m&quot;
+  end
+end
+
+def delete_files(files)
+  files = files.map{|file| file.strip.gsub(/\.md/,&quot;&quot;)}
+  puts &quot;连接服务器...&quot;
+  Net::SSH.start(&quot;ip&quot;, &quot;username&quot;,:password =&gt; nil,:port =&gt; &#39;port&#39;) do |ssh|
+      puts ssh.exec!(&quot;cd /home/dccmmtop/rails_app/script_blog &amp;&amp; RAILS_ENV=production /home/dccmmtop/.rbenv/shims/bundle exec rake delete_blog[#{files.join(&#39;,&#39;)}]&quot;)
+  end
+end
+options = {}
+
+option_parse = OptionParser.new do |opts|
+  opts.banner = &#39;manage blog of conmmand line tool&#39;
+  opts.on(&#39;-a file_name&#39;,&#39;--add files&#39;,&#39;add new file or update file&#39;) do |value|
+    options[:add_files] = value.split(/\s|,/).map{|name| name if name.size &gt; 0}.compact
+  end
+
+  opts.on(&#39;-d file_name&#39;,&#39;--delete files&#39;,&#39;delete file&#39;) do |value|
+    options[:delete_files] = value.split(/\s|,/).map{|name| name if name.size &gt; 0}.compact
+  end
+end.parse!
+if options.has_key?(:add_files)
+  add_files(options[:add_files])
+elsif options.has_key?(:delete_files)
+  delete_files(options[:delete_files])
+end</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/push_blog/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-qiniu_upload_file" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/qiniu_upload_file/">qiniu_upload_file</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/qiniu_upload_file/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
+require &#39;qiniu&#39;
+Qiniu.establish_connection! access_key: &#39;xxxxxxxxxx&#39;,
+                            secret_key: &#39;xxxxxxxxxx&#39;
+bucket = &#39;dc141210104&#39;
+puts ARGV[0]
+key = ARGV[0].split(/\//).last
+
+put_policy = Qiniu::Auth::PutPolicy.new(
+    bucket, # 存储空间
+    key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
+    3600    # token 过期时间，默认为 3600 秒，即 1 小时
+)
+# 生成上传 Token
+uptoken = Qiniu::Auth.generate_uptoken(put_policy)
+filePath = ARGV[0]
+# 调用 upload_with_token_2 方法上传
+code, result, response_headers = Qiniu::Storage.upload_with_token_2(
+     uptoken,
+     filePath,
+     key,
+     nil, # 可以接受一个 Hash 作为自定义变量，请参照 http://developer.qiniu.com/article/kodo/kodo-developer/up/vars.html#xvar
+     bucket: bucket
+)
+#打印上传返回的信息
+# puts &quot;\n\e[1;40;37mhttp://ogbkru1bq.bkt.clouddn.com/#{key}\e[0m&quot;
+puts &quot;http://ogbkru1bq.bkt.clouddn.com/#{key}&quot;</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/qiniu_upload_file/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-rails_model字段验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/">rails_model字段验证</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <pre><code class="ruby">validates :address,  presence: true, uniqueness: true
+validates :email, presence: true, length: { maximum: 255 },
+VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+format: { with: VALID_EMAIL_REGEX }</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">validates</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/rails_model%E5%AD%97%E6%AE%B5%E9%AA%8C%E8%AF%81/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-rails_record数据库查询" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -404,221 +690,6 @@ Client.exists?([1,2,3])</code></pre>
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/10/31/rails_record%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-rails使用markdown显示文本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/rails%E4%BD%BF%E7%94%A8markdown%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC/">rails使用markdown显示文本</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/rails%E4%BD%BF%E7%94%A8markdown%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="rails使用markdown显示文本"><a href="#rails使用markdown显示文本" class="headerlink" title="rails使用markdown显示文本"></a>rails使用markdown显示文本</h2><ul>
-<li>在Gemgfile中</li>
-</ul>
-<pre><code class="ruby"># markdown
-gem &#39;redcarpet&#39;
-# # 代码颜色高亮
-gem &#39;coderay&#39;</code></pre>
-<ul>
-<li>执行 <code>bundle install</code> 安装包</li>
-<li>在<code>application_helper</code>中添加如下代码</li>
-</ul>
-<pre><code class="ruby">class CodeRayify &lt; Redcarpet::Render::HTML
-    def block_code(code, language)
-      language=&quot;c&quot; if language==&quot;c++&quot;
-      language ||= :plaintext
-      begin
-        CodeRay.scan(code, language).div
-      rescue Exception =&gt; e
-        language=&quot;markdown&quot;
-        retry
-      end
-    end
-  end
-
-  def markdown(text)
-    coderayified = CodeRayify.new(:filter_html =&gt; true,
-                                  :hard_wrap =&gt; true)
-    render_options = {
-      # will remove from the output HTML tags inputted by user
-      filter_html:     true,
-      # will insert &lt;br /&gt; tags in paragraphs where are newlines
-      # (ignored by default)
-      hard_wrap: true,
-      # hash for extra link options, for example &#39;nofollow&#39;
-      link_attributes: { rel: &#39;nofollow&#39; }
-      # more
-      # will remove &lt;img&gt; tags from output
-      # no_images: true
-      # will remove &lt;a&gt; tags from output
-      # no_links: true
-      # will remove &lt;style&gt; tags from output
-      # no_styles: true
-      # generate links for only safe protocols
-      # safe_links_only: true
-      # and more ... (prettify, with_toc_data, xhtml)
-    }
-    renderer = Redcarpet::Render::HTML.new(render_options)
-
-    extensions = {
-      #will parse links without need of enclosing them
-      autolink:     true,
-      # blocks delimited with 3 ` or ~ will be considered as code block.
-      # No need to indent.  You can provide language name too.
-      # ```ruby
-      # block of code
-      # ```
-      fenced_code_blocks: true,
-      # will ignore standard require for empty lines surrounding HTML blocks
-      lax_spacing:  true,
-      # will not generate emphasis inside of words, for example no_emph_no
-      no_intra_emphasis:  true,
-      # will parse strikethrough from ~~, for example: ~~bad~~
-      strikethrough:      true,
-      # will parse superscript after ^, you can wrap superscript in ()
-      superscript:  true
-      # will require a space after # in defining headers
-      # space_after_headers: true
-    }
-    Redcarpet::Markdown.new(coderayified, extensions).render(text).html_safe
-  end</code></pre>
-<ul>
-<li>在view中要显示markdown文本的地方添加<code>&lt;%= markdown(text)%&gt;</code></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/rails%E4%BD%BF%E7%94%A8markdown%E6%98%BE%E7%A4%BA%E6%96%87%E6%9C%AC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-rails健壮参数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/">rails健壮参数</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">def user_params
-  params.require(:user).permit(:nickname, :email, :address)
-end</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">健壮参数</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/rails%E5%81%A5%E5%A3%AE%E5%8F%82%E6%95%B0/">展开全文 >></a>
         </p>
       
 
@@ -976,171 +1047,6 @@ end</code></pre>
 
 
   
-    <article id="post-rails字体加载问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/">rails字体加载问题</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
-<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
-<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
-<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
-<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
-<p><strong>The default asset pipeline</strong></p>
-<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
-<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
-<pre><code>|-app/
-|---assets/
-|-----fonts/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
-<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
-<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
-<p><strong>Fonts path in your Sass</strong></p>
-<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
-<pre><code>@font-face {
-    font-family: &#39;icofonts&#39;;
-    src:url(&#39;fonts/icofonts.eot&#39;);
-    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
-        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
-        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
-    font-weight: normal;
-    font-style: normal;
-}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:font-url(&#39;icofonts.eot&#39;);
-  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-
-  ...
-} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src: url(/assets/icofonts.eot);
-  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
-    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
-    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
-    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
-  font-weight: normal;
-  font-style: normal;
-}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
-<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
-<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/
-|-------fonts/</code></pre><p><strong>The Sass</strong></p>
-<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
-  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
-
-  ...
-}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-
-  ...
-}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
-<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
-<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
-<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
-  ...
-}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
-<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
-<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
-<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-rails验证码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1325,7 +1231,7 @@ gem &#39;dalli&#39;</code></pre>
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/5/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/5/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1340,7 +1246,7 @@ gem &#39;dalli&#39;</code></pre>
     		&copy; 2019 邓超
     	</div>
       	<div class="footer-right">
-      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1305
+      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1314
       	</div>
     </div>
   </div>
@@ -1420,6 +1326,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1433,10 +1343,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1488,15 +1394,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1509,14 +1415,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">axel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1564,15 +1462,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1588,6 +1486,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">图片处理</a>
               </li>
              
@@ -1596,15 +1498,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">pacman</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1652,6 +1550,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">axel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1692,10 +1598,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1712,11 +1614,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1736,15 +1638,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1788,6 +1690,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">windows</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">yakuake</a>
               </li>
              
@@ -1812,11 +1718,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1828,15 +1734,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">awk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1856,11 +1766,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1912,11 +1822,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
             
             <div class="clearfix"></div>

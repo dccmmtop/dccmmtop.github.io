@@ -133,6 +133,426 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-postgresql中文模糊查询性能优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">postgresql中文模糊查询性能优化</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="archive-article-date">
+  	<time datetime="2019-03-24T02:05:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文记录中文模糊查询优化的方向是 <strong>使模式匹配使用索引</strong></p>
+<p>有一张 2 千万多的 user 表，其中需要按照 users.chinese_name 字段进行模糊查找。</p>
+<h3 id="启用-pg-trgm-扩展"><a href="#启用-pg-trgm-扩展" class="headerlink" title="启用 pg_trgm 扩展"></a>启用 pg_trgm 扩展</h3><p>pg_trgm 模块提供函数和操作符测定字母，数字，文本基于三元模型匹配的相似性， 还有支持快速搜索相似字符串的索引操作符类。</p>
+<p>这里提到了一个三元模型，其实很简单。打个比方 foo 的三元模型的集合为{“ f”,” fo”,”foo”,”oo “}, foo|bar 的三元模型的集合为{“ f”,” fo”,”foo”,”oo “,” b”,” ba”,”bar”,”ar “}。也就是说将字符串拆解成三个字符一组，每个字符串被认为有两个空格前缀和一个空格后缀。</p>
+<p>Postgres 使用 trigram 将字符串分解成更小的单元便于有效地索引它们。pg_trgm 模块支持 GIST 或 GIN 索引，从 9.1 开始，这些索引支持 LIKE/ILIKE 查询。</p>
+<p>要使用 pg_trgm 模块，首先要启用该扩展，然后使用 gin_trgm_ops 创建索引</p>
+<pre><code class="sql">CREATE EXTENSION pg_trgm;</code></pre>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><p>在字段上创建 GIN 类型的索引可以处理包含多个键的值，如数组等. 与 GIST 类似， GIN支持用户定义的索引策略，可以通过定义GIN索引的特定操作符类型实现不同的功能。 PostgreSQL的标准中发布了用于一维数组的GIN操作符类， 比如它支持 包含操作符 ‘@&gt;’、被包含操作符 ‘&lt;@’、相等操作符 ‘=’、重叠操作符 ‘&amp;&amp;’,等等。</p>
+<p>但是这种索引对中文不起作用，需要把中文转换成字节（ASCII码），然后使用函数索引</p>
+<pre><code class="sql">create or replace function textsend_i (text) returns bytea as
+$$
+
+  select textsend($1);
+
+$$
+language sql strict immutable;
+CREATE INDEX trgm_idx_users_chinese_name ON users USING GIN(text(textsend_i(chinese_name)) gin_trgm_ops);</code></pre>
+<h3 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h3><pre><code class="sql">SELECT chinese_name FROM users WHERE text(textsend_i(chinese_name)) ~ ltrim(text(textsend_i(&#39;深圳&#39;)), &#39;\x&#39;);</code></pre>
+<h3 id="再优化"><a href="#再优化" class="headerlink" title="再优化"></a>再优化</h3><p>添加 GIN 索引后，查询性能提升很多。如上所说，GIN 不支持中文，在查询的时候，先把 chinese_name 字段转化为 bytea，然后进行匹配。这里也耽误了不少时间，我们可以在users 表上在添加一个 chinese_name_bytea 字段，存储 chinese_name 的字节形式，然后直接在该字段上进行创建 GIN 索引。也算是一种空间换取时间的方式。</p>
+<pre><code class="sql">ALTER TABLE users;
+ADD COLUMN chinese_name_bytea VARCHAR;
+UPDATE users SET chinese_name_bytes = textsend(chinese_name);
+CREATE INDEX trgm_idx_users_chinese_name_bytea ON users USING GIN(chinese_name_bytea gin_trgm_ops);</code></pre>
+<p>查询时：</p>
+<pre><code class="sql">SELECT chinese_name FROM users WHERE chinese_name_bytea ~ ltrim(text(textsend_i(&#39;深圳&#39;)), &#39;\x&#39;);</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">模糊查询</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">postgesql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">pg_trgm</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/24/postgresql%E4%B8%AD%E6%96%87%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-网页全屏背景图实现方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">网页全屏背景图实现方式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-03-23T14:31:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>原文： <a href="https://molunerfinn.com/FullScreenBackground(css)" target="_blank" rel="noopener">https://molunerfinn.com/FullScreenBackground(css)</a></p>
+</blockquote>
+<p>全屏背景的意思就是背景图占满整个浏览器视窗，在没有 body 其他内容的时候不出现滚动条。就算有滚动条的时候，背景也是固定的，不跟随滚动。<br>对于这类的全屏背景图片的实现，我们需要注意的是，有五种情况：</p>
+<ul>
+<li>图片很小重复铺满整个视窗</li>
+<li>被浏览器视窗大小截断</li>
+<li>宽度占满浏览器视窗而高度被截断</li>
+<li>根据浏览器视窗大小长宽按比例缩放</li>
+<li>根据图片与浏览器视窗的相对大小进行缩放或者截断</li>
+</ul>
+<p>为此我准备了三张图片作为代表。一张是小图，100px*100px；一张是横向的背景图，1920px*1080px；一张纵向背景图,2062px*3000px。这三张背景图基本上涵盖了我们需要做全屏背景图的需要了。</p>
+<h3 id="1-图片很小重复铺满整个视窗"><a href="#1-图片很小重复铺满整个视窗" class="headerlink" title="1. 图片很小重复铺满整个视窗"></a>1. 图片很小重复铺满整个视窗</h3><p>这种情况下，图片一般都是比较简单的，能做到边缘接触后也看不出痕迹的。比如类似羊皮纸背景，你不需要做一张特别大的羊皮纸，只需要做一小张，边缘接触的时候看不出边界就行，然后让它们重复铺满整个浏览器就好了。这样能很大的程度上减轻浏览器以及服务器端的负担。对于用户来说，实际上他只加载了一张很小的图片就实现了全屏背景。<br>这种情况是最简单的：</p>
+<pre><code class="css">body {
+  background: url(&#39;xxx.jpg&#39;); //图片地址和格式依自己存放的图片而定。这边都是以 jpg 格式为例。下同。
+}</code></pre>
+<p>当然以上的这种简易写法在 PC 端的高版本浏览器里一般没有问题，但是在低版本浏览器以及某些手机的浏览器里就会出现问题。究其原因一般是浏览器解析的时候，若 body 没有设置高度，那么浏览器将会 body 的高度解析成 body 内部子元素所占的高度。也就是当子元素的高度不够的情况下，你页面的背景也就只能填充子元素，而剩下的部分就是默认的白色背景色了。</p>
+<p>这要如何解决呢？解决办法也很简单。</p>
+<pre><code class="css">html,
+body {
+  height: 100%;
+}</code></pre>
+<p>只需将 html 和 body 的高度设为 100%就行。这样的话背景就能完整填充了。</p>
+<h3 id="2-被浏览器视窗大小截断"><a href="#2-被浏览器视窗大小截断" class="headerlink" title="2. 被浏览器视窗大小截断"></a>2. 被浏览器视窗大小截断</h3><p>注意：如果你的背景图片的分辨率比普通的屏幕尺寸大(例如 14 寸笔记本通常的分辨率是 1366*768)，那么这种方法设置的全屏背景将会被浏览器视窗截掉大于浏览器视窗的其他部分。</p>
+<pre><code class="css">body {
+  background: url(&#39;xxx.jpg&#39;);
+}</code></pre>
+<p>实现的方法和第一种是一样的，但是效果却不一样。</p>
+<p><strong>注意：这种情况下，当你的浏览器的宽度比你的图片还宽，高度也高过你的图片，那么这样的情况同样会出现第一种情况，就是浏览器将会将这张图复制平铺。</strong></p>
+<h3 id="3-宽度占满浏览器视窗而高度被截断"><a href="#3-宽度占满浏览器视窗而高度被截断" class="headerlink" title="3. 宽度占满浏览器视窗而高度被截断"></a>3. 宽度占满浏览器视窗而高度被截断</h3><p>这种方式很好理解，这种图一般是长图，也就是高度大于宽度的图。通常在 PC 端浏览的时候你只能看到这张图片的上半部分（多余浏览器高度的部分就会被截断），而在手机端浏览的时候，由于手机屏幕是竖持，所以能够将这展示出这张背景图的大部分内容。而如果背景图设计合适的话，这种方式的背景图是能够全平台适应的，从宽屏的 PC，到窄屏的手机。</p>
+<p>下面说一下这种背景图片的实现方式。</p>
+<p>在 body 下新建一行标签。</p>
+<pre><code class="css">&lt;img id=&quot;background&quot; src=&quot;background.jpg&quot;&gt;</code></pre>
+<p>然后在 CSS 内我们选中这个 ID 叫做 background 的元素。</p>
+<pre><code class="css">#background {
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+}</code></pre>
+<p>原理分析一下，最关键还是这个 position: fixed;，这句话将 img 这个行脱离了文档流，独立出来，然后通过 z-index: -1 将背景图下沉。由于它不属于 body 里，并且它的高度高于浏览器的高度，所以就会占满整个屏幕。</p>
+<p>注意：不过需要注意的是这种方法将会在屏幕的高宽比&gt;图片的高宽比的时候（比如屏幕高宽比为 2:1，若图片为 3:2），那么背景将会宽度占满宽度，而高度不够，就会留白。不过一般情况下只要选图比例恰当就不会出现这种情况。</p>
+<h3 id="4-根据浏览器视窗大小长宽按比例缩放"><a href="#4-根据浏览器视窗大小长宽按比例缩放" class="headerlink" title="4. 根据浏览器视窗大小长宽按比例缩放"></a>4. 根据浏览器视窗大小长宽按比例缩放</h3><p>这种方式的背景图推荐为 PC 或者手机端单独准备的背景图。<br>同样在 body 下新建一行标签。</p>
+<pre><code class="css">&lt;img id=&quot;background&quot; src=&quot;background.jpg&quot;&gt;</code></pre>
+<p>在 CSS 内我们选中这个 ID 叫做 background 的元素。</p>
+<pre><code class="css">#background {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+}</code></pre>
+<p>实际上，这种方法的原理就是将图片的四周粘死在浏览器的四边，浏览器视窗怎么变化图片也怎么变化。所以最好是宽屏对应宽图，手机端就配长图。这样的话比例也不会失真太多。不过缺点就是需要分别给手机和 PC 配图。</p>
+<h3 id="5-根据图片与浏览器视窗的相对大小进行缩放或者截断"><a href="#5-根据图片与浏览器视窗的相对大小进行缩放或者截断" class="headerlink" title="5. 根据图片与浏览器视窗的相对大小进行缩放或者截断"></a>5. 根据图片与浏览器视窗的相对大小进行缩放或者截断</h3><p>这种方法是适配程度最高的。也就是不管是长图宽图，它都能适配整个屏幕。<br>这里需要用到 background-size 属性的 cover 值。</p>
+<p>实现方法如下：</p>
+<pre><code class="css">body,
+html {
+  height: 100%;
+}
+body{
+  background: url(&#39;xxx.jpg&#39;) no-repeat fixed;
+  background-size：cover;
+}</code></pre>
+<p>它实现的效果是：当浏览器的视窗比例和背景图片的长宽比差不多的情况下，那么整张图会自动计算比例贴合整个屏幕。当视窗长宽比&gt;图片长宽比的时候，会自动抛去图片右侧的部分使剩下的部分的长宽比契合屏幕的长宽比。同样，当视窗的长宽比&lt;图片长宽比的时候，也就是屏幕宽度太宽而高度太小的时候，将会自动抛去图片底部的部分使剩下的部分的长宽比契合屏幕的长宽比。也就是这种做法将会能够最好的契合各种设备都能显示出背景图。当然如果背景图里有些重要的消息，需要实时呈现出来的话，还是用上面的方法来展示。如果背景图并不是很重要的话，只是作为一个衬底，那么这种方法将是适配的最好方法。不需要 JS 也能做到全平台适配。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">css</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/23/%E7%BD%91%E9%A1%B5%E5%85%A8%E5%B1%8F%E8%83%8C%E6%99%AF%E5%9B%BE%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-postgreSQL分区表在rails的应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/20/postgreSQL%E5%88%86%E5%8C%BA%E8%A1%A8%E5%9C%A8rails%E7%9A%84%E5%BA%94%E7%94%A8/">postgreSQL分区表在rails的应用</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/20/postgreSQL%E5%88%86%E5%8C%BA%E8%A1%A8%E5%9C%A8rails%E7%9A%84%E5%BA%94%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2019-03-20T07:19:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>postgerSQL 是通过表继承来实现分区表的。表分区就是把逻辑上的一个大表分割成物理上的几个小块，分区可以提供若干好处。</p>
+<ul>
+<li><p>删除历史数据更快，如果是按时间分区的，在删除历史数据时，直接删除历史分区就可以了，如果没有分区，通过 DELETE 删除数据时会比较慢，还容易导致 VACUUM 超载；</p>
+</li>
+<li><p>某些类型的查询性能可以得到极大的提升，特别是表中访问率较高的行位于一个单独分区或少数几个分区的情况下。如果在按时间分区的表中，大多数查询发生在时间最近的一个分区或几个分区中，而较早时间分区比较少查询，那么，在建分区表后各个分区表会有各自的索引，使用率较高的分区表的索引就可能完全缓存在内存中，这样效率就会高很多；</p>
+</li>
+<li><p>当查询或更新一个分区的大部分记录时，连续扫描那个分区而不是使用索引离散的访问整个表，可以获得巨大的性能提升；</p>
+</li>
+<li><p>很少用到的历史数据可以使用表空间的技术移动到便宜一些的慢速存储介质上，因为使用分区表可以将不同的分区安置在不同的物理介质上。</p>
+</li>
+</ul>
+<h3 id="什么时候该使用分区表？"><a href="#什么时候该使用分区表？" class="headerlink" title="什么时候该使用分区表？"></a>什么时候该使用分区表？</h3><p>一般取决于具体应用，不过也有个基本的简单原则，即表的大小超过了数据库服务器的物理内存大小则应该使用</p>
+<p><strong>使用分区表时，一般都让父表为空，数据都存在子表中</strong></p>
+<h3 id="建分区表的步骤"><a href="#建分区表的步骤" class="headerlink" title="建分区表的步骤"></a>建分区表的步骤</h3><ol>
+<li><p>创建父表，所有的分区都从它继承。这个表中没有数据，不要在这个表上定义任何检查约束，除非你希望约束所有的分区。同样，在其上定义任何索引或唯一约束也没有任何意义。</p>
+</li>
+<li><p>创建几个子表，每个都是从主表上继承的。通常，这些表不会增加任何字段。我们把子表称作分区，实际上他们就是普通的 postgreSQL 表</p>
+</li>
+<li><p>给分区表增加约束，定义每隔分区允许的键值。</p>
+</li>
+<li><p>对于每个分区，在关键字字段上创建一个索引，也可以创建其它你想创建的索引。严格来说，关键字索引并非是必须的，但是大多情况下他是很有帮助的，如果你希望关键字是唯一的，那么应该总是给每个分区创建一个唯一约束或主键约束。</p>
+</li>
+<li><p>定义一个规则或者触发器，把对主表的数据插入重定向到合适的分区表。</p>
+</li>
+<li><p>确保 postgresql.conf 里的配置参数 constaint_exclusion(约束排除) 是打开的。打开后，如果查询中的 WHERE 子句的过滤条件与分区的约束条件匹配，那么这个查询会智能的只查询这个分区，而不会查询其他分区。 在 9.2.4 以后的版本中， 参数 constaint_exclusion 默认就是 partition。 如果设置成 off 则会扫描每张分区子表。</p>
+</li>
+</ol>
+<h3 id="在-rails-中的应用"><a href="#在-rails-中的应用" class="headerlink" title="在 rails 中的应用"></a>在 rails 中的应用</h3><p>rails 没有提供专有的方法来设置分区表，需要我们编写 SQL 语句手动设置。分区表与触发器的创建自然是写在迁移文件中</p>
+<p>下面是 按商标的长度不同，把商标数据存入不同的表中 的例子</p>
+<h3 id="创建父表"><a href="#创建父表" class="headerlink" title="创建父表"></a>创建父表</h3><pre><code class="ruby">class CreateTrademarkWords &lt; ActiveRecord::Migration[5.2]
+  def change
+    create_table :trademark_words do |t|
+      t.string :name
+      t.integer :length
+      t.string :origin
+
+      t.timestamps
+    end
+  end
+end</code></pre>
+<h3 id="创建子表及触发器"><a href="#创建子表及触发器" class="headerlink" title="创建子表及触发器"></a>创建子表及触发器</h3><pre><code class="ruby">class CreatePartitionTableOfTrademarkWords &lt; ActiveRecord::Migration[5.2]
+  def up
+    # 注意如何在 rails 中编写 SQL
+    execute &lt;&lt;~SQL
+    CREATE TABLE trademark_words_1 (CHECK (length = 1)) INHERITS (trademark_words);
+    CREATE INDEX length_1_index_name ON trademark_words_1 (name);
+    CREATE INDEX length_1_index_origin ON trademark_words_1 (origin);
+
+    CREATE TABLE trademark_words_2 (CHECK (length = 2))   INHERITS (trademark_words);
+    CREATE INDEX length_2_index_name ON trademark_words_2 (name);
+    CREATE INDEX length_2_index_origin ON trademark_words_2 (origin);
+
+    CREATE TABLE trademark_words_3 (CHECK (length = 3))   INHERITS (trademark_words);
+    CREATE INDEX length_3_index_name ON trademark_words_3(name);
+    CREATE INDEX length_3_index_origin ON trademark_words_3 (origin);
+
+    CREATE TABLE trademark_words_4 (CHECK (length = 4))   INHERITS (trademark_words);
+    CREATE INDEX length_4_index_name ON trademark_words_4(name);
+    CREATE INDEX length_4_index_origin ON trademark_words_4 (origin);
+
+    CREATE TABLE trademark_words_5 (CHECK (length = 5))   INHERITS (trademark_words);
+    CREATE INDEX length_5_index_name ON trademark_words_5(name);
+    CREATE INDEX length_5_index_origin ON trademark_words_5 (origin);
+
+    # 触发器
+    CREATE OR REPLACE FUNCTION trademark_words_insert_trigger()
+    RETURNS TRIGGER AS $$
+    BEGIN
+        IF ( NEW.length = 1 ) THEN
+             INSERT INTO trademark_words_1 VALUES (NEW.*);
+        ELSIF ( NEW.length = 2) THEN
+             INSERT INTO trademark_words_2 VALUES (NEW.*);
+        ELSIF ( NEW.length = 3) THEN
+             INSERT INTO trademark_words_3 VALUES (NEW.*);
+        ELSIF ( NEW.length = 4) THEN
+             INSERT INTO trademark_words_4 VALUES (NEW.*);
+        ELSIF ( NEW.length = 5) THEN
+             INSERT INTO trademark_words_5 VALUES (NEW.*);
+        ELSE
+        RAISE EXCEPTION &#39;Length out of range. Fix the trademark_words_insert_trigger() function!&#39;;
+        END IF;
+        RETURN NULL;
+    END;
+    $$
+    LANGUAGE plpgsql;
+    CREATE TRIGGER insert_trademark_words
+        BEFORE INSERT ON trademark_words
+        FOR EACH ROW EXECUTE PROCEDURE trademark_words_insert_trigger();
+    SQL
+
+  end
+
+  # 回滚操作
+  def down
+    execute &lt;&lt;~SQL
+            DROP TABLE trademark_words_1;
+            DROP TABLE trademark_words_2;
+            DROP TABLE trademark_words_3;
+            DROP TABLE trademark_words_4;
+            DROP TABLE trademark_words_5;
+            DROP TRIGGER insert_trademark_words ON trademark_words;
+          SQL
+
+  end
+end
+</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分区表</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/20/postgreSQL%E5%88%86%E5%8C%BA%E8%A1%A8%E5%9C%A8rails%E7%9A%84%E5%BA%94%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-postgres窗口函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -887,305 +1307,9 @@ name = &quot;#{picture_path}#{Time.now.to_i.to_s}.png&quot;
 
 
   
-    <article id="post-Linux文件压缩" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/14/Linux%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9/">Linux文件压缩</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/14/Linux%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9/" class="archive-article-date">
-  	<time datetime="2019-02-14T02:19:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>原文:<a href="http://blog.sina.com.cn/s/blog_407abb0d0100lajg.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_407abb0d0100lajg.html</a></p>
-<p>1 各种压缩 解压命令<br>（1） tar<br><strong>仅仅做打包动作</strong>，相当于归档处理，不做压缩；解压也一样，只是把归档文件释放出来。</p>
-<p>打包归档：<br>tar -cvf examples.tar examples   (examples为shell执行路径下的目录)</p>
-<p>释放解压：<br>tar -xvf examples.tar （解压至当前shell执行目录下）<br>tar -xvf examples.tar  -C /path (/path 解压至其它路径)</p>
-<p>（2）tar.gz tgz   (tar.gz和tgz只是两种不同的书写方式，后者是一种简化书写，等同处理)<br>Linux下使用非常普遍的一种压缩方式，兼顾了压缩时间（耗费CPU）和压缩空间（压缩比率）<br>其实这是对（1）的tar包进行gzip算法的压缩</p>
-<p>打包压缩：<br>tar -zcvf examples.tgz examples   (examples为shell执行路径下的目录)</p>
-<p>释放解压：<br>tar -zxvf examples.tar （解压至当前shell执行目录下）<br>tar -zxvf examples.tar  -C /path (/path 解压至其它路径)</p>
-<p>（3）tar.bz(超高压缩率)<br>Linux下压缩比率较tgz大，即压缩后占用更小的空间，使得压缩包看起来更小。但同时在压缩，解压的过程却是非常耗费CPU时间。</p>
-<p>打包压缩：<br>tar -jcvf examples.tar.bz examples   (examples为shell执行路径下的目录)</p>
-<p>释放解压：<br>tar -jxvf examples.tar.bz （解压至当前shell执行目录下）<br>tar -jxvf examples.tar.bz  -C /path (/path 解压至其它路径)</p>
-<p>真实例子:</p>
-<p><img src="https://i.loli.net/2019/02/14/5c64d08f7d00f.png?filename=1550110708.png" alt="1550110708.png"></p>
-<p>(4) tar.bz2<br>较tar.bz有着更快速的效率。所使用的命令与（3）相同，不再赘述。</p>
-<p>(5) .gz<br>压缩：<br>gzip-d examples.gz examples</p>
-<p>解压：<br>gunzip examples.gz</p>
-<p>（6） .Z<br>压缩：<br>compress files</p>
-<p>解压：<br>uncompress examples.Z</p>
-<p>(7) tar.Z  （这个和tar.gz的解压只在大小写(Z与z)之分，如果在解压时候不小心将z打成Z时候无法解压tar.gz了）<br>压缩：<br>tar -Zcvf examples.tar.Z examples</p>
-<p>解压：<br>tar -Zxvf examples.tar.Z</p>
-<p>(8) .zip<br>压缩：<br>zip -r examples.zip examples (examples为目录)</p>
-<p>解压：<br>zip examples.zip</p>
-<p>(9) .rar<br>压缩：<br>rar -a examples.rar examples</p>
-<p>解压：</p>
-<p>rar -x examples.rar</p>
-<p>2 各种压缩比率，占用时间对比</p>
-<p>为了保证能够让压缩比率较为明显，需选取一个内容较多、占用空间较大的目录作为Demo。我将自己Ubuntu 9.10中/user/local整个目录作为范例，/user/local内所有文件总计大小为877.7MB。</p>
-<p>在此，我们定义 压缩比率=原内容大小/压缩后大小，压缩比率越大，则表明压缩后占用空间的压缩包越小</p>
-<p>（1）.tar<br>tar -cvf local.tar /usr/local<br>打包后 local.tar: 892.6MB, 耗费时间：55 s (秒)。此实验打包后.tar后反倒比原来文件内容更大，出乎意料！<br>压缩比率为877.7/892.6=0.98（居然不是相同，等于1！）</p>
-<p>  tar -xvf local.tar<br>释放877.7MB(与原/usr/local大小完全相同，符合预期)，耗费时间：78 s，比打包耗时</p>
-<p>对于.tar而言，打包比释放较为快速，但打包后的.tar比原目录内容所占空间要大。</p>
-<p>(2) .tgz<br>tar -zcvf local.tgz /usr/local<br>打包后 local.tgz: 344.1MB, 耗费时间： 146 s (秒)。此实验说明.tgz压缩到50%以下的空间，具体为 压缩比率=877.7/344.1 =2.55</p>
-<p>tar -zxvf local.tar<br>解压877.7MB，耗费时间： 56 s。 此与.tar 正相反，解压比打包省时了很多，接近到打包时间的三分之一。</p>
-<p>(3) .tar.bz<br>tar -jcvf local.tar.bz /usr/local<br>打包后local.tar.bz: 318.4 MB  耗费时间：330 s（即5 m 30 s，非常之漫长！）<br>压缩比率为877.7/318.4=2.76</p>
-<p>相对于.tgz的压缩得更小巧，但优势并不大，CPU耗费时间却多了两倍多。</p>
-<p>tar -xcvf local.tar.bz<br>解压877.7 MB，耗费时间： 128 s。 此与.tgz相似，解压比打包省时很多，接近打包时间的三分之一。</p>
-<p>（4） .tar.bz2<br>tar -jcvf local.tar.bz2 /usr/local<br>打包后local.tar.bz:  318.4 MB  耗费时间： 302 s<br>压缩比率为877.7/318.4=2.76</p>
-<p>与.tar.bz打包后大小完全一致，但CPU耗费时间稍少一点。因此从此实验说明，网上一些言论称tar.bz2比tar.bz有着更大的压缩比率似乎说不通，只是速度稍快，高效了一些而已。</p>
-<p>tar -xcvf local.tar.bz<br>解压877.7 MB，耗费时间：  123 s。 此与.tar.bz相差不大，略有优势。</p>
-<p>由此可见，对于tar.bz 与tar.bz2打包后并无差异，只是tar.bz2较为快速，时间上略占上风。</p>
-<p>其它如.zip  .Z .rar等压缩方式在Linux下使用不是非常广泛，在此不做进一步探讨实验。</p>
-<p>综合起来，在压缩比率上： tar.bz=tar.bz2&gt;tgz&gt;tar<br>             占用空间与压缩比率成反比： tar.bz=tar.bz2tar.bz2&gt;tgz&gt;tar<br>                              解压： tar.bz&gt;tar.bz2&gt;tar&gt;tgz<br>               从效率角度来说，当然是耗费时间越短越好</p>
-<p>因此，Linux下对于占用空间与耗费时间的折衷多选用tgz格式，不仅压缩率较高，而且打包、解压的时间都较为快速，是较为理想的选择。</p>
-<p>如果对效率很关切，非常在乎时间的话，选择tgz tar的方式都不错。当然，如果disk空间较为紧张，非常在乎空间的话，选择高压缩比率的tar.bz2则更为适宜。</p>
-<p>结论：</p>
-<p>再一次印证了物理空间与时间的矛盾（想占用更小的空间，得到高压缩比率，肯定要牺牲较长的时间；反之，如果时间较为宝贵，要求快速，那么所得的压缩比率一定较小，当然会占用更大的空间了）。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tar</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/14/Linux%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-谷歌浏览器代理设置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/13/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE/">谷歌浏览器代理设置</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/13/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE/" class="archive-article-date">
-  	<time datetime="2019-02-13T10:09:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>switchOmega 代理配置文件 <a href="https://github.com/dccmmtop/switchOmega" target="_blank" rel="noopener">https://github.com/dccmmtop/switchOmega</a></p>
-<p>在安装 switchOmega 前，使用<code>google-chrome-stable --proxy-server=&quot;socks5://127.0.0.1:1080&quot;</code> 可以访问谷歌商店来安装插件</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">proxy</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/13/%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BB%A3%E7%90%86%E8%AE%BE%E7%BD%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-pryrc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/13/pryrc/">pryrc</a>
-    </h1>
-  
-
-        
-        <a href="/2019/02/13/pryrc/" class="archive-article-date">
-  	<time datetime="2019-02-13T09:48:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="ruby">begin
-  require &#39;hirb&#39;
-rescue LoadError
-  # Missing goodies, bummer
-end
-
-if defined? Hirb
-  # Slightly dirty hack to fully support in-session Hirb.disable/enable toggling
-  Hirb::View.instance_eval do
-    def enable_output_method
-      @output_method = true
-      @old_print = Pry.config.print
-      Pry.config.print = proc do |*args|
-        Hirb::View.view_or_page_output(args[1]) || @old_print.call(*args)
-      end
-    end
-
-    def disable_output_method
-      Pry.config.print = @old_print
-      @output_method = nil
-    end
-  end
-
-  Hirb.enable
-end
-
-require &#39;rails/console/app&#39;
-module Rails::ConsoleMethods
-  alias_method :rr, :reload!
-end</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">pryrc</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/02/13/pryrc/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/11/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/11/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1200,7 +1324,7 @@ end</code></pre>
     		&copy; 2019 邓超
     	</div>
       	<div class="footer-right">
-      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1305
+      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1314
       	</div>
     </div>
   </div>
@@ -1280,6 +1404,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1293,10 +1421,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1348,15 +1472,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1369,14 +1493,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">axel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1424,15 +1540,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1448,6 +1564,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">图片处理</a>
               </li>
              
@@ -1456,15 +1576,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">pacman</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1512,6 +1628,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">axel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1552,10 +1676,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1572,11 +1692,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1596,15 +1716,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1648,6 +1768,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">windows</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">yakuake</a>
               </li>
              
@@ -1672,11 +1796,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1688,15 +1812,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">awk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1716,11 +1844,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1772,11 +1900,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
             
             <div class="clearfix"></div>

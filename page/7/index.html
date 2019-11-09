@@ -133,6 +133,272 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-css定制响应式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">css定制响应式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="示例-不同屏幕下使用文本居中"><a href="#示例-不同屏幕下使用文本居中" class="headerlink" title="示例 不同屏幕下使用文本居中"></a>示例 不同屏幕下使用文本居中</h2><pre><code class="css">@media (max-width: 767px) {
+  .text-center-xs {
+  text-align: center;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .text-center-sm {
+  text-align: center;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .text-center-md {
+  text-align: center;
+  }
+}
+@media (min-width: 1200px) {
+  .text-center-lg {
+  text-align: center;
+  }
+}
+</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/css%E5%AE%9A%E5%88%B6%E5%93%8D%E5%BA%94%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-git_status中文文件名编码问题解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">git_status中文文件名编码问题解决</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="git-status-中文文件名编码问题解决"><a href="#git-status-中文文件名编码问题解决" class="headerlink" title="git status 中文文件名编码问题解决"></a>git status 中文文件名编码问题解决</h2><p>Git发展至今，对中文的支持任然不足，本地化做得并不完善，命令的输出及命令的帮助还只能输出英文。</p>
+<p>目前大家最关心的问题是：可以在提交说明中使用中文。</p>
+<p>要实现提交说明的中文注释，这就需要需要对Git进行特殊设置。</p>
+<p>Linux平台的中文用户一般会使用UTF-8字符集，Git在UTF-8字符集下可以工作得非常好：</p>
+<p>在提交时，可以在提交说明中输入中文。</p>
+<p>显示提交历史，能够正常显示提交说明中的中文字符。</p>
+<p>可以添加名称为中文的文件，并可以在同样使用UTF-8字符集的Linux环境中克隆和检出。</p>
+<p>可以创建带有中文字符的里程碑名称。</p>
+<p>但是，在默认设置下，中文文件名在工作区状态输出，查看历史更改概要，以及在补丁文件中，文件名的中文不能正确地显示，而是显示为八进制的字符编码，示例如下：</p>
+<pre><code class="shell">$ git status -s
+?? &quot;\350\257\264\346\230\216.txt\n
+$ printf &quot;\350\257\264\346\230\216.txt\n&quot;
+说明.txt</code></pre>
+<p>通过将Git配置变量 core.quotepath 设置为false，就可以解决中文文件名称在这些Git命令输出中的显示问题，<br>示例：</p>
+<pre><code class="shell">$ git config --global core.quotepath false
+$ git status -s</code></pre>
+<blockquote>
+<p>输出: </p>
+<p>说明.txt</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/git_status%E4%B8%AD%E6%96%87%E6%96%87%E4%BB%B6%E5%90%8D%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CSS3实现鼠标移动到图片上图片变大" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/">CSS3实现鼠标移动到图片上图片变大</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.029Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="CSS3实现鼠标移动到图片上图片变大"><a href="#CSS3实现鼠标移动到图片上图片变大" class="headerlink" title="CSS3实现鼠标移动到图片上图片变大"></a>CSS3实现鼠标移动到图片上图片变大</h2><h3 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://blog.csdn.net/u014175572/article/details/51535768" target="_blank" rel="noopener">转载</a></h3><h6 id="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"><a href="#SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）" class="headerlink" title="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"></a>SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）</h6><p>CSS3的transform:scale()可以实现按比例放大或者缩小功能。</p>
+<p>CSS3的transition允许CSS的属性值在一定的时间区间内平滑地过渡。这种效果可以在鼠标单击、获得焦点、被点击或对元素任何改变中触发，并圆滑地以动画效果改变CSS的属性值。</p>
+<p>效果如下图所示：</p>
+<p>1、当未鼠标未放到图片上的效果：</p>
+<p><img src="https://img-blog.csdn.net/20160530100006074" alt="img"></p>
+<p>2、当鼠标放到图片上后(放大的过程是有动画过渡的，这个过渡的时间可以自定义)：</p>
+<p><img src="https://img-blog.csdn.net/20160530100059753" alt="img"></p>
+<p>代码如下：</p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;  
+&lt;html&gt;  
+    &lt;head&gt;  
+        &lt;meta charset=&quot;UTF-8&quot;&gt;  
+        &lt;title&gt;&lt;/title&gt;  
+        &lt;style type=&quot;text/css&quot;&gt;  
+            div{  
+                width: 300px;  
+                height: 300px;  
+                border: #000 solid 1px;  
+                margin: 50px auto;  
+                overflow: hidden;  
+            }  
+            div img{  
+                cursor: pointer;  
+                transition: all 0.6s;  
+            }  
+            div img:hover{  
+                transform: scale(1.4);  
+            }  
+        &lt;/style&gt;  
+    &lt;/head&gt;  
+    &lt;body&gt;  
+        &lt;div&gt;  
+            &lt;img src=&quot;img/focus.png&quot; /&gt;  
+        &lt;/div&gt;  
+    &lt;/body&gt;  
+&lt;/html&gt;  </code></pre>
+<p>其中：</p>
+<p>transition: all 0.6s;表示所有的属性变化在0.6s的时间段内完成。</p>
+<p>transform: scale(1.4);表示在鼠标放到图片上的时候图片按比例放大1.4倍。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-adb获取手机应用的apk安装包文件" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -491,6 +757,281 @@ end</code></pre>
 
 
   
+    <article id="post-修改postgres的登录密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">修改postgres的登录密码</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
+<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
+<blockquote>
+<p><code>local   all             postgres                                peer</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                trust</code></p>
+</blockquote>
+</li>
+<li><p>restart the server</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>sudo service postgresql restart</code></pre></blockquote>
+<ol start="3">
+<li><p>Login into psql and set your password</p>
+<blockquote>
+<p><code>psql -U postgres</code></p>
+<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
+</blockquote>
+</li>
+</ol>
+<ol start="4">
+<li><p>Finally change the <code>pg_hba.conf</code> </p>
+<blockquote>
+<p><code>local   all             postgres                                trust</code></p>
+<p>to</p>
+<p><code>local   all             postgres                                md5</code>to</p>
+</blockquote>
+</li>
+</ol>
+<p>After restarting the postgresql server, you can access it with your own password</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-修饰符moifier的作用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">修饰符moifier的作用</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
+<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
+<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
+<pre><code class="js">modifier isOwner() {
+   if (msg.sender != owner) {
+        throw;
+    }
+
+    _; // continue executing rest of method body
+}
+
+doSomething() isOwner { //直接写在方法后面作为函数的一部分
+  // will first check if caller is owner
+
+  // code
+}</code></pre>
+<p>您还可以堆叠多个修改器以简化您的过程</p>
+<pre><code class="js">enum State { Created, Locked, Inactive }
+
+modifier isState(State _state) {
+    require(state == _state);
+
+    _; // run rest of code
+}
+
+modifier cleanUp() {
+    _; // finish running rest of method body
+
+    // clean up code
+}
+
+doSomething() isOwner isState(State.Created) cleanUp {
+  // code
+}</code></pre>
+<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">soliity，contract</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-划过父元素时子元素或者兄弟元素更改样式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/">划过父元素时子元素或者兄弟元素更改样式</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/" class="archive-article-date">
+  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
+<pre><code class="scss">
+.btn-right:hover{ // .btn-right 是父元素
+    transform: translate(.3rem,0);
+    border-bottom: 1px solid transparent;
+    i{ //i 是 .brn-right 的子元素
+      margin-left: 30px;
+    }
+    ~ .underline{ // .underline 是 .btn-right的兄弟元素
+      width:28%;
+    }
+  }</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-以太坊客户端Geth命令用法-参数详解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -668,602 +1209,9 @@ help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETH
 
 
   
-    <article id="post-修改postgres的登录密码" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">修改postgres的登录密码</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="修改postgres的登录密码"><a href="#修改postgres的登录密码" class="headerlink" title="修改postgres的登录密码"></a>修改postgres的登录密码</h3><ol>
-<li><p>open the file <code>pg_hba.conf</code> for Ubuntu it will be in <code>/etc/postgresql/9.x/main</code> and change this line:</p>
-<blockquote>
-<p><code>local   all             postgres                                peer</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                trust</code></p>
-</blockquote>
-</li>
-<li><p>restart the server</p>
-</li>
-</ol>
-<blockquote>
-<pre><code>sudo service postgresql restart</code></pre></blockquote>
-<ol start="3">
-<li><p>Login into psql and set your password</p>
-<blockquote>
-<p><code>psql -U postgres</code></p>
-<p><code>ALTER USER postgres with password &#39;your-password&#39;</code></p>
-</blockquote>
-</li>
-</ol>
-<ol start="4">
-<li><p>Finally change the <code>pg_hba.conf</code> </p>
-<blockquote>
-<p><code>local   all             postgres                                trust</code></p>
-<p>to</p>
-<p><code>local   all             postgres                                md5</code>to</p>
-</blockquote>
-</li>
-</ol>
-<p>After restarting the postgresql server, you can access it with your own password</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E4%BF%AE%E6%94%B9postgres%E7%9A%84%E7%99%BB%E5%BD%95%E5%AF%86%E7%A0%81/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-划过父元素时子元素或者兄弟元素更改样式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/">划过父元素时子元素或者兄弟元素更改样式</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
-<pre><code class="scss">
-.btn-right:hover{ // .btn-right 是父元素
-    transform: translate(.3rem,0);
-    border-bottom: 1px solid transparent;
-    i{ //i 是 .brn-right 的子元素
-      margin-left: 30px;
-    }
-    ~ .underline{ // .underline 是 .btn-right的兄弟元素
-      width:28%;
-    }
-  }</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-修饰符moifier的作用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">修饰符moifier的作用</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
-<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
-<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
-<pre><code class="js">modifier isOwner() {
-   if (msg.sender != owner) {
-        throw;
-    }
-
-    _; // continue executing rest of method body
-}
-
-doSomething() isOwner { //直接写在方法后面作为函数的一部分
-  // will first check if caller is owner
-
-  // code
-}</code></pre>
-<p>您还可以堆叠多个修改器以简化您的过程</p>
-<pre><code class="js">enum State { Created, Locked, Inactive }
-
-modifier isState(State _state) {
-    require(state == _state);
-
-    _; // run rest of code
-}
-
-modifier cleanUp() {
-    _; // finish running rest of method body
-
-    // clean up code
-}
-
-doSomething() isOwner isState(State.Created) cleanUp {
-  // code
-}</code></pre>
-<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">soliity，contract</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-判断浏览器类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/">判断浏览器类型</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <pre><code class="js">var Browser = new Object();
-Browser.isMozilla =
-  typeof document.implementation != &#39;undefined&#39; &amp;&amp;
-  typeof document.implementation.createDocument != &#39;undefined&#39; &amp;&amp;
-  typeof HTMLDocument != &#39;undefined&#39;;
-Browser.isIE = window.ActiveXObject ? true : false;
-Browser.isFirefox = navigator.userAgent.toLowerCase().indexOf(&#39;firefox&#39;) != -1;
-Browser.isSafari = navigator.userAgent.toLowerCase().indexOf(&#39;safari&#39;) != -1;
-Browser.isOpera = navigator.userAgent.toLowerCase().indexOf(&#39;opera&#39;) != -1;
-Browser.isChrome = navigator.userAgent.indexOf(&#39;Chrome&#39;) &gt; -1;
-
-function initCheck() {
-  if (Browser.isFirefox || Browser.isChrome) {
-  } else {
-  }
-}</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">js</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%88%A4%E6%96%AD%E6%B5%8F%E8%A7%88%E5%99%A8%E7%B1%BB%E5%9E%8B/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-如何创建自己的ruby_gem包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84ruby_gem%E5%8C%85/">如何创建自己的ruby_gem包</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84ruby_gem%E5%8C%85/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="如何创建自己的ruby-gem包"><a href="#如何创建自己的ruby-gem包" class="headerlink" title="如何创建自己的ruby gem包"></a>如何创建自己的ruby gem包</h3><h4 id="编写一个最简单的例子"><a href="#编写一个最简单的例子" class="headerlink" title="编写一个最简单的例子"></a>编写一个最简单的例子</h4><ol>
-<li>建好如下文件夹<br>注意：lib目录下必须有个和你gem名字一样的rb文件。<pre><code class="shell">$ cd hola  
-$ tree  </code></pre>
-.<br>├── hola.gemspec<br>└── lib<br> └── hola.rb  </li>
-<li>编写代码<br>. hola.rb<pre><code class="ruby">class Hola  
-def self.hi  
- puts &quot;Hello world!&quot;  
-end  
-end  </code></pre>
-</li>
-</ol>
-<p>.hola.gemspec</p>
-<pre><code class="ruby">Gem::Specification.new do |s|  
-  s.name        = &#39;hola&#39;  
-  s.version     = &#39;0.0.0&#39;  
-  s.date        = &#39;2010-04-28&#39;  
-  s.summary     = &quot;Hola!&quot;  
-  s.description = &quot;A simple hello world gem&quot;  
-  s.authors     = [&quot;Nick Quaranto&quot;]  
-  s.email       = &#39;nick@quaran.to&#39;  
-  s.files       = [&quot;lib/hola.rb&quot;]  
-  s.homepage    =  
-    &#39;http://rubygems.org/gems/hola&#39;  
-end  </code></pre>
-<p>上面字段的意思，比较简单。相信大家都能理解。</p>
-<p>3.编译生成gem</p>
-<pre><code class="shell">% gem build hola.gemspec  </code></pre>
-<blockquote>
-<p> Successfully built RubyGem  </p>
-<p>Name: hola  </p>
-<p>Version: 0.0.0  </p>
-<p>File: hola-0.0.0.gem  </p>
-</blockquote>
-<pre><code class="shell">% gem install ./hola-0.0.0.gem </code></pre>
-<blockquote>
-<p> Successfully installed hola-0.0.0  </p>
-</blockquote>
-<blockquote>
-<p> 1 gem installed  </p>
-</blockquote>
-<p>4.测试使用<br>[ruby] view plain copy<br>% irb  </p>
-<blockquote>
-<blockquote>
-<p>require ‘hola’<br>true<br>Hola.hi<br>  llo world!<br>  ：在ruby 1.9.2之前到版本里面，需要先require ‘rubygem’，才能使用我们写的gem.</p>
-</blockquote>
-</blockquote>
-<p>5.发布到rubygems网站<br>[ruby] view plain copy<br>$ curl -u tom <a href="https://rubygems.org/api/v1/api_key.yaml" target="_blank" rel="noopener">https://rubygems.org/api/v1/api_key.yaml</a> &gt;<br>~/.gem/credentials<br>Enter host password for user ‘tom’:<br>设定完之后发布<br>[ruby] view plain copy<br>% gem push hola-0.0.0.gem<br>Pushing gem to RubyGems.org…<br>Successfully registered gem: hola (0.0.0)<br>发布成功。<br>这样任何一个人都可以使用你写的gem了。</p>
-<p>稍微复杂的rubygem例子<br>上面的例子只有一个ruby文件，一般gem应该没有这么简单的。<br>下面说下有多个ruby文件该怎么写。</p>
-<ol>
-<li><p>目录结构<br>多了个hola目录和translator.rb文件<br>[ruby] view plain copy<br>% tree<br>.<br>├── hola.gemspec<br>└── lib<br> ├── hola<br> │   └── translator.rb<br> └── hola.rb  </p>
-</li>
-<li><p>代码<br>lib/hola/translator.rb<br>[ruby] view plain copy<br>% cat  lib/hola/translator.rb<br>class Hola::Translator<br>def initialize(language)<br> @language = language<br>end  </p>
-<p>def hi<br> case @language<br> when :spanish<br>   “hola mundo”<br> else<br>   “hello world”<br> end<br>end<br>end<br>lib/hola.rb<br>[ruby] view plain copy<br>% cat lib/hola.rb<br>class Hola<br>def self.hi(language = :english)<br> translator = Translator.new(language)<br> translator.hi<br>end<br>end  </p>
-</li>
-</ol>
-<p>require ‘hola/translator’<br>.hola.gemspec<br>[ruby] view plain copy<br>% cat hola.gemspec<br>Gem::Specification.new do |s|<br>  s.name        = ‘hola’<br>  s.version     = ‘0.0.0’<br>  s.date        = ‘2010-04-28’<br>  s.summary     = “Hola!”<br>  s.description = “A simple hello world gem”<br>  s.authors     = [“Nick Quaranto”]<br>  s.email       = ‘nick@quaran.to’<br>  s.files       = [“lib/hola.rb”, “lib/hola/translator.rb”]<br>  s.homepage    =<br>    ‘<a href="http://rubygems.org/gems/hola&#39;" target="_blank" rel="noopener">http://rubygems.org/gems/hola&#39;</a><br>end<br>红色是和上面不一样的地方。</p>
-<p>其他步骤和上面一样了。很简单吧！</p>
-<p>最后说下怎么写个 gem包含可执行文件的例子。<br>这个也很简单。像rake就是典型的包含可执行文件的gem.</p>
-<ol>
-<li><p>在刚才工程目录下建个bin文件夹<br>生成可执行文件，并且修改权限为可运行。<br>[ruby] view plain copy<br>% mkdir bin<br>% touch bin/hola<br>% chmod a+x bin/hola  </p>
-</li>
-<li><p>修改可执行文件内容<br>bin/hola<br>[ruby] view plain copy<br>#!/usr/bin/env ruby  </p>
-</li>
-</ol>
-<p>require ‘hola’<br>puts Hola.hi(ARGV[0])  </p>
-<p>测试下<br>% ruby -Ilib ./bin/hola<br>hello world  </p>
-<p>% ruby -Ilib ./bin/hola spanish<br>hola mundo  </p>
-<p>3 .最后修改gemspec<br>[ruby] view plain copy<br>% head -4 hola.gemspec<br>Gem::Specification.new do |s|<br>  s.name        = ‘hola’<br>  s.version     = ‘0.0.1’<br>  s.executables &lt;&lt; ‘hola’<br>其他就和上面一样了。很简单吧。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84ruby_gem%E5%8C%85/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-得到图片外链vim脚本" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/">得到图片外链vim脚本</a>
-    </h1>
-  
-
-        
-        <a href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/" class="archive-article-date">
-  	<time datetime="2019-10-30T17:08:53.019Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="选中的图片地址，将图片上传到七牛云，并得到外链"><a href="#选中的图片地址，将图片上传到七牛云，并得到外链" class="headerlink" title="选中的图片地址，将图片上传到七牛云，并得到外链"></a>选中的图片地址，将图片上传到七牛云，并得到外链</h3><p>配合自定义命令<a href="https://dccmm.world/topics/qiniu_upload_file" target="_blank" rel="noopener">qiniu</a>使用</p>
-<pre><code class="vimscript">function! qiniu#get_file_url_from_qiniu()
-    &quot; Why is this not a built-in Vim script function?!
-    let [line_start, column_start] = getpos(&quot;&#39;&lt;&quot;)[1:2]
-    let [line_end, column_end] = getpos(&quot;&#39;&gt;&quot;)[1:2]
-    let lines = getline(line_start, line_end)
-    if len(lines) == 0
-        return &#39;&#39;
-    endif
-    let lines[-1] = lines[-1][: column_end - (&amp;selection == &#39;inclusive&#39; ? 1 : 2)]
-    let lines[0] = lines[0][column_start - 1:]
-    &quot; 得到选中的文本
-    let re = join(lines,&quot;\n&quot;)
-    &quot; 执行系统命令
-    let  re1 = system(&quot;qiniu &quot; . re)
-    &quot; url 处理
-    let tmpq = split(re1,&quot;\n&quot;)[-1]
-    let tar = substitute(tmpq,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    let src = substitute(re,&quot;/&quot;,&quot;\\\\/&quot;,&quot;g&quot;)
-    &quot; 替换文本
-    exec &quot;:s/&quot;.src.&quot;/&quot;.tar.&quot;/&quot;
-endfunction</code></pre>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vim</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">DIY_script</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/%E5%BE%97%E5%88%B0%E5%9B%BE%E7%89%87%E5%A4%96%E9%93%BEvim%E8%84%9A%E6%9C%AC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1278,7 +1226,7 @@ endfunction</code></pre>
     		&copy; 2019 邓超
     	</div>
       	<div class="footer-right">
-      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1305
+      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1314
       	</div>
     </div>
   </div>
@@ -1358,6 +1306,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1371,10 +1323,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1426,15 +1374,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1447,14 +1395,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">axel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1502,15 +1442,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1526,6 +1466,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">图片处理</a>
               </li>
              
@@ -1534,15 +1478,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">pacman</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1590,6 +1530,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">axel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1630,10 +1578,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1650,11 +1594,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1674,15 +1618,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1726,6 +1670,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">windows</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">yakuake</a>
               </li>
              
@@ -1750,11 +1698,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1766,15 +1714,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">awk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1794,11 +1746,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1850,11 +1802,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
             
             <div class="clearfix"></div>

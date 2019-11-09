@@ -133,6 +133,292 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-react_native_状态栏颜色" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/08/react_native_%E7%8A%B6%E6%80%81%E6%A0%8F%E9%A2%9C%E8%89%B2/">react_native_状态栏颜色</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/08/react_native_%E7%8A%B6%E6%80%81%E6%A0%8F%E9%A2%9C%E8%89%B2/" class="archive-article-date">
+  	<time datetime="2018-08-08T03:04:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="改变标题栏颜色"><a href="#改变标题栏颜色" class="headerlink" title="改变标题栏颜色"></a>改变标题栏颜色</h3><pre><code>&lt;StatusBar backgroundColor={&#39;#e34451&#39;} /&gt;</code></pre>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">react_naitve</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/08/react_native_%E7%8A%B6%E6%80%81%E6%A0%8F%E9%A2%9C%E8%89%B2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Truffle命令指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/08/Truffle%E5%91%BD%E4%BB%A4%E6%8C%87%E5%8D%97/">Truffle命令指南</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/08/Truffle%E5%91%BD%E4%BB%A4%E6%8C%87%E5%8D%97/" class="archive-article-date">
+  	<time datetime="2018-08-08T03:02:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><pre><code>truffle [command] [options]</code></pre><h3 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h3><h4 id="build"><a href="#build" class="headerlink" title="build"></a>build</h4><p>构建一个开发中的 app 版本，创建<code>.build</code>目录。</p>
+<pre><code>truffle build</code></pre><p>可选参数</p>
+<ul>
+<li>–dist: 创建一个可发布的 app 版本。仅在使用默认构造器时可用。</li>
+</ul>
+<p>查看<a href="http://truffle.tryblockchain.org/Truffle-build-%E9%BB%98%E8%AE%A4%E6%9E%84%E5%BB%BA%E5%99%A8.html" target="_blank" rel="noopener">6. 构建应用</a>章节来了解更多。</p>
+<h4 id="console"><a href="#console" class="headerlink" title="console"></a>console</h4><p>运行一个控制台，里面包含已初始化，且随时可用的合约对象。</p>
+<pre><code>truffle console</code></pre><p>一旦控制台启去吧，你可以使用通过命令行来使用你的合约，就像代码中那样。另外所有 Truffle 的列在这里的命令都可以在控制台使用。</p>
+<p>可选参数：</p>
+<ul>
+<li>–network 名称：指定要使用的网络</li>
+<li>–verbose-rpc：输出 Truffle 与 RPC 通信的详细信息。</li>
+</ul>
+<p>其它的<a href="http://truffle.tryblockchain.org/Truffle-UsingTheConsole-%E4%BD%BF%E7%94%A8%E6%8E%A7%E5%88%B6%E5%8F%B0.html" target="_blank" rel="noopener">9. 控制台</a>章节来了解更多。</p>
+<h4 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h4><p>智能编译你的合约，仅会编译自上次编译后修改过的合约，除非另外指定强制刷新。</p>
+<pre><code>truffle compile</code></pre><p>可选参数：</p>
+<ul>
+<li>–compile-all: 强制编译所有合约。</li>
+<li>–network 名称：指定使用的网络，保存编译的结果到指定的网络上。</li>
+</ul>
+<h4 id="create-contract"><a href="#create-contract" class="headerlink" title="create:contract"></a>create:contract</h4><p>工具方法使用脚手架来创建一个新合约。名称需要符合驼峰命名：</p>
+<pre><code>$ truffle create:contract MyContract</code></pre><h4 id="create-test"><a href="#create-test" class="headerlink" title="create:test"></a>create:test</h4><p>工具方法，使用脚手架来创建一个新的测试方法。名称需要符合驼峰命名。</p>
+<pre><code>$ truffle create:test MyTest</code></pre><h4 id="migrate"><a href="#migrate" class="headerlink" title="migrate"></a>migrate</h4><p>运行工程的移植。详情见<code>移植</code>相关的章节。</p>
+<pre><code>truffle migrate</code></pre><p>可选的参数：</p>
+<ul>
+<li>–reset: 从头运行所有的移植。</li>
+<li>–network 名称：指定要使用的网络，并将编译后的资料保存到那个网络。</li>
+<li>–to number：将版本从当前版本移植到序号指定的版本。</li>
+<li>–compile-all: 强制编译所有的合约</li>
+<li>–verbose-rpc：打印 Truffle 与 RPC 交互的详细日志。</li>
+</ul>
+<h4 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h4><p>在 Truffle 的环境下执行一个 Javascript 文件。环境内包含，web3，基于网络设置的默认 provider，作为全局对象的你的合约对象。这个 Javascript 文件需要 export 一个函数，这样 Truffle 才可以执行。查看<a href="http://truffle.tryblockchain.org/Truffle-WrtingExternalScripts-%E5%A4%96%E9%83%A8%E8%84%9A%E6%9C%AC.html" target="_blank" rel="noopener">10. 外部脚本</a>来了解更多。</p>
+<pre><code>$ truffle exec /path/to/my/script.js</code></pre><p>可选参数：</p>
+<ul>
+<li>–network 名称：名称：指定要使用的网络，并将编译后的资料保存到那个网络。</li>
+</ul>
+<h4 id="init"><a href="#init" class="headerlink" title="init"></a>init</h4><p>在当前目录下初始化一个全新的 APP，一个全新的工程。会自带默认合约和前端配置。</p>
+<pre><code>$ truffle init</code></pre><h4 id="list"><a href="#list" class="headerlink" title="list"></a>list</h4><p>列出所有可用的命令，与<code>--help</code>等同。</p>
+<pre><code>truffle list</code></pre><h4 id="serve"><a href="#serve" class="headerlink" title="serve"></a>serve</h4><p>在<code>http://localhost:8080</code>提供编译的 app 对应的服务，且在需要的时候自动构建，自动部署。与<code>truffle watch</code>类似，区别在于这里增加 web 服务器功能。</p>
+<pre><code>truffle serve</code></pre><p>可选参数：</p>
+<ul>
+<li>-p port: 指定 http 服务的端口。默认是 8080。</li>
+<li>–network 名称：名称：指定要使用的网络，并将编译后的资料保存到那个网络。</li>
+</ul>
+<h4 id="test"><a href="#test" class="headerlink" title="test"></a>test</h4><p>运行所有在<code>./test</code>目录下的测试用例。或可选的运行单个测试文件。</p>
+<pre><code>$ truffle test [/path/to/test/file]</code></pre><p>可选参数：</p>
+<ul>
+<li>–network 名称：指定要使用的网络，并将编译后的资料保存到那个网络。</li>
+<li>–compile-all: 强制编译所有的合约</li>
+<li>–verbose-rpc：打印 Truffle 与 RPC 交互的详细日志。</li>
+</ul>
+<h4 id="version"><a href="#version" class="headerlink" title="version"></a>version</h4><p>输出版本号然后退出。</p>
+<pre><code>truffle version</code></pre><h4 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h4><p>Watch 合约，APP，和配置文件变化，在需要时自动构建 APP。</p>
+<pre><code>truffle watch</code></pre><p>如果任何问题，欢迎留言批评指正。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">truffle</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/08/Truffle%E5%91%BD%E4%BB%A4%E6%8C%87%E5%8D%97/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-414_Request_URI_Too_Large" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/08/414_Request_URI_Too_Large/">414_Request_URI_Too_Large</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/08/414_Request_URI_Too_Large/" class="archive-article-date">
+  	<time datetime="2018-08-08T02:56:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>当 post 请求中参数的长度过大时或者 get 请求链接过长时，会引发 <code>414 Request-URI Too Large</code>错误</strong></p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>在<code>nginx.conf中</code>的<code>http{ }</code> 区域内添加如下设置</p>
+<pre><code class="shell">client_header_buffer_size 512k;
+large_client_header_buffers 4 512k;</code></pre>
+<h3 id="重启服务"><a href="#重启服务" class="headerlink" title="重启服务"></a>重启服务</h3><pre><code class="shell">service nginx restart</code></pre>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">rails</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/08/414_Request_URI_Too_Large/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-博客创建" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1387,87 +1673,9 @@ port: xxx
 
 
   
-    <article id="post-ssh免密码登录" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/29/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/">ssh免密码登录</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/29/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/" class="archive-article-date">
-  	<time datetime="2018-05-29T03:24:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>生成 key<br>在本地执行<code>ssh-keygen</code></li>
-<li>将本地的公钥拷贝到远程服务器<pre><code class="shell">ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</code></pre>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/29/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/20/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span>
+      <a class="extend prev" rel="prev" href="/page/20/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/22/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1482,7 +1690,7 @@ port: xxx
     		&copy; 2019 邓超
     	</div>
       	<div class="footer-right">
-      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1305
+      		<a href="https://dccmm.world" target="_blank">梦里不知身是客</a> ^_^ <a href="" target="_blank">林夕</a> 1314
       	</div>
     </div>
   </div>
@@ -1562,6 +1770,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1575,10 +1787,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">activeRecirdStore</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1630,15 +1838,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">contract</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">solidity</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">truffle</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1651,14 +1859,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">axel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1706,15 +1906,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1730,6 +1930,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">图片处理</a>
               </li>
              
@@ -1738,15 +1942,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">pacman</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1794,6 +1994,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">axel</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1834,10 +2042,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">email</a>
               </li>
              
@@ -1854,11 +2058,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">android</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color3">android</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1878,15 +2082,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">hash</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">sort</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">heredoc</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1930,6 +2134,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">windows</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">yakuake</a>
               </li>
              
@@ -1954,11 +2162,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
+                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1970,15 +2178,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">awk</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">zsh</a>
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1998,11 +2210,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">截屏</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -2054,11 +2266,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">helper</a>
+                <a href="javascript:void(0)" class="js-tag color5">健壮参数</a>
               </li>
             
             <div class="clearfix"></div>
