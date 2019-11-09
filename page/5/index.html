@@ -321,19 +321,19 @@ const styles = StyleSheet.create({
 
 
   
-    <article id="post-rails字体加载问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-react_native点击空白处输入法隐藏" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/">rails字体加载问题</a>
+      <a class="article-title" href="/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/">react_native点击空白处输入法隐藏</a>
     </h1>
   
 
         
-        <a href="/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/" class="archive-article-date">
+        <a href="/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/" class="archive-article-date">
   	<time datetime="2019-10-30T17:08:53.036Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-31</time>
 </a>
         
@@ -341,109 +341,41 @@ const styles = StyleSheet.create({
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
-<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
-<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
-<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
-<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
-<p><strong>The default asset pipeline</strong></p>
-<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
-<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
-<pre><code>|-app/
-|---assets/
-|-----fonts/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
-<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
-<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
-<p><strong>Fonts path in your Sass</strong></p>
-<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
-<pre><code>@font-face {
-    font-family: &#39;icofonts&#39;;
-    src:url(&#39;fonts/icofonts.eot&#39;);
-    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
-        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
-        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
-    font-weight: normal;
-    font-style: normal;
-}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:font-url(&#39;icofonts.eot&#39;);
-  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+        <h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
+    this.refs.textInput1.blur();
+    this.refs.textInput2.blur();
+  };
 
-  ...
-} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src: url(/assets/icofonts.eot);
-  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
-    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
-    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
-    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
-  font-weight: normal;
-  font-style: normal;
-}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
-<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
-<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/
-|-------fonts/</code></pre><p><strong>The Sass</strong></p>
-<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
-  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
+  render() {
+    return (
+      &lt;TouchableWithoutFeedback
+        style={styles.container}
+        onPress={() =&gt; {
+          this.hideInputBox();
+        }}
+      &gt;
+        &lt;View style={styles.container}&gt;
+          &lt;View style={styles.inputGroup}&gt;
 
-  ...
-}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-
-  ...
-}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
-<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
-<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
-<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
-  ...
-}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
-<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
-<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
-<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
+            &lt;TextInput
+              ref=&quot;textInput1&quot;
+            /&gt;
+          &lt;/View&gt;
+          &lt;View style={[styles.inputGroup]}&gt;
+            &lt;TextInput
+              ref=&quot;textInput2&quot;
+            /&gt;
+          &lt;/View&gt;
+        &lt;/View&gt;
+      &lt;/TouchableWithoutFeedback&gt;
+    );
+    const styles = StyleSheet.create({
+  container: {
+    justifyContent: &quot;center&quot;,
+    flex: 1
+  },
+    })</code></pre>
 
       
 
@@ -456,7 +388,7 @@ const styles = StyleSheet.create({
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/">展开全文 >></a>
         </p>
       
 
@@ -1282,10 +1214,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
@@ -1302,7 +1230,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1310,11 +1238,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分页</a>
+                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">shutter</a>
+                <a href="javascript:void(0)" class="js-tag color2">gradle</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">分页</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1346,7 +1278,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1358,7 +1290,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1371,6 +1303,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">自启</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">axel</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1398,7 +1338,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">curl</a>
+                <a href="javascript:void(0)" class="js-tag color5">gems</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1406,19 +1346,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">gems</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">https</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">证书</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">js</a>
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1427,6 +1355,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拷贝</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">证书</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1442,10 +1382,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">图片处理</a>
               </li>
              
@@ -1454,7 +1390,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">maven</a>
+                <a href="javascript:void(0)" class="js-tag color3">manjaro</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1462,7 +1398,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
+                <a href="javascript:void(0)" class="js-tag color1">maven</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1478,11 +1414,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
+                <a href="javascript:void(0)" class="js-tag color4">分区表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">postgresql</a>
+                <a href="javascript:void(0)" class="js-tag color1">postgersql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1506,14 +1442,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">aria2c</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">axel</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
@@ -1522,11 +1450,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
+                <a href="javascript:void(0)" class="js-tag color1">cable</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
+                <a href="javascript:void(0)" class="js-tag color5">CORS</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1538,7 +1466,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cable</a>
+                <a href="javascript:void(0)" class="js-tag color4">自关联</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1558,11 +1486,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">react-native</a>
+                <a href="javascript:void(0)" class="js-tag color4">solidity</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">router</a>
+                <a href="javascript:void(0)" class="js-tag color3">react-native</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1570,11 +1498,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color2">router</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">android</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1638,15 +1570,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">windows</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">定时任务</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">wget</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">windows</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1670,15 +1602,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
+                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">soliity，contract</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">geth</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1694,15 +1622,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">枚举</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">zsh</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">打开类</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1714,11 +1642,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">hidden</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">代码片段</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">DIY_script</a>
+                <a href="javascript:void(0)" class="js-tag color4">API</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1726,7 +1658,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">API</a>
+                <a href="javascript:void(0)" class="js-tag color1">DIY_script</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1762,6 +1694,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">常识</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">SQL</a>
               </li>
              
@@ -1770,11 +1706,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">常识</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">部署</a>
+                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1782,7 +1714,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">错误提示</a>
+                <a href="javascript:void(0)" class="js-tag color3">部署</a>
               </li>
              
               <li class="article-tag-list-item">

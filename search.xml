@@ -1160,6 +1160,18 @@ puts options.inspect</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>ruby数组排序,但是排序的字段可能为空</title>
+    <url>/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/</url>
+    <content><![CDATA[<h3 id="ruby数组排序-但是排序的字段可能为空"><a href="#ruby数组排序-但是排序的字段可能为空" class="headerlink" title="ruby数组排序,但是排序的字段可能为空"></a>ruby数组排序,但是排序的字段可能为空</h3><pre><code class="ruby">foo = [nil, -3, 100, 4, 6, nil, 4, nil, 23]
+
+foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
+
+=&gt; [-3, 4, 4, 6, 23, 100, nil, nil, nil]</code></pre>
+<pre><code class="ruby">children.sort_by {|child| [child.position ? 0 : 1,child.position || 0]}</code></pre>
+<p><a href="https://stackoverflow.com/questions/808318/sorting-a-ruby-array-of-objects-by-an-attribute-that-could-be-nil" target="_blank" rel="noopener">详情请看</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>ruby多层数组排序</title>
     <url>/2019/10/31/ruby%E5%A4%9A%E5%B1%82%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F/</url>
     <content><![CDATA[<p>##ruby中数组进行多层排序<br>例子如下：</p>
@@ -1196,18 +1208,6 @@ end</code></pre>
 <p>但sort要比sort_by灵活。因为最后的排序条件还可以这样写：</p>
 <p><code>[size_b, sum_a, first_number_b] &lt;=&gt; [size_a, sum_b, first_number_a]</code><br>这样就相当于先按长度倒序排列，然后再按照字符串各数字之和进行排序，最后再按照首个字符的大小倒序排列。</p>
 <p>作者：kamionayuki<br>链接：<a href="http://www.jianshu.com/p/319d0174f246" target="_blank" rel="noopener">http://www.jianshu.com/p/319d0174f246</a><br>來源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>ruby数组排序,但是排序的字段可能为空</title>
-    <url>/2019/10/31/ruby%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F,%E4%BD%86%E6%98%AF%E6%8E%92%E5%BA%8F%E7%9A%84%E5%AD%97%E6%AE%B5%E5%8F%AF%E8%83%BD%E4%B8%BA%E7%A9%BA/</url>
-    <content><![CDATA[<h3 id="ruby数组排序-但是排序的字段可能为空"><a href="#ruby数组排序-但是排序的字段可能为空" class="headerlink" title="ruby数组排序,但是排序的字段可能为空"></a>ruby数组排序,但是排序的字段可能为空</h3><pre><code class="ruby">foo = [nil, -3, 100, 4, 6, nil, 4, nil, 23]
-
-foo.sort { |a,b| a &amp;&amp; b ? a &lt;=&gt; b : a ? -1 : 1 }
-
-=&gt; [-3, 4, 4, 6, 23, 100, nil, nil, nil]</code></pre>
-<pre><code class="ruby">children.sort_by {|child| [child.position ? 0 : 1,child.position || 0]}</code></pre>
-<p><a href="https://stackoverflow.com/questions/808318/sorting-a-ruby-array-of-objects-by-an-attribute-that-could-be-nil" target="_blank" rel="noopener">详情请看</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -1515,6 +1515,14 @@ width = 1797 if width &lt; 1797
 ]]></content>
   </entry>
   <entry>
+    <title>Rails对测试数据库的操作</title>
+    <url>/2019/10/31/Rails%E5%AF%B9%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h2 id="Rails-对测试数据库的操作"><a href="#Rails-对测试数据库的操作" class="headerlink" title="Rails 对测试数据库的操作"></a>Rails 对测试数据库的操作</h2><pre><code class="ruby">bundle exec rake db:drop RAILS_ENV=test
+bundle exec rake db:create RAILS_ENV=test
+bundle exec rake db:schema:load RAILS_ENV=test</code></pre>
+]]></content>
+  </entry>
+  <entry>
     <title>Rails好用的gem包</title>
     <url>/2019/10/31/Rails%E5%A5%BD%E7%94%A8%E7%9A%84gem%E5%8C%85/</url>
     <content><![CDATA[<h2 id="Rails-好用的gem包"><a href="#Rails-好用的gem包" class="headerlink" title="Rails 好用的gem包"></a>Rails 好用的gem包</h2><ul>
@@ -1651,11 +1659,35 @@ cucumber - cucumber/cucumber · GitHub</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>Rails对测试数据库的操作</title>
-    <url>/2019/10/31/Rails%E5%AF%B9%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h2 id="Rails-对测试数据库的操作"><a href="#Rails-对测试数据库的操作" class="headerlink" title="Rails 对测试数据库的操作"></a>Rails 对测试数据库的操作</h2><pre><code class="ruby">bundle exec rake db:drop RAILS_ENV=test
-bundle exec rake db:create RAILS_ENV=test
-bundle exec rake db:schema:load RAILS_ENV=test</code></pre>
+    <title>qiniu_upload_file</title>
+    <url>/2019/10/31/qiniu_upload_file/</url>
+    <content><![CDATA[<pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
+require &#39;qiniu&#39;
+Qiniu.establish_connection! access_key: &#39;xxxxxxxxxx&#39;,
+                            secret_key: &#39;xxxxxxxxxx&#39;
+bucket = &#39;dc141210104&#39;
+puts ARGV[0]
+key = ARGV[0].split(/\//).last
+
+put_policy = Qiniu::Auth::PutPolicy.new(
+    bucket, # 存储空间
+    key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
+    3600    # token 过期时间，默认为 3600 秒，即 1 小时
+)
+# 生成上传 Token
+uptoken = Qiniu::Auth.generate_uptoken(put_policy)
+filePath = ARGV[0]
+# 调用 upload_with_token_2 方法上传
+code, result, response_headers = Qiniu::Storage.upload_with_token_2(
+     uptoken,
+     filePath,
+     key,
+     nil, # 可以接受一个 Hash 作为自定义变量，请参照 http://developer.qiniu.com/article/kodo/kodo-developer/up/vars.html#xvar
+     bucket: bucket
+)
+#打印上传返回的信息
+# puts &quot;\n\e[1;40;37mhttp://ogbkru1bq.bkt.clouddn.com/#{key}\e[0m&quot;
+puts &quot;http://ogbkru1bq.bkt.clouddn.com/#{key}&quot;</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -1715,38 +1747,6 @@ if options.has_key?(:add_files)
 elsif options.has_key?(:delete_files)
   delete_files(options[:delete_files])
 end</code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>qiniu_upload_file</title>
-    <url>/2019/10/31/qiniu_upload_file/</url>
-    <content><![CDATA[<pre><code class="ruby">#!/home/mc/.rvm/rubies/ruby-2.3.1/bin/ruby
-require &#39;qiniu&#39;
-Qiniu.establish_connection! access_key: &#39;xxxxxxxxxx&#39;,
-                            secret_key: &#39;xxxxxxxxxx&#39;
-bucket = &#39;dc141210104&#39;
-puts ARGV[0]
-key = ARGV[0].split(/\//).last
-
-put_policy = Qiniu::Auth::PutPolicy.new(
-    bucket, # 存储空间
-    key,    # 指定上传的资源名，如果传入 nil，就表示不指定资源名，将使用默认的资源名
-    3600    # token 过期时间，默认为 3600 秒，即 1 小时
-)
-# 生成上传 Token
-uptoken = Qiniu::Auth.generate_uptoken(put_policy)
-filePath = ARGV[0]
-# 调用 upload_with_token_2 方法上传
-code, result, response_headers = Qiniu::Storage.upload_with_token_2(
-     uptoken,
-     filePath,
-     key,
-     nil, # 可以接受一个 Hash 作为自定义变量，请参照 http://developer.qiniu.com/article/kodo/kodo-developer/up/vars.html#xvar
-     bucket: bucket
-)
-#打印上传返回的信息
-# puts &quot;\n\e[1;40;37mhttp://ogbkru1bq.bkt.clouddn.com/#{key}\e[0m&quot;
-puts &quot;http://ogbkru1bq.bkt.clouddn.com/#{key}&quot;</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2088,6 +2088,114 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>rails字体加载问题</title>
+    <url>/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
+<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
+<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
+<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
+<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
+<p><strong>The default asset pipeline</strong></p>
+<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
+<pre><code>|-app/
+|---assets/
+|-----images/
+|-----javascripts/
+|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
+<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
+<pre><code>|-app/
+|---assets/
+|-----fonts/
+|-----images/
+|-----javascripts/
+|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
+<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
+<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
+<p><strong>Fonts path in your Sass</strong></p>
+<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
+<pre><code>@font-face {
+    font-family: &#39;icofonts&#39;;
+    src:url(&#39;fonts/icofonts.eot&#39;);
+    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
+        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
+        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
+    font-weight: normal;
+    font-style: normal;
+}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:font-url(&#39;icofonts.eot&#39;);
+  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+
+  ...
+} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
+<pre><code>@font-face {
+  font-family: &#39;icofonts&#39;;
+  src: url(/assets/icofonts.eot);
+  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
+    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
+    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
+    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
+  font-weight: normal;
+  font-style: normal;
+}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
+<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
+<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
+<pre><code>|-app/
+|---assets/
+|-----images/
+|-----javascripts/
+|-----stylesheets/
+|-------fonts/</code></pre><p><strong>The Sass</strong></p>
+<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
+  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
+
+  ...
+}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
+  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+
+  ...
+}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
+<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
+  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  ...
+}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
+<pre><code>@font-face {
+  font-family:&#39;icofonts&#39;;
+  src:url(&#39;fonts/icofonts.eot&#39;);
+  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  ...
+}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
+<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
+<pre><code>@font-face {
+  font-family: &#39;icofonts&#39;;
+  src:url(&#39;fonts/icofonts.eot&#39;);
+  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
+  ...
+}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
+<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
+<pre><code>@font-face {
+  font-family: &#39;icofonts&#39;;
+  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
+  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
+  ...
+}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
+<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
+<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
+<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
+]]></content>
+  </entry>
+  <entry>
     <title>rails部署启用es6语法</title>
     <url>/2019/10/31/rails%E9%83%A8%E7%BD%B2%E5%90%AF%E7%94%A8es6%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h3 id="Uglifier-Error-Unexpected-token-punc-To-use-ES6-syntax-harmony-mode-must-be-enabled-with-Uglifier-new-harmony-gt-true"><a href="#Uglifier-Error-Unexpected-token-punc-To-use-ES6-syntax-harmony-mode-must-be-enabled-with-Uglifier-new-harmony-gt-true" class="headerlink" title="Uglifier::Error: Unexpected token: punc ((). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true)"></a>Uglifier::Error: Unexpected token: punc ((). To use ES6 syntax, harmony mode must be enabled with Uglifier.new(:harmony =&gt; true)</h3><p>部署时启用 ES6 语法<br>Try replacing</p>
@@ -2123,46 +2231,6 @@ gem &#39;dalli&#39;</code></pre>
     img.attr(&#39;src&#39;, currentSrc.split(&#39;?&#39;)[0] + &#39;?&#39; + (new Date()).getTime());
     return false
 </code></pre>
-]]></content>
-  </entry>
-  <entry>
-    <title>react_native点击空白处输入法隐藏</title>
-    <url>/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/</url>
-    <content><![CDATA[<h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
-<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
-    this.refs.textInput1.blur();
-    this.refs.textInput2.blur();
-  };
-
-  render() {
-    return (
-      &lt;TouchableWithoutFeedback
-        style={styles.container}
-        onPress={() =&gt; {
-          this.hideInputBox();
-        }}
-      &gt;
-        &lt;View style={styles.container}&gt;
-          &lt;View style={styles.inputGroup}&gt;
-
-            &lt;TextInput
-              ref=&quot;textInput1&quot;
-            /&gt;
-          &lt;/View&gt;
-          &lt;View style={[styles.inputGroup]}&gt;
-            &lt;TextInput
-              ref=&quot;textInput2&quot;
-            /&gt;
-          &lt;/View&gt;
-        &lt;/View&gt;
-      &lt;/TouchableWithoutFeedback&gt;
-    );
-    const styles = StyleSheet.create({
-  container: {
-    justifyContent: &quot;center&quot;,
-    flex: 1
-  },
-    })</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2297,111 +2365,43 @@ const styles = StyleSheet.create({
 ]]></content>
   </entry>
   <entry>
-    <title>rails字体加载问题</title>
-    <url>/2019/10/31/rails%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h2 id="rails字体加载问题"><a href="#rails字体加载问题" class="headerlink" title="rails字体加载问题"></a>rails字体加载问题</h2><p><a href="https://gist.github.com/anotheruiguy/7379570" target="_blank" rel="noopener">原文连接</a></p>
-<p>Web fonts are pretty much all the rage. Using a CDN for font libraries, like TypeKit or Google Fonts, will be a great solution for many projects. For others, this is not an option. Especially when you are creating a custom icon library for your project.</p>
-<p>Rails and the asset pipeline are great tools, but Rails has yet to get caught up in the custom web font craze.</p>
-<p>As with all things Rails, there is more then one way to skin this cat. There is the recommended way, and then there are the other ways.</p>
-<h2 id="The-recommended-way"><a href="#The-recommended-way" class="headerlink" title="The recommended way"></a>The recommended way</h2><p>Here I will show how to update your Rails project so that you can use the asset pipeline appropriately and resource your files using the common Rails convention.</p>
-<p><strong>The default asset pipeline</strong></p>
-<p>When looking in your project’s <code>assets</code> directory, you would see the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p>What we need to do is add the <code>fonts</code> directory within the <code>assets</code> directory so that we can resource these files in our <code>CSS</code>or <code>Sass</code> files using proper rails conventions and the asset pipeline.</p>
-<p>The problem is, simply adding a <code>fonts</code> directory isn’t picked up by the pipeline. For now, let’s just add that in there and then fix the Rails issue next.</p>
-<pre><code>|-app/
-|---assets/
-|-----fonts/
-|-----images/
-|-----javascripts/
-|-----stylesheets/</code></pre><p><strong>Updating the asset pipeline</strong></p>
-<p>The fix is pretty simple. Open your project’s config file, located at <code>config/application.rb</code> and add the following line within your <code>Application</code> class:</p>
-<pre><code>config.assets.paths &lt;&lt; Rails.root.join(&quot;app&quot;, &quot;assets&quot;, &quot;fonts&quot;)</code></pre><p>BOOM! Now Rails is smart enough to know what to do with assets within the <code>fonts</code> directory.</p>
-<p><strong>Fonts path in your Sass</strong></p>
-<p>Default CSS that you will get from sites like <a href="http://icomoon.io/" target="_blank" rel="noopener">icomoon.io</a> will typically look something like this:</p>
-<pre><code>@font-face {
-    font-family: &#39;icofonts&#39;;
-    src:url(&#39;fonts/icofonts.eot&#39;);
-    src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
-        url(&#39;fonts/icofonts.ttf&#39;) format(&#39;truetype&#39;),
-        url(&#39;fonts/icofonts.woff&#39;) format(&#39;woff&#39;),
-        url(&#39;fonts/icofonts.svg#icofonts&#39;) format(&#39;svg&#39;);
-    font-weight: normal;
-    font-style: normal;
-}    </code></pre><p>That seems right, unless you are using the asset pipeline. So to make the path correct we need to make a slight update and replace <code>src:url()</code> with <code>src:font-url()</code>. Our Sass file would look like:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:font-url(&#39;icofonts.eot&#39;);
-  src:font-url(&#39;icofonts.eot?#iefix&#39;) format(&#39;embedded-opentype&#39;),
+    <title>react_native点击空白处输入法隐藏</title>
+    <url>/2019/10/31/react_native%E7%82%B9%E5%87%BB%E7%A9%BA%E7%99%BD%E5%A4%84%E8%BE%93%E5%85%A5%E6%B3%95%E9%9A%90%E8%97%8F/</url>
+    <content><![CDATA[<h3 id="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"><a href="#当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏" class="headerlink" title="当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏"></a>当有输入框获取到焦点时，输入法便会显示，否则输入法隐藏</h3><p>可以用<code>TouchWithoutFeedback</code>作为最外层的容器，并添加一个点击时间处理，让所有的输入控件失去焦点，这样当点击空白处输入法就会隐藏。<br>父容器和子组件都有点击事件时，会执行子组件的点击事件，父容器的点击事件不会被触发。</p>
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><pre><code class="jsx">hideInputBox = () =&gt; {
+    this.refs.textInput1.blur();
+    this.refs.textInput2.blur();
+  };
 
-  ...
-} </code></pre><p>When the Sass is rendered into CSS, you should see something like the following:</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src: url(/assets/icofonts.eot);
-  src: url(/assets/icofonts.eot?#iefix) format(&quot;embedded-opentype&quot;), 
-    url(/assets/icofonts.ttf) format(&quot;truetype&quot;), 
-    url(/assets/icofonts.woff) format(&quot;woff&quot;), 
-    url(/assets/icofonts.svg#icofonts) format(&quot;svg&quot;);
-  font-weight: normal;
-  font-style: normal;
-}</code></pre><p>Perfect. Our fonts are in the <code>assets</code> directory where it feels best. Our code is clean and follows all the common Rails conventions. This is the best possible soliton and if you are happy here, do not read the rest of this article. It get’s a little weird from here on.</p>
-<h2 id="The-way-of-the-hacker"><a href="#The-way-of-the-hacker" class="headerlink" title="The way of the hacker"></a>The way of the hacker</h2><p>Anything you put into a directory within the <code>assets</code> directory will be carried through the pipeline. So, why not put the <code>fonts</code>directory within the <code>stylesheets</code> directory?</p>
-<p>If you are like me, that just feels weird, but I don’t judge. If you don’t want to or can’t create the <code>fonts</code> directory within the <code>assets</code> directory or can’t update the <code>application.rb</code> file, you could do something like the following:</p>
-<pre><code>|-app/
-|---assets/
-|-----images/
-|-----javascripts/
-|-----stylesheets/
-|-------fonts/</code></pre><p><strong>The Sass</strong></p>
-<p>This is kind of interesting. Since the <code>fonts</code> directory is in the <code>stylesheets</code> directory, the fonts just come along for the ride. Simply use <code>(asset-path(&#39; ... &#39;))</code> so that Rails creates the proper path.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(asset-path(&#39;fonts/icofonts.eot&#39;));
-  src:url(asset-path(&#39;fonts/icofonts.eot?#iefix&#39;)) format(&#39;embedded-opentype&#39;),
+  render() {
+    return (
+      &lt;TouchableWithoutFeedback
+        style={styles.container}
+        onPress={() =&gt; {
+          this.hideInputBox();
+        }}
+      &gt;
+        &lt;View style={styles.container}&gt;
+          &lt;View style={styles.inputGroup}&gt;
 
-  ...
-}</code></pre><p>When the Sass is processed into CSS, you should see the following:</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src: url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src: url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-
-  ...
-}</code></pre><p><strong>Hardcoding the path, it works, but … yuk</strong></p>
-<p>What’s interesting about this is, since you are putting the <code>fonts</code> directory inside the <code>stylesheets</code> directory, do you really need to use the <code>src:url(asset-path(&#39;fonts/icofonts.eot&#39;));</code> method? At this point the fonts are already in the asset pipeline and the following code, although not ideal, hardcoding <code>/assets/</code> into the path will work.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;/assets/fonts/icofonts.eot&#39;);
-  src:url(&#39;/assets/fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>But … since the <code>fonts</code> directory is within the <code>stylesheets</code> directory and this is already in the asset pipeline, if you just refer to the fonts in a relative path, that works too. But man, that’s just doesn’t feel very Rails to me.</p>
-<pre><code>@font-face {
-  font-family:&#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p><strong>But … I’m not using Sass?</strong></p>
-<p>Ok, first I have to ask … WAT? Ok fine, not using Sass, going with good ‘ol CSS. Interesting enough, putting the <code>fonts</code>directory is within the <code>stylesheets</code> directory again works and you can simply use the relative path.</p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;fonts/icofonts.eot&#39;);
-  src:url(&#39;fonts/icofonts.eot?#iefix&#39;) format(&quot;embedded-opentype&quot;),
-  ...
-}</code></pre><p>We all know that this kind of sucks. So if we wanted to bring the asset pipeline back into play we can’t use CSS by itself, we need to add some Ruby juice to this. But how? Yup, make the file <code>name.css.erb</code>, yeah, I said that.</p>
-<p>Ok, so for this example we need to get straight up Ruby on this. The <code>(&#39;fonts/icofonts.eot&#39;)</code> needs to be wrapped in some Ruby <code>&lt;%= asset_path(&#39;...&#39;) %&gt;;</code></p>
-<pre><code>@font-face {
-  font-family: &#39;icofonts&#39;;
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot&#39;) %&gt;&#39;);
-  src:url(&#39;&lt;%= asset_path(&#39;fonts/icofonts.eot?#iefix&#39;) %&gt;&#39;) format(&#39;embedded-opentype&#39;),
-  ...
-}</code></pre><p>This is very similar to the earlier syntax of <code>src:url(asset-path(&#39;fonts/ ... &#39;));</code> I illustrated earlier, but WOW! <code>css.erb</code>and <code>&#39;&lt;%= ... %&gt;&#39;</code> just causes me a little pain.</p>
-<p>You can eliminate this by simply changing any <code>.css</code> file to a <code>.css.scss</code> file and then take full advantage of all the awesome that Sass brings you and not hack Ruby onto plain CSS. Just my $0.02.</p>
-<h2 id="In-conclusion"><a href="#In-conclusion" class="headerlink" title="In conclusion"></a>In conclusion</h2><p>Although I am illustrating seemingly clever ways to solve this problem, in the end the best solution really is to update your Rails project and use the asset pipeline as intended. And if you aren’t using Sass yet in your project and want to learn, I strongly suggest looking at <a href="https://speakerdeck.com/anotheruiguy/sass-101-a-newbs-guide" target="_blank" rel="noopener">Sass 101 - A Newb’s Guide</a>.</p>
-<p>I should also note that many of these hacked techniques I did not test in a development environment with cache busting. Use at your own risk.</p>
+            &lt;TextInput
+              ref=&quot;textInput1&quot;
+            /&gt;
+          &lt;/View&gt;
+          &lt;View style={[styles.inputGroup]}&gt;
+            &lt;TextInput
+              ref=&quot;textInput2&quot;
+            /&gt;
+          &lt;/View&gt;
+        &lt;/View&gt;
+      &lt;/TouchableWithoutFeedback&gt;
+    );
+    const styles = StyleSheet.create({
+  container: {
+    justifyContent: &quot;center&quot;,
+    flex: 1
+  },
+    })</code></pre>
 ]]></content>
   </entry>
   <entry>
@@ -2645,6 +2645,19 @@ new Date(ms);</code></pre>
 ]]></content>
   </entry>
   <entry>
+    <title>linux添加新用户</title>
+    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
+    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
+<li>adduser username</li>
+<li>输入密码</li>
+<li>再次输密码</li>
+<li>输入电话号等，按enter使用默认值</li>
+<li>新用户创建成功</li>
+</ol>
+<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
+]]></content>
+  </entry>
+  <entry>
     <title>liunx用命令行的方式更换桌面背景</title>
     <url>/2019/10/31/liunx%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9B%B4%E6%8D%A2%E6%A1%8C%E9%9D%A2%E8%83%8C%E6%99%AF/</url>
     <content><![CDATA[<h2 id="liunx用命令行的方式更换桌面背景"><a href="#liunx用命令行的方式更换桌面背景" class="headerlink" title="liunx用命令行的方式更换桌面背景"></a>liunx用命令行的方式更换桌面背景</h2><pre><code class="shell"> gsettings set org.gnome.desktop.background picture-uri &quot;file:/home/mc/桌面/disco-75c0c1ef.png&quot;</code></pre>
@@ -2689,24 +2702,55 @@ new Date(ms);</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>linux添加新用户</title>
-    <url>/2019/10/31/linux%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7/</url>
-    <content><![CDATA[<h2 id="linux添加新用户"><a href="#linux添加新用户" class="headerlink" title="linux添加新用户"></a>linux添加新用户</h2><ol>
-<li>adduser username</li>
-<li>输入密码</li>
-<li>再次输密码</li>
-<li>输入电话号等，按enter使用默认值</li>
-<li>新用户创建成功</li>
-</ol>
-<p><strong>这时新用户没有权限使用sudo</strong><br>打开<code>/etc/sudoers</code>文件，找到<code>root    ALL=(ALL) ALL</code><br>在下方添加一行<br><code>username  ALL=(ALL) ALL</code><br>强制保存<br>done！</p>
-]]></content>
-  </entry>
-  <entry>
     <title>nginx_passenger安装</title>
     <url>/2019/10/31/nginx_passenger%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<h1 id="Install-our-PGP-key-and-add-HTTPS-support-for-APT"><a href="#Install-our-PGP-key-and-add-HTTPS-support-for-APT" class="headerlink" title="Install our PGP key and add HTTPS support for APT"></a>Install our PGP key and add HTTPS support for APT</h1><p>sudo apt-key adv –keyserver hkp://keyserver.ubuntu.com:80 –recv-keys<br>561F9B9CAC40B2F7<br>sudo apt-get install -y apt-transport-https ca-certificates</p>
 <h1 id="Add-our-APT-repository"><a href="#Add-our-APT-repository" class="headerlink" title="Add our APT repository"></a>Add our APT repository</h1><p>sudo sh -c ‘echo deb <a href="https://oss-binaries.phusionpassenger.com/apt/passenger" target="_blank" rel="noopener">https://oss-binaries.phusionpassenger.com/apt/passenger</a><br>xenial main &gt; /etc/apt/sources.list.d/passenger.list’<br>sudo apt-get update</p>
 <h1 id="Install-Passenger-Nginx"><a href="#Install-Passenger-Nginx" class="headerlink" title="Install Passenger + Nginx"></a>Install Passenger + Nginx</h1><p>sudo apt-get install -y nginx-extras passenger</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>CSS3实现鼠标移动到图片上图片变大</title>
+    <url>/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/</url>
+    <content><![CDATA[<h2 id="CSS3实现鼠标移动到图片上图片变大"><a href="#CSS3实现鼠标移动到图片上图片变大" class="headerlink" title="CSS3实现鼠标移动到图片上图片变大"></a>CSS3实现鼠标移动到图片上图片变大</h2><h3 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://blog.csdn.net/u014175572/article/details/51535768" target="_blank" rel="noopener">转载</a></h3><h6 id="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"><a href="#SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）" class="headerlink" title="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"></a>SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）</h6><p>CSS3的transform:scale()可以实现按比例放大或者缩小功能。</p>
+<p>CSS3的transition允许CSS的属性值在一定的时间区间内平滑地过渡。这种效果可以在鼠标单击、获得焦点、被点击或对元素任何改变中触发，并圆滑地以动画效果改变CSS的属性值。</p>
+<p>效果如下图所示：</p>
+<p>1、当未鼠标未放到图片上的效果：</p>
+<p><img src="https://img-blog.csdn.net/20160530100006074" alt="img"></p>
+<p>2、当鼠标放到图片上后(放大的过程是有动画过渡的，这个过渡的时间可以自定义)：</p>
+<p><img src="https://img-blog.csdn.net/20160530100059753" alt="img"></p>
+<p>代码如下：</p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;  
+&lt;html&gt;  
+    &lt;head&gt;  
+        &lt;meta charset=&quot;UTF-8&quot;&gt;  
+        &lt;title&gt;&lt;/title&gt;  
+        &lt;style type=&quot;text/css&quot;&gt;  
+            div{  
+                width: 300px;  
+                height: 300px;  
+                border: #000 solid 1px;  
+                margin: 50px auto;  
+                overflow: hidden;  
+            }  
+            div img{  
+                cursor: pointer;  
+                transition: all 0.6s;  
+            }  
+            div img:hover{  
+                transform: scale(1.4);  
+            }  
+        &lt;/style&gt;  
+    &lt;/head&gt;  
+    &lt;body&gt;  
+        &lt;div&gt;  
+            &lt;img src=&quot;img/focus.png&quot; /&gt;  
+        &lt;/div&gt;  
+    &lt;/body&gt;  
+&lt;/html&gt;  </code></pre>
+<p>其中：</p>
+<p>transition: all 0.6s;表示所有的属性变化在0.6s的时间段内完成。</p>
+<p>transform: scale(1.4);表示在鼠标放到图片上的时候图片按比例放大1.4倍。</p>
 ]]></content>
   </entry>
   <entry>
@@ -2846,50 +2890,6 @@ $ git status -s</code></pre>
 <p>输出: </p>
 <p>说明.txt</p>
 </blockquote>
-]]></content>
-  </entry>
-  <entry>
-    <title>CSS3实现鼠标移动到图片上图片变大</title>
-    <url>/2019/10/31/CSS3%E5%AE%9E%E7%8E%B0%E9%BC%A0%E6%A0%87%E7%A7%BB%E5%8A%A8%E5%88%B0%E5%9B%BE%E7%89%87%E4%B8%8A%E5%9B%BE%E7%89%87%E5%8F%98%E5%A4%A7/</url>
-    <content><![CDATA[<h2 id="CSS3实现鼠标移动到图片上图片变大"><a href="#CSS3实现鼠标移动到图片上图片变大" class="headerlink" title="CSS3实现鼠标移动到图片上图片变大"></a>CSS3实现鼠标移动到图片上图片变大</h2><h3 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://blog.csdn.net/u014175572/article/details/51535768" target="_blank" rel="noopener">转载</a></h3><h6 id="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"><a href="#SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）" class="headerlink" title="SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）"></a>SS3实现鼠标移动到图片上图片变大（缓慢变大，有过渡效果，放大的过程是有动画过渡的，这个过渡的时间可以自定义）</h6><p>CSS3的transform:scale()可以实现按比例放大或者缩小功能。</p>
-<p>CSS3的transition允许CSS的属性值在一定的时间区间内平滑地过渡。这种效果可以在鼠标单击、获得焦点、被点击或对元素任何改变中触发，并圆滑地以动画效果改变CSS的属性值。</p>
-<p>效果如下图所示：</p>
-<p>1、当未鼠标未放到图片上的效果：</p>
-<p><img src="https://img-blog.csdn.net/20160530100006074" alt="img"></p>
-<p>2、当鼠标放到图片上后(放大的过程是有动画过渡的，这个过渡的时间可以自定义)：</p>
-<p><img src="https://img-blog.csdn.net/20160530100059753" alt="img"></p>
-<p>代码如下：</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;  
-&lt;html&gt;  
-    &lt;head&gt;  
-        &lt;meta charset=&quot;UTF-8&quot;&gt;  
-        &lt;title&gt;&lt;/title&gt;  
-        &lt;style type=&quot;text/css&quot;&gt;  
-            div{  
-                width: 300px;  
-                height: 300px;  
-                border: #000 solid 1px;  
-                margin: 50px auto;  
-                overflow: hidden;  
-            }  
-            div img{  
-                cursor: pointer;  
-                transition: all 0.6s;  
-            }  
-            div img:hover{  
-                transform: scale(1.4);  
-            }  
-        &lt;/style&gt;  
-    &lt;/head&gt;  
-    &lt;body&gt;  
-        &lt;div&gt;  
-            &lt;img src=&quot;img/focus.png&quot; /&gt;  
-        &lt;/div&gt;  
-    &lt;/body&gt;  
-&lt;/html&gt;  </code></pre>
-<p>其中：</p>
-<p>transition: all 0.6s;表示所有的属性变化在0.6s的时间段内完成。</p>
-<p>transform: scale(1.4);表示在鼠标放到图片上的时候图片按比例放大1.4倍。</p>
 ]]></content>
   </entry>
   <entry>
@@ -3102,66 +3102,6 @@ end</code></pre>
 ]]></content>
   </entry>
   <entry>
-    <title>修饰符moifier的作用</title>
-    <url>/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/</url>
-    <content><![CDATA[<p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
-<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
-<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
-<pre><code class="js">modifier isOwner() {
-   if (msg.sender != owner) {
-        throw;
-    }
-
-    _; // continue executing rest of method body
-}
-
-doSomething() isOwner { //直接写在方法后面作为函数的一部分
-  // will first check if caller is owner
-
-  // code
-}</code></pre>
-<p>您还可以堆叠多个修改器以简化您的过程</p>
-<pre><code class="js">enum State { Created, Locked, Inactive }
-
-modifier isState(State _state) {
-    require(state == _state);
-
-    _; // run rest of code
-}
-
-modifier cleanUp() {
-    _; // finish running rest of method body
-
-    // clean up code
-}
-
-doSomething() isOwner isState(State.Created) cleanUp {
-  // code
-}</code></pre>
-<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
-]]></content>
-      <tags>
-        <tag>soliity，contract</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>划过父元素时子元素或者兄弟元素更改样式</title>
-    <url>/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
-<pre><code class="scss">
-.btn-right:hover{ // .btn-right 是父元素
-    transform: translate(.3rem,0);
-    border-bottom: 1px solid transparent;
-    i{ //i 是 .brn-right 的子元素
-      margin-left: 30px;
-    }
-    ~ .underline{ // .underline 是 .btn-right的兄弟元素
-      width:28%;
-    }
-  }</code></pre>
-]]></content>
-  </entry>
-  <entry>
     <title>以太坊客户端Geth命令用法-参数详解</title>
     <url>/2019/10/31/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E5%AE%A2%E6%88%B7%E7%AB%AFGeth%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95-%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h2 id="转载"><a href="#转载" class="headerlink" title="转载"></a><a href="https://learnblockchain.cn/2017/11/29/geth_cmd_options/" target="_blank" rel="noopener">转载</a></h2><p>Geth 在以太坊智能合约开发中最常用的工具（必备开发工具），一个多用途的命令行工具。<br>熟悉 Geth 可以让我们有更好的效率，大家可收藏起来作为 Geth 命令用法手册。 本文主要是对 geth help 的翻译，基于最新的 geth 1.7.3-stable 版本。</p>
@@ -3269,6 +3209,66 @@ help,h     显示一个命令或帮助一个命令列表</code></pre><h3 id="ETH
         <tag>contract</tag>
         <tag>geth</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>修饰符moifier的作用</title>
+    <url>/2019/10/31/%E4%BF%AE%E9%A5%B0%E7%AC%A6moifier%E7%9A%84%E4%BD%9C%E7%94%A8/</url>
+    <content><![CDATA[<p><a href="https://stackoverflow.com/questions/44982437/what-does-a-modifier-do-in-solidity" target="_blank" rel="noopener">摘自于 stackflow</a><br>修饰符允许您将其他功能包装到方法中，因此它们有点像 OOP 中的装饰器模式。</p>
+<p>修饰符通常用于智能合约中，以确保在继续执行方法中的其余代码之前满足某些条件</p>
+<p>例如，isOwner 通常用于确保方法的调用者是合同的所有者：</p>
+<pre><code class="js">modifier isOwner() {
+   if (msg.sender != owner) {
+        throw;
+    }
+
+    _; // continue executing rest of method body
+}
+
+doSomething() isOwner { //直接写在方法后面作为函数的一部分
+  // will first check if caller is owner
+
+  // code
+}</code></pre>
+<p>您还可以堆叠多个修改器以简化您的过程</p>
+<pre><code class="js">enum State { Created, Locked, Inactive }
+
+modifier isState(State _state) {
+    require(state == _state);
+
+    _; // run rest of code
+}
+
+modifier cleanUp() {
+    _; // finish running rest of method body
+
+    // clean up code
+}
+
+doSomething() isOwner isState(State.Created) cleanUp {
+  // code
+}</code></pre>
+<p>修饰符以声明和可读的方式表达正在发生的操作。</p>
+]]></content>
+      <tags>
+        <tag>soliity，contract</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>划过父元素时子元素或者兄弟元素更改样式</title>
+    <url>/2019/10/31/%E5%88%92%E8%BF%87%E7%88%B6%E5%85%83%E7%B4%A0%E6%97%B6%E5%AD%90%E5%85%83%E7%B4%A0%E6%88%96%E8%80%85%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0%E6%9B%B4%E6%94%B9%E6%A0%B7%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="划过父元素时子元素或者兄弟元素更改样式"><a href="#划过父元素时子元素或者兄弟元素更改样式" class="headerlink" title="划过父元素时子元素或者兄弟元素更改样式"></a>划过父元素时子元素或者兄弟元素更改样式</h1><p><strong>下面是scss语法</strong></p>
+<pre><code class="scss">
+.btn-right:hover{ // .btn-right 是父元素
+    transform: translate(.3rem,0);
+    border-bottom: 1px solid transparent;
+    i{ //i 是 .brn-right 的子元素
+      margin-left: 30px;
+    }
+    ~ .underline{ // .underline 是 .btn-right的兄弟元素
+      width:28%;
+    }
+  }</code></pre>
+]]></content>
   </entry>
   <entry>
     <title>判断浏览器类型</title>
@@ -8102,6 +8102,105 @@ export default class Request {
       </tags>
   </entry>
   <entry>
+    <title>电子书合集-2</title>
+    <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/</url>
+    <content><![CDATA[<p>一、中文电子书网站</p>
+<p>1.好读网站</p>
+<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
+<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
+<p>2.亿年书海</p>
+<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
+<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
+<p>3.只有下载</p>
+<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
+<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
+<p>4.逛电驴</p>
+<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
+<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
+<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
+<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
+<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
+<p>6.浩扬电子书城</p>
+<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
+<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
+<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
+<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
+<p>中文杂志下载网站，下载方式为网盘。</p>
+<p>8.书格</p>
+<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
+<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
+<p>9.中国哲学书电子化计划</p>
+<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
+<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
+<p>10.古籍馆</p>
+<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
+<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
+<p>11.马克思主义文库</p>
+<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
+<p>12.凡人大传</p>
+<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
+<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
+<p>13.殆知阁古籍搜索引擎</p>
+<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
+<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
+<p>14.中国国家数字图书馆</p>
+<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
+<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
+<p>15.超星</p>
+<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
+<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
+<p>16.E 书联盟</p>
+<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
+<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
+<p>17.轻之国度轻小说文库</p>
+<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
+<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
+<p>18.SF 互动传媒</p>
+<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
+<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
+<p>19.青年文摘</p>
+<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
+<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
+<p>20.zcom</p>
+<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
+<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
+<p>21.读书网</p>
+<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
+<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
+<p>时不时看一些书，充实生活，很不错。</p>
+<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
+<p>22.我有閑書庫</p>
+<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
+<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
+<p>23.完美文库</p>
+<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
+<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
+<p>24.en8848</p>
+<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
+<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
+<p>二、网盘和种子搜索引擎</p>
+<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
+<p>1.盘搜</p>
+<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
+<p>目前最常用的一个网盘搜索引擎。</p>
+<p>2.哈兔网盘搜索</p>
+<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
+<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
+<p>3.ZHA FILE 搜索</p>
+<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
+<p>基于谷歌的网盘搜索引擎。</p>
+<p>4.百度网盘搜索引擎</p>
+<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
+<p>专搜百度网盘资源。</p>
+<p>5.海盗湾</p>
+<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
+]]></content>
+      <tags>
+        <tag>hidden</tag>
+        <tag>电子书</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>电子书合集-1</title>
     <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-1/</url>
     <content><![CDATA[<p><a href="https://www.zhihu.com/people/wang-rui-xiang-76" target="_blank" rel="noopener"><img src="https://pic3.zhimg.com/d382960d26a93ebfd0c36eef09bc8e02_xs.jpg" alt="北野狐狼"></a></p>
@@ -8229,105 +8328,6 @@ export default class Request {
 <p>txt 精排版资源</p>
 <p>6 寸 pdf 资源</p>
 <p><img src="https://pic2.zhimg.com/80/v2-bdbc90eacfc7027b230d80e18e189d65_hd.jpg" alt="img">浩瀚的星空 浩瀚的书海</p>
-]]></content>
-      <tags>
-        <tag>hidden</tag>
-        <tag>电子书</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>电子书合集-2</title>
-    <url>/2018/09/09/%E7%94%B5%E5%AD%90%E4%B9%A6%E5%90%88%E9%9B%86-2/</url>
-    <content><![CDATA[<p>一、中文电子书网站</p>
-<p>1.好读网站</p>
-<p><a href="http://haodoo.net/" target="_blank" rel="noopener">http://haodoo.net/</a></p>
-<p>免费的线上繁体中文图书馆，可在线阅读及下载，可下载的格式有：updb，pdb，prc，epub。</p>
-<p>2.亿年书海</p>
-<p><a href="http://www.inien.com/" target="_blank" rel="noopener">http://www.inien.com/</a></p>
-<p>据说是上海某强人做的，可在线阅读及下载，下载可以选择不同的尺寸及格式，还可自定义格式，功能十分强大。注意下载按钮在导航栏登录注册右边。</p>
-<p>3.只有下载</p>
-<p><a href="http://www.zhiyouxiazai.com/" target="_blank" rel="noopener">http://www.zhiyouxiazai.com/</a></p>
-<p>文档类的资源还是不错的，只是都是城通网盘的……推荐大家把他掏空，传到其他网盘。</p>
-<p>4.逛电驴</p>
-<p><a href="http://verycd.gdajie.com/book/computer/page" target="_blank" rel="noopener">http://verycd.gdajie.com/book/computer/page</a></p>
-<p>比电驴要更新晚，但不会有无法下载的情况，广告较多。</p>
-<p>5.潇哥资源_电子书资源外链发布站专业书籍</p>
-<p><a href="http://www.staffempire.com/" target="_blank" rel="noopener">http://www.staffempire.com/</a></p>
-<p>专业书籍网站，下载方式为网盘和其他网站的下载链接。</p>
-<p>6.浩扬电子书城</p>
-<p><a href="http://www.chnxp.com.cn/" target="_blank" rel="noopener">http://www.chnxp.com.cn/</a></p>
-<p>一个提供在线书籍资源下载的网站，提供很多文学、语言、经济、社会、科学、医疗保健、历史教育等电子书籍。</p>
-<p>7.杂志馆 PDF 电子杂志电子书籍免费下载网站</p>
-<p><a href="http://bucee.net/" target="_blank" rel="noopener">http://bucee.net/</a></p>
-<p>中文杂志下载网站，下载方式为网盘。</p>
-<p>8.书格</p>
-<p><a href="http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog" target="_blank" rel="noopener">http://shuge.org/?from=inf&amp;wvr=5&amp;loc=infblog</a></p>
-<p>书格是一个自由开放的在线古籍图书馆。致力于开放式分享、介绍、推荐古本（四九以前的影像本）PDF；网站致力于为古籍的保护与数字化传播贡献。相对于其它网站追求点击率来说，其原则相反，网站尽可能减少访问者点击次数便能得到自己想要的内容。</p>
-<p>9.中国哲学书电子化计划</p>
-<p><a href="http://ctext.org/zh" target="_blank" rel="noopener">http://ctext.org/zh</a></p>
-<p>本计划的目的在于开发一个在线电子书系统，试图将中国的古代哲学书及其相关的原典文献加以电子化，用交叉索引等技术充分利用电脑的功能，给中外的学者提供更方便的方式来学习和研究这些古书。您可以打开先秦两汉或汉代之后的目录，也可以参考系统简介、常见问答集、使用说明和相关工具。若想要寻找某一部著作的相关讯息，您可以使用书名检索功能同时检索本站各种主要原典资料。</p>
-<p>10.古籍馆</p>
-<p><a href="http://www.gujiguan.com/" target="_blank" rel="noopener">http://www.gujiguan.com/</a></p>
-<p>古籍館收錄從古代至民國(主要收錄 1949 年以前)初人撰寫並經寫抄、刻印、排印、影印之歷代漢文古籍爲基本收錄範圍。免费在线阅读，需要注册。</p>
-<p>11.马克思主义文库</p>
-<p><a href="http://marxists.anu.edu.au/chinese/index.html" target="_blank" rel="noopener">http://marxists.anu.edu.au/chinese/index.html</a></p>
-<p>12.凡人大传</p>
-<p><a href="http://www.fanren8.com/index.php" target="_blank" rel="noopener">http://www.fanren8.com/index.php</a></p>
-<p>新浪@殆知阁建立的论坛，内有大量文献书籍，没有设置权限，可自由下载。</p>
-<p>13.殆知阁古籍搜索引擎</p>
-<p><a href="http://wenxian.fanren8.com/" target="_blank" rel="noopener">http://wenxian.fanren8.com/</a></p>
-<p>同样是殆知阁建立，已经收录超过十六亿字的古籍，并且提供殆知阁十万卷古代文献资料 txt 文件下载。</p>
-<p>14.中国国家数字图书馆</p>
-<p><a href="http://www.nlc.gov.cn/index.htm" target="_blank" rel="noopener">http://www.nlc.gov.cn/index.htm</a></p>
-<p>大量在线资源、子数据库、可以在线阅读海量电子书，同时其账号与阿帕比电子图书通用，需要注册。</p>
-<p>15.超星</p>
-<p><a href="http://www.chaoxing.com/" target="_blank" rel="noopener">http://www.chaoxing.com/</a></p>
-<p>40 万电子书，注册后可以在线或是用客户端，若是在教育网中，推荐包库网址可以下载到本机上离线阅读，至于 pdg 如何转成 pdf，请看百度经验。</p>
-<p>16.E 书联盟</p>
-<p><a href="http://www.book118.com/" target="_blank" rel="noopener">http://www.book118.com/</a></p>
-<p>庞大的免费中文电子书下载站，这个站的书籍一般都是没有密码的，下载密码的链接只是广告。</p>
-<p>17.轻之国度轻小说文库</p>
-<p><a href="http://lknovel.lightnovel.cn/" target="_blank" rel="noopener">http://lknovel.lightnovel.cn/</a></p>
-<p>轻之国度论坛建立的轻小说下载网站，提供 txt 和 epub 下载，无需注册。</p>
-<p>18.SF 互动传媒</p>
-<p><a href="http://book.sfacg.com/" target="_blank" rel="noopener">http://book.sfacg.com/</a></p>
-<p>国内原创轻小说聚集地，大部分可以下载，格式为 txt。</p>
-<p>19.青年文摘</p>
-<p><a href="http://www.qnwz.cn/html/ebookdown/" target="_blank" rel="noopener">http://www.qnwz.cn/html/ebookdown/</a></p>
-<p>青年文摘官网提供的部分杂志下载，这里直接给出下载页面的链接了。</p>
-<p>20.zcom</p>
-<p><a href="http://online.zcom.com/" target="_blank" rel="noopener">http://online.zcom.com/</a></p>
-<p>电子杂志阅读，格式为 exe，阅读体验还可以，提供多个下载地址。</p>
-<p>21.读书网</p>
-<p><a href="http://www.dushuba.net/" target="_blank" rel="noopener">http://www.dushuba.net/</a></p>
-<p>看一看推荐的书籍，很多有趣的东西，都是 PDF 格式的。</p>
-<p>时不时看一些书，充实生活，很不错。</p>
-<p>网站有搜索和图书分类，可以快速找到自己感兴趣的书籍，缺点是下载都是城通网盘。</p>
-<p>22.我有閑書庫</p>
-<p><a href="http://www.woyouxian.com/index.html" target="_blank" rel="noopener">http://www.woyouxian.com/index.html</a></p>
-<p>國内相當不錯的閲讀網站，雖然書少了點，但很不錯。大多是文學名著。</p>
-<p>23.完美文库</p>
-<p><a href="http://www.wmwk.org/Home.aspx" target="_blank" rel="noopener">http://www.wmwk.org/Home.aspx</a></p>
-<p>可在线阅读及下载，可下载 txt,mobi,epub 格式，亦可投递到 kindle。而且移动版可免积分阅读所有内容。积分规则比较复杂。</p>
-<p>24.en8848</p>
-<p><a href="http://www.en8848.com.cn/Soft/" target="_blank" rel="noopener">http://www.en8848.com.cn/Soft/</a></p>
-<p>英文小说阅读网，很多国内流行的畅销书的 PDF 版都能在里面找到，而且质量通常都不错。</p>
-<p>二、网盘和种子搜索引擎</p>
-<p>这类网站可以搜索各种资源，当然搜索电子书也不含糊，这里推荐几个常用的搜索引擎。</p>
-<p>1.盘搜</p>
-<p><a href="http://www.pansou.com/" target="_blank" rel="noopener">http://www.pansou.com/</a></p>
-<p>目前最常用的一个网盘搜索引擎。</p>
-<p>2.哈兔网盘搜索</p>
-<p><a href="http://www.haatoo.com/" target="_blank" rel="noopener">http://www.haatoo.com/</a></p>
-<p>百度网盘, Dbank 网盘 or 迅雷快盘以及其他。</p>
-<p>3.ZHA FILE 搜索</p>
-<p><a href="http://www.zhaofile.com/" target="_blank" rel="noopener">http://www.zhaofile.com/</a></p>
-<p>基于谷歌的网盘搜索引擎。</p>
-<p>4.百度网盘搜索引擎</p>
-<p><a href="http://so.baiduyun.me/" target="_blank" rel="noopener">http://so.baiduyun.me/</a></p>
-<p>专搜百度网盘资源。</p>
-<p>5.海盗湾</p>
-<p><a href="http://mobile2.itanzi.com/api2/a/thepiratebay.se" target="_blank" rel="noopener">thepiratebay.se</a></p>
 ]]></content>
       <tags>
         <tag>hidden</tag>
