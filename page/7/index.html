@@ -98,6 +98,129 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/">rails发送qq邮件的配置</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/" class="article-date">
+                        <time datetime='2018-11-28T17:26:31.000&#43;00:00' itemprop="datePublished">2018-11-28</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    rails 中使用邮件服务是非常方便的，直接加配置文件就可以，参考指南 qq 邮箱正确的配置如下 production.rb / development.rb ActionMailer::Base.delivery_method = :smtp config.action_mailer.perform_deliveries = true config.action_mailer.raise_delivery_errors = true config.action_mailer.default :charset =&gt; &#34;utf-8&#34; ActionMailer::Base.smtp_settings = { :address =&gt; &#39;smtp.qq.com&#39;, :port =&gt; 465, :domain =&gt; &#39;qq.com&#39;, :user_name =&gt; ENV[&#39;qq_mail_address&#39;] # 授权码 :password =&gt; ENV[&#39;qq_mail_address&#39;] :authentication =&gt; &#39;plain&#39;, :ssl =&gt; true, :enable_starttls_auto =&gt; true } 切记，qq 邮箱后台要开启
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/rails">rails
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/postgres%E7%B3%BB%E5%88%97%E4%B9%8B%E7%94%A8%E6%88%B7%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/">postgres系列之用户及权限管理</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/postgres%E7%B3%BB%E5%88%97%E4%B9%8B%E7%94%A8%E6%88%B7%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" class="article-date">
+                        <time datetime='2018-11-25T22:58:15.000&#43;00:00' itemprop="datePublished">2018-11-25</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    在初始化数据库系统时，有一个预定义的超级用户，这用户的名称与初始化该数据库的操作系统用户名相同，默认是 postgres，在这个超级用户连接数据库，然后创建出更多的用户。 创建用户和角色 创建用户与角色的语
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/postgres%E7%B3%BB%E5%88%97%E4%B9%8B%E7%94%A8%E6%88%B7%E5%8F%8A%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/database">database
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/">ruby_heredoc的用法</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/" class="article-date">
+                        <time datetime='2018-11-22T09:23:36.000&#43;00:00' itemprop="datePublished">2018-11-22</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    整理自ruby-china 基础的用法 def print_heredoc puts &lt;&lt;EOF this is the first line this is the second line EOF end print_heredoc 输出： this is the first line this is the second line 如果你觉得代码太难看（这根本不符合 Ruby 的风格），你可能会这样写： def print_heredoc puts &lt;&lt;EOF this is the first line this is the second line EOF end print_heredoc 你会发现
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/ruby">ruby
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/">rails_多态关联</a></h1>
                 </header>
                 
@@ -567,129 +690,6 @@
                     </p>
                     <p class="article-more-link">
                         <a href="../../posts/rails-%E8%87%AA%E5%85%B3%E8%81%94/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/rails">rails
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/ruby%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2/">ruby随机生成字符串</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/ruby%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2/" class="article-date">
-                        <time datetime='2018-08-12T10:23:46.000&#43;00:00' itemprop="datePublished">2018-08-12</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    shuffle ((&#34;0&#34;..&#34;9&#34;).to_a + (&#34;A&#34;..&#34;Z&#34;).to_a).shuffle[0..6].to_a.join shuffle: 随机排列，中文名称是洗牌 sample ((&#34;0&#34;..&#34;9&#34;).to_a + (&#34;A&#34;..&#34;Z&#34;).to_a).sample(6).join * [*&#39;0&#39;..&#39;9&#39;,*&#39;A&#39;..&#39;Z&#39;].sample(6).join *的意思是将范围展开
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/ruby%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/ruby">ruby
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails_console%E5%A5%BD%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7/">rails_console好用的技巧</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rails_console%E5%A5%BD%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7/" class="article-date">
-                        <time datetime='2018-08-07T23:58:40.000&#43;00:00' itemprop="datePublished">2018-08-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    用 app 来调用 routes，比如 app.posts_path, app.topic_path(1) irb &gt; app.topics_path =&gt; &#34;/topics&#34; irb &gt; app.get(app.root_path) ...... =&gt; 200 用 helper 来调用 Helper 方法，比如: irb &gt; helper.link_to(&#34;Ruby China&#34;, &#34;http://ruby-china.org&#34;) =&gt; &#34;&lt;a href=\&#34;http://ruby-china.org\&#34;&gt;Ruby China&lt;/a&gt;&#34; irb &gt; helper.truncate(&#34;Here is Ruby China.&#34;, length: 15) =&gt; &#34;Here is Ruby...&#34; 使用 source_location 方法查看方法在那里定义的, 比如: irb &gt;Topic.instance_method(:destroy).source_location =&gt; [&#34;/Users/jason/.rvm/gems/ruby-1.9.3-p0/gems/mongoid-2.4.8/lib/mongoid/persistence.rb&#34;, 30] irb &gt;Topic.method(:destroy_all).source_location =&gt; [&#34;/Users/jason/.rvm/gems/ruby-1.9.3-p0/gems/mongoid-2.4.8/lib/mongoid/persistence.rb&#34;, 239]
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/rails_console%E5%A5%BD%E7%94%A8%E7%9A%84%E6%8A%80%E5%B7%A7/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/rails">rails
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/">ActiveRecord_Store用法示例</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/" class="article-date">
-                        <time datetime='2018-08-07T22:53:19.000&#43;00:00' itemprop="datePublished">2018-08-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    转载 http://api.rubyonrails.org/classes/ActiveRecord/Store.html 阅读 http://api.rubyonrails.org 相关的笔记 使用 Model 里面的一个字段作为一个序列化的封装，用来存储一个 key/value 文档里面提到，对应的存储字段的类型最好是 text， 以便确保有足够的存储空间 Make sure that you declare the database column used for the serialized store as a text, so there's plenty of room. 假设 Model
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/"></a>
                     </p>
                 </div>
 
