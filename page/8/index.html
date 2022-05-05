@@ -98,6 +98,88 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ssh%E9%9A%A7%E9%81%93/">SSH隧道</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ssh%E9%9A%A7%E9%81%93/" class="article-date">
+                        <time datetime='2018-08-19T17:04:28.000&#43;00:00' itemprop="datePublished">2018-08-19</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    在开发微信公众号或小程序的时候，由于微信平台规则的限制，部分接口需要通过线上域名才能正常访问。但我们一般都会在本地开发，因为这能快速的看到源码修改后的运行结果。但当涉及到需要调用微信接口时，由于不和你
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/ssh%E9%9A%A7%E9%81%93/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails-%E8%87%AA%E5%85%B3%E8%81%94/">rails-自关联</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/rails-%E8%87%AA%E5%85%B3%E8%81%94/" class="article-date">
+                        <time datetime='2018-08-15T12:22:06.000&#43;00:00' itemprop="datePublished">2018-08-15</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    关于 Rails 的模型自关联有一个非常有意思的题目，大概是这样的： lisa = Person.create(name:&#39;Lisa&#39;) tom = Person.create(name:&#39;Tom&#39;,parent_id:lisa.id) andy = Person.create(name:&#39;Andy&#39;,parent_id:lisa.id) tom.parent.name =&gt; &#39;Lisa&#39; lisa.children.map(&amp;:name) =&gt; [&#39;Tom&#39;,&#39;Andy&#39;] thomas = Person.create(name: &#39;Thomas&#39;,parent_id: tom.id) peter = Person.create(name:&#39;Peter&#39;,parent_id:tom.id) gavin = Person.create(name:&#39;Gavin&#39;, parent_id: andy.id) lisa.grandchildren.map(&amp;:name) =&gt; [&#39;Thomas&#39;,&#39;Peter&#39;,&#39;Gavin&#39;] 问如何定义 Person 模型来满足以上需求？ 题目考察了对模型自关联的理解，通过审题我们可以得出
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/rails-%E8%87%AA%E5%85%B3%E8%81%94/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/rails">rails
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/ruby%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2/">ruby随机生成字符串</a></h1>
                 </header>
                 

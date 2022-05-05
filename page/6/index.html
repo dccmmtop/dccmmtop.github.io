@@ -98,6 +98,66 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/iota-%E7%94%A8%E6%B3%95/">iota 用法</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/iota-%E7%94%A8%E6%B3%95/" class="article-date">
+                        <time datetime='2021-07-29T22:49:53.000&#43;00:00' itemprop="datePublished">2021-07-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    用在常量声明中，初始值为0，一组常量同时声明时，其值逐行增加 类似枚举 const ( c0 = iota //c0 == 0 c1 = iota //c1 == 1 c2 = iota //c2 == 2 ) 简写模式 const ( c0 = iota // c0 == 0 c1 // c1 == 1 c2 // c2 == 2 ) 分开的const 分开的const语句， iota 的
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/iota-%E7%94%A8%E6%B3%95/"></a>
+                    </p>
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">交叉编译</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="article-date">
+                        <time datetime='2021-07-25T10:24:03.000&#43;00:00' itemprop="datePublished">2021-07-25</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    1.Mac下编译Linux, Windows Linux CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build filename.go Windows CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build filename.go 如: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o helloworld-windows helloworld.go 2.Linux下编译Mac, Windows Mac CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build filename.go Windows CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build filename.go 3.Windows下编译Mac, Linux Mac SET CGO_ENABLED=0 SET GOOS=darwin SET GOARCH=amd64 go build filename.go Linux SET CGO_ENABLED=0 SET GOOS=linux
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/"></a>
+                    </p>
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%A4%9A%E8%A1%8C%E5%8F%98%E5%8D%95%E8%A1%8C/">多行变单行</a></h1>
                 </header>
                 
@@ -633,93 +693,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/ruby">ruby
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/xpath%E7%94%A8%E6%B3%95/">xpath用法</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/xpath%E7%94%A8%E6%B3%95/" class="article-date">
-                        <time datetime='2019-01-02T17:56:48.000&#43;00:00' itemprop="datePublished">2019-01-02</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    整理自https://devhints.io/xpath#prefixes Descendant selectors h1 //h1 div p //div//p ul &gt; li //ul/li ul &gt; li &gt; a //ul/li/a div &gt; * //div/* :root / :root &gt; body /body Attribute selectors #id //*[@id=&quot;id&quot;] .class //*[@class=&quot;class&quot;] …kinda input[type=&quot;submit&quot;] //input[@type=&quot;submit&quot;] a#abc[for=&quot;xyz&quot;] //a[@id=&quot;abc&quot;][@for=&quot;xyz&quot;] a[rel] //a[@rel] a[href^='/'] //a[starts-with(@href, '/')] a[href$='pdf'] //a[ends-with(@href, '.pdf')] a[href*='://'] //a[contains(@href, '://')] a[rel~='help'] //a[contains(@rel, 'help')] …kinda
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/xpath%E7%94%A8%E6%B3%95/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/xpath">xpath
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/yakuake%E9%85%8D%E7%BD%AEcolor-theme/">yakuake配置color-theme</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/yakuake%E9%85%8D%E7%BD%AEcolor-theme/" class="article-date">
-                        <time datetime='2018-12-28T11:31:57.000&#43;00:00' itemprop="datePublished">2018-12-28</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    打开管理配置， &ndash;&gt; appearance &ndash;&gt; new 给新的 color theme 命名(gruvbox)，然后点击应用，保存。 打开 .kde/share/apps/konsole/gruvbox.colortheme,清空文件内容 在 manjaro 中， 该文件位于 ~/.local/share/konsole/ 目
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/yakuake%E9%85%8D%E7%BD%AEcolor-theme/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/yakuake">yakuake
-                            </a>
-                        </li>
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/color">color
                             </a>
                         </li>
                         
