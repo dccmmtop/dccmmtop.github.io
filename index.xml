@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Thu, 05 May 2022 22:29:49 +0000</lastBuildDate><atom:link href="https://dccmmtop.gitee.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 May 2022 16:39:06 +0000</lastBuildDate><atom:link href="https://dccmmtop.gitee.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>右键注册自定义程序</title>
+      <link>https://dccmmtop.gitee.io/posts/%E5%8F%B3%E9%94%AE%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E7%A8%8B%E5%BA%8F/</link>
+      <pubDate>Sun, 08 May 2022 16:39:06 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.gitee.io/posts/%E5%8F%B3%E9%94%AE%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E7%A8%8B%E5%BA%8F/</guid>
+      <description>想把自己写的一个控制台程序添加到右键，可以通过修改注册表的方式实现，但是修改起来比较麻烦，推荐使用右键管理器进行修改 右侧的 ”文件“ ”文件夹“ ”目录“ 等，代表在该项右键时，右键菜单显示的内容 点击 + 新建：</description>
+    </item>
+    
     <item>
       <title>架构整洁之道书摘八——软件架构</title>
       <link>https://dccmmtop.gitee.io/posts/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93%E4%B9%A6%E6%91%98%E5%85%AB%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/</link>
