@@ -108,149 +108,45 @@
             
         </div>
         <div class="article-entry" itemprop="articleBody">
-            <p>开启查询日志输出
-默认mongodb不会输出所有的操作语句到日志中，google出的答案如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mongod --profile<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span> --slowms<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span> &amp;
-</code></pre></div><p>或</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mongo
-MongoDB shell version: 2.4.9
-connecting to: <span style="color:#8be9fd;font-style:italic">test</span>
-&gt; use myDb
-switched to db myDb
-&gt; db.getProfilingLevel<span style="color:#ff79c6">()</span>
-<span style="color:#bd93f9">0</span>
-&gt; db.setProfilingLevel<span style="color:#ff79c6">(</span>2<span style="color:#ff79c6">)</span>
-<span style="color:#ff79c6">{</span> <span style="color:#f1fa8c">&#34;was&#34;</span> : 0, <span style="color:#f1fa8c">&#34;slowms&#34;</span> : 1, <span style="color:#f1fa8c">&#34;ok&#34;</span> : <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">}</span>
-&gt; db.getProfilingLevel<span style="color:#ff79c6">()</span>
-<span style="color:#bd93f9">2</span>
-&gt; db.system.profile.find<span style="color:#ff79c6">()</span>.pretty<span style="color:#ff79c6">()</span>
-db.setProfilingLevel<span style="color:#ff79c6">(</span>2<span style="color:#ff79c6">)</span><span style="color:#6272a4">#意味着mongodb会记录所有的操作到日志中。</span>
-</code></pre></div><p>在上述操作完成后就可以在log文件中查看操作日志记录了：
-tail -f /var/log/mongodb/mongodb.log</p>
-<p>//输出</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">Mon Mar  4 15:02:55 [conn1] query dendro.quads query: { graph: &#34;u:http://example.org/people&#34; } ntoreturn:0 ntoskip:0 nscanned:6 keyUpdates:0 locks(micros) r:73163 nreturned:6 reslen:9884 88ms
-</code></pre></div><p>db.setProfilingLevel其实是设了mongodb内在工具profiler的日志记录级别的。
-参考:https://docs.mongodb.com/manual/reference/glossary/#term-database-profiler</p>
-<p>level有如下的取值：</p>
-<p>0：关闭。不做分析
-1：打开。只记录慢查询
-2：打开。记录所有的操作</p>
-<h2 id="mongodb日志组件种类及日志等级">MongoDB日志组件种类及日志等级</h2>
-<p>每种数据库都有自己的日志模块，MongoDB也不例外，通常情况下，一个数据库的日志中，记录的是数据库的连接信息、存储信息、网络信息、索引信息以及查询信息等。从MongoDB3.0版本开始，MongoDB在日志中引入了日志等级和日志组件的概念，作为DBA来讲，关注的最多的应该是慢查询日志和连接日志。</p>
-<p>在MongoDB中，我们可以通过下面的命令，来获取所有的日志组件种类和对应的日志等级：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">db.getLogComponents<span style="color:#ff79c6">()</span>
-
-PRIMARY&gt; db.getLogComponents<span style="color:#ff79c6">()</span>
-<span style="color:#ff79c6">{</span>
-        <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : 0,
-        <span style="color:#f1fa8c">&#34;accessControl&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;command&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;control&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;executor&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;geo&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;index&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;network&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1,
-                <span style="color:#f1fa8c">&#34;asio&#34;</span> : <span style="color:#ff79c6">{</span>
-                        <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-                <span style="color:#ff79c6">}</span>,
-                <span style="color:#f1fa8c">&#34;bridge&#34;</span> : <span style="color:#ff79c6">{</span>
-                        <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-                <span style="color:#ff79c6">}</span>
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;query&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;replication&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;sharding&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;storage&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1,
-                <span style="color:#f1fa8c">&#34;journal&#34;</span> : <span style="color:#ff79c6">{</span>
-                        <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-                <span style="color:#ff79c6">}</span>
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;write&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>,
-        <span style="color:#f1fa8c">&#34;ftdc&#34;</span> : <span style="color:#ff79c6">{</span>
-                <span style="color:#f1fa8c">&#34;verbosity&#34;</span> : -1
-        <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><p>这里，我需要对执行的结果做个说明。</p>
-<p>首先来看返回结果中的总的verbosity，它的值是0。相应的取值还有1~5，数字越大，表示日志的详细程度越高，当这个值取到5的时候，MongoDB将会输出所有的调试debug日志，这个日志量将会非常大，一般情况下，默认的值是0.</p>
-<p>你可以留意到，这个执行结果中，包含很多子项目，例如command，control，executer，query，replication，sharding等，这些子项目也叫作日志组件，它代表这种类型的日志，例如sharding代表分片相关的日志。每个子项目里面也有一个verbosity，它代表的是当前的组件的日志等级，它的取值和上面的verbosity取值一样，可以取0,1,2,3,4,5，不同的是，它还可以取值为-1，代表继承父日志级别。</p>
-<p>在上面的例子中：</p>
-<p>1、storage就是storage.joural的父级目录。</p>
-<p>2、storage.journal的日志等级是-1，代表它继承storage的日志级别，</p>
-<p>3、storage的日志级别也是-1，代表它继承全局的日志级别，</p>
-<p>4、全局的日志级别是0，这就意味着：storage和storage.journal的日志级别也都是0</p>
-<h3 id="设置某个日志组件的日志级别">设置某个日志组件的日志级别</h3>
-<p>为了获取更好的可读性，有时候会对单个日志组件的日志级别输出的更清晰一点，这种情况下，可以通过下面的命令来设置某个日志组件的日志等级：</p>
-<h3 id="方法一dbsetloglevel">方法一：db.setLogLevel()</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">db.setLogLevel<span style="color:#ff79c6">()</span>
-</code></pre></div><p>它的常用方法如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">db.setLogLevel<span style="color:#ff79c6">(</span>&lt;level&gt;,&lt;component&gt;<span style="color:#ff79c6">)</span>
-</code></pre></div><p>其中，level是等级，可以取值0~5，component是组件名称。可以取accessControl、command、control、ftdc、 geo、index、network、query、replication、recovery、sharding、storage、storage.journal、transaction、write等。</p>
-<p><img src="../../images/20210622090109023_4006.png" alt=""></p>
-<h3 id="方法二执行mongodb命令">方法二：执行MongoDB命令</h3>
+            <h2 id="开启查询日志">开启查询日志</h2>
+<h3 id="方法一执行mongodb命令">方法一：执行MongoDB命令</h3>
 <p>这个命令只能设置单个组件的日志等级，如果想要一次性设置多个组件的日志等级，可以使用下面的方法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">db.adminCommand<span style="color:#ff79c6">(</span> <span style="color:#ff79c6">{</span>
-   setParameter: 1,
-   logComponentVerbosity: <span style="color:#ff79c6">{</span>
-      verbosity: 1,
-      query: <span style="color:#ff79c6">{</span> verbosity: <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">}</span>,
-      storage: <span style="color:#ff79c6">{</span>
-         verbosity: 2,
-         journal: <span style="color:#ff79c6">{</span>
-            verbosity: <span style="color:#bd93f9">1</span>
-         <span style="color:#ff79c6">}</span>
-      <span style="color:#ff79c6">}</span>
-   <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span> <span style="color:#ff79c6">)</span>
-</code></pre></div><p>上面例子中的方法，</p>
+<p>新建 start_log.js， 内容如下</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">db.adminCommand( {
+   setParameter<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>,
+   logComponentVerbosity<span style="color:#ff79c6">:</span> {
+      verbosity<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>,
+      query<span style="color:#ff79c6">:</span> { verbosity<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span> },
+      storage<span style="color:#ff79c6">:</span> {
+         verbosity<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>,
+         journal<span style="color:#ff79c6">:</span> {
+            verbosity<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>
+         }
+      }
+   }
+} );
+</code></pre></div><p>执行命令：</p>
+<p>如果开启了认证,还需要加上用户和密码信息
+<code>./mongo 127.0.0.1:27019/eop_task ./start_log.js</code></p>
+<p>上面例子中的方法，</p>
 <p>将全局的日志等级设置成1；</p>
 <p>将query的日志等级设置成2；</p>
 <p>将storage的日志等级设置成2；</p>
-<p>将storage.journal的日志等级设置成1；
-或者
-例如：将systemLog 整体设置为1，其中 query 子项 设置为2。</p>
-<p>修改的具体命令为：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">db.adminCommand<span style="color:#ff79c6">(</span> <span style="color:#ff79c6">{</span>
-   setParameter: 1,
-   logComponentVerbosity: <span style="color:#ff79c6">{</span>
-      verbosity: 1,
-      query: <span style="color:#ff79c6">{</span>
-         verbosity: <span style="color:#bd93f9">2</span>
-      <span style="color:#ff79c6">}</span>
-   <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span> <span style="color:#ff79c6">)</span>
-</code></pre></div><p>恢复原级别：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">db.adminCommand<span style="color:#ff79c6">(</span> <span style="color:#ff79c6">{</span>
-   setParameter:0,
-   logComponentVerbosity: <span style="color:#ff79c6">{</span>
-      verbosity: 0,
-      query: <span style="color:#ff79c6">{</span>
-         verbosity: -1
-      <span style="color:#ff79c6">}</span>
-   <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span> <span style="color:#ff79c6">)</span>
-</code></pre></div><h3 id="方法三写入配置文件">方法三：写入配置文件</h3>
+<p>将storage.journal的日志等级设置成1；</p>
+<p><strong>恢复原级别：</strong></p>
+<p>新建 close_log.js,内容如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">db.auth(<span style="color:#f1fa8c">&#34;eop&#34;</span>,<span style="color:#f1fa8c">&#34;password&#34;</span>);
+db.adminCommand( {
+   setParameter<span style="color:#ff79c6">:</span><span style="color:#bd93f9">0</span>,
+   logComponentVerbosity<span style="color:#ff79c6">:</span> {
+      verbosity<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>,
+      query<span style="color:#ff79c6">:</span> {
+         verbosity<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>
+      }
+   }
+});
+</code></pre></div><p>执行命令 <code>./mongo 127.0.0.1:27019/eop_task ./close_log.js</code></p>
+<h3 id="方法二写入配置文件">方法二：写入配置文件</h3>
 <p>执行这个命令，等同于在配置文件中写入：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#ff79c6">systemLog</span>:
     <span style="color:#ff79c6">verbosity</span>: <span style="color:#bd93f9">1</span>
@@ -261,9 +157,6 @@ PRIMARY&gt; db.getLogComponents<span style="color:#ff79c6">()</span>
             <span style="color:#ff79c6">verbosity</span>: <span style="color:#bd93f9">2</span>
             <span style="color:#ff79c6">journal</span>:
                 <span style="color:#ff79c6">verbosity</span>: <span style="color:#bd93f9">1</span>
-</code></pre></div><h3 id="方法四启动的时候设置参数">方法四：启动的时候，设置参数</h3>
-<p>除此之外，我们也可以在mongod启动的时候，通过命令设置某个日志组件的日志等级，如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mongod --setParameter <span style="color:#f1fa8c">&#34;logComponentVerbosity={command: 3}&#34;</span>
 </code></pre></div><h3 id="日志轮换">日志轮换</h3>
 <p>有时候，长时间没有清理日志，日志的数据量会变的很大，这个时候我们可以通过两种方法来对日志进行滚动：</p>
 <p>利用日志轮滚的方法，直接在MongoDB的命令行里面输入：</p>
@@ -271,6 +164,29 @@ PRIMARY&gt; db.getLogComponents<span style="color:#ff79c6">()</span>
 db.runCommand<span style="color:#ff79c6">({</span>logRotate:1<span style="color:#ff79c6">})</span>
 </code></pre></div><p>这种方法采用了命令来切换日志文件，不需要关闭mongodb服务，是一个比较推荐的做法。</p>
 <p>当然，如果需要人手工的定期执行这个命令，好像也不够优雅，所以可以配合crontab去做这个事情，每天定时执行一次，达到日志文件轮滚的目的。</p>
+<h3 id="查询日志分析">查询日志分析</h3>
+<p>调整日志等级后，在日志文件中会发现如下类似日志</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">{ aggregate: &#34;zyb_work_task&#34;, pipeline: [ { $match: { level: 0 } }, { $match: { $or: [ { &#34;creator.id&#34;: 811 }, { assigneeType: 0, assigneeId: 811 }, { assigneeType: 1, assigneeId: { $in: [ 5778 ] } }, { assigneeType: 2, assigneeId: { $in: [ 29295, 28087, 28118 ] } }, { &#34;ccUser.id&#34;: 811 }, { subAssigneeList: 811 }, { subCcList: 811 }, { subCreatorList: 811 } ] } }, { $addFields: { currentEmpFocus: { $ifNull: [ &#34;$empFocus.811&#34;, 0 ] } } }, { $match: { finishFlag: false } }, { $sort: { currentEmpFocus: -1, createTime: -1 } }, { $limit: 20 } ], cursor: {} }
+</code></pre></div><p>然后将其复制到js文件中：</p>
+<p>find_task_list.js</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">
+<span style="color:#6272a4">//认证
+</span><span style="color:#6272a4"></span>db.auth(<span style="color:#f1fa8c">&#34;eop&#34;</span>,<span style="color:#f1fa8c">&#34;eopQAZ23wsx&#34;</span>);
+
+<span style="color:#6272a4">// 格式化输出
+</span><span style="color:#6272a4"></span>print(JSON.stringify(
+<span style="color:#6272a4">// 执行命令
+</span><span style="color:#6272a4"></span>db.runCommand(
+
+<span style="color:#6272a4">// 直接复制日志中的查询命令
+</span><span style="color:#6272a4"></span>{ aggregate<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;zyb_work_task&#34;</span>, pipeline<span style="color:#ff79c6">:</span> [ { $match<span style="color:#ff79c6">:</span> { level<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span> } }, { $match<span style="color:#ff79c6">:</span> { $or<span style="color:#ff79c6">:</span> [ { <span style="color:#f1fa8c">&#34;creator.id&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#bd93f9">811</span> }, { assigneeType<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>, assigneeId<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">811</span> }, { assigneeType<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, assigneeId<span style="color:#ff79c6">:</span> { $in<span style="color:#ff79c6">:</span> [ <span style="color:#bd93f9">5778</span> ] } }, { assigneeType<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>, assigneeId<span style="color:#ff79c6">:</span> { $in<span style="color:#ff79c6">:</span> [ <span style="color:#bd93f9">29295</span>, <span style="color:#bd93f9">28087</span>, <span style="color:#bd93f9">28118</span> ] } }, { <span style="color:#f1fa8c">&#34;ccUser.id&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#bd93f9">811</span> }, { subAssigneeList<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">811</span> }, { subCcList<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">811</span> }, { subCreatorList<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">811</span> } ] } }, { $addFields<span style="color:#ff79c6">:</span> { currentEmpFocus<span style="color:#ff79c6">:</span> { $ifNull<span style="color:#ff79c6">:</span> [ <span style="color:#f1fa8c">&#34;$empFocus.811&#34;</span>, <span style="color:#bd93f9">0</span> ] } } }, { $match<span style="color:#ff79c6">:</span> { finishFlag<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span> } }, { $sort<span style="color:#ff79c6">:</span> { currentEmpFocus<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>, createTime<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> } }, { $limit<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">20</span> } ], cursor<span style="color:#ff79c6">:</span> {} }
+
+)
+)
+);
+
+</code></pre></div><p>执行: ./mongo 127.0.0.1:27019/eop_task ./find_task_list.js</p>
+<p>此时就可以将应用的查询语句对应的结果显示出来，进行下一步的调试</p>
 
         </div>
 
@@ -280,14 +196,12 @@ db.runCommand<span style="color:#ff79c6">({</span>logRotate:1<span style="color:
             <h3></h3>
             <nav id="TableOfContents">
   <ul>
-    <li><a href="#mongodb日志组件种类及日志等级">MongoDB日志组件种类及日志等级</a>
+    <li><a href="#开启查询日志">开启查询日志</a>
       <ul>
-        <li><a href="#设置某个日志组件的日志级别">设置某个日志组件的日志级别</a></li>
-        <li><a href="#方法一dbsetloglevel">方法一：db.setLogLevel()</a></li>
-        <li><a href="#方法二执行mongodb命令">方法二：执行MongoDB命令</a></li>
-        <li><a href="#方法三写入配置文件">方法三：写入配置文件</a></li>
-        <li><a href="#方法四启动的时候设置参数">方法四：启动的时候，设置参数</a></li>
+        <li><a href="#方法一执行mongodb命令">方法一：执行MongoDB命令</a></li>
+        <li><a href="#方法二写入配置文件">方法二：写入配置文件</a></li>
         <li><a href="#日志轮换">日志轮换</a></li>
+        <li><a href="#查询日志分析">查询日志分析</a></li>
       </ul>
     </li>
   </ul>
@@ -304,7 +218,7 @@ db.runCommand<span style="color:#ff79c6">({</span>logRotate:1<span style="color:
             <ul class="article-tag-list">
                 
                 <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/mongo">mongo
+                    <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/mongodb">mongoDB
                     </a>
                 </li>
                 

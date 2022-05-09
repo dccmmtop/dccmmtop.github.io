@@ -493,7 +493,7 @@
       <pubDate>Thu, 12 Aug 2021 23:13:15 +0000</pubDate>
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.gitee.io/posts/%E5%BC%80%E5%90%AF%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97/</guid>
-      <description>开启查询日志输出 默认mongodb不会输出所有的操作语句到日志中，google出的答案如下： mongod --profile=1 --slowms=1 &amp;amp; 或 $ mongo MongoDB shell version: 2.4.9 connecting to: test &amp;gt; use myDb switched to db myDb &amp;gt; db.getProfilingLevel() 0 &amp;gt; db.setProfilingLevel(2) { &amp;#34;was&amp;#34; : 0, &amp;#34;slowms&amp;#34; : 1, &amp;#34;ok&amp;#34; : 1 } &amp;gt; db.getProfilingLevel() 2 &amp;gt; db.system.profile.find().pretty() db.setProfil</description>
+      <description>开启查询日志 方法一：执行MongoDB命令 这个命令只能设置单个组件的日志等级，如果想要一次性设置多个组件的日志等级，可以使用下面的方法： 新建 start_log.js， 内容如下 db.adminCommand( { setParameter: 1, logComponentVerbosity: { verbosity: 1, query: { verbosity: 2 },</description>
     </item>
     
     <item>
