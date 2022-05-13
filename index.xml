@@ -9,7 +9,25 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Sun, 08 May 2022 22:06:51 +0000</lastBuildDate><atom:link href="https://dccmmtop.gitee.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 13 May 2022 17:28:48 +0000</lastBuildDate><atom:link href="https://dccmmtop.gitee.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>powershell配置</title>
+      <link>https://dccmmtop.gitee.io/posts/powershell%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Fri, 13 May 2022 17:28:48 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.gitee.io/posts/powershell%E9%85%8D%E7%BD%AE/</guid>
+      <description>安装powershell 下载地址 安装scoop 打开powershell 执行 修改策略 set-executionpolicy remotesigned -s cu 安装scoop iex (new-object net.webclient).downloadstring(&#39;https://get.scoop.sh&#39;) 自动补全 PSReadLine 在 V5 或以上版本中自带 命令 $profile 可见看见配置文件的路径，如果没有此文件，新建即可 打配置</description>
+    </item>
+    
+    <item>
+      <title>awk分组统计</title>
+      <link>https://dccmmtop.gitee.io/posts/awk%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/</link>
+      <pubDate>Tue, 10 May 2022 15:51:00 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.gitee.io/posts/awk%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/</guid>
+      <description>Shell学习笔记：awk实现group by分组统计功能 日常部分数据以 txt 的文件格式提供，为避免入库之后再进行统计的麻烦，故学习 shell 进行处理，减少工作量。 1.样例数据 test.txt YD5Gxxx|6618151|68</description>
+    </item>
+    
     <item>
       <title>golnag插件式开发的一种案例</title>
       <link>https://dccmmtop.gitee.io/posts/golnag%E6%8F%92%E4%BB%B6%E5%BC%8F%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E7%A7%8D%E6%A1%88%E4%BE%8B/</link>

@@ -98,6 +98,88 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails5%E4%B8%AD%E7%9A%84autoload%E5%92%8Ceager_load/">Rails5中的autoload和eager_load</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/rails5%E4%B8%AD%E7%9A%84autoload%E5%92%8Ceager_load/" class="article-date">
+                        <time datetime='2019-01-19T10:21:48.000&#43;00:00' itemprop="datePublished">2019-01-19</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    翻译并整理： https://collectiveidea.com/blog/archives/2016/07/22/solutions-to-potential-upgrade-problems-in-rails-5 https://blog.bigbinary.com/2016/08/29/rails-5-disables-autoloading-after-booting-the-app-in-production.html autoload和eager_load autoload: 在常量使用之前不会加载，只有当使用一个当前不存在常量时，会在 autoload_paths 寻找，然后加载它，当在给定的目录中找不到这个常量时，就会触发错误。并且 autoload 是非线程安
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/rails5%E4%B8%AD%E7%9A%84autoload%E5%92%8Ceager_load/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/rails">rails
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ruby%E4%B8%ADhash%E7%9A%84%E6%8E%92%E5%BA%8F/">ruby中hash的排序</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ruby%E4%B8%ADhash%E7%9A%84%E6%8E%92%E5%BA%8F/" class="article-date">
+                        <time datetime='2019-01-15T11:45:27.000&#43;00:00' itemprop="datePublished">2019-01-15</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    翻译自 https://medium.com/@florenceliang/some-notes-about-using-hash-sort-by-in-ruby-f4b3a700fc33 ruby中的sort和sort_by 是两个非常有用的工具，我们可以按照自己的想法排序。比如我们可以按照名字字母表或者名字的长短进行排序。但是ruby文档中却没有过多的说明，因此本文主要说明一下
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/ruby%E4%B8%ADhash%E7%9A%84%E6%8E%92%E5%BA%8F/"></a>
+                    </p>
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/ruby">ruby
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/vim%E5%88%A0%E9%99%A4%E4%B8%8D%E5%8C%85%E5%90%AB%E7%89%B9%E5%AE%9A%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%A1%8C/">vim删除不包含特定字符串的行</a></h1>
                 </header>
                 
@@ -622,88 +704,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/ruby">ruby
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/vim%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">vim中的正则表达式</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/vim%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="article-date">
-                        <time datetime='2018-09-21T14:28:51.000&#43;00:00' itemprop="datePublished">2018-09-21</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    首先，在哪些情况下会用到正则表达式？ 使用正则表达式的命令最常见的就是 / 和 ? 命令。其格式如下： /正则表达式 ?正则表达式 另一个很有用的命令就是 :s（替换）命令，将第一个//之间的正则表达式替换成第二个//
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/vim%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/vim">vim
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rack-cors%E8%A7%A3%E5%86%B3ajax%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98-cors/">rack-cors解决Ajax跨域问题-CORS</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rack-cors%E8%A7%A3%E5%86%B3ajax%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98-cors/" class="article-date">
-                        <time datetime='2018-09-19T09:25:49.000&#43;00:00' itemprop="datePublished">2018-09-19</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    什么是跨域 理解跨域首先必须要了解同源策略。同源策略是浏览器上为安全性考虑实施的非常重要的安全策略。 那么什么是同源？我们知道，URL 由协议、域名、端口和路径组成，如果两个 URL 的协议、域名和端口相同，则表示
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/rack-cors%E8%A7%A3%E5%86%B3ajax%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98-cors/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.gitee.io/tags/rails">rails
                             </a>
                         </li>
                         
