@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Mon, 27 Jun 2022 22:57:24 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 04 Jul 2022 22:27:10 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RabbitMQ集群部署</title>
+      <link>https://dccmmtop.github.io/posts/rabbitmq%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Mon, 04 Jul 2022 22:27:10 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/rabbitmq%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/</guid>
+      <description>本文采用docker-compose 的方式部署 rabbitMQ集群 docker-compose.yml version: &amp;#34;3&amp;#34; services: rabbitmq: restart: always container_name: rabbitMQ image: rabbitmq:3.7.7-management # 注意 hostname（本地域名）, rabbitMQ集群之间的通信就是靠此寻址的。物理机部署时也可以使用固定IP</description>
+    </item>
+    
     <item>
       <title>RabbitMQ应答队列</title>
       <link>https://dccmmtop.github.io/posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/</link>

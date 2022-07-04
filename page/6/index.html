@@ -98,6 +98,36 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ssh%E6%85%A2/">ssh慢</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ssh%E6%85%A2/" class="article-date">
+                        <time datetime='2021-08-10T10:48:44.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    在目标机器中修改/etc/ssh/sshd_conf文件 将UseDNS 的缺省值由yes修改为no，并重启ssh
+                    </p>
+                    <p class="article-more-link">
+                        <a href="../../posts/ssh%E6%85%A2/"></a>
+                    </p>
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/linux%E6%89%B9%E9%87%8F%E9%87%8D%E5%91%BD%E5%90%8D/">linux批量重命名</a></h1>
                 </header>
                 
@@ -614,47 +644,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails%E8%BF%9E%E6%8E%A5%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/">Rails连接多个数据库</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rails%E8%BF%9E%E6%8E%A5%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date">
-                        <time datetime='2019-04-03T11:48:31.000&#43;00:00' itemprop="datePublished">2019-04-03</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    假如已经连接的的数据库名是 word_development, 现在需要添加一个名为 trademark_development 和 trademark_test 的本地数据库 步骤如下: 添加配置信息 在 config/database.yml 添加如下信息 trademark_default: &amp;trademark_default adapter: postgresql encoding: unicode pool: &lt;%= ENV.fetch(&#34;RAILS_MAX_THREADS&#34;) { 5 } %&gt; trademark_development: &lt;&lt;: *trademark_default database: trademark_development # 如果是远程的数据库添加如下信息 #username: username #password: 123456 #host: xxxx #port: xxx trademark_test: &lt;&lt;: *trademark_default database: trademark_test 关
-                    </p>
-                    <p class="article-more-link">
-                        <a href="../../posts/rails%E8%BF%9E%E6%8E%A5%E5%A4%9A%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93/"></a>
-                    </p>
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
                             </a>
                         </li>
                         
