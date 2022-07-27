@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>RabbitMQ应答队列 // 超的博客</title>
+    <title>索引的本质 // 超的博客</title>
 
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -10,11 +10,11 @@
     
     
 
-        <meta property="og:title" content="RabbitMQ应答队列" />
+        <meta property="og:title" content="索引的本质" />
     <meta property="og:description" content="" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%AC%E8%B4%A8/" />
     
 
      <link rel="icon" type="image/x-icon" href="../../favicon.ico">
@@ -96,30 +96,80 @@
     <div class="article-inner">
         
         <header class="article-header">
-            <h1 class="article-title" itemprop="name">RabbitMQ应答队列</h1>
+            <h1 class="article-title" itemprop="name">索引的本质</h1>
         </header>
         
         <div class="article-meta">
-            <a href="../../posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/" class="article-date">
-                <time datetime='2022-06-27T22:57:24.000&#43;00:00' itemprop="datePublished">2022-06-27</time>
+            <a href="../../posts/%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%AC%E8%B4%A8/" class="article-date">
+                <time datetime='2022-07-18T23:08:52.000&#43;00:00' itemprop="datePublished">2022-07-18</time>
             </a>
             
             
             
         </div>
         <div class="article-entry" itemprop="articleBody">
-            <p>生产者在某个队列上等待消费者返回的消息， 这个队列被称为应答队列,RabbitMQ 天生支持应答队列的机制。</p>
-<h3 id="什么时候需要应答队列">什么时候需要应答队列</h3>
-<p>当一条消息被消费者处理后，需要告知生产者一些信息时，消费者就需要在应答队列上发布一条应答消息。当应答消息被生产者处理后，应答队列就应该被删除
-这时，生产者就像客户端的角色，而消费者就像服务器的角色。由此可知，应答队列应该与消息一对一存在，并且队列名称唯一，应答消息被处理后，队列就应该删除。很棒的是，RabbitMQ的匿名队列很好的满足了这个特性.</p>
-<h3 id="上代码">上代码</h3>
-<h4 id="客户端生产者">客户端（生产者）</h4>
-<p><img src="../../images/20220627231931732_2971.png" alt=""></p>
-<h4 id="服务端消费者">服务端(消费者)</h4>
-<p><img src="../../images/20220627232501991_15062.png" alt=""></p>
-<p>从上代码中可以看出，利用应答队列是不是也可以实现 HTTP 服务器的功能，客户端发起请求， 服务器处理请求，返回数据，客户端处理返回数据</p>
-<p>我们知道，RabbitMQ中的队列要绑定到交换器上，才能通过路由将消息正确的投递到队列上，但是上面的服务端发送应答消息时，将消息头中的应答队列设置为消息的路由key，并没有绑定的动作，为什么也行得通呢？</p>
-<p>其实，不同于通过RabbitMQ发布的任何其他消息，这里没有交换器。这是关于通过Rabbit来实现RPC通信的唯一两处特别的地方：使用reply_to作为发布应答消息的目的地，同时发布的时候无须指定交换器。</p>
+            <p>索引是帮助MySQL高效获取数据的排好序的数据结构</p>
+<p>索引树的构建， 本质上是控制树的高度</p>
+<p>二叉树： 顺序插入时，等同链表</p>
+<p>红黑树（平衡二叉树）： 虽然会自动平衡节点位置，但仍然高度不可控。表比较大时会导致书的高度很高。增加查找次数</p>
+<h3 id="为什么最终选择b树--而不是b树">为什么最终选择B+树  而不是B树</h3>
+<p>B+树将数据全部放到叶子节点，留下更多的空间放 key, key 越多，宽度越宽，同样的数据量，宽度越大，高度越小。查找次数就越小。</p>
+<p>在水平方向在内存中使用二分查找的效率远远大于从磁盘中加载一页数据， 所以我们希望树越宽越好，而不是越高越好</p>
+<p>存储引擎是在表级别上生效的，不是是数据库级别</p>
+<p><img src="../../images/20220721230942096_12836.png" alt=""></p>
+<p>B+ 树叶子节点有双向指针，方便范围查询， 只需找到范围的边界，即可快速的便利整个范围</p>
+<p>B 树叶子节点没有指针，只能每次都从根节点查找范围内的每一个数据</p>
+<h3 id="hash-索引">Hash 索引</h3>
+<p><img src="../../images/20220721231419651_29071.png" alt=""></p>
+<h3 id="数据库文件">数据库文件</h3>
+<h4 id="myisam-引擎">MyISAM 引擎</h4>
+<ul>
+<li>frm:  表结构相关, frame（框架） 缩写`</li>
+<li>MYD: MyISAM Data 表数据</li>
+<li>MYI: MyISAM Index 表索引</li>
+</ul>
+<p><img src="../../images/20220720223538659_2601.png" alt=""></p>
+<p>索引结构中的叶子节点的 data 存放的是 数据行的位置，及这一行在 MYD 文件的位置， 而不是直接放的真实数据</p>
+<h3 id="innodb">InnoDB</h3>
+<ul>
+<li>frm 表结构信息</li>
+<li>ibd 表数据加索引</li>
+</ul>
+<h4 id="表数据组织形式">表数据组织形式</h4>
+<p><img src="../../images/20220720224051883_12060.png" alt=""></p>
+<p>表结构本身就是按照 B+ Tree 结构存储， 叶子节点放的是出索引列其他列的数据</p>
+<h3 id="聚集与非聚集索引">聚集与非聚集索引</h3>
+<p>叶子节点直接包含整行数据的叫做聚集索引 (InnoDB 主键索引)
+叶子节点不包含整行数据的叫做非聚集索引 (MyISAM 索引)</p>
+<p>索引与数据文件分开储存叫做非聚集索引 反之叫做聚集索引</p>
+<p>单从索引结构的来看，聚集索引的查找速度高于非聚集索引</p>
+<p>InnoDB 只有一个聚集索引，默认是主键索引， 非主键索引的叶子节点存放的是主键的值，如下图</p>
+<p><img src="../../images/20220721232641610_2470.png" alt=""></p>
+<p>这样做的目的有两个：</p>
+<ul>
+<li>
+<ol>
+<li>节约空间，避免将整行的数据存放多份</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>保证数据的一致性，否则每增加一行，对应的每个索引都要维护一份行数据。必须要等到每个索引都更新完，数据才能插入成功</li>
+</ol>
+</li>
+</ul>
+<h3 id="为什么建议innodb-表必须有主键并且是整型自增的">为什么建议InnoDB 表必须有主键，并且是整型自增的？</h3>
+<p>InnoDB 整个表的数据就是用B+ 树组织的，如果存在主键，就用主键为索引，叶子节点存储行数据
+如果没有主键，InnoDB 就会找到一个每行数据都不相同的列作为索引来组织整个表的数据
+如果没有找到这种列，就会建一个隐藏的列，自动维护值，用这个隐藏的列来组织数据， 
+所以我们要主动做这种工作 减少数据库的负担</p>
+<h4 id="为什么是整型">为什么是整型</h4>
+<p>因为在查找数据的过程中，需要多次比较大小，整型的比较运算速度大于字符串， 并且占用空间小</p>
+<h4 id="为什么是自增">为什么是自增</h4>
+<ul>
+<li>避免叶子节点的分裂</li>
+<li>避免B+ 树做平衡调整</li>
+</ul>
 
         </div>
 
@@ -131,8 +181,12 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#什么时候需要应答队列">什么时候需要应答队列</a></li>
-        <li><a href="#上代码">上代码</a></li>
+        <li><a href="#为什么最终选择b树--而不是b树">为什么最终选择B+树  而不是B树</a></li>
+        <li><a href="#hash-索引">Hash 索引</a></li>
+        <li><a href="#数据库文件">数据库文件</a></li>
+        <li><a href="#innodb">InnoDB</a></li>
+        <li><a href="#聚集与非聚集索引">聚集与非聚集索引</a></li>
+        <li><a href="#为什么建议innodb-表必须有主键并且是整型自增的">为什么建议InnoDB 表必须有主键，并且是整型自增的？</a></li>
       </ul>
     </li>
   </ul>
@@ -149,7 +203,7 @@
             <ul class="article-tag-list">
                 
                 <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E7%B4%A2%E5%BC%95">索引
                     </a>
                 </li>
                 
@@ -160,15 +214,15 @@
     
 <nav id="article-nav">
     
-    <a href="../../posts/rabbitmq%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="../../posts/zap%E5%8C%85%E4%BD%BF%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
         <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            RabbitMQ集群部署
+            zap包使用
         </div>
     </a>
     
     
-    <a href="../../posts/powershell%E9%85%8D%E7%BD%AE/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">powershell配置&nbsp;<span>&gt;</span></div>
+    <a href="../../posts/rabbitmq%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E8%8A%82%E7%82%B9%E4%B8%8E%E7%A3%81%E7%9B%98%E8%8A%82%E7%82%B9/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">RabbitMQ中的内存节点与磁盘节点&nbsp;<span>&gt;</span></div>
     </a>
     
 </nav>
