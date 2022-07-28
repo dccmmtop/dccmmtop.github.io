@@ -22,7 +22,7 @@
 </span></span><span style=display:flex><span>	filename <span style=color:#ff79c6>:=</span> <span style=color:#f1fa8c>&#34;./1.txt&#34;</span>
 </span></span><span style=display:flex><span>	f, err <span style=color:#ff79c6>:=</span> os.<span style=color:#50fa7b>Open</span>(filename)
 </span></span><span style=display:flex><span>	<span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span> {
-</span></span><span style=display:flex><span>		fmt.<span style=color:#50fa7b>Printf</span>(<span style=color:#f1fa8c>&#34;璇诲彇 %s 澶辫触, err: %v\n&#34;</span>, filename, err)
+</span></span><span style=display:flex><span>		fmt.<span style=color:#50fa7b>Printf</span>(<span style=color:#f1fa8c>&#34;read %s fail, err: %v\n&#34;</span>, filename, err)
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>	<span style=color:#ff79c6>defer</span> f.<span style=color:#50fa7b>Close</span>()
 </span></span><span style=display:flex><span>	reader <span style=color:#ff79c6>:=</span> bufio.<span style=color:#50fa7b>NewReader</span>(f)
@@ -30,7 +30,7 @@
 </span></span><span style=display:flex><span>	<span style=color:#ff79c6>for</span> {
 </span></span><span style=display:flex><span>		line, _, err <span style=color:#ff79c6>:=</span> reader.<span style=color:#50fa7b>ReadLine</span>()
 </span></span><span style=display:flex><span>		<span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>==</span> io.EOF {
-</span></span><span style=display:flex><span>			fmt.<span style=color:#50fa7b>Println</span>(<span style=color:#f1fa8c>&#34;鍒拌揪鏂囦欢鏈熬锛宒one!&#34;</span>)
+</span></span><span style=display:flex><span>			fmt.<span style=color:#50fa7b>Println</span>(<span style=color:#f1fa8c>&#34;done!&#34;</span>)
 </span></span><span style=display:flex><span>			<span style=color:#ff79c6>break</span>
 </span></span><span style=display:flex><span>		}
 </span></span><span style=display:flex><span>		fmt.<span style=color:#50fa7b>Println</span>(line)
