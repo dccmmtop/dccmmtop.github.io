@@ -22,15 +22,13 @@
 </span></span><span style=display:flex><span>    <span style=color:#ff79c6>steps</span>:
 </span></span><span style=display:flex><span>      - <span style=color:#ff79c6>uses</span>: actions/checkout@v2 <span style=color:#6272a4># 引用actions/checkout这个action，与所在的github仓库同名</span>
 </span></span><span style=display:flex><span>	    <span style=color:#ff79c6>with</span>:
-</span></span><span style=display:flex><span>	      <span style=color:#ff79c6>submodules</span>: <span style=color:#ff79c6>true</span> <span style=color:#6272a4># Fetch Hugo themes (true OR recursive) 获取submodule主题</span>
-</span></span><span style=display:flex><span>	      <span style=color:#ff79c6>fetch-depth</span>: <span style=color:#bd93f9>0</span> <span style=color:#6272a4># Fetch all history for .GitInfo and .Lastmod</span>
-</span></span><span style=display:flex><span>	  
+</span></span><span style=display:flex><span>          <span style=color:#ff79c6>submodules</span>: <span style=color:#ff79c6>true</span> <span style=color:#6272a4># Fetch Hugo themes (true OR recursive) 获取submodule主题</span>
+</span></span><span style=display:flex><span>          <span style=color:#ff79c6>fetch-depth</span>: <span style=color:#bd93f9>0</span> <span style=color:#6272a4># Fetch all history for .GitInfo and .Lastmod</span>
 </span></span><span style=display:flex><span>      - <span style=color:#ff79c6>name</span>: Setup Hugo <span style=color:#6272a4># 步骤名自取</span>
 </span></span><span style=display:flex><span>      <span style=color:#ff79c6>uses</span>: peaceiris/actions-hugo@v2 <span style=color:#6272a4># hugo官方提供的action，用于在任务环境中获取hugo</span>
 </span></span><span style=display:flex><span>      <span style=color:#ff79c6>with</span>:
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>hugo-version</span>: <span style=color:#f1fa8c>&#39;latest&#39;</span> <span style=color:#6272a4># 获取最新版本的hugo</span>
-</span></span><span style=display:flex><span>		<span style=color:#6272a4># extended: true</span>
-</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>hugo-version</span>: <span style=color:#f1fa8c>&#39;latest&#39;</span> <span style=color:#6272a4># 获取最新版本的hugo</span>
+</span></span><span style=display:flex><span>		
 </span></span><span style=display:flex><span>      - <span style=color:#ff79c6>name</span>: Build
 </span></span><span style=display:flex><span>      <span style=color:#ff79c6>run</span>: hugo --minify <span style=color:#6272a4># 使用hugo构建静态网页</span>
 </span></span><span style=display:flex><span>
