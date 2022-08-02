@@ -21,3 +21,7 @@
 .highlight-copy-btn:hover {
     background-color: #666;
 }
+
+.hidden{
+  display: none;
+}

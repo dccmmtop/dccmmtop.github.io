@@ -21,10 +21,12 @@ $(function() {
     return selection;
   }
 
+
+
   function addCopyButton(containerEl) {
     console.log("添加复制")
     var copyBtn = document.createElement("button");
-    copyBtn.className = "highlight-copy-btn";
+    copyBtn.className = "highlight-copy-btn hidden";
     copyBtn.textContent = "Copy";
 
     var codeEl = containerEl.firstElementChild;
@@ -51,5 +53,10 @@ $(function() {
   for(var i =0 ; i< highlightBlocks.length; i ++) {
     addCopyButton(highlightBlocks[i])
   }
-  //Array.prototype.forEach.call(highlightBlocks, addCopyButton);
+  
+  $(".highlight").hover(function(){
+    $(this).children("button")[0].setAttribute('style', 'display : block !important');
+  },function(){
+    $(this).children("button")[0].setAttribute('style', 'display : none !important');
+  });
 });
