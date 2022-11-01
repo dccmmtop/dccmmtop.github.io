@@ -1,0 +1,252 @@
+<!doctype html><html><head><title>Bean装配相关注解 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="Bean装配相关注解"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/bean%E8%A3%85%E9%85%8D%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=generator content="Hugo 0.105.0"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>关于</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>Bean装配相关注解</h1></header><div class=article-meta><a href=../../posts/bean%E8%A3%85%E9%85%8D%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3/ class=article-date><time datetime=2022-11-01T16:05:53.000+00:00 itemprop=datePublished>2022-11-01</time></a></div><div class=article-entry itemprop=articleBody><h2 id=componentscan>@ComponentScan</h2><ul><li>启用组件扫描</li><li>默认扫描与配置类相同的包以及子包</li></ul><h3 id=如何扫描指定的包>如何扫描指定的包</h3><ul><li>@ComponentScan(&ldquo;包名&rdquo;)</li><li>扫描一组包： <code>@ComponentScan(basePackages={"xxx","xxx"})</code></li></ul><p>这种两种方式都是传入字符串，无法方便的重构。因为我们的编辑器一般不会解析你的字符串值，可以使用下面方式：</p><ul><li>扫描类和接口： <code>@ComponentScan(basePackageClasses={xxx.class, xxxx.class})</code> 这些类所在的包会作为组件扫描的基础包，可以为需要扫描的包中添加一个空接口，标记该包需要扫描，这种方式避免了传入字符串，方便重构修改</li></ul><h2 id=contextconfigurationclassesxxxclass>@ContextConfiguration(classes=xxx.class)</h2><p>需要在 xxx.class 中加载配置</p><h2 id=component>@Component</h2><p>向容器中注册组件</p><ul><li>bean 的名字默认是类名首字母小写</li><li>也可以指定： @Component(&ldquo;xxx&rdquo;)</li><li>@Named 可以替代 @Component</li></ul><h2 id=autowired>@Autowired</h2><ul><li><p>用在构造器上 当 Spring 去创建该类的 bean 时，会调用这个构造方法，同时传入一个 满足参数的 bean</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>Class User <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Car car<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>   <span style=color:#6272a4>// 会使用这个方法去构造 bean, 而不是无    参构造器
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    @Autowired
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>User</span><span style=color:#ff79c6>(</span>Car car<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>car</span> <span style=color:#ff79c6>=</span> car<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div></li><li><p>用在 Setter 方法上</p></li><li><p>其实可以用在类的任何方法上，Spring 尝试满足方法参数上声明的依赖，如果找不到对应的 bean 就会抛出异常</p></li><li><p>@Autowired(required=false) 即使没找到也不会抛出异常，会传入 Null. 可能会导致空指针异常</p></li><li><p>如果有多个 bean 都能满足，会抛出异常</p></li><li><p>可以使用 Inject 替换，Inject 是 java 中依赖注入规范</p></li></ul><h2 id=bean>@Bean</h2><ul><li>显示配置 Bean, 可以把第三方对象设置成 Bean，因为我们无法直接在第三方类上添加@Component 注解</li><li>bean Id 默认是方法名，可以指定：<code>@Bean("xxx")</code><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>@Configuration
+</span></span><span style=display:flex><span>@ComponentScan
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>AutowiredDemoConfig</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    * User 是引入的第三方工具，无法修改 User 类，在类名上加 @Component 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Bean
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> User <span style=color:#50fa7b>user</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>(</span>10<span style=color:#ff79c6>,</span><span style=color:#f1fa8c>&#34;dc1&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div></li></ul><h2 id=profiledev>@Profile(&ldquo;dev&rdquo;)</h2><ul><li>和@Bean 一起使用，当 dev 环境上才会创建 bean</li><li>配置
+<code>spring.profiles.default=dev</code> 或者 <code>spring.profiles.active=dev</code> 激活 dev 环境，如果没有激活的环境，只会创建那些没有定义在 profile 中的 bean</li><li>从 Spring 4 开始，依赖 @Conditional 注解</li></ul><h2 id=conditional>@Conditional</h2><ul><li>Since 4.0</li><li>条件化的 bean</li><li>用到带有@Bean 的注解的方法上</li><li>给定条件的结果为 true 时，创建 bean 否则不创建</li><li>需要实现 Conditional 接口中的 matches 方法</li></ul><h2 id=primary>@Primary</h2><ul><li><p>处理自动装配的歧义</p></li><li><p>如果一个 Bean 是接口，系统中有多个实现类。注入时就会有歧义，抛出异常</p></li><li><p>@Primary 用在 Bean 上，标记这个 bean 是首选的，发生歧义时首选它， 不会报错</p></li><li><p>缺点： 只能使用其中一个 bean，无法指定注入哪个，@Qualifier 解决这个问题</p><p>示例：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>@RunWith<span style=color:#ff79c6>(</span>SpringJUnit4ClassRunner<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@ContextConfiguration<span style=color:#ff79c6>(</span>classes <span style=color:#ff79c6>=</span> AutowiredDemoConfig<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>QualifierDemo</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>  @Autowired
+</span></span><span style=display:flex><span>  <span style=color:#8be9fd;font-style:italic>private</span> Dessert dessert<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  @Test
+</span></span><span style=display:flex><span>  <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>eat</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>      dessert<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>* Cake IceCream 都实现了 Dessert
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>*/</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>interface</span> <span style=color:#50fa7b>Dessert</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>  String <span style=color:#50fa7b>getName</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Component
+</span></span><span style=display:flex><span>@Primary <span style=color:#6272a4>// 会优先注入 Cake
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Cake</span> <span style=color:#8be9fd;font-style:italic>implements</span> Dessert <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>  <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>      String name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;Cake&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>      System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>name<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>      <span style=color:#ff79c6>return</span> name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Component
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>IceCream</span> <span style=color:#8be9fd;font-style:italic>implements</span> Dessert<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>      String name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;IceCream&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>      System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>name<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>      <span style=color:#ff79c6>return</span> name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>  <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div></li></ul><h2 id=qualifierxxx-bean-name>@Qualifier(&ldquo;xxx bean name&rdquo;)</h2><ul><li>与 @Autowired 一起使用时直接指定 bean 的名字进行装配：</li><li>与 @Component 一起使用，可以设置 bean 的名字</li><li>与 @Bean 一起使用，可以设置 bean 的名字</li></ul><h2 id=scope-bean-的作用域>@Scope bean 的作用域</h2><p>默认所有的 bean 都是单例的。Spring 定义了多种作用域，包括：</p><ul><li>单例 (Singleton): 整个应用中只创建一个 bean 实例</li><li>原型 (Prototype): 每次注入或者通过 Spring 应用上下文获取的时候，都会创建一个新的 bean。</li><li>会话 (Session): 在 Web 应用中，为每个会话创建一个实例</li><li>请求 (Request): 在 Web 应用中，为每个请求创建一个实例</li></ul><h3 id=示例>示例</h3><p>使用 @Scope 注解，改变bean的作用域</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>@RunWith<span style=color:#ff79c6>(</span>SpringJUnit4ClassRunner<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@ComponentScan
+</span></span><span style=display:flex><span>@ContextConfiguration<span style=color:#ff79c6>(</span>classes <span style=color:#ff79c6>=</span> ScopeDemo<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>ScopeDemo</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    @Qualifier<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;singleSTU&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Student s1<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    @Qualifier<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;singleSTU&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Student s2<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    @Qualifier<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;prototypeSTU&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Student s3<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    @Qualifier<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;prototypeSTU&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Student s4<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Test
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span>  <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>scopeDemo</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        Assert<span style=color:#ff79c6>.</span><span style=color:#50fa7b>assertEquals</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;s1 s2 是单例作用域，两者应该相等:&#34;</span><span style=color:#ff79c6>,</span> s1<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hashCode</span><span style=color:#ff79c6>(),</span> s2<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hashCode</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>        Assert<span style=color:#ff79c6>.</span><span style=color:#50fa7b>assertNotEquals</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;s3 s4 是原型作用域，两者应该不相等:&#34;</span><span style=color:#ff79c6>,</span> s3<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hashCode</span><span style=color:#ff79c6>(),</span> s4<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hashCode</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Configuration
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Student</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 默认是单例作用域
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * @return
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
+</span></span><span style=display:flex><span>    @Bean<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;singleSTU&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> Student <span style=color:#50fa7b>stu</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        Random random <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Random<span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        Student s1 <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Student<span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        s1<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setAge</span><span style=color:#ff79c6>(</span>random<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nextInt</span><span style=color:#ff79c6>(</span>100<span style=color:#ff79c6>));</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> s1<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 设置原型作用域
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * @return
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
+</span></span><span style=display:flex><span>    @Bean<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;prototypeSTU&#34;</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    @Scope<span style=color:#ff79c6>(</span>ConfigurableBeanFactory<span style=color:#ff79c6>.</span><span style=color:#50fa7b>SCOPE_PROTOTYPE</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> Student <span style=color:#50fa7b>stu1</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        Random random <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Random<span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        Student s1 <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Student<span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        s1<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setAge</span><span style=color:#ff79c6>(</span>random<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nextInt</span><span style=color:#ff79c6>(</span>100<span style=color:#ff79c6>));</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> s1<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getAge</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setAge</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>age</span> <span style=color:#ff79c6>=</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h2 id=运行时注入外部值>运行时注入外部值</h2><p>把配置文件中的字段注入到对象中</p><h3 id=enviroment>Enviroment</h3><p>通过注解@PropertySource(&ldquo;xxx&rdquo;)讲配置文件中的信息注入到Enviorment 对象中:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>@RunWith<span style=color:#ff79c6>(</span>SpringJUnit4ClassRunner<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@ComponentScan
+</span></span><span style=display:flex><span>@ContextConfiguration<span style=color:#ff79c6>(</span>classes <span style=color:#ff79c6>=</span> EnviromentDemo<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>EnviromentDemo</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Mysql mysql<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Test
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>testDataSource</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>mysql<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getPort</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Configuration
+</span></span><span style=display:flex><span>@PropertySource<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;classpath:/app.properties&#34;</span><span style=color:#ff79c6>)</span><span style=color:#6272a4>// 将配置文件中的字段加载到 Environment 中，稍后可以通过 Environment 对象获取
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>DataSource</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    Environment env<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Bean
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> Mysql <span style=color:#50fa7b>mysql</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 获取对应的字段值，getProperty 更多用法参考源码
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>return</span>  <span style=color:#ff79c6>new</span> Mysql<span style=color:#ff79c6>(</span>env<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getProperty</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;mysql.port&#34;</span><span style=color:#ff79c6>,</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>),</span> env<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getProperty</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;mysql.host&#34;</span><span style=color:#ff79c6>));</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Mysql</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>private</span> String host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Mysql</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>,</span> String host<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>         <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>port</span> <span style=color:#ff79c6>=</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>         <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>host</span> <span style=color:#ff79c6>=</span> host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>     <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getPort</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>         <span style=color:#ff79c6>return</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>     <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setPort</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>         <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>port</span> <span style=color:#ff79c6>=</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>     <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>getHost</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>         <span style=color:#ff79c6>return</span> host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>     <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>     <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setHost</span><span style=color:#ff79c6>(</span>String host<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>         <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>host</span> <span style=color:#ff79c6>=</span> host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>     <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span> <span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h3 id=通过属性占位符装配>通过属性占位符装配</h3><p>还可以通过 ${} 占位符读取配置文件中的字段，注入到字段中； 如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>@RunWith<span style=color:#ff79c6>(</span>SpringJUnit4ClassRunner<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@ComponentScan
+</span></span><span style=display:flex><span>@ContextConfiguration<span style=color:#ff79c6>(</span>classes <span style=color:#ff79c6>=</span> ValueDemo<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>ValueDemo</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> Mysql1 mysql<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Test
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>testDataSource</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>mysql<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getPort</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Configuration
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>DataSource1</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Autowired
+</span></span><span style=display:flex><span>    Environment env<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Bean <span style=color:#6272a4>// 这个bean 是必须的。可以解析占位符,自动查找
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>public</span>  <span style=color:#8be9fd;font-style:italic>static</span> PropertySourcesPlaceholderConfigurer  <span style=color:#50fa7b>propertySourcesPlaceholderConfigurer</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>new</span> PropertySourcesPlaceholderConfigurer<span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @Bean
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// ${} 占位符方式注入
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>public</span> Mysql1 <span style=color:#50fa7b>mysql</span><span style=color:#ff79c6>(</span>@Value<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;${mysql.port}&#34;</span><span style=color:#ff79c6>)</span> <span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>,</span>@Value<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;${mysql.host}&#34;</span><span style=color:#ff79c6>)</span> String host<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 获取对应的字段值，getProperty 更多用法参考源码
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>return</span>  <span style=color:#ff79c6>new</span> Mysql1<span style=color:#ff79c6>(</span>port<span style=color:#ff79c6>,</span> host<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Mysql1</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> String host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Mysql1</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>,</span> String host<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>port</span> <span style=color:#ff79c6>=</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>host</span> <span style=color:#ff79c6>=</span> host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getPort</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setPort</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> port<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>port</span> <span style=color:#ff79c6>=</span> port<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>getHost</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setHost</span><span style=color:#ff79c6>(</span>String host<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>host</span> <span style=color:#ff79c6>=</span> host<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><a href=#componentscan>@ComponentScan</a><ul><li><a href=#如何扫描指定的包>如何扫描指定的包</a></li></ul></li><li><a href=#contextconfigurationclassesxxxclass>@ContextConfiguration(classes=xxx.class)</a></li><li><a href=#component>@Component</a></li><li><a href=#autowired>@Autowired</a></li><li><a href=#bean>@Bean</a></li><li><a href=#profiledev>@Profile(&ldquo;dev&rdquo;)</a></li><li><a href=#conditional>@Conditional</a></li><li><a href=#primary>@Primary</a></li><li><a href=#qualifierxxx-bean-name>@Qualifier(&ldquo;xxx bean name&rdquo;)</a></li><li><a href=#scope-bean-的作用域>@Scope bean 的作用域</a><ul><li><a href=#示例>示例</a></li></ul></li><li><a href=#运行时注入外部值>运行时注入外部值</a><ul><li><a href=#enviroment>Enviroment</a></li><li><a href=#通过属性占位符装配>通过属性占位符装配</a></li></ul></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/spring>spring</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/maven%E5%AE%8C%E5%85%A8%E4%BE%9D%E8%B5%96%E6%9C%AC%E5%9C%B0%E5%BA%93/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>maven完全依赖本地库&nbsp;<span>></span></div></a></nav></article></section><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2022 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script></footer></div></body></html>
