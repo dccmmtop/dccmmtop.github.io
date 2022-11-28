@@ -4,7 +4,7 @@
 <link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
 <script src=https://dccmmtop.github.io/js/fuse.js></script>
 <script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.106.0"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.107.0"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
 <a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
 <a class=main-nav-link href=../../tags/>标签</a>
 <a class=main-nav-link href=../../about/>我</a>
@@ -51,7 +51,7 @@
 </span></span><span style=display:flex><span>           System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;进入 Callable 的 call 方法&#34;</span><span style=color:#ff79c6>);</span>
 </span></span><span style=display:flex><span>            <span style=color:#6272a4>// 模拟子线程任务，在此睡眠 2s，
 </span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#6272a4>// 小细节：由于 call 方法会抛出 Exception，这里不用像使用 Runnable 的run 方法那样 try/catch 了
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span>5000<span style=color:#ff79c6>);</span>
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>5000</span><span style=color:#ff79c6>);</span>
 </span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;Hello from Callable&#34;</span><span style=color:#ff79c6>;</span>
 </span></span><span style=display:flex><span>        <span style=color:#ff79c6>};</span>
 </span></span><span style=display:flex><span>
@@ -83,12 +83,12 @@
 </span></span></code></pre></div><p>如果子程序运行时间过长，或者其他原因，我们想 cancel 子程序的运行，则我们可以使用 Future 提供的 cancel 方法，继续对程序做一些修改</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#ff79c6>while</span><span style=color:#ff79c6>(!</span>future<span style=color:#ff79c6>.</span><span style=color:#50fa7b>isDone</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
 </span></span><span style=display:flex><span>   System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;子线程任务还没有结束...&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>   Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span>1000<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>   Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1000</span><span style=color:#ff79c6>);</span>
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> elapsedTimeInSec <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nanoTime</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>-</span> startTime<span style=color:#ff79c6>)/</span>1000000000<span style=color:#ff79c6>.</span><span style=color:#50fa7b>0</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> elapsedTimeInSec <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nanoTime</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>-</span> startTime<span style=color:#ff79c6>)/</span><span style=color:#bd93f9>1000000000.0</span><span style=color:#ff79c6>;</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>      <span style=color:#6272a4>// 如果程序运行时间大于 1s，则取消子线程的运行
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>   <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>elapsedTimeInSec <span style=color:#ff79c6>&gt;</span> 1<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>   <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>elapsedTimeInSec <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
 </span></span><span style=display:flex><span>      future<span style=color:#ff79c6>.</span><span style=color:#50fa7b>cancel</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>true</span><span style=color:#ff79c6>);</span>
 </span></span><span style=display:flex><span>   <span style=color:#ff79c6>}</span>
 </span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
