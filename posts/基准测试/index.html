@@ -9,9 +9,7 @@
 <a class=main-nav-link href=../../tags/>标签</a>
 <a class=main-nav-link href=../../about/>我</a>
 <a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>基准测试</h1></header><div class=article-meta><a href=../../posts/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/ class=article-date><time datetime=2022-04-14T00:00:02.000+00:00 itemprop=datePublished>2022-04-14</time></a></div><div class=article-entry itemprop=articleBody><h1 id=基准测试>基准测试</h1><h2 id=http_load>http_load</h2><p>可以通过一个输入文件提供多个 URL，Hpttp_load 在这些 URL 中随机选择进行测试。
-也可以定制 axtp_1oad，使其按照时间比率进行测试，而不仅仅是测试最大请求处理</p><p>下面通过一个简单的例子来演示如何使用 http_1oad。首先创建一个 urls.txt文件，输入
-如下的 URL :</p><pre tabindex=0><code>http://ww.mysqlperformanceblog.com/
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>基准测试</h1></header><div class=article-meta><a href=../../posts/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/ class=article-date><time datetime=2022-04-14T00:00:02.000+00:00 itemprop=datePublished>2022-04-14</time></a></div><div class=article-entry itemprop=articleBody><h1 id=基准测试>基准测试</h1><h2 id=http_load>http_load</h2><p>可以通过一个输入文件提供多个 URL，Hpttp_load 在这些 URL 中随机选择进行测试。<br>也可以定制 axtp_1oad，使其按照时间比率进行测试，而不仅仅是测试最大请求处理</p><p>下面通过一个简单的例子来演示如何使用 http_1oad。首先创建一个 urls.txt文件，输入<br>如下的 URL :</p><pre tabindex=0><code>http://ww.mysqlperformanceblog.com/
 
 http: //www.mysqlperformanceblog.com/page/2/
 
@@ -20,8 +18,7 @@ http: //www.mysqlperformanceblog .com/mysql-patches/
 http: //www.mysqlperformanceblog . com/mysql-performance-presentations/
 
 http: //www.mysqlperformanceblog . com/2006/09/06/slow-query-log-analyzes-tools/
-</code></pre><p>hitp_load 最简单的用法，就是循环请求给定的 URL 列表。测试程序将以最快的速度请
-求这些 URL :</p><pre tabindex=0><code>$ http_load -parallel 1 -seconds 10 urls.txt
+</code></pre><p>hitp_load 最简单的用法，就是循环请求给定的 URL 列表。测试程序将以最快的速度请<br>求这些 URL :</p><pre tabindex=0><code>$ http_load -parallel 1 -seconds 10 urls.txt
 19 fetches, 1 max parallel, 837929 bytes, in 10.0003 seconds
 44101.5 mean bytes/connection
 1.89995 fetches/sec, 83790.7 bytes/sec
@@ -30,9 +27,7 @@ msecs/first-response: 320.207 mean, 508.958 max, 179.308 min
 HTTP response codes:
 
 code 200 - 19
-</code></pre><p>测试的结果很容易理解，只是简单地输出了请求的统计信息。下面是另外一个稍微复杂
-的测试，还是尽可能快地循环请求给定的 URL 列表，不过模拟同时有五个并发用户在
-进行请求 ;</p><pre tabindex=0><code>$ http_load -parallel 5 -seconds 10 urls.txt
+</code></pre><p>测试的结果很容易理解，只是简单地输出了请求的统计信息。下面是另外一个稍微复杂<br>的测试，还是尽可能快地循环请求给定的 URL 列表，不过模拟同时有五个并发用户在<br>进行请求 ;</p><pre tabindex=0><code>$ http_load -parallel 5 -seconds 10 urls.txt
 94 fetches, 5 max parallel, 4.75565e+06 bytes, in 10.0005 seconds
 50592 mean bytes/connection
 9.39953 fetches/sec, 475541 bytes/sec
@@ -40,8 +35,7 @@ msecs/connect: 65.1983 mean, 169.991 max, 38.189 min
 msecs/first-response: 245.014 mean, 993.059 max, 99.646 min
 HTTP response codes:
 code 200 - 94
-</code></pre><p>另外，除了测试最快的速度，也可以根据预估的访问请求率 〈比如每秒 5 次) 来做压力
-模拟测试。</p><pre tabindex=0><code>$ http_load -rate 5 -seconds 10 urls.txt
+</code></pre><p>另外，除了测试最快的速度，也可以根据预估的访问请求率 〈比如每秒 5 次) 来做压力<br>模拟测试。</p><pre tabindex=0><code>$ http_load -rate 5 -seconds 10 urls.txt
 48 fetches, 4 max parallel, 2.50104e+06 bytes, in 10 seconds
 52105 mean bytes/connection
 4.8 fetches/sec, 250104 bytes/sec
@@ -50,8 +44,7 @@ msecs/first-response: 246.811 mean, 546.203 max, 108.363 min
 HTTP response codes:
 
 code 200 - 48
-</code></pre><p>最后，还可以模拟更大的负载，可以将访问请求率提高到每秒 20 次请求。请注意，连
-接和请求响应时间都会随着负载的提高而增加。</p><pre tabindex=0><code>$ http_load -rate 20 -seconds 10 urls.txt
+</code></pre><p>最后，还可以模拟更大的负载，可以将访问请求率提高到每秒 20 次请求。请注意，连<br>接和请求响应时间都会随着负载的提高而增加。</p><pre tabindex=0><code>$ http_load -rate 20 -seconds 10 urls.txt
 111 fetches, 89 max parallel, 5.91142e+06 bytes, in 10.0001 seconds
 53256.1 mean bytes/connection
 11.0998 fetches/sec, 591134 bytes/sec
@@ -59,9 +52,7 @@ msecs/connect: 100.384 mean, 211.885 max, 38.214 min
 msecs/first-response: 2163.51 mean, 7862.77 max, 933.708 min
 HTTP response codes:
 code 200 -- 111
-</code></pre><h2 id=sysbench>sysbench</h2><p>sysbench 的 CPU 基准测试</p><p>最典型的子系统测试就是 CPU 基准测试。该测试使用 64 位整数，测试计算素数直到某
-个最大值所需要的时间。 下面的例子将比较两台不同的GNU/Linux 服务器上的测试结果。
-第一台机器的 CPU 配置如下 :</p><pre tabindex=0><code>[servert ~]$ cat /proc/cpuinfo
+</code></pre><h2 id=sysbench>sysbench</h2><p>sysbench 的 CPU 基准测试</p><p>最典型的子系统测试就是 CPU 基准测试。该测试使用 64 位整数，测试计算素数直到某<br>个最大值所需要的时间。 下面的例子将比较两台不同的GNU/Linux 服务器上的测试结果。<br>第一台机器的 CPU 配置如下 :</p><pre tabindex=0><code>[servert ~]$ cat /proc/cpuinfo
 
 model nane + AMD Opteron(tm) Processor 246
 stepping        a
@@ -82,7 +73,6 @@ cpu Miz
 sysbench v0.4.8: multithreaded system evaluation benchnark
 
 Test execution summary: total time:                     6.85965
-</code></pre><p>测试的结果简单打印出了计算出素数的时间，很容易进行比较。在上面的测试中，第二
-人台服务器的测试结果显示比第一台快两倍。</p></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><a href=#http_load>http_load</a></li><li><a href=#sysbench>sysbench</a></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/mysql>MySQL</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/mysql%E4%B8%AD%E7%9A%84%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+</code></pre><p>测试的结果简单打印出了计算出素数的时间，很容易进行比较。在上面的测试中，第二<br>人台服务器的测试结果显示比第一台快两倍。</p></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><a href=#http_load>http_load</a></li><li><a href=#sysbench>sysbench</a></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/mysql>MySQL</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/mysql%E4%B8%AD%E7%9A%84%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
 mysql中的查询缓存</div></a><a href=../../posts/mysql%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>mysql中的字符集&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
 <script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>

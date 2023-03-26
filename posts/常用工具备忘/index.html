@@ -27,8 +27,7 @@
 </span></span><span style=display:flex><span>    <span style=color:#ff79c6>&lt;artifactId&gt;</span>jackson-databind<span style=color:#ff79c6>&lt;/artifactId&gt;</span>
 </span></span><span style=display:flex><span>    <span style=color:#ff79c6>&lt;version&gt;</span>2.4.3<span style=color:#ff79c6>&lt;/version&gt;</span>
 </span></span><span style=display:flex><span><span style=color:#ff79c6>&lt;/dependency&gt;</span>
-</span></span></code></pre></div><p>Maven总是会用最近的依赖，也就是说，你在项目的构建说明文件里增加的这个依赖，会覆盖传递依赖引入的另一个依赖。</p><ul><li>gradle
-假如要替换的版本更新。直接写新版本即可:</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>compile(&#34;com.fasterxml.jackson.core:jackson-databind:2.4.3&#34;)
+</span></span></code></pre></div><p>Maven总是会用最近的依赖，也就是说，你在项目的构建说明文件里增加的这个依赖，会覆盖传递依赖引入的另一个依赖。</p><ul><li>gradle<br>假如要替换的版本更新。直接写新版本即可:</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>compile(&#34;com.fasterxml.jackson.core:jackson-databind:2.4.3&#34;)
 </span></span></code></pre></div><p>假如要替换的是一个旧版本,需要把原有更新的版本排除，再添加旧版本的包:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>compile(&#34;org.springframework.boot:spring-boot-starter-web&#34;) {  
 </span></span><span style=display:flex><span>    exclude group: &#39;com.fasterxml.jackson.core&#39;
 </span></span><span style=display:flex><span>}

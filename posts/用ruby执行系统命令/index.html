@@ -59,8 +59,7 @@
 </span></span><span style=display:flex><span>-----&gt; Heroku receiving push
 </span></span><span style=display:flex><span>-----&gt; Ruby/Rails app detected
 </span></span><span style=display:flex><span>-----&gt; Installing dependencies using Bundler version 1.2.1
-</span></span></code></pre></div><p>这里需要注意的重要一点是，当我执行程序ruby lab.rb时，我的终端在前10秒内没有看到任何输出。然后我将整个输出视为一个转储。
-另外需要注意的是，heroku正在将所有这些输出写入stderr而不是stdout。</p><p>所以我们应该捕获来自heroku的输出，因为它正在流式传输而不是在处理结束时将整个输出转储为一个单个的字符串块。</p><p>这是修改后的代码。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>require</span> <span style=color:#f1fa8c>&#39;open3&#39;</span>
+</span></span></code></pre></div><p>这里需要注意的重要一点是，当我执行程序ruby lab.rb时，我的终端在前10秒内没有看到任何输出。然后我将整个输出视为一个转储。<br>另外需要注意的是，heroku正在将所有这些输出写入stderr而不是stdout。</p><p>所以我们应该捕获来自heroku的输出，因为它正在流式传输而不是在处理结束时将整个输出转储为一个单个的字符串块。</p><p>这是修改后的代码。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>require</span> <span style=color:#f1fa8c>&#39;open3&#39;</span>
 </span></span><span style=display:flex><span>cmd <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;git push heroku master&#39;</span>
 </span></span><span style=display:flex><span>Open3<span style=color:#ff79c6>.</span>popen3(cmd) <span style=color:#ff79c6>do</span> <span style=color:#ff79c6>|</span>stdin, stdout, stderr, wait_thr<span style=color:#ff79c6>|</span>
 </span></span><span style=display:flex><span>  <span style=color:#ff79c6>while</span> line <span style=color:#ff79c6>=</span> stderr<span style=color:#ff79c6>.</span>gets

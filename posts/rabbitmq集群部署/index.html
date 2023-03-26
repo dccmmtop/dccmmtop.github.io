@@ -62,10 +62,7 @@
 </span></span><span style=display:flex><span>    <span style=color:#ff79c6>volumes</span>:
 </span></span><span style=display:flex><span>      - ./data/rabbit_2:/var/lib/rabbitmq
 </span></span><span style=display:flex><span>      - ./conf:/etc/rabbitmq
-</span></span></code></pre></div><h4 id=集群节点之间如何通信>集群节点之间如何通信</h4><p>如上配置所示，我们并没有像之前的服务那样，使用 link 明确的标识与其他服务的链接关系。那么这是如何让 3 个节点互相通信的呢？</p><p>原来docker 1.0 版本之后，会内置一个域名服务器，可以进入容器内部查看 <code>/etc/reslv.conf</code> 文件，会发现 <code>nameserver 127.0.0.11</code> 配置。
-这就是默认域名解析服务器的地址。我们在配置文件中指定了 <code>hostname</code> 的值,在容器启动的时候，就会向域名服务器注册信息，域名服务器会记域名与该机器ip的对应关系，后面我们在容器中使用 hostname 去访问其他服务时，便会通过域名服务器找到对应的IP是什么，从而访问该服务</p><h3 id=目录结构>目录结构</h3><p>如上配置所示， 分别使用 <code>./data/rabbit</code> <code>./data/rabbit_1</code> <code>./data/rabbit_2</code> 作为每个节点的数据卷
-使用 <code>./conf</code> 作为配置文件的卷
-所以有如下目录结构</p><p><img src=../../images/20220704223907831_32327.png alt></p><p>其中 <code>rabbitmq.conf</code> 配置如下</p><pre tabindex=0><code class=language-conf data-lang=conf>loopback_users.guest = false
+</span></span></code></pre></div><h4 id=集群节点之间如何通信>集群节点之间如何通信</h4><p>如上配置所示，我们并没有像之前的服务那样，使用 link 明确的标识与其他服务的链接关系。那么这是如何让 3 个节点互相通信的呢？</p><p>原来docker 1.0 版本之后，会内置一个域名服务器，可以进入容器内部查看 <code>/etc/reslv.conf</code> 文件，会发现 <code>nameserver 127.0.0.11</code> 配置。<br>这就是默认域名解析服务器的地址。我们在配置文件中指定了 <code>hostname</code> 的值,在容器启动的时候，就会向域名服务器注册信息，域名服务器会记域名与该机器ip的对应关系，后面我们在容器中使用 hostname 去访问其他服务时，便会通过域名服务器找到对应的IP是什么，从而访问该服务</p><h3 id=目录结构>目录结构</h3><p>如上配置所示， 分别使用 <code>./data/rabbit</code> <code>./data/rabbit_1</code> <code>./data/rabbit_2</code> 作为每个节点的数据卷<br>使用 <code>./conf</code> 作为配置文件的卷<br>所以有如下目录结构</p><p><img src=../../images/20220704223907831_32327.png alt></p><p>其中 <code>rabbitmq.conf</code> 配置如下</p><pre tabindex=0><code class=language-conf data-lang=conf>loopback_users.guest = false
 listeners.tcp.default = 5672
 default_pass = admin
 default_user = admin
