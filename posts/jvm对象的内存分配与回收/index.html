@@ -1,90 +1,394 @@
-<!doctype html><html><head><title>jvm对象的内存分配与回收 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="jvm对象的内存分配与回收"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>jvm对象的内存分配与回收</h1></header><div class=article-meta><a href=../../posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/ class=article-date><time datetime=2022-08-28T22:27:11.000+00:00 itemprop=datePublished>2022-08-28</time></a></div><div class=article-entry itemprop=articleBody><h2 id=对象分配过程简略流程图>对象分配过程简略流程图</h2><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220828231403.png alt></p><h2 id=对象栈上分配>对象栈上分配</h2><p>我们都知道对象分配在堆上，当对象没有被引用时就会当成垃圾回收，如果对象数量比较多，会给GC带来较大的压力，影响性能，为了减少<strong>临时对象</strong>在堆内的分配次数，JVM 通过逃逸分析，确定该对象不会被外部访问。如果不会逃逸，可以将该对象在栈上分配。该对象所占用的空间就可以随着栈帧出栈而销毁，减轻了GC的压力</p><h3 id=逃逸分析>逃逸分析</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> User <span style=color:#50fa7b>test1</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>   User user <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>   user<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setId</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>   user<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setName</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;zhuge&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>   <span style=color:#6272a4>//TODO 保存到数据库
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>   <span style=color:#ff79c6>return</span> user<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>test2</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>   User user <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>   user<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setId</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>   user<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setName</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;zhuge&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>   <span style=color:#6272a4>//TODO 保存到数据库
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>test1 方法将 user 返回了，有可能被外部对象引用，其作用域范围不确定， test2 方法没有将 user 对象返回，其作用域仅仅在方法内部，没有逃出方法范围，可以把 user 进行栈内分配。</p><p>JVM 可以通过参数 -XX:DoEscapeAnalysis 开启逃逸分析，<strong>JDK7 之后默认开启</strong></p><h3 id=标量替换>标量替换</h3><p>将对象进行栈内分配时也不是将整个对象全部放到栈中，JVM 不会创建对象， 而是把对象拆开，将对象中的成员变量放到栈中，这样就不会因为没有一大块连续的空间导致对象内存不够分配</p><ul><li>开启标量替换参数: -XX:+EliminateAllocations，JDK7之后默认开启。</li></ul><p>如下面的例子:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>EscapeAnalysis</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> Person p<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 发生逃逸，对象被返回到方法作用域以外，被方法外部，线程外部都可以访问
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>escape</span><span style=color:#ff79c6>(){</span>
-</span></span><span style=display:flex><span>        p <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Person<span style=color:#ff79c6>(</span><span style=color:#bd93f9>26</span><span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#34;TomCoding escape&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 不会逃逸，对象在方法内部
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>noEscape</span><span style=color:#ff79c6>(){</span>
-</span></span><span style=display:flex><span>        Person person <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Person<span style=color:#ff79c6>(</span><span style=color:#bd93f9>26</span><span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#34;TomCoding noEscape&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> person<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Person</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String name<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>...</span> <span style=color:#6272a4>// 省略构造方法
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>比如上述noEscape()方法中person对象只会在方法内部，通过标量替换技术得到如下伪码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 不会逃逸，对象在方法内部
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>noEscape</span><span style=color:#ff79c6>(){</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>26</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    String name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;TomCoding noEscape&#34;</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> name<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h3 id=标量和聚合量>标量和聚合量</h3><p>标量即不可被进一步分解的量，而JAVA的基本数据类型就是标量（如：int，long等基本数据类型以及reference类型等），标量的对立就是可以被进一步分解的量，而这种量称之为聚合量。而在JAVA中对象就是可以被进一步分解的聚合量</p><h3 id=栈上分配示例>栈上分配示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 栈上分配，标量替换
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 代码调用了1亿次alloc()，如果是分配到堆上，大概需要1GB以上堆空间，如果堆空间小于该值，必然会触发GC。
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 使用如下参数不会发生GC
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * -Xmx15m -Xms15m -XX:+DoEscapeAnalysis -XX:+PrintGC -XX:+EliminateAllocations
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 使用如下参数都会发生大量GC
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * -Xmx15m -Xms15m -XX:-DoEscapeAnalysis -XX:+PrintGC -XX:+EliminateAllocations
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * -Xmx15m -Xms15m -XX:+DoEscapeAnalysis -XX:+PrintGC -XX:-EliminateAllocations
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>AllotOnStack</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>long</span> start <span style=color:#ff79c6>=</span> System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentTimeMillis</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>100000000</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            alloc<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>long</span> end <span style=color:#ff79c6>=</span> System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentTimeMillis</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>end <span style=color:#ff79c6>-</span> start<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>alloc</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        User user <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        user<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setId</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        user<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setName</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;user1&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>可以根据打印的GC日志明显看出开启了栈内分配时，GC 次数远远小于不开启站内分配</p><h2 id=在eden区分配>在EDEN区分配</h2><p>虽然jvm可以通过逃逸分析来将一部分对象进行栈上分配，但是在实际代码中，不逃逸的对象还是占少量的，大部分仍对象然分配在堆上的 EDEN 区</p><p>当Eden区没有足够的空间时将触发一次 Minor GC</p><h3 id=为什么-eden-与-survivor-的比例是-811>为什么 Eden 与 Survivor 的比例是 8:1:1</h3><p>大量对象被分配在 Eden 区，Eden 满了之后会触发Minor GC, 可能有99% 以上的对象被当作垃圾回收，剩余的存活对象被挪到为空的 survivor 区，下一次Eden满了之后，又会触发MinorGC ,把 Eden 和 Survivor 对象回收，把剩余的对象一次性挪到另一块为空的 Survivor 区。因为新生对象大部分寿命较短，所以 JVM 默认的比例 8:1:1 是非常合适的，让 Eden 足够大。 Survivor 够用即可。</p><p>JVM默认有这个参数-XX:+UseAdaptiveSizePolicy(默认开启)，会导致这个8:1:1比例<strong>自动变化</strong>，如果不想这个比例有变化可以设置参数-XX:-UseAdaptiveSizePolicy</p><h4 id=提前进入老年代>提前进入老年代</h4><p>在发生MinorGC 后，Eden区的对象在向 Survivor 区转移时，如果 Survivor 区放不下这个对象。那么这个大对象直接进入老年代</p><p>相当于这个大对象跳过了 Survivor 区，直接进入空间更大的老年代区</p><h4 id=直接进入老年代的场景>直接进入老年代的场景</h4><p>在 Serial 和 ParNew 垃圾回收器下，大对象会直接进分配到老年代中，不经过 Eden 和 Survivor 区。 大对象就是需要连续大内存的对象,比如字符串，数组，这样做的好处是可以避免为大对象分配内存时的复制操作降低效率</p><p>可以通过参数调节大对象的阀值: -XX:PretenureSizeThreshold</p><p>例子: -XX:PretenureSizeThreshold=1000000 (单位是字节) -XX:+UseSerialGC</p><h4 id=长期存活的对象会进入老年代>长期存活的对象会进入老年代</h4><p>如果对象在 Eden 出生并经过第一次 Minor GC 后仍然能够存活，并且能被 Survivor 容纳的话，将被移动到 Survivor 空间中，并将对象年龄设为1。对象在 Survivor 中每熬过一次 MinorGC，年龄就增加1岁，当它的年龄增加到一定程度 （默认为15岁，CMS收集器默认6岁，不同的垃圾收集器会略微有点不同），就会被晋升到老年代中。对象晋升到老年代的年龄阈值，可以通过参数 -XX:MaxTenuringThreshold 来设置。</p><h4 id=动态判断可能为长期对象>动态判断可能为长期对象</h4><p>除了上述的对象年龄稳步增加到 15 后会移到老年代之外。还有一种动态计算年龄的方法:</p><p>当前放对象的Survivor区域里(其中一块区域，放对象的那块s区)，一批对象的总大小大于这块Survivor区域内存大小的50%(-XX:TargetSurvivorRatio可以指定)，那么此时大于等于这批对象年龄最大值的对象，就可以直接进入老年代了，例如Survivor区域里现在有一批对象，年龄1+年龄2+年龄n的多个年龄对象总和超过了Survivor区域的50%，此时就会把年龄n(含)以上的对象都放入老年代。这个规则其实是希望那些可能是长期存活的对象，尽早进入老年代。对象动态年龄判断机制一般是在minor gc之后触发的</p><h2 id=垃圾回收器如何工作>垃圾回收器如何工作</h2><h3 id=引用计数法差>引用计数法(差)</h3><p>给对象中添加一个引用计数器，每当有一个地方引用它，计数器就加1；当引用失效，计数器就减1；任何时候计数器为0的对象就是不可能再被使用的。</p><p><strong>这种方法实现简单，效率高，当时目前主流的虚拟机并没有选择这种算法，主要他存在循环引用的问题:</strong></p><p>所谓对象之间的相互引用问题，除了对象objA 和 objB 相互引用着对方之外，这两个对象之间再无任何引用。但是他们因为互相引用对方，导致它们的引用计数器都不为0，于是引用计数算法无法通知 GC 回收器回收他们</p><h3 id=可达性分析算法>可达性分析算法</h3><p>将 <strong>GC Roots</strong> 对象作为起点，从这些节点开始向下搜索引用的对象，找到的对象都标记为非垃圾对象，其余未标记的对象都是垃圾对象</p><h4 id=gc-roots>GC Roots</h4><p>对象引用的根节点: 线程栈的本地变量、静态变量、本地方法栈的变量等等</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220830184513.png alt></p><h4 id=常见的引用类型>常见的引用类型</h4><p>java的引用类型一般分为四种：强引用、软引用、弱引用、虚引用</p><h5 id=强引用>强引用</h5><p>普通的变量引用</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span> <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> User user <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>();</span>
-</span></span></code></pre></div><h5 id=软引用>软引用</h5><p>将对象用SoftReference软引用类型的对象包裹，正常情况不会被回收，但是GC做完后发现释放不出空间存放<br>新的对象，则会把这些软引用的对象回收掉。软引用可用来实现内存敏感的高速缓存。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> SoftReference<span style=color:#ff79c6>&lt;</span>User<span style=color:#ff79c6>&gt;</span> user <span style=color:#ff79c6>=</span>  <span style=color:#ff79c6>new</span> SoftReference<span style=color:#ff79c6>&lt;</span>User<span style=color:#ff79c6>&gt;(</span><span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>());</span>
-</span></span></code></pre></div><p>软引用在实际中有重要的应用，例如浏览器的后退按钮。按后退时，这个后退时显示的网页内容是重新进行请求还是从<br>缓存中取出呢？这就要看具体的实现策略了。<br>（1）如果一个网页在浏览结束时就进行内容的回收，则按后退查看前面浏览过的页面时，需要重新构建<br>（2）如果将浏览过的网页存储到内存中会造成内存的大量浪费，甚至会造成内存溢出</p><h4 id=弱引用>弱引用</h4><p>将对象用WeakReference软引用类型的对象包裹，弱引用跟没引用差不多，GC会直接回收掉，很少用</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> WeakReference<span style=color:#ff79c6>&lt;</span>User<span style=color:#ff79c6>&gt;</span> user <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> WeakReference<span style=color:#ff79c6>&lt;</span>User<span style=color:#ff79c6>&gt;(</span><span style=color:#ff79c6>new</span> User<span style=color:#ff79c6>());</span>  
-</span></span></code></pre></div><h5 id=虚引用>虚引用</h5><p>虚引用也称为幽灵引用或者幻影引用，它是最弱的一种引用关系，几乎不用</p><h2 id=方法区的回收>方法区的回收</h2><p>方法区主要回收的是无用的类，那么如何判断一个类是无用的类的呢？</p><p>类需要同时满足下面3个条件才能算是 “无用的类” ：</p><ul><li>该类所有的实例都已经被回收，也就是 Java 堆中不存在该类的任何实例。</li><li>加载该类的 ClassLoader 已经被回收。</li><li>该类对应的 java.lang.Class 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li></ul></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><a href=#对象分配过程简略流程图>对象分配过程简略流程图</a></li><li><a href=#对象栈上分配>对象栈上分配</a><ul><li><a href=#逃逸分析>逃逸分析</a></li><li><a href=#标量替换>标量替换</a></li><li><a href=#标量和聚合量>标量和聚合量</a></li><li><a href=#栈上分配示例>栈上分配示例</a></li></ul></li><li><a href=#在eden区分配>在EDEN区分配</a><ul><li><a href=#为什么-eden-与-survivor-的比例是-811>为什么 Eden 与 Survivor 的比例是 8:1:1</a></li></ul></li><li><a href=#垃圾回收器如何工作>垃圾回收器如何工作</a><ul><li><a href=#引用计数法差>引用计数法(差)</a></li><li><a href=#可达性分析算法>可达性分析算法</a></li></ul></li><li><a href=#方法区的回收>方法区的回收</a></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/%E6%9F%A5%E7%9C%8Bes%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-查看ES集群信息</div></a><a href=../../posts/jvm%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>jvm中对象的创建过程&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>jvm对象的内存分配与回收 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="jvm对象的内存分配与回收" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">jvm对象的内存分配与回收</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="article-date">
+                <time datetime='2022-08-28T22:27:11.000&#43;00:00' itemprop="datePublished">2022-08-28</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="对象分配过程简略流程图">对象分配过程简略流程图</h2>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220828231403.png" alt=""></p>
+<h2 id="对象栈上分配">对象栈上分配</h2>
+<p>我们都知道对象分配在堆上，当对象没有被引用时就会当成垃圾回收，如果对象数量比较多，会给GC带来较大的压力，影响性能，为了减少<strong>临时对象</strong>在堆内的分配次数，JVM 通过逃逸分析，确定该对象不会被外部访问。如果不会逃逸，可以将该对象在栈上分配。该对象所占用的空间就可以随着栈帧出栈而销毁，减轻了GC的压力</p>
+<h3 id="逃逸分析">逃逸分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">test1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>   User user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>   user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setId</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>   user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhuge&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">//TODO 保存到数据库
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>   <span style="color:#ff79c6">return</span> user<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">test2</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>   User user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>   user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setId</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>   user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhuge&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">//TODO 保存到数据库
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>test1 方法将 user 返回了，有可能被外部对象引用，其作用域范围不确定， test2 方法没有将 user  对象返回，其作用域仅仅在方法内部，没有逃出方法范围，可以把 user 进行栈内分配。</p>
+<p>JVM 可以通过参数 -XX:DoEscapeAnalysis 开启逃逸分析，<strong>JDK7 之后默认开启</strong></p>
+<h3 id="标量替换">标量替换</h3>
+<p>将对象进行栈内分配时也不是将整个对象全部放到栈中，JVM 不会创建对象， 而是把对象拆开，将对象中的成员变量放到栈中，这样就不会因为没有一大块连续的空间导致对象内存不够分配</p>
+<ul>
+<li>开启标量替换参数: -XX:+EliminateAllocations，JDK7之后默认开启。</li>
+</ul>
+<p>如下面的例子:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">EscapeAnalysis</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Person p<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 发生逃逸，对象被返回到方法作用域以外，被方法外部，线程外部都可以访问
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">escape</span><span style="color:#ff79c6">(){</span>
+</span></span><span style="display:flex;"><span>        p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person<span style="color:#ff79c6">(</span><span style="color:#bd93f9">26</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TomCoding escape&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 不会逃逸，对象在方法内部
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">noEscape</span><span style="color:#ff79c6">(){</span>
+</span></span><span style="display:flex;"><span>        Person person <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person<span style="color:#ff79c6">(</span><span style="color:#bd93f9">26</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TomCoding noEscape&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> person<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Person</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> age<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String name<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">...</span> <span style="color:#6272a4">// 省略构造方法
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>比如上述noEscape()方法中person对象只会在方法内部，通过标量替换技术得到如下伪码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 不会逃逸，对象在方法内部
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">noEscape</span><span style="color:#ff79c6">(){</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">26</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    String name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TomCoding noEscape&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> name<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h3 id="标量和聚合量">标量和聚合量</h3>
+<p>标量即不可被进一步分解的量，而JAVA的基本数据类型就是标量（如：int，long等基本数据类型以及reference类型等），标量的对立就是可以被进一步分解的量，而这种量称之为聚合量。而在JAVA中对象就是可以被进一步分解的聚合量</p>
+<h3 id="栈上分配示例">栈上分配示例</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 栈上分配，标量替换
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 代码调用了1亿次alloc()，如果是分配到堆上，大概需要1GB以上堆空间，如果堆空间小于该值，必然会触发GC。
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 使用如下参数不会发生GC
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * -Xmx15m -Xms15m -XX:+DoEscapeAnalysis -XX:+PrintGC -XX:+EliminateAllocations
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 使用如下参数都会发生大量GC
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * -Xmx15m -Xms15m -XX:-DoEscapeAnalysis -XX:+PrintGC -XX:+EliminateAllocations
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * -Xmx15m -Xms15m -XX:+DoEscapeAnalysis -XX:+PrintGC -XX:-EliminateAllocations
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AllotOnStack</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">long</span> start <span style="color:#ff79c6">=</span> System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentTimeMillis</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">100000000</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            alloc<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">long</span> end <span style="color:#ff79c6">=</span> System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentTimeMillis</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>end <span style="color:#ff79c6">-</span> start<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">alloc</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        User user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setId</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;user1&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>可以根据打印的GC日志明显看出开启了栈内分配时，GC 次数远远小于不开启站内分配</p>
+<h2 id="在eden区分配">在EDEN区分配</h2>
+<p>虽然jvm可以通过逃逸分析来将一部分对象进行栈上分配，但是在实际代码中，不逃逸的对象还是占少量的，大部分仍对象然分配在堆上的 EDEN 区</p>
+<p>当Eden区没有足够的空间时将触发一次 Minor GC</p>
+<h3 id="为什么-eden-与-survivor-的比例是-811">为什么 Eden 与 Survivor 的比例是 8:1:1</h3>
+<p>大量对象被分配在 Eden 区，Eden 满了之后会触发Minor GC, 可能有99% 以上的对象被当作垃圾回收，剩余的存活对象被挪到为空的 survivor 区，下一次Eden满了之后，又会触发MinorGC ,把 Eden 和 Survivor 对象回收，把剩余的对象一次性挪到另一块为空的 Survivor 区。因为新生对象大部分寿命较短，所以 JVM 默认的比例 8:1:1 是非常合适的，让 Eden 足够大。 Survivor  够用即可。</p>
+<p>JVM默认有这个参数-XX:+UseAdaptiveSizePolicy(默认开启)，会导致这个8:1:1比例<strong>自动变化</strong>，如果不想这个比例有变化可以设置参数-XX:-UseAdaptiveSizePolicy</p>
+<h4 id="提前进入老年代">提前进入老年代</h4>
+<p>在发生MinorGC 后，Eden区的对象在向 Survivor 区转移时，如果 Survivor  区放不下这个对象。那么这个大对象直接进入老年代</p>
+<p>相当于这个大对象跳过了 Survivor 区，直接进入空间更大的老年代区</p>
+<h4 id="直接进入老年代的场景">直接进入老年代的场景</h4>
+<p>在  Serial 和 ParNew 垃圾回收器下，大对象会直接进分配到老年代中，不经过 Eden 和 Survivor 区。 大对象就是需要连续大内存的对象,比如字符串，数组，这样做的好处是可以避免为大对象分配内存时的复制操作降低效率</p>
+<p>可以通过参数调节大对象的阀值: -XX:PretenureSizeThreshold</p>
+<p>例子: -XX:PretenureSizeThreshold=1000000 (单位是字节) -XX:+UseSerialGC</p>
+<h4 id="长期存活的对象会进入老年代">长期存活的对象会进入老年代</h4>
+<p>如果对象在 Eden 出生并经过第一次 Minor GC 后仍然能够存活，并且能被 Survivor 容纳的话，将被移动到 Survivor   空间中，并将对象年龄设为1。对象在 Survivor 中每熬过一次 MinorGC，年龄就增加1岁，当它的年龄增加到一定程度 （默认为15岁，CMS收集器默认6岁，不同的垃圾收集器会略微有点不同），就会被晋升到老年代中。对象晋升到老年代的年龄阈值，可以通过参数 -XX:MaxTenuringThreshold 来设置。</p>
+<h4 id="动态判断可能为长期对象">动态判断可能为长期对象</h4>
+<p>除了上述的对象年龄稳步增加到 15 后会移到老年代之外。还有一种动态计算年龄的方法:</p>
+<p>当前放对象的Survivor区域里(其中一块区域，放对象的那块s区)，一批对象的总大小大于这块Survivor区域内存大小的50%(-XX:TargetSurvivorRatio可以指定)，那么此时大于等于这批对象年龄最大值的对象，就可以直接进入老年代了，例如Survivor区域里现在有一批对象，年龄1+年龄2+年龄n的多个年龄对象总和超过了Survivor区域的50%，此时就会把年龄n(含)以上的对象都放入老年代。这个规则其实是希望那些可能是长期存活的对象，尽早进入老年代。对象动态年龄判断机制一般是在minor gc之后触发的</p>
+<h2 id="垃圾回收器如何工作">垃圾回收器如何工作</h2>
+<h3 id="引用计数法差">引用计数法(差)</h3>
+<p>给对象中添加一个引用计数器，每当有一个地方引用它，计数器就加1；当引用失效，计数器就减1；任何时候计数器为0的对象就是不可能再被使用的。</p>
+<p><strong>这种方法实现简单，效率高，当时目前主流的虚拟机并没有选择这种算法，主要他存在循环引用的问题:</strong></p>
+<p>所谓对象之间的相互引用问题，除了对象objA 和 objB 相互引用着对方之外，这两个对象之间再无任何引用。但是他们因为互相引用对方，导致它们的引用计数器都不为0，于是引用计数算法无法通知 GC 回收器回收他们</p>
+<h3 id="可达性分析算法">可达性分析算法</h3>
+<p>将 <strong>GC Roots</strong> 对象作为起点，从这些节点开始向下搜索引用的对象，找到的对象都标记为非垃圾对象，其余未标记的对象都是垃圾对象</p>
+<h4 id="gc-roots">GC Roots</h4>
+<p>对象引用的根节点: 线程栈的本地变量、静态变量、本地方法栈的变量等等</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220830184513.png" alt=""></p>
+<h4 id="常见的引用类型">常见的引用类型</h4>
+<p>java的引用类型一般分为四种：强引用、软引用、弱引用、虚引用</p>
+<h5 id="强引用">强引用</h5>
+<p>普通的变量引用</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span> <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> User user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">();</span>
+</span></span></code></pre></div><h5 id="软引用">软引用</h5>
+<p>将对象用SoftReference软引用类型的对象包裹，正常情况不会被回收，但是GC做完后发现释放不出空间存放<br>
+新的对象，则会把这些软引用的对象回收掉。软引用可用来实现内存敏感的高速缓存。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> SoftReference<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> user <span style="color:#ff79c6">=</span>  <span style="color:#ff79c6">new</span> SoftReference<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;(</span><span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">());</span>
+</span></span></code></pre></div><p>软引用在实际中有重要的应用，例如浏览器的后退按钮。按后退时，这个后退时显示的网页内容是重新进行请求还是从<br>
+缓存中取出呢？这就要看具体的实现策略了。<br>
+（1）如果一个网页在浏览结束时就进行内容的回收，则按后退查看前面浏览过的页面时，需要重新构建<br>
+（2）如果将浏览过的网页存储到内存中会造成内存的大量浪费，甚至会造成内存溢出</p>
+<h4 id="弱引用">弱引用</h4>
+<p>将对象用WeakReference软引用类型的对象包裹，弱引用跟没引用差不多，GC会直接回收掉，很少用</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> WeakReference<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> WeakReference<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;(</span><span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">());</span>  
+</span></span></code></pre></div><h5 id="虚引用">虚引用</h5>
+<p>虚引用也称为幽灵引用或者幻影引用，它是最弱的一种引用关系，几乎不用</p>
+<h2 id="方法区的回收">方法区的回收</h2>
+<p>方法区主要回收的是无用的类，那么如何判断一个类是无用的类的呢？</p>
+<p>类需要同时满足下面3个条件才能算是 “无用的类” ：</p>
+<ul>
+<li>该类所有的实例都已经被回收，也就是 Java 堆中不存在该类的任何实例。</li>
+<li>加载该类的 ClassLoader 已经被回收。</li>
+<li>该类对应的 java.lang.Class 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+
+        </div>
+
+        
+        
+        <div class="article-toc" >
+            <h3></h3>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#对象分配过程简略流程图">对象分配过程简略流程图</a></li>
+    <li><a href="#对象栈上分配">对象栈上分配</a>
+      <ul>
+        <li><a href="#逃逸分析">逃逸分析</a></li>
+        <li><a href="#标量替换">标量替换</a></li>
+        <li><a href="#标量和聚合量">标量和聚合量</a></li>
+        <li><a href="#栈上分配示例">栈上分配示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#在eden区分配">在EDEN区分配</a>
+      <ul>
+        <li><a href="#为什么-eden-与-survivor-的比例是-811">为什么 Eden 与 Survivor 的比例是 8:1:1</a></li>
+      </ul>
+    </li>
+    <li><a href="#垃圾回收器如何工作">垃圾回收器如何工作</a>
+      <ul>
+        <li><a href="#引用计数法差">引用计数法(差)</a></li>
+        <li><a href="#可达性分析算法">可达性分析算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#方法区的回收">方法区的回收</a></li>
+  </ul>
+</nav>
+        </div>
+        
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/%E6%9F%A5%E7%9C%8Bes%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            查看ES集群信息
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/jvm%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">jvm中对象的创建过程&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

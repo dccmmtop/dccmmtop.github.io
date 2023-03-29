@@ -1,26 +1,442 @@
-<!doctype html><html><head><title>CMS垃圾回收器与三色标记算法 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="CMS垃圾回收器与三色标记算法"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/cms%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E4%B8%8E%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>CMS垃圾回收器与三色标记算法</h1></header><div class=article-meta><a href=../../posts/cms%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E4%B8%8E%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95/ class=article-date><time datetime=2022-09-02T15:37:30.000+00:00 itemprop=datePublished>2022-09-02</time></a></div><div class=article-entry itemprop=articleBody><h2 id=垃圾收集算法>垃圾收集算法</h2><p>整体可以分为以下几种算法：</p><ul><li>标记复制算法</li><li>标记整理算法</li><li>标记清除算法</li></ul><h2 id=分代收集理论>分代收集理论</h2><p>目前的虚拟机的垃圾回收器都是采用分代收集算法，一般根据对象存活周期的不同，将内存分为几块，一般将java堆分为新生代和老年代，然后根据各代的特点选择不同的垃圾回收器算法</p><p>比如在新生代，每次收集都会有大量的对象死去（近 99% ），所以选择复制算法，只需复制少量对象就可以完成垃圾回收，成本较低。 而老年代对象存活几率是比较高的，也没有额外的空间给担保，所以要选择标记清除或标记整理算法，这两种算法比复制算法慢10倍以上</p><h2 id=标记复制算法>标记复制算法</h2><p>将内存分为大小相同的两个块，只把对象分配到其中一个块上，当这个块的空间不足时，就将还存活的对象复制到另外一块上去，然后把使用过那块空间清理掉。每次都是对内存空间的一半进行回收</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902160852.png alt></p><h2 id=标记清除算法>标记清除算法</h2><p>分为两步</p><ol><li>标记存活的对象</li><li>清理没有被标记的对象</li></ol><p>一般选择这种，也可以反过来，标记需要回收的对象，然后清理所有被标记的对象</p><p><strong>缺点:</strong></p><ul><li>效率低，（要标记的对象可能很多）</li><li>内存碎片多（会产生大量的不连续下空间，无法利用）<br>如图:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902161733.png alt></li></ul><h2 id=标记整理算法>标记整理算法</h2><p>根据老年代的特点专门制定的清除方案，与标记清除一样，需要先标记存活对象，不同的是，后续没有直接回收垃圾，而是将存活的对象统一向一端移动，然后清理掉边界以外的内存</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902163653.png alt></p><h2 id=垃圾回收器>垃圾回收器</h2><p>上述几个算法是理论，实现垃圾回收算法的叫做垃圾收集器</p><p><strong>垃圾回收器没有最好的，只有最合适的</strong></p><h3 id=概览>概览</h3><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902164252.png alt></p><h3 id=serial-收集器>Serial 收集器</h3><p>-XX:+UseSerialGC 开启年轻代使用</p><p>-XX:+UseSerialOldGC 开启老年代使用</p><p>Serial（串行）收集器是最基本、历史最悠久的垃圾收集器了。看名字就知道这个收集器是一个<strong>单线程</strong>收集器了。它的 “单线程” 的意义不仅仅意味着它只会使用一条垃圾收集线程去完成垃圾收集工作，更重要的是它在进行垃圾收集工作的时候必须暂停其他所有的工作线程（ &ldquo;Stop The World&rdquo; ），直到它收集结束。</p><p><strong>新生代采用复制算法，老年代采用标记-整理算法。</strong></p><p>示意图：</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902164852.png alt></p><p><strong>Serial Old</strong> 收集器是Serial收集器的老年代版本，它同样是一个单线程收集器。</p><p>它主要有两大用途：</p><ol><li>在JDK1.5以及以前的版本中与Parallel Scavenge收集器搭配使用</li><li>作为CMS收集器的后备方案。</li></ol><p>实现简单，单线程的收集效率高</p><h3 id=parallel-scavenge--收集器>Parallel Scavenge 收集器</h3><p>JK8 默认的垃圾回收器</p><p>-XX:+UseParallelGC(年轻代)， 采用复制算法</p><p>-XX:+UseParallelOldGC(老年代) 标记整理算法</p><p>Parallel 其实就是 Serial 的多线程版本，默认的收集线程数与CPU核心数相同，也可以使用参数 -XX:ParallelGCThreads 指定收集线程数，但是一般不推荐修改。</p><p>Parallel Scavenge <strong>注重的是收集效率</strong>，后面要介绍的 <strong>CMS，G1 收集器 更注重用户体验</strong>，缩短 STW 的时长。但是他不能与 CMS 收集器配合使用</p><p>示意图:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902165751.png alt></p><h3 id=parnew-收集器>ParNew 收集器</h3><p>ParNew 收集器和 Parallel 很类似，主要区别在于，他可以与 CMS 配合使用，新生代采用复制算法，老年代采用标记-整理算法。</p><p>只有 Serial ,ParNew 可以与 CMS 配合使用 ， ParNew 是很多虚拟机的首要选择。</p><h2 id=cms-收集器>CMS 收集器</h2><p>-XX:+UseConcMarkSweepGC(old)</p><p>CMS(ConcurrentMarkSweep) 是一种追求<strong>短 STW</strong> 为目标的收集器，注重用户体验，他是 HotSpot 虚拟机第一款真正意义上的收集器，第一次实现了让用户线程和收集线程同时工作</p><p>从名字就可以看出来，Mark: 标记，Sweep: 清除， 它采用标记清理算法， 他的工作流程更复杂，主要分下面5个步骤:</p><ol><li><strong>初始标记</strong>: 暂停用户线程，标记GC Root 直接引用 的对象，速度很快</li><li><strong>并发标记</strong>： 从第一步标记的对象开始遍历所有引用对象，过程耗时很长，但是不需要暂停用户线程，因为有用户线程的干扰，可能会修改已经标记的对象，产生问题</li><li><strong>重新标记</strong>：为了修正并发标记时产生的问题，产生问题的对象比例小，所以速度很快。此过程会STW</li><li><strong>并发清理</strong>： 清理线程与用户线程同时运行，清理掉没有标记的对象，如果此时有新增的对象虽然没有被标记，统一会当作存活对象，不会误清理</li><li><strong>并发重置</strong>： 重置本次GC被标记的数据</li></ol><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902183707.png alt></p><p><strong>优点:</strong></p><ul><li>并发收集</li><li>短停顿</li></ul><p><strong>缺点:</strong></p><ul><li>和用户线程抢占CPU资源</li><li>无法处理浮动垃圾</li><li>由于时标记清除算法，会产生内存碎片，可以通过参数: -XX:+UseCMSCompactAtFullCollection 控制是否做空间整理</li><li>由于允许用户线程同时运行，会造成在GC过程中不断的有对象进入内存，当前GC没有完成，空间没有释放，可能导致没有足够的空间放新进来的对象，此时会导致 STW,然后退化成 serial 收集器进行垃圾回收</li></ul><h4 id=cms的相关核心参数>CMS的相关核心参数</h4><ol><li>-XX:+UseConcMarkSweepGC：启用cms </li><li>-XX:ConcGCThreads：并发的GC线程数</li><li>-XX:+UseCMSCompactAtFullCollection：FullGC之后做压缩整理（减少碎片）</li><li>-XX:CMSFullGCsBeforeCompaction：多少次FullGC之后压缩一次，默认是0，代表每次FullGC后都会压缩一次</li><li>-XX:CMSInitiatingOccupancyFraction: 当老年代使用达到该比例时会触发FullGC（默认是92，这是百分比）</li><li>-XX:+UseCMSInitiatingOccupancyOnly：只使用设定的回收阈值(-XX:CMSInitiatingOccupancyFraction设定的值)，如果不指定，JVM仅在第一次使用设定值，后续则会自动调整</li><li>-XX:+CMSScavengeBeforeRemark：在CMS GC前启动一次minor gc，降低CMS GC标记阶段(也会对年轻代一起做标记，如果在minor gc就干掉了很多对垃圾对象，标记阶段就会减少一些标记时间)时的开销，一般CMS的GC耗时 80%都在标记阶段</li><li>-XX:+CMSParallellnitialMarkEnabled：表示在初始标记的时候多线程执行，缩短STW</li><li>-XX:+CMSParallelRemarkEnabled：在重新标记的时候多线程执行，缩短STW;</li></ol><h3 id=三色标记>三色标记</h3><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184401.png alt></p><h5 id=初始标记>初始标记</h5><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184431.png alt></p><h4 id=并发标记>并发标记</h4><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184452.png alt></p><h5 id=并发标记产生的问题的原因>并发标记产生的问题的原因</h5><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184527.png alt></p><h5 id=出现问题的后果>出现问题的后果</h5><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184608.png alt></p><h5 id=问题的解决办法>问题的解决办法</h5><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184654.png alt></p><p>出现漏标的两个必要条件:</p><ol><li>有对象的引用关系被删除</li><li>删除的对象又被重新引用</li></ol><p>见上图<br>破环任意步骤，即可避免漏标的现象。有以下两种解决方案:</p><ul><li>增量更新<br>因为重新标记时，要再次从黑色对象出发，深度扫描所有引用，效率没有原始快照高<ul><li>优点: 不会产生浮动垃圾</li><li>缺点: 效率低</li></ul></li><li>原始快照<br>再引用被删除时，记录关系，重新扫描时，将被引用的对象标记为非垃圾，如果后续没有再次引该对象，那么该对象就会变成浮动垃圾<ul><li>缺点: 可能会产生浮动垃圾</li><li>优点: 不要重新扫描，效率高</li></ul></li></ul><p>那除此之外，还没有没有其他可能重新引用对象呢？答案只有一个， new 一个新对象。在GC期间，有新的对象进来时，统一被当成黑色处理，不会被回收</p><p>那么上图中的 brand 会不会被重新引用呢？答案是不会！因为已经找不到引用 brand 对象的变量了，在引用程序中无法再次引用这个垃圾对象</p><p>上图中说到，在对象被引用上，删除对象引用是，记录这个引用关系，从而方便后续的重新编辑，那么这个记录的动作是如何发生的？ 这时就要引入写屏障的技术了。</p><p>以上无论是对引用关系记录的插入还是删除， 虚拟机的记录操作都是通过写屏障实现的。</p><h6 id=写屏障>写屏障</h6><p>类似于切面，在赋值动作的前后做一些事情。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#8be9fd>void</span> <span style=color:#50fa7b>oop_field_store</span>(oop<span style=color:#ff79c6>*</span> field, oop new_value) { 
-</span></span><span style=display:flex><span>    pre_write_barrier(field); <span style=color:#6272a4>// 写屏障-写前操作 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>*</span>field <span style=color:#ff79c6>=</span> new_value; 
-</span></span><span style=display:flex><span>    post_write_barrier(field, value); <span style=color:#6272a4>// 写屏障-写后操作
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>}
-</span></span></code></pre></div><ul><li>写屏障实现SATB</li></ul><p>当对象B的成员变量的引用发生变化时，比如引用消失（a.b.d = null），我们可以利用写屏障，将B原来成员变量的引用对象D记录下来：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#8be9fd>void</span> <span style=color:#50fa7b>pre_write_barrier</span>(oop<span style=color:#ff79c6>*</span> field) {
-</span></span><span style=display:flex><span>    oop old_value <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>*</span>field; <span style=color:#6272a4>// 获取旧值 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    remark_set.add(old_value); <span style=color:#6272a4>// 记录原来的引用对象 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>}
-</span></span></code></pre></div><ul><li>写屏障实现增量更新</li></ul><p>当对象A的成员变量的引用发生变化时，比如新增引用（a.d = d），我们可以利用写屏障，将A新的成员变量引用对象D记录下来：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c++ data-lang=c++><span style=display:flex><span><span style=color:#8be9fd>void</span> <span style=color:#50fa7b>post_write_barrier</span>(oop<span style=color:#ff79c6>*</span> field, oop new_value) { 
-</span></span><span style=display:flex><span>    remark_set.add(new_value); <span style=color:#6272a4>// 记录新引用的对象 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>}
-</span></span></code></pre></div><h6 id=读屏障>读屏障</h6><p>与写屏障类似</p><h4 id=重新标记>重新标记</h4><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184725.png alt></p><h4 id=并发清理>并发清理</h4><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184752.png alt></p><h4 id=并发重置>并发重置</h4><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184819.png alt></p><p>以上就是三色标记的大体流程了</p><h2 id=不同垃圾回收器对三色标记的选择>不同垃圾回收器对三色标记的选择</h2><ul><li>CMS 写屏障 + 增量更新</li><li>G1 ,Shenandoah： 写屏障 + STAB</li><li>ZGC: 读屏障</li></ul><h3 id=为什么-g1-采用-stab-cms-采用-增量更新>为什么 G1 采用 STAB， CMS 采用 增量更新</h3><p>个人理解： G1 一般用于大内存的机器，内存 8G 至百G级别, 存放的对象更多，自然要扫描的对象更多，如果采用效率低的增量更新方式，效率下降的更严重，所以采用效率较高的 STAB,虽然会产生一些浮动垃圾，但是对于大内存机器来说，影响不大。</p><p>CMS 适用于内存较小的机器,多用于 4G 到 8G 的机器上，无论采用 STAB 还是 CMS, 效率上无法拉开明显差距，而增量更新不会产生浮动垃圾，对内存更小的机器来说，内存的使用更敏感，自然采用增量更新的方式</p><h2 id=记忆集与卡表>记忆集与卡表</h2><p>这两个结构是为了垃圾器在跨代访问时提高速度的。</p><p>在新生代做GCRoots可达性扫描过程中可能会碰到跨代引用的对象，这种如果又去对老年代再去扫描，甚至老年代内存在很多对象的间接引用，这种效率就太低了，大大的延长了 Minor GC 的时间。</p><p>为此，在新生代可以引入记录集（Remember Set）的数据结构（记录从非收集区到收集区的指针集合），避免把整个老年代加入GCRoots扫描范围。事实上并不只是新生代、 老年代之间也有跨代引用的问题， 所有涉及部分区域收集（Partial GC） 行为的垃圾收集器， 典型的如G1、 ZGC和Shenandoah收集器， 都会面临相同的问题。</p><p>垃圾收集场景中，收集器只需通过记忆集判断出某一块非收集区域是否存在指向收集区域的指针即可，无需了解跨代引用指针的全部细节。</p><p>hotspot使用一种叫做“卡表”(Cardtable)的方式实现记忆集，也是目前最常用的一种方式。关于卡表与记忆集的关系， 可以类比为Java语言中HashMap与Map的关系。</p><p>卡表是使用一个字节数组实现：CARD_TABLE[ ]，每个元素对应着其标识的内存区域一块特定大小的内存块，称为“卡页”。</p><p>hotSpot使用的卡页是2^9大小，即512字节<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220903092345.png alt></p><p>一个卡页中可包含多个对象，只要有一个对象的字段存在跨代指针，其对应的卡表的元素标识就变成1，表示该元素变脏，否则为0.</p><p>GC时，只要筛选本收集区的卡表中变脏的元素加入GCRoots里。</p><p>卡表的维护</p><p>卡表变脏上面已经说了，但是需要知道如何让卡表变脏，即发生引用字段赋值时，如何更新卡表对应的标识为1。</p><p>Hotspot使用写屏障维护卡表状态。</p></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><a href=#垃圾收集算法>垃圾收集算法</a></li><li><a href=#分代收集理论>分代收集理论</a></li><li><a href=#标记复制算法>标记复制算法</a></li><li><a href=#标记清除算法>标记清除算法</a></li><li><a href=#标记整理算法>标记整理算法</a></li><li><a href=#垃圾回收器>垃圾回收器</a><ul><li><a href=#概览>概览</a></li><li><a href=#serial-收集器>Serial 收集器</a></li><li><a href=#parallel-scavenge--收集器>Parallel Scavenge 收集器</a></li><li><a href=#parnew-收集器>ParNew 收集器</a></li></ul></li><li><a href=#cms-收集器>CMS 收集器</a><ul><li></li><li><a href=#三色标记>三色标记</a></li></ul></li><li><a href=#不同垃圾回收器对三色标记的选择>不同垃圾回收器对三色标记的选择</a><ul><li><a href=#为什么-g1-采用-stab-cms-采用-增量更新>为什么 G1 采用 STAB， CMS 采用 增量更新</a></li></ul></li><li><a href=#记忆集与卡表>记忆集与卡表</a></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-G1垃圾收集器</div></a><a href=../../posts/%E6%9F%A5%E7%9C%8Bes%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>查看ES集群信息&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CMS垃圾回收器与三色标记算法 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="CMS垃圾回收器与三色标记算法" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/cms%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E4%B8%8E%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">CMS垃圾回收器与三色标记算法</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/cms%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E4%B8%8E%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95/" class="article-date">
+                <time datetime='2022-09-02T15:37:30.000&#43;00:00' itemprop="datePublished">2022-09-02</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="垃圾收集算法">垃圾收集算法</h2>
+<p>整体可以分为以下几种算法：</p>
+<ul>
+<li>标记复制算法</li>
+<li>标记整理算法</li>
+<li>标记清除算法</li>
+</ul>
+<h2 id="分代收集理论">分代收集理论</h2>
+<p>目前的虚拟机的垃圾回收器都是采用分代收集算法，一般根据对象存活周期的不同，将内存分为几块，一般将java堆分为新生代和老年代，然后根据各代的特点选择不同的垃圾回收器算法</p>
+<p>比如在新生代，每次收集都会有大量的对象死去（近 99% ），所以选择复制算法，只需复制少量对象就可以完成垃圾回收，成本较低。 而老年代对象存活几率是比较高的，也没有额外的空间给担保，所以要选择标记清除或标记整理算法，这两种算法比复制算法慢10倍以上</p>
+<h2 id="标记复制算法">标记复制算法</h2>
+<p>将内存分为大小相同的两个块，只把对象分配到其中一个块上，当这个块的空间不足时，就将还存活的对象复制到另外一块上去，然后把使用过那块空间清理掉。每次都是对内存空间的一半进行回收</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902160852.png" alt=""></p>
+<h2 id="标记清除算法">标记清除算法</h2>
+<p>分为两步</p>
+<ol>
+<li>标记存活的对象</li>
+<li>清理没有被标记的对象</li>
+</ol>
+<p>一般选择这种，也可以反过来，标记需要回收的对象，然后清理所有被标记的对象</p>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>效率低，（要标记的对象可能很多）</li>
+<li>内存碎片多（会产生大量的不连续下空间，无法利用）<br>
+如图:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902161733.png" alt=""></li>
+</ul>
+<h2 id="标记整理算法">标记整理算法</h2>
+<p>根据老年代的特点专门制定的清除方案，与标记清除一样，需要先标记存活对象，不同的是，后续没有直接回收垃圾，而是将存活的对象统一向一端移动，然后清理掉边界以外的内存</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902163653.png" alt=""></p>
+<h2 id="垃圾回收器">垃圾回收器</h2>
+<p>上述几个算法是理论，实现垃圾回收算法的叫做垃圾收集器</p>
+<p><strong>垃圾回收器没有最好的，只有最合适的</strong></p>
+<h3 id="概览">概览</h3>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902164252.png" alt=""></p>
+<h3 id="serial-收集器">Serial 收集器</h3>
+<p>-XX:+UseSerialGC 开启年轻代使用</p>
+<p>-XX:+UseSerialOldGC  开启老年代使用</p>
+<p>Serial（串行）收集器是最基本、历史最悠久的垃圾收集器了。看名字就知道这个收集器是一个<strong>单线程</strong>收集器了。它的 “单线程” 的意义不仅仅意味着它只会使用一条垃圾收集线程去完成垃圾收集工作，更重要的是它在进行垃圾收集工作的时候必须暂停其他所有的工作线程（ &ldquo;Stop The World&rdquo; ），直到它收集结束。</p>
+<p><strong>新生代采用复制算法，老年代采用标记-整理算法。</strong></p>
+<p>示意图：</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902164852.png" alt=""></p>
+<p><strong>Serial Old</strong> 收集器是Serial收集器的老年代版本，它同样是一个单线程收集器。</p>
+<p>它主要有两大用途：</p>
+<ol>
+<li>在JDK1.5以及以前的版本中与Parallel Scavenge收集器搭配使用</li>
+<li>作为CMS收集器的后备方案。</li>
+</ol>
+<p>实现简单，单线程的收集效率高</p>
+<h3 id="parallel-scavenge--收集器">Parallel Scavenge  收集器</h3>
+<p>JK8 默认的垃圾回收器</p>
+<p>-XX:+UseParallelGC(年轻代)， 采用复制算法</p>
+<p>-XX:+UseParallelOldGC(老年代)  标记整理算法</p>
+<p>Parallel 其实就是 Serial 的多线程版本，默认的收集线程数与CPU核心数相同，也可以使用参数    -XX:ParallelGCThreads 指定收集线程数，但是一般不推荐修改。</p>
+<p>Parallel Scavenge  <strong>注重的是收集效率</strong>，后面要介绍的 <strong>CMS，G1 收集器 更注重用户体验</strong>，缩短 STW 的时长。但是他不能与 CMS 收集器配合使用</p>
+<p>示意图:</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902165751.png" alt=""></p>
+<h3 id="parnew-收集器">ParNew 收集器</h3>
+<p>ParNew 收集器和 Parallel 很类似，主要区别在于，他可以与 CMS 配合使用，新生代采用复制算法，老年代采用标记-整理算法。</p>
+<p>只有 Serial ,ParNew 可以与 CMS 配合使用 ， ParNew 是很多虚拟机的首要选择。</p>
+<h2 id="cms-收集器">CMS 收集器</h2>
+<p>-XX:+UseConcMarkSweepGC(old)</p>
+<p>CMS(ConcurrentMarkSweep) 是一种追求<strong>短 STW</strong> 为目标的收集器，注重用户体验，他是 HotSpot 虚拟机第一款真正意义上的收集器，第一次实现了让用户线程和收集线程同时工作</p>
+<p>从名字就可以看出来，Mark: 标记，Sweep: 清除， 它采用标记清理算法， 他的工作流程更复杂，主要分下面5个步骤:</p>
+<ol>
+<li><strong>初始标记</strong>: 暂停用户线程，标记GC Root 直接引用 的对象，速度很快</li>
+<li><strong>并发标记</strong>： 从第一步标记的对象开始遍历所有引用对象，过程耗时很长，但是不需要暂停用户线程，因为有用户线程的干扰，可能会修改已经标记的对象，产生问题</li>
+<li><strong>重新标记</strong>：为了修正并发标记时产生的问题，产生问题的对象比例小，所以速度很快。此过程会STW</li>
+<li><strong>并发清理</strong>： 清理线程与用户线程同时运行，清理掉没有标记的对象，如果此时有新增的对象虽然没有被标记，统一会当作存活对象，不会误清理</li>
+<li><strong>并发重置</strong>： 重置本次GC被标记的数据</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902183707.png" alt=""></p>
+<p><strong>优点:</strong></p>
+<ul>
+<li>并发收集</li>
+<li>短停顿</li>
+</ul>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>和用户线程抢占CPU资源</li>
+<li>无法处理浮动垃圾</li>
+<li>由于时标记清除算法，会产生内存碎片，可以通过参数: -XX:+UseCMSCompactAtFullCollection 控制是否做空间整理</li>
+<li>由于允许用户线程同时运行，会造成在GC过程中不断的有对象进入内存，当前GC没有完成，空间没有释放，可能导致没有足够的空间放新进来的对象，此时会导致 STW,然后退化成 serial 收集器进行垃圾回收</li>
+</ul>
+<h4 id="cms的相关核心参数">CMS的相关核心参数</h4>
+<ol>
+<li>-XX:+UseConcMarkSweepGC：启用cms </li>
+<li>-XX:ConcGCThreads：并发的GC线程数</li>
+<li>-XX:+UseCMSCompactAtFullCollection：FullGC之后做压缩整理（减少碎片）</li>
+<li>-XX:CMSFullGCsBeforeCompaction：多少次FullGC之后压缩一次，默认是0，代表每次FullGC后都会压缩一次</li>
+<li>-XX:CMSInitiatingOccupancyFraction: 当老年代使用达到该比例时会触发FullGC（默认是92，这是百分比）</li>
+<li>-XX:+UseCMSInitiatingOccupancyOnly：只使用设定的回收阈值(-XX:CMSInitiatingOccupancyFraction设定的值)，如果不指定，JVM仅在第一次使用设定值，后续则会自动调整</li>
+<li>-XX:+CMSScavengeBeforeRemark：在CMS GC前启动一次minor gc，降低CMS GC标记阶段(也会对年轻代一起做标记，如果在minor gc就干掉了很多对垃圾对象，标记阶段就会减少一些标记时间)时的开销，一般CMS的GC耗时 80%都在标记阶段</li>
+<li>-XX:+CMSParallellnitialMarkEnabled：表示在初始标记的时候多线程执行，缩短STW</li>
+<li>-XX:+CMSParallelRemarkEnabled：在重新标记的时候多线程执行，缩短STW;</li>
+</ol>
+<h3 id="三色标记">三色标记</h3>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184401.png" alt=""></p>
+<h5 id="初始标记">初始标记</h5>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184431.png" alt=""></p>
+<h4 id="并发标记">并发标记</h4>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184452.png" alt=""></p>
+<h5 id="并发标记产生的问题的原因">并发标记产生的问题的原因</h5>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184527.png" alt=""></p>
+<h5 id="出现问题的后果">出现问题的后果</h5>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184608.png" alt=""></p>
+<h5 id="问题的解决办法">问题的解决办法</h5>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184654.png" alt=""></p>
+<p>出现漏标的两个必要条件:</p>
+<ol>
+<li>有对象的引用关系被删除</li>
+<li>删除的对象又被重新引用</li>
+</ol>
+<p>见上图<br>
+破环任意步骤，即可避免漏标的现象。有以下两种解决方案:</p>
+<ul>
+<li>增量更新<br>
+因为重新标记时，要再次从黑色对象出发，深度扫描所有引用，效率没有原始快照高
+<ul>
+<li>优点: 不会产生浮动垃圾</li>
+<li>缺点: 效率低</li>
+</ul>
+</li>
+<li>原始快照<br>
+再引用被删除时，记录关系，重新扫描时，将被引用的对象标记为非垃圾，如果后续没有再次引该对象，那么该对象就会变成浮动垃圾
+<ul>
+<li>缺点: 可能会产生浮动垃圾</li>
+<li>优点: 不要重新扫描，效率高</li>
+</ul>
+</li>
+</ul>
+<p>那除此之外，还没有没有其他可能重新引用对象呢？答案只有一个， new 一个新对象。在GC期间，有新的对象进来时，统一被当成黑色处理，不会被回收</p>
+<p>那么上图中的 brand 会不会被重新引用呢？答案是不会！因为已经找不到引用 brand 对象的变量了，在引用程序中无法再次引用这个垃圾对象</p>
+<p>上图中说到，在对象被引用上，删除对象引用是，记录这个引用关系，从而方便后续的重新编辑，那么这个记录的动作是如何发生的？ 这时就要引入写屏障的技术了。</p>
+<p>以上无论是对引用关系记录的插入还是删除， 虚拟机的记录操作都是通过写屏障实现的。</p>
+<h6 id="写屏障">写屏障</h6>
+<p>类似于切面，在赋值动作的前后做一些事情。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">oop_field_store</span>(oop<span style="color:#ff79c6">*</span> field, oop new_value) { 
+</span></span><span style="display:flex;"><span>    pre_write_barrier(field); <span style="color:#6272a4">// 写屏障-写前操作 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">*</span>field <span style="color:#ff79c6">=</span> new_value; 
+</span></span><span style="display:flex;"><span>    post_write_barrier(field, value); <span style="color:#6272a4">// 写屏障-写后操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span></code></pre></div><ul>
+<li>写屏障实现SATB</li>
+</ul>
+<p>当对象B的成员变量的引用发生变化时，比如引用消失（a.b.d = null），我们可以利用写屏障，将B原来成员变量的引用对象D记录下来：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">pre_write_barrier</span>(oop<span style="color:#ff79c6">*</span> field) {
+</span></span><span style="display:flex;"><span>    oop old_value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">*</span>field; <span style="color:#6272a4">// 获取旧值 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    remark_set.add(old_value); <span style="color:#6272a4">// 记录原来的引用对象 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span></code></pre></div><ul>
+<li>写屏障实现增量更新</li>
+</ul>
+<p>当对象A的成员变量的引用发生变化时，比如新增引用（a.d = d），我们可以利用写屏障，将A新的成员变量引用对象D记录下来：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">post_write_barrier</span>(oop<span style="color:#ff79c6">*</span> field, oop new_value) { 
+</span></span><span style="display:flex;"><span>    remark_set.add(new_value); <span style="color:#6272a4">// 记录新引用的对象 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span></code></pre></div><h6 id="读屏障">读屏障</h6>
+<p>与写屏障类似</p>
+<h4 id="重新标记">重新标记</h4>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184725.png" alt=""></p>
+<h4 id="并发清理">并发清理</h4>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184752.png" alt=""></p>
+<h4 id="并发重置">并发重置</h4>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220902184819.png" alt=""></p>
+<p>以上就是三色标记的大体流程了</p>
+<h2 id="不同垃圾回收器对三色标记的选择">不同垃圾回收器对三色标记的选择</h2>
+<ul>
+<li>CMS 写屏障 + 增量更新</li>
+<li>G1 ,Shenandoah： 写屏障 + STAB</li>
+<li>ZGC: 读屏障</li>
+</ul>
+<h3 id="为什么-g1-采用-stab-cms-采用-增量更新">为什么 G1 采用 STAB， CMS 采用 增量更新</h3>
+<p>个人理解： G1 一般用于大内存的机器，内存 8G 至百G级别, 存放的对象更多，自然要扫描的对象更多，如果采用效率低的增量更新方式，效率下降的更严重，所以采用效率较高的 STAB,虽然会产生一些浮动垃圾，但是对于大内存机器来说，影响不大。</p>
+<p>CMS 适用于内存较小的机器,多用于 4G 到 8G 的机器上，无论采用 STAB 还是 CMS, 效率上无法拉开明显差距，而增量更新不会产生浮动垃圾，对内存更小的机器来说，内存的使用更敏感，自然采用增量更新的方式</p>
+<h2 id="记忆集与卡表">记忆集与卡表</h2>
+<p>这两个结构是为了垃圾器在跨代访问时提高速度的。</p>
+<p>在新生代做GCRoots可达性扫描过程中可能会碰到跨代引用的对象，这种如果又去对老年代再去扫描，甚至老年代内存在很多对象的间接引用，这种效率就太低了，大大的延长了 Minor GC 的时间。</p>
+<p>为此，在新生代可以引入记录集（Remember Set）的数据结构（记录从非收集区到收集区的指针集合），避免把整个老年代加入GCRoots扫描范围。事实上并不只是新生代、 老年代之间也有跨代引用的问题， 所有涉及部分区域收集（Partial GC） 行为的垃圾收集器， 典型的如G1、 ZGC和Shenandoah收集器， 都会面临相同的问题。</p>
+<p>垃圾收集场景中，收集器只需通过记忆集判断出某一块非收集区域是否存在指向收集区域的指针即可，无需了解跨代引用指针的全部细节。</p>
+<p>hotspot使用一种叫做“卡表”(Cardtable)的方式实现记忆集，也是目前最常用的一种方式。关于卡表与记忆集的关系， 可以类比为Java语言中HashMap与Map的关系。</p>
+<p>卡表是使用一个字节数组实现：CARD_TABLE[ ]，每个元素对应着其标识的内存区域一块特定大小的内存块，称为“卡页”。</p>
+<p>hotSpot使用的卡页是2^9大小，即512字节<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220903092345.png" alt=""></p>
+<p>一个卡页中可包含多个对象，只要有一个对象的字段存在跨代指针，其对应的卡表的元素标识就变成1，表示该元素变脏，否则为0.</p>
+<p>GC时，只要筛选本收集区的卡表中变脏的元素加入GCRoots里。</p>
+<p>卡表的维护</p>
+<p>卡表变脏上面已经说了，但是需要知道如何让卡表变脏，即发生引用字段赋值时，如何更新卡表对应的标识为1。</p>
+<p>Hotspot使用写屏障维护卡表状态。</p>
+
+        </div>
+
+        
+        
+        <div class="article-toc" >
+            <h3></h3>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#垃圾收集算法">垃圾收集算法</a></li>
+    <li><a href="#分代收集理论">分代收集理论</a></li>
+    <li><a href="#标记复制算法">标记复制算法</a></li>
+    <li><a href="#标记清除算法">标记清除算法</a></li>
+    <li><a href="#标记整理算法">标记整理算法</a></li>
+    <li><a href="#垃圾回收器">垃圾回收器</a>
+      <ul>
+        <li><a href="#概览">概览</a></li>
+        <li><a href="#serial-收集器">Serial 收集器</a></li>
+        <li><a href="#parallel-scavenge--收集器">Parallel Scavenge  收集器</a></li>
+        <li><a href="#parnew-收集器">ParNew 收集器</a></li>
+      </ul>
+    </li>
+    <li><a href="#cms-收集器">CMS 收集器</a>
+      <ul>
+        <li></li>
+        <li><a href="#三色标记">三色标记</a></li>
+      </ul>
+    </li>
+    <li><a href="#不同垃圾回收器对三色标记的选择">不同垃圾回收器对三色标记的选择</a>
+      <ul>
+        <li><a href="#为什么-g1-采用-stab-cms-采用-增量更新">为什么 G1 采用 STAB， CMS 采用 增量更新</a></li>
+      </ul>
+    </li>
+    <li><a href="#记忆集与卡表">记忆集与卡表</a></li>
+  </ul>
+</nav>
+        </div>
+        
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            G1垃圾收集器
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/%E6%9F%A5%E7%9C%8Bes%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">查看ES集群信息&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

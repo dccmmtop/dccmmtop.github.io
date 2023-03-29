@@ -1,326 +1,886 @@
-<!doctype html><html><head><title>索引优化 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="索引优化"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>索引优化</h1></header><div class=article-meta><a href=../../posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/ class=article-date><time datetime=2022-08-03T17:10:57.000+00:00 itemprop=datePublished>2022-08-03</time></a></div><div class=article-entry itemprop=articleBody><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>CREATE</span> <span style=color:#ff79c6>TABLE</span> <span style=color:#ff79c6>`</span>employees<span style=color:#ff79c6>`</span> (
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>`</span>id<span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>int</span>(<span style=color:#bd93f9>11</span>) <span style=color:#ff79c6>NOT</span> <span style=color:#ff79c6>NULL</span> AUTO_INCREMENT,
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>`</span>name<span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>varchar</span>(<span style=color:#bd93f9>24</span>) <span style=color:#ff79c6>NOT</span> <span style=color:#ff79c6>NULL</span> <span style=color:#ff79c6>DEFAULT</span> <span style=color:#f1fa8c>&#39;&#39;</span> <span style=color:#ff79c6>COMMENT</span> <span style=color:#f1fa8c>&#39;姓名&#39;</span>,
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>`</span>age<span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>int</span>(<span style=color:#bd93f9>11</span>) <span style=color:#ff79c6>NOT</span> <span style=color:#ff79c6>NULL</span> <span style=color:#ff79c6>DEFAULT</span> <span style=color:#f1fa8c>&#39;0&#39;</span> <span style=color:#ff79c6>COMMENT</span> <span style=color:#f1fa8c>&#39;年龄&#39;</span>,
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>`</span><span style=color:#ff79c6>position</span><span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>varchar</span>(<span style=color:#bd93f9>20</span>) <span style=color:#ff79c6>NOT</span> <span style=color:#ff79c6>NULL</span> <span style=color:#ff79c6>DEFAULT</span> <span style=color:#f1fa8c>&#39;&#39;</span> <span style=color:#ff79c6>COMMENT</span> <span style=color:#f1fa8c>&#39;职位&#39;</span>,
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>`</span>hire_time<span style=color:#ff79c6>`</span> <span style=color:#ff79c6>timestamp</span> <span style=color:#ff79c6>NOT</span> <span style=color:#ff79c6>NULL</span> <span style=color:#ff79c6>DEFAULT</span> <span style=color:#ff79c6>CURRENT_TIMESTAMP</span> <span style=color:#ff79c6>COMMENT</span> <span style=color:#f1fa8c>&#39;入职时间&#39;</span>,
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>PRIMARY</span> <span style=color:#ff79c6>KEY</span> (<span style=color:#ff79c6>`</span>id<span style=color:#ff79c6>`</span>),
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>KEY</span> <span style=color:#ff79c6>`</span>idx_name_age_position<span style=color:#ff79c6>`</span> (<span style=color:#ff79c6>`</span>name<span style=color:#ff79c6>`</span>,<span style=color:#ff79c6>`</span>age<span style=color:#ff79c6>`</span>,<span style=color:#ff79c6>`</span><span style=color:#ff79c6>position</span><span style=color:#ff79c6>`</span>) <span style=color:#ff79c6>USING</span> BTREE
-</span></span><span style=display:flex><span> ) ENGINE<span style=color:#ff79c6>=</span>InnoDB AUTO_INCREMENT<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span> <span style=color:#ff79c6>DEFAULT</span> CHARSET<span style=color:#ff79c6>=</span>utf8 <span style=color:#ff79c6>COMMENT</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;员工记录表&#39;</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>INSERT</span> <span style=color:#ff79c6>INTO</span> employees(name,age,<span style=color:#ff79c6>position</span>,hire_time) <span style=color:#ff79c6>VALUES</span>(<span style=color:#f1fa8c>&#39;LiLei&#39;</span>,<span style=color:#bd93f9>22</span>,<span style=color:#f1fa8c>&#39;manager&#39;</span>,NOW());
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>INSERT</span> <span style=color:#ff79c6>INTO</span> employees(name,age,<span style=color:#ff79c6>position</span>,hire_time) <span style=color:#ff79c6>VALUES</span>(<span style=color:#f1fa8c>&#39;HanMeimei&#39;</span>, <span style=color:#bd93f9>23</span>,<span style=color:#f1fa8c>&#39;dev&#39;</span>,NOW());
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>INSERT</span> <span style=color:#ff79c6>INTO</span> employees(name,age,<span style=color:#ff79c6>position</span>,hire_time) <span style=color:#ff79c6>VALUES</span>(<span style=color:#f1fa8c>&#39;Lucy&#39;</span>,<span style=color:#bd93f9>23</span>,<span style=color:#f1fa8c>&#39;dev&#39;</span>,NOW());
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span> ‐‐ 插入一些示例数据
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>drop</span> <span style=color:#ff79c6>procedure</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>exists</span> insert_emp;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>delimiter</span> ;;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>create</span> <span style=color:#ff79c6>procedure</span> insert_emp()
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>begin</span>
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>declare</span> i <span style=color:#8be9fd;font-style:italic>int</span>;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>set</span> i<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span>;
-</span></span><span style=display:flex><span> while(i<span style=color:#ff79c6>&lt;=</span><span style=color:#bd93f9>100000</span>)<span style=color:#ff79c6>do</span>
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>insert</span> <span style=color:#ff79c6>into</span> employees(name,age,<span style=color:#ff79c6>position</span>) <span style=color:#ff79c6>values</span>(CONCAT(<span style=color:#f1fa8c>&#39;zhuge&#39;</span>,i),i,<span style=color:#f1fa8c>&#39;dev&#39;</span>);
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>set</span> i<span style=color:#ff79c6>=</span>i<span style=color:#ff79c6>+</span><span style=color:#bd93f9>1</span>;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>end</span> while;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>end</span>;;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>delimiter</span> ;
-</span></span><span style=display:flex><span> <span style=color:#ff79c6>call</span> insert_emp();
-</span></span></code></pre></div><p>如上有 <code>employees</code> 表，有主键索引和 (name, age, position ) 联合索引, 看下面的查询示例:</p><h3 id=联合索引的首字段用范围查询>联合索引的首字段用范围查询</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>&gt;</span> <span style=color:#f1fa8c>&#39;LiLei&#39;</span> <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803151010.png alt></p><p>结论：联合索引第一个字段就用范围查找不会走索引，mysql内部可能觉得<strong>第一个字段就用范围</strong>，结果集应该很大，回表效率不高，还不如就全表扫描</p><h3 id=强制走索引>强制走索引</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees <span style=color:#ff79c6>force</span> <span style=color:#ff79c6>index</span>(idx_name_age_position) <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>&gt;</span> <span style=color:#f1fa8c>&#39;LiLei&#39;</span> <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803151827.png alt></p><p>结论：虽然使用了强制走索引让联合索引第一个字段范围查找也走索引，扫描的行rows看上去也少了点，但是最终查找效率不一定比全表扫描高，因为回表效率不高， 一般不会使用这个手段，除非有证据能证明强制走索引后效率大幅度提高</p><h3 id=覆盖索引优化>覆盖索引优化</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> name,age,<span style=color:#ff79c6>position</span> <span style=color:#ff79c6>FROM</span> employees <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>&gt;</span> <span style=color:#f1fa8c>&#39;LiLei&#39;</span> <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803152346.png alt><br>将 <code>select *</code> 修改为 <code>select name, age, posiion</code> ， 只选择索引中已经存在的列，可以不用回表，所以会利用索引</p><h3 id=in和or什么时候会走索引>in和or什么时候会走索引</h3><p>在表数据量比较大的情况会走索引，数据量不多的情况下会选择全表扫描,示例如下:</p><p><strong>in 查询</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>in</span> (<span style=color:#f1fa8c>&#39;LiLei&#39;</span>,<span style=color:#f1fa8c>&#39;HanMeimei&#39;</span>,<span style=color:#f1fa8c>&#39;Lucy&#39;</span>) <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803152913.png alt></p><p>用到全部索引<br><strong>or 查询</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees <span style=color:#ff79c6>WHERE</span> (name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;LiLei&#39;</span> <span style=color:#ff79c6>or</span> name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;HanMeimei&#39;</span>) <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153050.png alt></p><p>用到全部索引</p><p>下面新建一张 employees_copy 表，结构和 employee 一样，但数据只有三条, 再执行上面两个查询</p><p><strong>in 查询</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees_copy <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>in</span> (<span style=color:#f1fa8c>&#39;LiLei&#39;</span>,<span style=color:#f1fa8c>&#39;HanMeimei&#39;</span>,<span style=color:#f1fa8c>&#39;Lucy&#39;</span>) <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153331.png alt></p><p>全表扫描</p><p><strong>or查询</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees_copy <span style=color:#ff79c6>WHERE</span> (name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;LiLei&#39;</span> <span style=color:#ff79c6>or</span> name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#39;HanMeimei&#39;</span>) <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153408.png alt></p><p>全表扫描</p><h3 id=like-xx-一般都会走索引和数据量无关>like xx% 一般都会走索引，和数据量无关</h3><p>大表</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>like</span> <span style=color:#f1fa8c>&#39;LiLei%&#39;</span> <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153549.png alt></p><p>小表</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> employees_copy <span style=color:#ff79c6>WHERE</span> name <span style=color:#ff79c6>like</span> <span style=color:#f1fa8c>&#39;LiLei%&#39;</span> <span style=color:#ff79c6>AND</span> age <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>22</span> <span style=color:#ff79c6>AND</span> <span style=color:#ff79c6>position</span> <span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;manager&#39;</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153614.png alt></p><p>可以看到，无论表的数据量大小，都会利用索引，为什么呢？</p><p>其实 like 用到了索引下推的优化</p><h3 id=索引下推>索引下推</h3><p>对于辅助联合索引，正常情况下按照最左前缀原则， <code>SELECT * from employees where name like 'LiLei%' and age = 22 and position = 'dev'</code> 这种情况下只会走name字段的索引，因为根据name字段过滤完，得到的索引行里的age和position是无序的，无法很好的利用索引。</p><p>在<code>MySQL5.6</code>之前的版本，这个查询只能在联合索引里匹配到名字是 &lsquo;LiLei&rsquo; 开头的索引，然后拿这些索引对应的主键逐个回表，到主键索引上找出相应的记录，再比对age和position这两个字段的值是否符合。</p><p>MySQL 5.6引入了索引下推优化，可以在索引遍历过程中，<strong>对索引中包含的所有字段先做判断，过滤掉不符合条件的记录之后再回表</strong>，可以有效的减少回表次数。使用了索引下推优化后，上面那个查询在联合索引里匹配到名字是 &lsquo;LiLei&rsquo; 开头的索引之后，同时还会在索引里过滤age和position这两个字段，拿着过滤完剩下的索引对应的主键id再回表查整行数据。</p><p>索引下推会减少回表次数，对于innodb引擎的表索引下推只能用于二级索引，innodb的主键索引（聚簇索引）树叶子节点上保存的是全行数据，所以这个时候索引下推并不会起到减少查询全行数据的效果。</p><h3 id=为什么范围查找没有用索引下推优化>为什么范围查找没有用索引下推优化？</h3><p>估计应该是Mysql认为范围查找过滤的结果集过大，<code>like KK%</code> 在绝大多数情况来看，过滤后的结果集比较小，所以这里Mysql选择给 like KK% 用了索引下推优化，当然这也<strong>不是绝对的</strong>，有时like KK% 也不一定就会走索引下推。</p><h2 id=如何选择索引>如何选择索引</h2><p>先看下面的两个查询:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803154807.png alt></p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803154821.png alt></p><p>同样的表，同样的字段，因为条件的不同，选择的索引也不同，MySQL 是如何选择的呢？</p><h3 id=trace-工具>Trace 工具</h3><p>MySQl 提供了一个工具，可以看到选择索引的计算过程， 用法如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span>
-</span></span><span style=display:flex><span>mysql<span style=color:#ff79c6>&gt;</span> <span style=color:#ff79c6>set</span> <span style=color:#ff79c6>session</span> optimizer_trace<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;enabled=on&#34;</span>,end_markers_in_json<span style=color:#ff79c6>=</span><span style=color:#ff79c6>on</span>;  <span style=color:#6272a4>--开启trace
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>
-</span></span><span style=display:flex><span>mysql<span style=color:#ff79c6>&gt;</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> employees <span style=color:#ff79c6>where</span> name <span style=color:#ff79c6>&gt;</span> <span style=color:#f1fa8c>&#39;a&#39;</span> <span style=color:#ff79c6>order</span> <span style=color:#ff79c6>by</span> <span style=color:#ff79c6>position</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>mysql<span style=color:#ff79c6>&gt;</span> <span style=color:#ff79c6>SELECT</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>FROM</span> information_schema.OPTIMIZER_TRACE;
-</span></span></code></pre></div><p>下面是对 trace 字段的解析</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>&#34;steps&#34;</span>: [
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>&#34;join_preparation&#34;</span>: {    <span style=color:#6272a4>//第一阶段：SQL准备阶段，格式化sql
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>&#34;select#&#34;</span>: <span style=color:#bd93f9>1</span>,
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>&#34;steps&#34;</span>: [
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;expanded_query&#34;</span>: <span style=color:#f1fa8c>&#34;/* select#1 */ select `employees`.`id` AS `id`,`employees`.`name` AS `name`,`employees`.`age` AS `age`,`employees`.`position` AS `position`,`employees`.`hire_time` AS `hire_time` from `employees` where (`employees`.`name` &gt; &#39;a&#39;) order by `employees`.`position`&#34;</span>
-</span></span><span style=display:flex><span>          }
-</span></span><span style=display:flex><span>        ] /* steps */
-</span></span><span style=display:flex><span>      } /* join_preparation */
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>&#34;join_optimization&#34;</span>: {    <span style=color:#6272a4>//第二阶段：SQL优化阶段
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>&#34;select#&#34;</span>: <span style=color:#bd93f9>1</span>,
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>&#34;steps&#34;</span>: [
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;condition_processing&#34;</span>: {    <span style=color:#6272a4>//条件处理
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>              <span style=color:#ff79c6>&#34;condition&#34;</span>: <span style=color:#f1fa8c>&#34;WHERE&#34;</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;original_condition&#34;</span>: <span style=color:#f1fa8c>&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;steps&#34;</span>: [
-</span></span><span style=display:flex><span>                {
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;transformation&#34;</span>: <span style=color:#f1fa8c>&#34;equality_propagation&#34;</span>,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;resulting_condition&#34;</span>: <span style=color:#f1fa8c>&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
-</span></span><span style=display:flex><span>                },
-</span></span><span style=display:flex><span>                {
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;transformation&#34;</span>: <span style=color:#f1fa8c>&#34;constant_propagation&#34;</span>,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;resulting_condition&#34;</span>: <span style=color:#f1fa8c>&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
-</span></span><span style=display:flex><span>                },
-</span></span><span style=display:flex><span>                {
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;transformation&#34;</span>: <span style=color:#f1fa8c>&#34;trivial_condition_removal&#34;</span>,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;resulting_condition&#34;</span>: <span style=color:#f1fa8c>&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
-</span></span><span style=display:flex><span>                }
-</span></span><span style=display:flex><span>              ] /* steps */
-</span></span><span style=display:flex><span>            } /* condition_processing */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;substitute_generated_columns&#34;</span>: {
-</span></span><span style=display:flex><span>            } /* substitute_generated_columns */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;table_dependencies&#34;</span>: [    <span style=color:#6272a4>//表依赖详情
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>              {
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;table&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`&#34;</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;row_may_be_null&#34;</span>: <span style=color:#ff79c6>false</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;map_bit&#34;</span>: <span style=color:#bd93f9>0</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;depends_on_map_bits&#34;</span>: [
-</span></span><span style=display:flex><span>                ] /* depends_on_map_bits */
-</span></span><span style=display:flex><span>              }
-</span></span><span style=display:flex><span>            ] /* table_dependencies */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;ref_optimizer_key_uses&#34;</span>: [
-</span></span><span style=display:flex><span>            ] /* ref_optimizer_key_uses */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;rows_estimation&#34;</span>: [    <span style=color:#6272a4>//预估表的访问成本
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>              {
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;table&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`&#34;</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;range_analysis&#34;</span>: {
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;table_scan&#34;</span>: {     <span style=color:#6272a4>//全表扫描情况
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    <span style=color:#ff79c6>&#34;rows&#34;</span>: <span style=color:#bd93f9>10123</span>,    <span style=color:#6272a4>//扫描行数
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    <span style=color:#ff79c6>&#34;cost&#34;</span>: <span style=color:#bd93f9>2054.7</span>    <span style=color:#6272a4>//查询成本
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                  } /* table_scan */,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;potential_range_indexes&#34;</span>: [    <span style=color:#6272a4>//查询可能使用的索引
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    {
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;index&#34;</span>: <span style=color:#f1fa8c>&#34;PRIMARY&#34;</span>,    <span style=color:#6272a4>//主键索引
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                      <span style=color:#ff79c6>&#34;usable&#34;</span>: <span style=color:#ff79c6>false</span>,
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;cause&#34;</span>: <span style=color:#f1fa8c>&#34;not_applicable&#34;</span>
-</span></span><span style=display:flex><span>                    },
-</span></span><span style=display:flex><span>                    {
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;index&#34;</span>: <span style=color:#f1fa8c>&#34;idx_name_age_position&#34;</span>,    <span style=color:#6272a4>//辅助索引
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                      <span style=color:#ff79c6>&#34;usable&#34;</span>: <span style=color:#ff79c6>true</span>,
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;key_parts&#34;</span>: [
-</span></span><span style=display:flex><span>                        <span style=color:#f1fa8c>&#34;name&#34;</span>,
-</span></span><span style=display:flex><span>                        <span style=color:#f1fa8c>&#34;age&#34;</span>,
-</span></span><span style=display:flex><span>                        <span style=color:#f1fa8c>&#34;position&#34;</span>,
-</span></span><span style=display:flex><span>                        <span style=color:#f1fa8c>&#34;id&#34;</span>
-</span></span><span style=display:flex><span>                      ] /* key_parts */
-</span></span><span style=display:flex><span>                    }
-</span></span><span style=display:flex><span>                  ] /* potential_range_indexes */,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;setup_range_conditions&#34;</span>: [
-</span></span><span style=display:flex><span>                  ] /* setup_range_conditions */,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;group_index_range&#34;</span>: {
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>&#34;chosen&#34;</span>: <span style=color:#ff79c6>false</span>,
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>&#34;cause&#34;</span>: <span style=color:#f1fa8c>&#34;not_group_by_or_distinct&#34;</span>
-</span></span><span style=display:flex><span>                  } /* group_index_range */,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;analyzing_range_alternatives&#34;</span>: {    <span style=color:#6272a4>//分析各个索引使用成本
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    <span style=color:#ff79c6>&#34;range_scan_alternatives&#34;</span>: [
-</span></span><span style=display:flex><span>                      {
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>&#34;index&#34;</span>: <span style=color:#f1fa8c>&#34;idx_name_age_position&#34;</span>,
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>&#34;ranges&#34;</span>: [
-</span></span><span style=display:flex><span>                          <span style=color:#f1fa8c>&#34;a &lt; name&#34;</span>      <span style=color:#6272a4>//索引使用范围
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        ] /* ranges */,
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>&#34;index_dives_for_eq_ranges&#34;</span>: <span style=color:#ff79c6>true</span>,
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>&#34;rowid_ordered&#34;</span>: <span style=color:#ff79c6>false</span>,    <span style=color:#6272a4>//使用该索引获取的记录是否按照主键排序
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#ff79c6>&#34;using_mrr&#34;</span>: <span style=color:#ff79c6>false</span>,
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>&#34;index_only&#34;</span>: <span style=color:#ff79c6>false</span>,       <span style=color:#6272a4>//是否使用覆盖索引
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#ff79c6>&#34;rows&#34;</span>: <span style=color:#bd93f9>5061</span>,              <span style=color:#6272a4>//索引扫描行数
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#ff79c6>&#34;cost&#34;</span>: <span style=color:#bd93f9>6074.2</span>,            <span style=color:#6272a4>//索引使用成本
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#ff79c6>&#34;chosen&#34;</span>: <span style=color:#ff79c6>false</span>,           <span style=color:#6272a4>//是否选择该索引
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#ff79c6>&#34;cause&#34;</span>: <span style=color:#f1fa8c>&#34;cost&#34;</span>
-</span></span><span style=display:flex><span>                      }
-</span></span><span style=display:flex><span>                    ] /* range_scan_alternatives */,
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>&#34;analyzing_roworder_intersect&#34;</span>: {
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;usable&#34;</span>: <span style=color:#ff79c6>false</span>,
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;cause&#34;</span>: <span style=color:#f1fa8c>&#34;too_few_roworder_scans&#34;</span>
-</span></span><span style=display:flex><span>                    } /* analyzing_roworder_intersect */
-</span></span><span style=display:flex><span>                  } /* analyzing_range_alternatives */
-</span></span><span style=display:flex><span>                } /* range_analysis */
-</span></span><span style=display:flex><span>              }
-</span></span><span style=display:flex><span>            ] /* rows_estimation */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;considered_execution_plans&#34;</span>: [
-</span></span><span style=display:flex><span>              {
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;plan_prefix&#34;</span>: [
-</span></span><span style=display:flex><span>                ] /* plan_prefix */,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;table&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`&#34;</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;best_access_path&#34;</span>: {    <span style=color:#6272a4>//最优访问路径
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                  <span style=color:#ff79c6>&#34;considered_access_paths&#34;</span>: [   <span style=color:#6272a4>//最终选择的访问路径
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    {
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;rows_to_scan&#34;</span>: <span style=color:#bd93f9>10123</span>,
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;access_type&#34;</span>: <span style=color:#f1fa8c>&#34;scan&#34;</span>,     <span style=color:#6272a4>//访问类型：为scan，全表扫描
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                      <span style=color:#ff79c6>&#34;resulting_rows&#34;</span>: <span style=color:#bd93f9>10123</span>,
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;cost&#34;</span>: <span style=color:#bd93f9>2052.6</span>,
-</span></span><span style=display:flex><span>                      <span style=color:#ff79c6>&#34;chosen&#34;</span>: <span style=color:#ff79c6>true</span>,            <span style=color:#6272a4>//确定选择
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                      <span style=color:#ff79c6>&#34;use_tmp_table&#34;</span>: <span style=color:#ff79c6>true</span>
-</span></span><span style=display:flex><span>                    }
-</span></span><span style=display:flex><span>                  ] /* considered_access_paths */
-</span></span><span style=display:flex><span>                } /* best_access_path */,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;condition_filtering_pct&#34;</span>: <span style=color:#bd93f9>100</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;rows_for_plan&#34;</span>: <span style=color:#bd93f9>10123</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;cost_for_plan&#34;</span>: <span style=color:#bd93f9>2052.6</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;sort_cost&#34;</span>: <span style=color:#bd93f9>10123</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;new_cost_for_plan&#34;</span>: <span style=color:#bd93f9>12176</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;chosen&#34;</span>: <span style=color:#ff79c6>true</span>
-</span></span><span style=display:flex><span>              }
-</span></span><span style=display:flex><span>            ] /* considered_execution_plans */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;attaching_conditions_to_tables&#34;</span>: {
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;original_condition&#34;</span>: <span style=color:#f1fa8c>&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;attached_conditions_computation&#34;</span>: [
-</span></span><span style=display:flex><span>              ] /* attached_conditions_computation */,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;attached_conditions_summary&#34;</span>: [
-</span></span><span style=display:flex><span>                {
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;table&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`&#34;</span>,
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;attached&#34;</span>: <span style=color:#f1fa8c>&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
-</span></span><span style=display:flex><span>                }
-</span></span><span style=display:flex><span>              ] /* attached_conditions_summary */
-</span></span><span style=display:flex><span>            } /* attaching_conditions_to_tables */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;clause_processing&#34;</span>: {
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;clause&#34;</span>: <span style=color:#f1fa8c>&#34;ORDER BY&#34;</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;original_clause&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`.`position`&#34;</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;items&#34;</span>: [
-</span></span><span style=display:flex><span>                {
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>&#34;item&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`.`position`&#34;</span>
-</span></span><span style=display:flex><span>                }
-</span></span><span style=display:flex><span>              ] /* items */,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;resulting_clause_is_simple&#34;</span>: <span style=color:#ff79c6>true</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;resulting_clause&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`.`position`&#34;</span>
-</span></span><span style=display:flex><span>            } /* clause_processing */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;reconsidering_access_paths_for_index_ordering&#34;</span>: {
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;clause&#34;</span>: <span style=color:#f1fa8c>&#34;ORDER BY&#34;</span>,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;steps&#34;</span>: [
-</span></span><span style=display:flex><span>              ] /* steps */,
-</span></span><span style=display:flex><span>              <span style=color:#ff79c6>&#34;index_order_summary&#34;</span>: {
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;table&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`&#34;</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;index_provides_order&#34;</span>: <span style=color:#ff79c6>false</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;order_direction&#34;</span>: <span style=color:#f1fa8c>&#34;undefined&#34;</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;index&#34;</span>: <span style=color:#f1fa8c>&#34;unknown&#34;</span>,
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;plan_changed&#34;</span>: <span style=color:#ff79c6>false</span>
-</span></span><span style=display:flex><span>              } /* index_order_summary */
-</span></span><span style=display:flex><span>            } /* reconsidering_access_paths_for_index_ordering */
-</span></span><span style=display:flex><span>          },
-</span></span><span style=display:flex><span>          {
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>&#34;refine_plan&#34;</span>: [
-</span></span><span style=display:flex><span>              {
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>&#34;table&#34;</span>: <span style=color:#f1fa8c>&#34;`employees`&#34;</span>
-</span></span><span style=display:flex><span>              }
-</span></span><span style=display:flex><span>            ] /* refine_plan */
-</span></span><span style=display:flex><span>          }
-</span></span><span style=display:flex><span>        ] /* steps */
-</span></span><span style=display:flex><span>      } /* join_optimization */
-</span></span><span style=display:flex><span>    },
-</span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>&#34;join_execution&#34;</span>: {    <span style=color:#6272a4>//第三阶段：SQL执行阶段
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>&#34;select#&#34;</span>: <span style=color:#bd93f9>1</span>,
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>&#34;steps&#34;</span>: [
-</span></span><span style=display:flex><span>        ] /* steps */
-</span></span><span style=display:flex><span>      } /* join_execution */
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>  ] /* steps */
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// 结论：全表扫描的成本低于索引扫描，所以mysql最终选择全表扫描
-</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>mysql&gt; <span style=color:#ff79c6>select</span> * from employees where name &gt; <span style=color:#f1fa8c>&#39;zzz&#39;</span> order by position;
-</span></span><span style=display:flex><span>mysql&gt; SELECT * FROM information_schema.OPTIMIZER_TRACE;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4># 查看trace字段可知索引扫描的成本低于全表扫描，所以mysql最终选择索引扫描</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>mysql&gt; <span style=color:#8be9fd;font-style:italic>set</span> session <span style=color:#8be9fd;font-style:italic>optimizer_trace</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;enabled=off&#34;</span>;    //关闭trace
-</span></span></code></pre></div><h2 id=深入优化>深入优化</h2><h3 id=order-by-和-group-by>order by 和 group by</h3><p>order by 和 group by 也会遵循左前缀法则, 如下例子<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803155858.png alt></p><p>根据左前缀法则，用到了 name 字段的索引，同时使用 age 字段用来排序， 因为 extra 种没有 filesort</p><p>order by 或者 group by 用到的索引不会参与到 key_len 的计算，索引 key_len 仍然只是 74， 即 name字段的长度</p><p>再看下面一个例子:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803160606.png alt></p><p>where 条件是name 排序字段是 position 跳过了age字段，所以只能用 name 索引，无法利用 position 索引进行索引排序，用到是文件排序</p><p>再看第三个例子:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803160739.png alt></p><p>使用name条件查询， 同时使用 age position 双字段排序，没有跳过联合索引的字段. 所以可以用索引排序</p><p>然后颠倒一下排序顺序，先position 再 age：<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161034.png alt></p><p>发现此时只能文件排序了</p><p>再看下面的例子</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161135.png alt></p><p>虽然排序字段与索引字段不一样，但仍然是索引排序， 因为查询条件中 用到是 （name， age）索引，排序中用到是 position 索引，并没有颠倒顺序。所以还是索引排序</p><p>如果一个正序一个倒序呢？<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161441.png alt></p><p>虽然排序字段与索引字段顺序相同， 但是 age 是正序， position 是倒叙，导致与索引的排序方式不同，无法利用索引。从而发生了文件排序， Mysql8以上版本有降序索引可以支持该种查询方式。</p><p>先 in 查询:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161705.png alt><br>对于排序来说，多个相等条件也是范围查询, 无法利用索引排序</p><p>先范围查询:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161824.png alt></p><p>这里发生了全表扫描，没有任何索引，排序自然也无法利用索引了，可以使用覆盖索引优化:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161956.png alt></p><h2 id=优化总结>优化总结</h2><ol><li>MySQL支持两种方式的排序filesort和index，Using index是指MySQL扫描索引本身完成排序。index效率高，filesort效率低。</li></ol><p>2、order by满足两种情况会使用Using index。</p><ul><li><p>order by语句使用索引最左前列。</p></li><li><p>使用where子句与order by子句条件列组合满足索引最左前列。</p></li></ul><ol start=3><li><p>尽量在索引列上完成排序，遵循索引建立（索引创建的顺序）时的最左前缀法则。</p></li><li><p>如果order by的条件不在索引列上，就会产生Using filesort。</p></li><li><p>能用覆盖索引尽量用覆盖索引</p></li><li><p>group by与order by很类似，其实质是先排序后分组，遵照索引创建顺序的最左前缀法则。对于group by的优化如果不需要排序的可以加上<strong>order by null禁止排序</strong>。注意，<strong>where高于having，能写在where中的限定条件就不要去having限定了。</strong></p></li></ol><h2 id=using-filesort文件排序原理详解>Using filesort文件排序原理详解</h2><h3 id=单路排序模式>单路排序模式；</h3><p>是一次性取出满足条件行的所有字段，然后在sort buffer中进行排序；用trace工具可以看到sort_mode信息里显示&lt; sort_key, additional_fields >或者&lt; sort_key, packed_additional_fields ></p><h3 id=双路排序又叫回表排序模式>双路排序（又叫回表排序模式）</h3><p>是首先根据相应的条件取出相应的排序字段和可以直接定位行数据的行 ID，然后在 sort buffer 中进行排序，排序完后需要再次取回其它需要的字段；用trace工具可以看到sort_mode信息里显示&lt; sort_key, rowid ></p><p>MySQL 通过比较系统变量 <code>max_length_for_sort_data</code>(默认1024字节) 的大小和需要查询的字段总大小来判断使用哪种排序模式。</p><ul><li>如果 字段的总长度小于max_length_for_sort_data ，那么使用 单路排序模式；</li><li>如果 字段的总长度大于max_length_for_sort_data ，那么使用 双路排序模·式。</li></ul><h2 id=分页优化>分页优化</h2><h3 id=常规的limit分页>常规的limit分页</h3><p>有如下查询语句</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> employees <span style=color:#ff79c6>limit</span> <span style=color:#bd93f9>10000</span>,<span style=color:#bd93f9>10</span>;
-</span></span></code></pre></div><p>该sql并不是只查询了10条，而是查找了10010条，然后把前10000条结果给舍弃掉, 因此要查询一个大表靠后的内容，执行效率是非常低的</p><h3 id=优化>优化</h3><h4 id=根据主键排序>根据主键排序</h4><p>上面的下面的sql语句没有指定排序方式，默认使用ID排序。当使用ID排序时，我们可以使用下面的优化。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> employees <span style=color:#ff79c6>where</span> id <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>90000</span> <span style=color:#ff79c6>limit</span> <span style=color:#bd93f9>5</span>;
-</span></span></code></pre></div><p>如果id是连续自增的，和<code>limit 90000,5</code> 结果没有差别，是 90001 ~ 90005 的数据。</p><p>但是如果在90000之前删除了一条数据，结果就不一样了，<code>id > 90000 limit 5</code> 的结果是 90001 ~ 90005， 但是<code>limit 90000, 5</code> 的结果是 90002 ~ 90006， 很明显 90002 ~ 90006 才是符合我们直觉的。所以这个优化只能限制与排序条件是连续的。如果id不是自增的呢？会出现什么情况，假如 90000 这条数据有两个，<code>limit 90000, 5</code> 的结果是 90000 ~ 90004，而 <code>id > 90000 limit 5</code> 的结果仍是 90001 ~ 90005， 会把 id= 90000 的数据漏掉一条。</p><p>所以这个优化只能用于排序的<strong>字段是连续自增的，并且不能重复</strong></p><h3 id=非主键排序的优化>非主键排序的优化</h3><p>有如下查询语句</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> employees <span style=color:#ff79c6>ORDER</span> <span style=color:#ff79c6>BY</span> name <span style=color:#ff79c6>limit</span> <span style=color:#bd93f9>90000</span>,<span style=color:#bd93f9>5</span>;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806101808.png alt></p><p>发现并没有用上name的索引，因为 <code>select *</code> ,扫描联合索引时，无法的到全部数据，需要回表，成本比全表扫描更高，所以优化器放弃使用索引。</p><p>可以使用索引覆盖的方法，使用分页查询仅仅找到少量的主键，然后在使用主键查找整行数据， 如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> employees e <span style=color:#ff79c6>inner</span> <span style=color:#ff79c6>join</span> (<span style=color:#ff79c6>select</span> id <span style=color:#ff79c6>from</span> employees <span style=color:#ff79c6>order</span> <span style=color:#ff79c6>by</span> name <span style=color:#ff79c6>limit</span> <span style=color:#bd93f9>90000</span>,<span style=color:#bd93f9>5</span>) ed <span style=color:#ff79c6>on</span> e.id <span style=color:#ff79c6>=</span> ed.id;
-</span></span></code></pre></div><p>看下执行计划：</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806102449.png alt></p><p>原 SQL 使用文件排序，优化后的使用索引排序</p><h2 id=表关联优化>表关联优化</h2><p>先造一些数据:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>CREATE</span> <span style=color:#ff79c6>TABLE</span> <span style=color:#ff79c6>`</span>t1<span style=color:#ff79c6>`</span> (
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>`</span>id<span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>int</span>(<span style=color:#bd93f9>11</span>) <span style=color:#ff79c6>NOT</span> <span style=color:#ff79c6>NULL</span> AUTO_INCREMENT,
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>`</span>a<span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>int</span>(<span style=color:#bd93f9>11</span>) <span style=color:#ff79c6>DEFAULT</span> <span style=color:#ff79c6>NULL</span>,
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>`</span>b<span style=color:#ff79c6>`</span> <span style=color:#8be9fd;font-style:italic>int</span>(<span style=color:#bd93f9>11</span>) <span style=color:#ff79c6>DEFAULT</span> <span style=color:#ff79c6>NULL</span>,
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>PRIMARY</span> <span style=color:#ff79c6>KEY</span> (<span style=color:#ff79c6>`</span>id<span style=color:#ff79c6>`</span>),
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>KEY</span> <span style=color:#ff79c6>`</span>idx_a<span style=color:#ff79c6>`</span> (<span style=color:#ff79c6>`</span>a<span style=color:#ff79c6>`</span>)
-</span></span><span style=display:flex><span>) ENGINE<span style=color:#ff79c6>=</span>InnoDB <span style=color:#ff79c6>DEFAULT</span> CHARSET<span style=color:#ff79c6>=</span>utf8;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>create</span> <span style=color:#ff79c6>table</span> t2 <span style=color:#ff79c6>like</span> t1;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>-- 插入一些示例数据
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>-- 往t1表插入1万行记录
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>drop</span> <span style=color:#ff79c6>procedure</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>exists</span> insert_t1; 
-</span></span><span style=display:flex><span><span style=color:#ff79c6>delimiter</span> ;;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>create</span> <span style=color:#ff79c6>procedure</span> insert_t1()        
-</span></span><span style=display:flex><span><span style=color:#ff79c6>begin</span>
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>declare</span> i <span style=color:#8be9fd;font-style:italic>int</span>;                    
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>set</span> i<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span>;                          
-</span></span><span style=display:flex><span>  while(i<span style=color:#ff79c6>&lt;=</span><span style=color:#bd93f9>10000</span>)<span style=color:#ff79c6>do</span>                 
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>insert</span> <span style=color:#ff79c6>into</span> t1(a,b) <span style=color:#ff79c6>values</span>(i,i);  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>set</span> i<span style=color:#ff79c6>=</span>i<span style=color:#ff79c6>+</span><span style=color:#bd93f9>1</span>;                       
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>end</span> while;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>end</span>;;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>delimiter</span> ;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>call</span> insert_t1();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>-- 往t2表插入100行记录
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>drop</span> <span style=color:#ff79c6>procedure</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>exists</span> insert_t2; 
-</span></span><span style=display:flex><span><span style=color:#ff79c6>delimiter</span> ;;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>create</span> <span style=color:#ff79c6>procedure</span> insert_t2()        
-</span></span><span style=display:flex><span><span style=color:#ff79c6>begin</span>
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>declare</span> i <span style=color:#8be9fd;font-style:italic>int</span>;                    
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>set</span> i<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span>;                          
-</span></span><span style=display:flex><span>  while(i<span style=color:#ff79c6>&lt;=</span><span style=color:#bd93f9>100</span>)<span style=color:#ff79c6>do</span>                 
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>insert</span> <span style=color:#ff79c6>into</span> t2(a,b) <span style=color:#ff79c6>values</span>(i,i);  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>set</span> i<span style=color:#ff79c6>=</span>i<span style=color:#ff79c6>+</span><span style=color:#bd93f9>1</span>;                       
-</span></span><span style=display:flex><span>  <span style=color:#ff79c6>end</span> while;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>end</span>;;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>delimiter</span> ;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>call</span> insert_t2();
-</span></span></code></pre></div><p>新建 t1 t2 表，结构一样， 都在a字段上有索引，b字段没有索引，t1表有 10000 行记录，t2表只有100条记录。</p><h3 id=常见的表关联算法>常见的表关联算法</h3><ul><li>内嵌循环连接算法 Nested-Loop Join</li><li>基于块的嵌套循环连接算法 Block Nested-Loop Join</li></ul><h4 id=内嵌循环连接算法>内嵌循环连接算法</h4><p>一次一行循环地从第一张表（称为驱动表）中读取行，在这行数据中取到关联字段，根据关联字段在另一张表（被驱动表）里取出满足条件的行，然后取出两张表的结果合集。</p><p>一般关联字段有索引的时候使用这种算法, 示例:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> t1 <span style=color:#ff79c6>inner</span> <span style=color:#ff79c6>join</span> t2 <span style=color:#ff79c6>on</span> t1.a<span style=color:#ff79c6>=</span> t2.a;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806103415.png alt></p><p>从执行计划中可以看到这些信息：</p><ul><li>驱动表是 t2，被驱动表是 t1。先执行的就是驱动表；优化器一般会<strong>优先选择小表做驱动表</strong>，用where条件过滤完驱动表，然后再跟被驱动表做关联查询。所以使用 inner join 时，<strong>排在前面的表并不一定就是驱动表</strong></li><li>当使用left join时，左表是驱动表，右表是被驱动表，当使用right join时，右表时驱动表，左表是被驱动表</li><li>使用了 NLJ算法。一般 join 语句中，如果执行计划 Extra 中<strong>未出现 Using join buffer</strong> 则表示使用的 join 算法是 NLJ。</li></ul><p>上面sql的大致流程如下：</p><ol><li>从表 t2 中读取一行数据（如果t2表有查询过滤条件的，用先用条件过滤完，再从过滤结果里取出一行数据）；</li><li>从第 1 步的数据中，取出关联字段 a，到表 t1 中查找；</li><li>取出表 t1 中满足条件的行，跟 t2 中获取到的结果合并，作为结果返回给客户端；</li><li>重复上面 3 步。</li></ol><p>整个过程会读取 t2 表的所有数据(扫描100行)，然后遍历这每行数据中字段 a 的值，根据 t2 表中 a 的值索引扫描 t1 表中的对应行(扫描100次 t1 表的索引，1次扫描可以认为最终只扫描 t1 表一行完整数据，也就是总共 t1 表也扫描了100行)。<strong>因此整个过程扫描了 200 行</strong></p><h3 id=基于块的嵌套循环算法>基于块的嵌套循环算法</h3><p>当关联字段没有没有索引的时候会使用这种算法</p><p>把驱动表的数据读入到 join_buffer 中，然后扫描被驱动表，把被驱动表每一行取出来跟 join_buffer 中的数据做对比。</p><p>如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> t1 <span style=color:#ff79c6>inner</span> <span style=color:#ff79c6>join</span> t2 <span style=color:#ff79c6>on</span> t1.b<span style=color:#ff79c6>=</span> t2.b;
-</span></span></code></pre></div><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806103855.png alt></p><p><strong>Extra 中 的Using join buffer (Block Nested Loop)说明该关联查询使用的是 BNL 算法。</strong></p><p>上面sql的大致流程如下：</p><ol><li>把 t2 的所有数据放入到 join_buffer 中</li><li>把表 t1 中每一行取出来，跟 join_buffer 中的数据做对比</li><li>返回满足 join 条件的数据</li></ol><p>整个过程对表 t1 和 t2 都做了一次全表扫描，因此<strong>扫描的总行数为10000(表 t1 的数据总量) + 100(表 t2 的数据总量) = 10100</strong>。<strong>并且 join_buffer 里的数据是无序的，因此对表 t1 中的每一行，都要做 100 次判断，所以内存中的判断次数是 100 * 10000= 100 万次。</strong></p><p>这个例子里表 t2 才 100 行，要是表 t2 是一个大表，join_buffer 放不下怎么办呢？·</p><p>join_buffer 的大小是由参数 join_buffer_size 设定的，默认值是 256k。如果放不下表 t2 的所有数据话，策略很简单，就是<strong>分段放</strong>。</p><p>比如 t2 表有1000行记录， join_buffer 一次只能放800行数据，那么执行过程就是先往 join_buffer 里放800行记录，然后从 t1 表里取数据跟 join_buffer 中数据对比得到部分结果，然后清空 join_buffer ，再放入 t2 表剩余200行记录，再次从 t1 表里取数据跟 join_buffer 中数据对比。所以就多扫了一次 t1 表。</p><h3 id=为什么要使用-bnlj-算法呢>为什么要使用 BNLJ 算法呢?</h3><p>如果上面第二条sql使用 Nested-Loop Join，那么扫描行数为 <strong>100 * 10000 = 100万次</strong>，这个是磁盘扫描。</p><p>很显然，用BNL磁盘扫描次数少很多，相比于磁盘扫描，BNL的内存计算会快得多。</p><p>因此MySQL对于被驱动表的关联字段没索引的关联查询，一般都会使用 BNL 算法。如果有索引一般选择 NLJ 算法，有索引的情况下 NLJ 算法比 BNL算法性能更高</p><h3 id=对于关联sql的优化>对于关联sql的优化</h3><ul><li><p>关联字段加索引，让mysql做join操作时尽量选择NLJ算法，驱动表因为需要全部查询出来，所以过滤的条件也尽量要走索引，避免全表扫描，总之，能走索引的过滤条件尽量都走索引</p></li><li><p>小表驱动大表，写多表连接sql时如果明确知道哪张表是小表可以用<code>straight_join</code>写法固定连接驱动方式，省去mysql优化器自己判断的时间</p></li></ul><p>straight_join解释：straight_join功能同join类似，但能让左边的表来驱动右边的表，能改表优化器对于联表查询的执行顺序。</p><p>比如：<code>select * from t2 straight_join t1 on t2.a = t1.a;</code> 代表指定mysql选着 t2 表作为驱动表。</p><ul><li><p>straight_join只适用于inner join，并不适用于left join，right join。（因为left join，right join已经代表指定了表的执行顺序）</p></li><li><p><strong>尽可能让优化器去判断</strong>，因为大部分情况下mysql优化器是比人要聪明的。使用straight_join一定要慎重，因为部分情况下人为指定的执行顺序并不一定会比优化引擎要靠谱。</p></li></ul><h4 id=小表的定义>小表的定义</h4><p>在决定哪个表做驱动表的时候，应该是两个表按照各自的条件过滤，过滤完成之后，计算参与 join 的各个字段的总数据量，数据量小的那个表，就是“小表”，应该作为驱动表。不单单是表的总数据量</p><h2 id=in和exsits优化>in和exsits优化</h2><p>原则：<strong>小表驱动大表</strong>，即小的数据集驱动大的数据集</p><ul><li>in：当B表的数据集小于A表的数据集时，in优于exists</li></ul><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>select * from A where id in (select id from B)
-</span></span><span style=display:flex><span>#等价于： 　　
-</span></span><span style=display:flex><span>for(select id from B){
-</span></span><span style=display:flex><span>    select * from A where A.id = B.id
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><ul><li>exists：当A表的数据集小于B表的数据集时，exists优于in</li></ul><p>将主查询A的数据，放到子查询B中做条件验证，根据验证结果（true或false）来决定主查询的数据是否保留</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>select * from A where exists (select 1 from B where B.id = A.id)
-</span></span><span style=display:flex><span>#等价于: 
-</span></span><span style=display:flex><span>for(select * from A){
-</span></span><span style=display:flex><span>  select * from B where B.id = A.id 
-</span></span><span style=display:flex><span>} 
-</span></span><span style=display:flex><span>#A表与B表的ID字段应建立索引
-</span></span></code></pre></div><h4 id=关于exists>关于Exists</h4><ol><li><p>EXISTS (subquery)只返回TRUE或FALSE,因此子查询中的SELECT * 也可以用SELECT 1替换,官方说法是实际执行时会忽略SELECT清单,因此没有区别</p></li><li><p>EXISTS子查询的实际执行过程可能经过了优化而不是我们理解上的逐条对比</p></li><li><p>EXISTS子查询往往也可以用JOIN来代替，何种最优需要具体问题具体分析</p></li></ol><h2 id=count-查询优化>count 查询优化</h2><p>有下面四条查询语句</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>count</span>(<span style=color:#bd93f9>1</span>) <span style=color:#ff79c6>from</span> employees;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>count</span>(id) <span style=color:#ff79c6>from</span> employees;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>count</span>(name) <span style=color:#ff79c6>from</span> employees;
-</span></span><span style=display:flex><span><span style=color:#ff79c6>EXPLAIN</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>count</span>(<span style=color:#ff79c6>*</span>) <span style=color:#ff79c6>from</span> employees;
-</span></span></code></pre></div><p>只有 count(字段名) 不会把该字段为null 计入总数</p><p>其实上面四条的查询计划都一样，效率上没有太大的差别</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806105225.png alt></p><h4 id=当字段有索引>当字段有索引</h4><p>count(*)≈count(1)>count(字段)>count(主键 id)</p><p>字段有索引，count(字段)统计走二级索引，二级索引存储数据比主键索引少，所以count(字段)>count(主键 id)</p><h4 id=当字段没有索引>当字段没有索引</h4><p>count(*)≈count(1)>count(主键 id)>count(字段)</p><p>字段没有索引count(字段)统计走不了索引，count(主键 id)还可以走主键索引，所以count(主键 id)>count(字段)</p><h4 id=count1>count(1)</h4><p>count(1)跟count(字段)执行过程类似，不过count(1)不需要取出字段统计，就用常量1做统计，count(字段)还需要取出字段，所以理论上count(1)比count(字段)会快一点。</p><h4 id=count>count(*)</h4><p>count(*) 是例外，mysql并不会把全部字段取出来，<strong>而是专门做了优化，不取值，按行累加</strong>，效率很高，<strong>所以不需要用count(列名)或count(常量)来替代 count(*)</strong>。</p><p>为什么对于count(id)，mysql最终选择辅助索引而不是主键聚集索引？因为二级索引相对主键索引存储数据更少，检索性能应该更高，mysql内部做了点优化(应该是在5.7版本才优化)。</p><h3 id=常见优化方法>常见优化方法</h3><ol><li><p>自己维护的总行数</p></li><li><p>show table status<br>如果只需要知道表总行数的估计值可以用如下sql查询，性能很高<br><code>show table status like 'employee'</code><br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806110121.png alt></p></li><li><p>将总数维护到Redis里<br>插入或删除表数据行的时候同时维护redis里的表总行数key的计数值(用incr或decr命令)，但是这种方式可能不准，很难保证表操作和redis操作的事务一致性</p></li></ol><h2 id=索引设计原则>索引设计原则</h2><p>索引设计原则</p><p>1、代码先行，索引后上</p><p>等到主体业务功能开发完毕，把涉及到该表相关sql都要拿出来分析之后再建立索引。</p><p>2、联合索引尽量覆盖条件</p><p>比如可以设计一个或者两三个联合索引(尽量少建单值索引)，让每一个联合索引都尽量去包含sql语句里的where、order by、group by的字段，还要确保这些联合索引的字段顺序尽量满足sql查询的最左前缀原则。</p><p>3、不要在<strong>小基数</strong>字段上建立索引</p><p>索引基数是指这个字段在表里总共有多少个不同的值，比如一张表总共100万行记录，其中有个性别字段，其值不是男就是女，那么该字段的基数就是2。</p><p>如果对这种小基数字段建立索引的话，还不如全表扫描了，因为你的索引树里就包含男和女两种值，根本没法进行快速的二分查找，那用索引就没有太大的意义了。</p><p>一般建立索引，尽量使用那些基数比较大的字段，就是值比较多的字段，那么才能发挥出B+树快速二分查找的优势来。</p><p>4、长字符串我们可以采用<strong>前缀索引</strong></p><p>尽量对字段类型较小的列设计索引，比如说什么tinyint之类的，因为字段类型较小的话，占用磁盘空间也会比较小，此时你在搜索的时候性能也会比较好一点。</p><p>当然，这个所谓的字段类型小一点的列，也不是绝对的，很多时候你就是要针对varchar(255)这种字段建立索引，哪怕多占用一些磁盘空间也是有必要的。</p><p>对于这种varchar(255)的大字段可能会比较占用磁盘空间，可以稍微优化下，比如针对这个字段的前20个字符建立索引，就是说，对这个字段里的每个值的前20个字符放在索引树里，类似于 <code>KEY index(name(20),age,position)</code></p><p>此时你在where条件里搜索的时候，如果是根据name字段来搜索，那么此时就会先到索引树里根据name字段的前20个字符去搜索，定位到之后前20个字符的前缀匹配的部分数据之后，再回到聚簇索引提取出来完整的name字段值进行比对。</p><p>但是假如你要是order by name，那么此时你的name因为在索引树里仅仅包含了前20个字符，所以这个排序是<strong>没法用上索引的， group by也是同理</strong></p><p>5、<strong>where与order by冲突时优先where</strong></p><p>在where和order by出现索引设计冲突时，到底是针对where去设计索引，还是针对order by设计索引？到底是让where去用上索引，还是让order by用上索引?</p><p>一般这种时候往往都是让where条件去使用索引来快速筛选出来一部分指定的数据，接着再进行排序。</p><p>因为大多数情况基于索引进行where筛选往往可以最快速度筛选出你要的少部分数据，然后做排序的成本可能会小很多。</p><h3 id=举个例子>举个例子</h3><p>有 employees表，name, age, sex, position 列， 有联合索引 （name, age, sex, position）,</p><p>sex : 性别，取值0 或1</p><p>有如下查询: <code>select id from employees where name = 'zhangsan' and age = 18 and position = 'dev'</code> 因为跳过了 sex 字段，position 无法利用索引</p><p>因为 sex 只有两个取值，我们在查询语句上把 sex 的值全部枚举出来， 如下:</p><p><code>select id from employees where name = 'zhangsan' and age = 18 and sex in (0, 1) and position = 'dev'</code></p><p>这样一来就可以利用全部索引了。</p><h3 id=再举个例子>再举个例子</h3><p>加入我们要查询最近一周登录的用户，首先想到的是 <code>last_login_time > {一周之前的时间}</code></p><p>这是一个范围查询，在后面的所有字段便无法利用索引了，我们可以再设计一个字段，recent_login_flag(tinyint) 标识是否最近登录过。用定时任务定期更新该字段的值。这样就由范围查询变成了等值查询，数据可能不是太及时变化，就看业务是否允许了。</p><p>总之就是想办法最大限度的利用索引。</p></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><ul><li><a href=#联合索引的首字段用范围查询>联合索引的首字段用范围查询</a></li><li><a href=#强制走索引>强制走索引</a></li><li><a href=#覆盖索引优化>覆盖索引优化</a></li><li><a href=#in和or什么时候会走索引>in和or什么时候会走索引</a></li><li><a href=#like-xx-一般都会走索引和数据量无关>like xx% 一般都会走索引，和数据量无关</a></li><li><a href=#索引下推>索引下推</a></li><li><a href=#为什么范围查找没有用索引下推优化>为什么范围查找没有用索引下推优化？</a></li></ul></li><li><a href=#如何选择索引>如何选择索引</a><ul><li><a href=#trace-工具>Trace 工具</a></li></ul></li><li><a href=#深入优化>深入优化</a><ul><li><a href=#order-by-和-group-by>order by 和 group by</a></li></ul></li><li><a href=#优化总结>优化总结</a></li><li><a href=#using-filesort文件排序原理详解>Using filesort文件排序原理详解</a><ul><li><a href=#单路排序模式>单路排序模式；</a></li><li><a href=#双路排序又叫回表排序模式>双路排序（又叫回表排序模式）</a></li></ul></li><li><a href=#分页优化>分页优化</a><ul><li><a href=#常规的limit分页>常规的limit分页</a></li><li><a href=#优化>优化</a></li><li><a href=#非主键排序的优化>非主键排序的优化</a></li></ul></li><li><a href=#表关联优化>表关联优化</a><ul><li><a href=#常见的表关联算法>常见的表关联算法</a></li><li><a href=#基于块的嵌套循环算法>基于块的嵌套循环算法</a></li><li><a href=#为什么要使用-bnlj-算法呢>为什么要使用 BNLJ 算法呢?</a></li><li><a href=#对于关联sql的优化>对于关联sql的优化</a></li></ul></li><li><a href=#in和exsits优化>in和exsits优化</a><ul><li></li></ul></li><li><a href=#count-查询优化>count 查询优化</a><ul><li></li><li><a href=#常见优化方法>常见优化方法</a></li></ul></li><li><a href=#索引设计原则>索引设计原则</a><ul><li><a href=#举个例子>举个例子</a></li><li><a href=#再举个例子>再举个例子</a></li></ul></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/mysql>MySQL</a></li><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/%E7%B4%A2%E5%BC%95>索引</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-MySQL事务和锁详解</div></a><a href=../../posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>MySQL内部结构&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>索引优化 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="索引优化" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">索引优化</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" class="article-date">
+                <time datetime='2022-08-03T17:10:57.000&#43;00:00' itemprop="datePublished">2022-08-03</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">`</span>employees<span style="color:#ff79c6">`</span> (
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">`</span>id<span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">int</span>(<span style="color:#bd93f9">11</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> AUTO_INCREMENT,
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">`</span>name<span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">varchar</span>(<span style="color:#bd93f9">24</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> <span style="color:#ff79c6">DEFAULT</span> <span style="color:#f1fa8c">&#39;&#39;</span> <span style="color:#ff79c6">COMMENT</span> <span style="color:#f1fa8c">&#39;姓名&#39;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">`</span>age<span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">int</span>(<span style="color:#bd93f9">11</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> <span style="color:#ff79c6">DEFAULT</span> <span style="color:#f1fa8c">&#39;0&#39;</span> <span style="color:#ff79c6">COMMENT</span> <span style="color:#f1fa8c">&#39;年龄&#39;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">`</span><span style="color:#ff79c6">position</span><span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">varchar</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> <span style="color:#ff79c6">DEFAULT</span> <span style="color:#f1fa8c">&#39;&#39;</span> <span style="color:#ff79c6">COMMENT</span> <span style="color:#f1fa8c">&#39;职位&#39;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">`</span>hire_time<span style="color:#ff79c6">`</span> <span style="color:#ff79c6">timestamp</span> <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> <span style="color:#ff79c6">DEFAULT</span> <span style="color:#ff79c6">CURRENT_TIMESTAMP</span> <span style="color:#ff79c6">COMMENT</span> <span style="color:#f1fa8c">&#39;入职时间&#39;</span>,
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span> (<span style="color:#ff79c6">`</span>id<span style="color:#ff79c6">`</span>),
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">KEY</span> <span style="color:#ff79c6">`</span>idx_name_age_position<span style="color:#ff79c6">`</span> (<span style="color:#ff79c6">`</span>name<span style="color:#ff79c6">`</span>,<span style="color:#ff79c6">`</span>age<span style="color:#ff79c6">`</span>,<span style="color:#ff79c6">`</span><span style="color:#ff79c6">position</span><span style="color:#ff79c6">`</span>) <span style="color:#ff79c6">USING</span> BTREE
+</span></span><span style="display:flex;"><span> ) ENGINE<span style="color:#ff79c6">=</span>InnoDB AUTO_INCREMENT<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">DEFAULT</span> CHARSET<span style="color:#ff79c6">=</span>utf8 <span style="color:#ff79c6">COMMENT</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;员工记录表&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> employees(name,age,<span style="color:#ff79c6">position</span>,hire_time) <span style="color:#ff79c6">VALUES</span>(<span style="color:#f1fa8c">&#39;LiLei&#39;</span>,<span style="color:#bd93f9">22</span>,<span style="color:#f1fa8c">&#39;manager&#39;</span>,NOW());
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> employees(name,age,<span style="color:#ff79c6">position</span>,hire_time) <span style="color:#ff79c6">VALUES</span>(<span style="color:#f1fa8c">&#39;HanMeimei&#39;</span>, <span style="color:#bd93f9">23</span>,<span style="color:#f1fa8c">&#39;dev&#39;</span>,NOW());
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">INSERT</span> <span style="color:#ff79c6">INTO</span> employees(name,age,<span style="color:#ff79c6">position</span>,hire_time) <span style="color:#ff79c6">VALUES</span>(<span style="color:#f1fa8c">&#39;Lucy&#39;</span>,<span style="color:#bd93f9">23</span>,<span style="color:#f1fa8c">&#39;dev&#39;</span>,NOW());
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> ‐‐ 插入一些示例数据
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">procedure</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> insert_emp;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">delimiter</span> ;;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">create</span> <span style="color:#ff79c6">procedure</span> insert_emp()
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">begin</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">declare</span> i <span style="color:#8be9fd;font-style:italic">int</span>;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">set</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span> while(i<span style="color:#ff79c6">&lt;=</span><span style="color:#bd93f9">100000</span>)<span style="color:#ff79c6">do</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> employees(name,age,<span style="color:#ff79c6">position</span>) <span style="color:#ff79c6">values</span>(CONCAT(<span style="color:#f1fa8c">&#39;zhuge&#39;</span>,i),i,<span style="color:#f1fa8c">&#39;dev&#39;</span>);
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">set</span> i<span style="color:#ff79c6">=</span>i<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">end</span> while;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">end</span>;;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">delimiter</span> ;
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">call</span> insert_emp();
+</span></span></code></pre></div><p>如上有 <code>employees</code> 表，有主键索引和 (name, age, position ) 联合索引, 看下面的查询示例:</p>
+<h3 id="联合索引的首字段用范围查询">联合索引的首字段用范围查询</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&#39;LiLei&#39;</span> <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803151010.png" alt=""></p>
+<p>结论：联合索引第一个字段就用范围查找不会走索引，mysql内部可能觉得<strong>第一个字段就用范围</strong>，结果集应该很大，回表效率不高，还不如就全表扫描</p>
+<h3 id="强制走索引">强制走索引</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees <span style="color:#ff79c6">force</span> <span style="color:#ff79c6">index</span>(idx_name_age_position) <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&#39;LiLei&#39;</span> <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803151827.png" alt=""></p>
+<p>结论：虽然使用了强制走索引让联合索引第一个字段范围查找也走索引，扫描的行rows看上去也少了点，但是最终查找效率不一定比全表扫描高，因为回表效率不高， 一般不会使用这个手段，除非有证据能证明强制走索引后效率大幅度提高</p>
+<h3 id="覆盖索引优化">覆盖索引优化</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> name,age,<span style="color:#ff79c6">position</span> <span style="color:#ff79c6">FROM</span> employees <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&#39;LiLei&#39;</span> <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803152346.png" alt=""><br>
+将 <code>select *</code> 修改为 <code>select name, age, posiion</code> ， 只选择索引中已经存在的列，可以不用回表，所以会利用索引</p>
+<h3 id="in和or什么时候会走索引">in和or什么时候会走索引</h3>
+<p>在表数据量比较大的情况会走索引，数据量不多的情况下会选择全表扫描,示例如下:</p>
+<p><strong>in 查询</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">in</span> (<span style="color:#f1fa8c">&#39;LiLei&#39;</span>,<span style="color:#f1fa8c">&#39;HanMeimei&#39;</span>,<span style="color:#f1fa8c">&#39;Lucy&#39;</span>) <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803152913.png" alt=""></p>
+<p>用到全部索引<br>
+<strong>or 查询</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees <span style="color:#ff79c6">WHERE</span> (name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;LiLei&#39;</span> <span style="color:#ff79c6">or</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;HanMeimei&#39;</span>) <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153050.png" alt=""></p>
+<p>用到全部索引</p>
+<p>下面新建一张 employees_copy 表，结构和 employee 一样，但数据只有三条, 再执行上面两个查询</p>
+<p><strong>in 查询</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees_copy <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">in</span> (<span style="color:#f1fa8c">&#39;LiLei&#39;</span>,<span style="color:#f1fa8c">&#39;HanMeimei&#39;</span>,<span style="color:#f1fa8c">&#39;Lucy&#39;</span>) <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153331.png" alt=""></p>
+<p>全表扫描</p>
+<p><strong>or查询</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees_copy <span style="color:#ff79c6">WHERE</span> (name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;LiLei&#39;</span> <span style="color:#ff79c6">or</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;HanMeimei&#39;</span>) <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153408.png" alt=""></p>
+<p>全表扫描</p>
+<h3 id="like-xx-一般都会走索引和数据量无关">like xx% 一般都会走索引，和数据量无关</h3>
+<p>大表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">like</span> <span style="color:#f1fa8c">&#39;LiLei%&#39;</span> <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153549.png" alt=""></p>
+<p>小表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> employees_copy <span style="color:#ff79c6">WHERE</span> name <span style="color:#ff79c6">like</span> <span style="color:#f1fa8c">&#39;LiLei%&#39;</span> <span style="color:#ff79c6">AND</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">22</span> <span style="color:#ff79c6">AND</span> <span style="color:#ff79c6">position</span> <span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;manager&#39;</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803153614.png" alt=""></p>
+<p>可以看到，无论表的数据量大小，都会利用索引，为什么呢？</p>
+<p>其实 like 用到了索引下推的优化</p>
+<h3 id="索引下推">索引下推</h3>
+<p>对于辅助联合索引，正常情况下按照最左前缀原则， <code>SELECT  * from employees where name like 'LiLei%' and  age = 22 and position  = 'dev'</code>  这种情况下只会走name字段的索引，因为根据name字段过滤完，得到的索引行里的age和position是无序的，无法很好的利用索引。</p>
+<p>在<code>MySQL5.6</code>之前的版本，这个查询只能在联合索引里匹配到名字是 &lsquo;LiLei&rsquo; 开头的索引，然后拿这些索引对应的主键逐个回表，到主键索引上找出相应的记录，再比对age和position这两个字段的值是否符合。</p>
+<p>MySQL 5.6引入了索引下推优化，可以在索引遍历过程中，<strong>对索引中包含的所有字段先做判断，过滤掉不符合条件的记录之后再回表</strong>，可以有效的减少回表次数。使用了索引下推优化后，上面那个查询在联合索引里匹配到名字是 &lsquo;LiLei&rsquo; 开头的索引之后，同时还会在索引里过滤age和position这两个字段，拿着过滤完剩下的索引对应的主键id再回表查整行数据。</p>
+<p>索引下推会减少回表次数，对于innodb引擎的表索引下推只能用于二级索引，innodb的主键索引（聚簇索引）树叶子节点上保存的是全行数据，所以这个时候索引下推并不会起到减少查询全行数据的效果。</p>
+<h3 id="为什么范围查找没有用索引下推优化">为什么范围查找没有用索引下推优化？</h3>
+<p>估计应该是Mysql认为范围查找过滤的结果集过大，<code>like KK%</code> 在绝大多数情况来看，过滤后的结果集比较小，所以这里Mysql选择给 like KK% 用了索引下推优化，当然这也<strong>不是绝对的</strong>，有时like KK% 也不一定就会走索引下推。</p>
+<h2 id="如何选择索引">如何选择索引</h2>
+<p>先看下面的两个查询:</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803154807.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803154821.png" alt=""></p>
+<p>同样的表，同样的字段，因为条件的不同，选择的索引也不同，MySQL 是如何选择的呢？</p>
+<h3 id="trace-工具">Trace 工具</h3>
+<p>MySQl 提供了一个工具，可以看到选择索引的计算过程， 用法如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">set</span> <span style="color:#ff79c6">session</span> optimizer_trace<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;enabled=on&#34;</span>,end_markers_in_json<span style="color:#ff79c6">=</span><span style="color:#ff79c6">on</span>;  <span style="color:#6272a4">--开启trace
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> employees <span style="color:#ff79c6">where</span> name <span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&#39;a&#39;</span> <span style="color:#ff79c6">order</span> <span style="color:#ff79c6">by</span> <span style="color:#ff79c6">position</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">FROM</span> information_schema.OPTIMIZER_TRACE;
+</span></span></code></pre></div><p>下面是对 trace 字段的解析</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&#34;steps&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&#34;join_preparation&#34;</span>: {    <span style="color:#6272a4">//第一阶段：SQL准备阶段，格式化sql
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">&#34;select#&#34;</span>: <span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;steps&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;expanded_query&#34;</span>: <span style="color:#f1fa8c">&#34;/* select#1 */ select `employees`.`id` AS `id`,`employees`.`name` AS `name`,`employees`.`age` AS `age`,`employees`.`position` AS `position`,`employees`.`hire_time` AS `hire_time` from `employees` where (`employees`.`name` &gt; &#39;a&#39;) order by `employees`.`position`&#34;</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ] /* steps */
+</span></span><span style="display:flex;"><span>      } /* join_preparation */
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&#34;join_optimization&#34;</span>: {    <span style="color:#6272a4">//第二阶段：SQL优化阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">&#34;select#&#34;</span>: <span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;steps&#34;</span>: [
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;condition_processing&#34;</span>: {    <span style="color:#6272a4">//条件处理
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>              <span style="color:#ff79c6">&#34;condition&#34;</span>: <span style="color:#f1fa8c">&#34;WHERE&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;original_condition&#34;</span>: <span style="color:#f1fa8c">&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;steps&#34;</span>: [
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;transformation&#34;</span>: <span style="color:#f1fa8c">&#34;equality_propagation&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;resulting_condition&#34;</span>: <span style="color:#f1fa8c">&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
+</span></span><span style="display:flex;"><span>                },
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;transformation&#34;</span>: <span style="color:#f1fa8c">&#34;constant_propagation&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;resulting_condition&#34;</span>: <span style="color:#f1fa8c">&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
+</span></span><span style="display:flex;"><span>                },
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;transformation&#34;</span>: <span style="color:#f1fa8c">&#34;trivial_condition_removal&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;resulting_condition&#34;</span>: <span style="color:#f1fa8c">&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              ] /* steps */
+</span></span><span style="display:flex;"><span>            } /* condition_processing */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;substitute_generated_columns&#34;</span>: {
+</span></span><span style="display:flex;"><span>            } /* substitute_generated_columns */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;table_dependencies&#34;</span>: [    <span style="color:#6272a4">//表依赖详情
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>              {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;table&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;row_may_be_null&#34;</span>: <span style="color:#ff79c6">false</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;map_bit&#34;</span>: <span style="color:#bd93f9">0</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;depends_on_map_bits&#34;</span>: [
+</span></span><span style="display:flex;"><span>                ] /* depends_on_map_bits */
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            ] /* table_dependencies */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;ref_optimizer_key_uses&#34;</span>: [
+</span></span><span style="display:flex;"><span>            ] /* ref_optimizer_key_uses */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;rows_estimation&#34;</span>: [    <span style="color:#6272a4">//预估表的访问成本
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>              {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;table&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;range_analysis&#34;</span>: {
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;table_scan&#34;</span>: {     <span style="color:#6272a4">//全表扫描情况
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">&#34;rows&#34;</span>: <span style="color:#bd93f9">10123</span>,    <span style="color:#6272a4">//扫描行数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">&#34;cost&#34;</span>: <span style="color:#bd93f9">2054.7</span>    <span style="color:#6272a4">//查询成本
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                  } /* table_scan */,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;potential_range_indexes&#34;</span>: [    <span style="color:#6272a4">//查询可能使用的索引
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    {
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;index&#34;</span>: <span style="color:#f1fa8c">&#34;PRIMARY&#34;</span>,    <span style="color:#6272a4">//主键索引
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                      <span style="color:#ff79c6">&#34;usable&#34;</span>: <span style="color:#ff79c6">false</span>,
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;cause&#34;</span>: <span style="color:#f1fa8c">&#34;not_applicable&#34;</span>
+</span></span><span style="display:flex;"><span>                    },
+</span></span><span style="display:flex;"><span>                    {
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;index&#34;</span>: <span style="color:#f1fa8c">&#34;idx_name_age_position&#34;</span>,    <span style="color:#6272a4">//辅助索引
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                      <span style="color:#ff79c6">&#34;usable&#34;</span>: <span style="color:#ff79c6">true</span>,
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;key_parts&#34;</span>: [
+</span></span><span style="display:flex;"><span>                        <span style="color:#f1fa8c">&#34;name&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#f1fa8c">&#34;age&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#f1fa8c">&#34;position&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#f1fa8c">&#34;id&#34;</span>
+</span></span><span style="display:flex;"><span>                      ] /* key_parts */
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                  ] /* potential_range_indexes */,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;setup_range_conditions&#34;</span>: [
+</span></span><span style="display:flex;"><span>                  ] /* setup_range_conditions */,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;group_index_range&#34;</span>: {
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">&#34;chosen&#34;</span>: <span style="color:#ff79c6">false</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">&#34;cause&#34;</span>: <span style="color:#f1fa8c">&#34;not_group_by_or_distinct&#34;</span>
+</span></span><span style="display:flex;"><span>                  } /* group_index_range */,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;analyzing_range_alternatives&#34;</span>: {    <span style="color:#6272a4">//分析各个索引使用成本
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">&#34;range_scan_alternatives&#34;</span>: [
+</span></span><span style="display:flex;"><span>                      {
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">&#34;index&#34;</span>: <span style="color:#f1fa8c">&#34;idx_name_age_position&#34;</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">&#34;ranges&#34;</span>: [
+</span></span><span style="display:flex;"><span>                          <span style="color:#f1fa8c">&#34;a &lt; name&#34;</span>      <span style="color:#6272a4">//索引使用范围
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        ] /* ranges */,
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">&#34;index_dives_for_eq_ranges&#34;</span>: <span style="color:#ff79c6">true</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">&#34;rowid_ordered&#34;</span>: <span style="color:#ff79c6">false</span>,    <span style="color:#6272a4">//使用该索引获取的记录是否按照主键排序
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#ff79c6">&#34;using_mrr&#34;</span>: <span style="color:#ff79c6">false</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">&#34;index_only&#34;</span>: <span style="color:#ff79c6">false</span>,       <span style="color:#6272a4">//是否使用覆盖索引
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#ff79c6">&#34;rows&#34;</span>: <span style="color:#bd93f9">5061</span>,              <span style="color:#6272a4">//索引扫描行数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#ff79c6">&#34;cost&#34;</span>: <span style="color:#bd93f9">6074.2</span>,            <span style="color:#6272a4">//索引使用成本
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#ff79c6">&#34;chosen&#34;</span>: <span style="color:#ff79c6">false</span>,           <span style="color:#6272a4">//是否选择该索引
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#ff79c6">&#34;cause&#34;</span>: <span style="color:#f1fa8c">&#34;cost&#34;</span>
+</span></span><span style="display:flex;"><span>                      }
+</span></span><span style="display:flex;"><span>                    ] /* range_scan_alternatives */,
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">&#34;analyzing_roworder_intersect&#34;</span>: {
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;usable&#34;</span>: <span style="color:#ff79c6">false</span>,
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;cause&#34;</span>: <span style="color:#f1fa8c">&#34;too_few_roworder_scans&#34;</span>
+</span></span><span style="display:flex;"><span>                    } /* analyzing_roworder_intersect */
+</span></span><span style="display:flex;"><span>                  } /* analyzing_range_alternatives */
+</span></span><span style="display:flex;"><span>                } /* range_analysis */
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            ] /* rows_estimation */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;considered_execution_plans&#34;</span>: [
+</span></span><span style="display:flex;"><span>              {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;plan_prefix&#34;</span>: [
+</span></span><span style="display:flex;"><span>                ] /* plan_prefix */,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;table&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;best_access_path&#34;</span>: {    <span style="color:#6272a4">//最优访问路径
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                  <span style="color:#ff79c6">&#34;considered_access_paths&#34;</span>: [   <span style="color:#6272a4">//最终选择的访问路径
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    {
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;rows_to_scan&#34;</span>: <span style="color:#bd93f9">10123</span>,
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;access_type&#34;</span>: <span style="color:#f1fa8c">&#34;scan&#34;</span>,     <span style="color:#6272a4">//访问类型：为scan，全表扫描
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                      <span style="color:#ff79c6">&#34;resulting_rows&#34;</span>: <span style="color:#bd93f9">10123</span>,
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;cost&#34;</span>: <span style="color:#bd93f9">2052.6</span>,
+</span></span><span style="display:flex;"><span>                      <span style="color:#ff79c6">&#34;chosen&#34;</span>: <span style="color:#ff79c6">true</span>,            <span style="color:#6272a4">//确定选择
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                      <span style="color:#ff79c6">&#34;use_tmp_table&#34;</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                  ] /* considered_access_paths */
+</span></span><span style="display:flex;"><span>                } /* best_access_path */,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;condition_filtering_pct&#34;</span>: <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;rows_for_plan&#34;</span>: <span style="color:#bd93f9">10123</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;cost_for_plan&#34;</span>: <span style="color:#bd93f9">2052.6</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;sort_cost&#34;</span>: <span style="color:#bd93f9">10123</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;new_cost_for_plan&#34;</span>: <span style="color:#bd93f9">12176</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;chosen&#34;</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            ] /* considered_execution_plans */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;attaching_conditions_to_tables&#34;</span>: {
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;original_condition&#34;</span>: <span style="color:#f1fa8c">&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;attached_conditions_computation&#34;</span>: [
+</span></span><span style="display:flex;"><span>              ] /* attached_conditions_computation */,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;attached_conditions_summary&#34;</span>: [
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;table&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`&#34;</span>,
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;attached&#34;</span>: <span style="color:#f1fa8c">&#34;(`employees`.`name` &gt; &#39;a&#39;)&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              ] /* attached_conditions_summary */
+</span></span><span style="display:flex;"><span>            } /* attaching_conditions_to_tables */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;clause_processing&#34;</span>: {
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;clause&#34;</span>: <span style="color:#f1fa8c">&#34;ORDER BY&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;original_clause&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`.`position`&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;items&#34;</span>: [
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">&#34;item&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`.`position`&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>              ] /* items */,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;resulting_clause_is_simple&#34;</span>: <span style="color:#ff79c6">true</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;resulting_clause&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`.`position`&#34;</span>
+</span></span><span style="display:flex;"><span>            } /* clause_processing */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;reconsidering_access_paths_for_index_ordering&#34;</span>: {
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;clause&#34;</span>: <span style="color:#f1fa8c">&#34;ORDER BY&#34;</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;steps&#34;</span>: [
+</span></span><span style="display:flex;"><span>              ] /* steps */,
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&#34;index_order_summary&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;table&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;index_provides_order&#34;</span>: <span style="color:#ff79c6">false</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;order_direction&#34;</span>: <span style="color:#f1fa8c">&#34;undefined&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;index&#34;</span>: <span style="color:#f1fa8c">&#34;unknown&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;plan_changed&#34;</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>              } /* index_order_summary */
+</span></span><span style="display:flex;"><span>            } /* reconsidering_access_paths_for_index_ordering */
+</span></span><span style="display:flex;"><span>          },
+</span></span><span style="display:flex;"><span>          {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&#34;refine_plan&#34;</span>: [
+</span></span><span style="display:flex;"><span>              {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">&#34;table&#34;</span>: <span style="color:#f1fa8c">&#34;`employees`&#34;</span>
+</span></span><span style="display:flex;"><span>              }
+</span></span><span style="display:flex;"><span>            ] /* refine_plan */
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        ] /* steps */
+</span></span><span style="display:flex;"><span>      } /* join_optimization */
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&#34;join_execution&#34;</span>: {    <span style="color:#6272a4">//第三阶段：SQL执行阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">&#34;select#&#34;</span>: <span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;steps&#34;</span>: [
+</span></span><span style="display:flex;"><span>        ] /* steps */
+</span></span><span style="display:flex;"><span>      } /* join_execution */
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ] /* steps */
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 结论：全表扫描的成本低于索引扫描，所以mysql最终选择全表扫描
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; <span style="color:#ff79c6">select</span> * from employees where name &gt; <span style="color:#f1fa8c">&#39;zzz&#39;</span> order by position;
+</span></span><span style="display:flex;"><span>mysql&gt; SELECT * FROM information_schema.OPTIMIZER_TRACE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 查看trace字段可知索引扫描的成本低于全表扫描，所以mysql最终选择索引扫描</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mysql&gt; <span style="color:#8be9fd;font-style:italic">set</span> session <span style="color:#8be9fd;font-style:italic">optimizer_trace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;enabled=off&#34;</span>;    //关闭trace
+</span></span></code></pre></div><h2 id="深入优化">深入优化</h2>
+<h3 id="order-by-和-group-by">order by 和 group by</h3>
+<p>order by  和 group by 也会遵循左前缀法则, 如下例子<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803155858.png" alt=""></p>
+<p>根据左前缀法则，用到了 name 字段的索引，同时使用 age 字段用来排序， 因为 extra 种没有 filesort</p>
+<p>order by 或者 group by 用到的索引不会参与到 key_len 的计算，索引 key_len 仍然只是 74， 即 name字段的长度</p>
+<p>再看下面一个例子:</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803160606.png" alt=""></p>
+<p>where 条件是name 排序字段是 position 跳过了age字段，所以只能用 name 索引，无法利用 position 索引进行索引排序，用到是文件排序</p>
+<p>再看第三个例子:</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803160739.png" alt=""></p>
+<p>使用name条件查询， 同时使用 age position 双字段排序，没有跳过联合索引的字段. 所以可以用索引排序</p>
+<p>然后颠倒一下排序顺序，先position 再 age：<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161034.png" alt=""></p>
+<p>发现此时只能文件排序了</p>
+<p>再看下面的例子</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161135.png" alt=""></p>
+<p>虽然排序字段与索引字段不一样，但仍然是索引排序， 因为查询条件中 用到是 （name， age）索引，排序中用到是 position 索引，并没有颠倒顺序。所以还是索引排序</p>
+<p>如果一个正序一个倒序呢？<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161441.png" alt=""></p>
+<p>虽然排序字段与索引字段顺序相同， 但是 age 是正序， position 是倒叙，导致与索引的排序方式不同，无法利用索引。从而发生了文件排序， Mysql8以上版本有降序索引可以支持该种查询方式。</p>
+<p>先 in 查询:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161705.png" alt=""><br>
+对于排序来说，多个相等条件也是范围查询, 无法利用索引排序</p>
+<p>先范围查询:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161824.png" alt=""></p>
+<p>这里发生了全表扫描，没有任何索引，排序自然也无法利用索引了，可以使用覆盖索引优化:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220803161956.png" alt=""></p>
+<h2 id="优化总结">优化总结</h2>
+<ol>
+<li>MySQL支持两种方式的排序filesort和index，Using index是指MySQL扫描索引本身完成排序。index效率高，filesort效率低。</li>
+</ol>
+<p>2、order by满足两种情况会使用Using index。</p>
+<ul>
+<li>
+<p>order by语句使用索引最左前列。</p>
+</li>
+<li>
+<p>使用where子句与order by子句条件列组合满足索引最左前列。</p>
+</li>
+</ul>
+<ol start="3">
+<li>
+<p>尽量在索引列上完成排序，遵循索引建立（索引创建的顺序）时的最左前缀法则。</p>
+</li>
+<li>
+<p>如果order by的条件不在索引列上，就会产生Using filesort。</p>
+</li>
+<li>
+<p>能用覆盖索引尽量用覆盖索引</p>
+</li>
+<li>
+<p>group by与order by很类似，其实质是先排序后分组，遵照索引创建顺序的最左前缀法则。对于group by的优化如果不需要排序的可以加上<strong>order by null禁止排序</strong>。注意，<strong>where高于having，能写在where中的限定条件就不要去having限定了。</strong></p>
+</li>
+</ol>
+<h2 id="using-filesort文件排序原理详解">Using filesort文件排序原理详解</h2>
+<h3 id="单路排序模式">单路排序模式；</h3>
+<p>是一次性取出满足条件行的所有字段，然后在sort buffer中进行排序；用trace工具可以看到sort_mode信息里显示&lt; sort_key, additional_fields &gt;或者&lt; sort_key, packed_additional_fields &gt;</p>
+<h3 id="双路排序又叫回表排序模式">双路排序（又叫回表排序模式）</h3>
+<p>是首先根据相应的条件取出相应的排序字段和可以直接定位行数据的行 ID，然后在 sort buffer 中进行排序，排序完后需要再次取回其它需要的字段；用trace工具可以看到sort_mode信息里显示&lt; sort_key, rowid &gt;</p>
+<p>MySQL 通过比较系统变量 <code>max_length_for_sort_data</code>(默认1024字节) 的大小和需要查询的字段总大小来判断使用哪种排序模式。</p>
+<ul>
+<li>如果 字段的总长度小于max_length_for_sort_data ，那么使用 单路排序模式；</li>
+<li>如果 字段的总长度大于max_length_for_sort_data ，那么使用 双路排序模·式。</li>
+</ul>
+<h2 id="分页优化">分页优化</h2>
+<h3 id="常规的limit分页">常规的limit分页</h3>
+<p>有如下查询语句</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> employees <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">10000</span>,<span style="color:#bd93f9">10</span>;
+</span></span></code></pre></div><p>该sql并不是只查询了10条，而是查找了10010条，然后把前10000条结果给舍弃掉, 因此要查询一个大表靠后的内容，执行效率是非常低的</p>
+<h3 id="优化">优化</h3>
+<h4 id="根据主键排序">根据主键排序</h4>
+<p>上面的下面的sql语句没有指定排序方式，默认使用ID排序。当使用ID排序时，我们可以使用下面的优化。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> employees <span style="color:#ff79c6">where</span> id <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">90000</span> <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">5</span>;
+</span></span></code></pre></div><p>如果id是连续自增的，和<code>limit 90000,5</code>  结果没有差别，是 90001 ~ 90005 的数据。</p>
+<p>但是如果在90000之前删除了一条数据，结果就不一样了，<code>id &gt; 90000 limit 5</code> 的结果是 90001 ~ 90005， 但是<code>limit 90000, 5</code> 的结果是 90002 ~ 90006， 很明显 90002 ~ 90006 才是符合我们直觉的。所以这个优化只能限制与排序条件是连续的。如果id不是自增的呢？会出现什么情况，假如 90000 这条数据有两个，<code>limit 90000, 5</code> 的结果是 90000 ~ 90004，而 <code>id &gt; 90000 limit 5</code> 的结果仍是 90001 ~ 90005， 会把 id= 90000 的数据漏掉一条。</p>
+<p>所以这个优化只能用于排序的<strong>字段是连续自增的，并且不能重复</strong></p>
+<h3 id="非主键排序的优化">非主键排序的优化</h3>
+<p>有如下查询语句</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> employees <span style="color:#ff79c6">ORDER</span> <span style="color:#ff79c6">BY</span> name <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">90000</span>,<span style="color:#bd93f9">5</span>;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806101808.png" alt=""></p>
+<p>发现并没有用上name的索引，因为 <code>select *</code> ,扫描联合索引时，无法的到全部数据，需要回表，成本比全表扫描更高，所以优化器放弃使用索引。</p>
+<p>可以使用索引覆盖的方法，使用分页查询仅仅找到少量的主键，然后在使用主键查找整行数据， 如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> employees e <span style="color:#ff79c6">inner</span> <span style="color:#ff79c6">join</span> (<span style="color:#ff79c6">select</span> id <span style="color:#ff79c6">from</span> employees <span style="color:#ff79c6">order</span> <span style="color:#ff79c6">by</span> name <span style="color:#ff79c6">limit</span> <span style="color:#bd93f9">90000</span>,<span style="color:#bd93f9">5</span>) ed <span style="color:#ff79c6">on</span> e.id <span style="color:#ff79c6">=</span> ed.id;
+</span></span></code></pre></div><p>看下执行计划：</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806102449.png" alt=""></p>
+<p>原 SQL 使用文件排序，优化后的使用索引排序</p>
+<h2 id="表关联优化">表关联优化</h2>
+<p>先造一些数据:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">CREATE</span> <span style="color:#ff79c6">TABLE</span> <span style="color:#ff79c6">`</span>t1<span style="color:#ff79c6">`</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">`</span>id<span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">int</span>(<span style="color:#bd93f9">11</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> AUTO_INCREMENT,
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">`</span>a<span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">int</span>(<span style="color:#bd93f9">11</span>) <span style="color:#ff79c6">DEFAULT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">`</span>b<span style="color:#ff79c6">`</span> <span style="color:#8be9fd;font-style:italic">int</span>(<span style="color:#bd93f9">11</span>) <span style="color:#ff79c6">DEFAULT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span> (<span style="color:#ff79c6">`</span>id<span style="color:#ff79c6">`</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">KEY</span> <span style="color:#ff79c6">`</span>idx_a<span style="color:#ff79c6">`</span> (<span style="color:#ff79c6">`</span>a<span style="color:#ff79c6">`</span>)
+</span></span><span style="display:flex;"><span>) ENGINE<span style="color:#ff79c6">=</span>InnoDB <span style="color:#ff79c6">DEFAULT</span> CHARSET<span style="color:#ff79c6">=</span>utf8;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> t2 <span style="color:#ff79c6">like</span> t1;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">-- 插入一些示例数据
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">-- 往t1表插入1万行记录
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">procedure</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> insert_t1; 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">delimiter</span> ;;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">procedure</span> insert_t1()        
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">begin</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">declare</span> i <span style="color:#8be9fd;font-style:italic">int</span>;                    
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">set</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;                          
+</span></span><span style="display:flex;"><span>  while(i<span style="color:#ff79c6">&lt;=</span><span style="color:#bd93f9">10000</span>)<span style="color:#ff79c6">do</span>                 
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> t1(a,b) <span style="color:#ff79c6">values</span>(i,i);  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">set</span> i<span style="color:#ff79c6">=</span>i<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;                       
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">end</span> while;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">end</span>;;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">delimiter</span> ;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">call</span> insert_t1();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">-- 往t2表插入100行记录
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">procedure</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> insert_t2; 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">delimiter</span> ;;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">procedure</span> insert_t2()        
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">begin</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">declare</span> i <span style="color:#8be9fd;font-style:italic">int</span>;                    
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">set</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;                          
+</span></span><span style="display:flex;"><span>  while(i<span style="color:#ff79c6">&lt;=</span><span style="color:#bd93f9">100</span>)<span style="color:#ff79c6">do</span>                 
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">insert</span> <span style="color:#ff79c6">into</span> t2(a,b) <span style="color:#ff79c6">values</span>(i,i);  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">set</span> i<span style="color:#ff79c6">=</span>i<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;                       
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">end</span> while;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">end</span>;;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">delimiter</span> ;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">call</span> insert_t2();
+</span></span></code></pre></div><p>新建 t1 t2 表，结构一样， 都在a字段上有索引，b字段没有索引，t1表有 10000 行记录，t2表只有100条记录。</p>
+<h3 id="常见的表关联算法">常见的表关联算法</h3>
+<ul>
+<li>内嵌循环连接算法   Nested-Loop Join</li>
+<li>基于块的嵌套循环连接算法 Block Nested-Loop Join</li>
+</ul>
+<h4 id="内嵌循环连接算法">内嵌循环连接算法</h4>
+<p>一次一行循环地从第一张表（称为驱动表）中读取行，在这行数据中取到关联字段，根据关联字段在另一张表（被驱动表）里取出满足条件的行，然后取出两张表的结果合集。</p>
+<p>一般关联字段有索引的时候使用这种算法, 示例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> t1 <span style="color:#ff79c6">inner</span> <span style="color:#ff79c6">join</span> t2 <span style="color:#ff79c6">on</span> t1.a<span style="color:#ff79c6">=</span> t2.a;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806103415.png" alt=""></p>
+<p>从执行计划中可以看到这些信息：</p>
+<ul>
+<li>驱动表是 t2，被驱动表是 t1。先执行的就是驱动表；优化器一般会<strong>优先选择小表做驱动表</strong>，用where条件过滤完驱动表，然后再跟被驱动表做关联查询。所以使用 inner join 时，<strong>排在前面的表并不一定就是驱动表</strong></li>
+<li>当使用left join时，左表是驱动表，右表是被驱动表，当使用right join时，右表时驱动表，左表是被驱动表</li>
+<li>使用了 NLJ算法。一般 join 语句中，如果执行计划 Extra 中<strong>未出现 Using join buffer</strong> 则表示使用的 join 算法是 NLJ。</li>
+</ul>
+<p>上面sql的大致流程如下：</p>
+<ol>
+<li>从表 t2 中读取一行数据（如果t2表有查询过滤条件的，用先用条件过滤完，再从过滤结果里取出一行数据）；</li>
+<li>从第 1 步的数据中，取出关联字段 a，到表 t1 中查找；</li>
+<li>取出表 t1 中满足条件的行，跟 t2 中获取到的结果合并，作为结果返回给客户端；</li>
+<li>重复上面 3 步。</li>
+</ol>
+<p>整个过程会读取 t2 表的所有数据(扫描100行)，然后遍历这每行数据中字段 a 的值，根据 t2 表中 a 的值索引扫描 t1 表中的对应行(扫描100次 t1 表的索引，1次扫描可以认为最终只扫描 t1 表一行完整数据，也就是总共 t1 表也扫描了100行)。<strong>因此整个过程扫描了 200 行</strong></p>
+<h3 id="基于块的嵌套循环算法">基于块的嵌套循环算法</h3>
+<p>当关联字段没有没有索引的时候会使用这种算法</p>
+<p>把驱动表的数据读入到 join_buffer 中，然后扫描被驱动表，把被驱动表每一行取出来跟 join_buffer 中的数据做对比。</p>
+<p>如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> t1 <span style="color:#ff79c6">inner</span> <span style="color:#ff79c6">join</span> t2 <span style="color:#ff79c6">on</span> t1.b<span style="color:#ff79c6">=</span> t2.b;
+</span></span></code></pre></div><p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806103855.png" alt=""></p>
+<p><strong>Extra 中 的Using join buffer (Block Nested Loop)说明该关联查询使用的是 BNL 算法。</strong></p>
+<p>上面sql的大致流程如下：</p>
+<ol>
+<li>把 t2 的所有数据放入到 join_buffer 中</li>
+<li>把表 t1 中每一行取出来，跟 join_buffer 中的数据做对比</li>
+<li>返回满足 join 条件的数据</li>
+</ol>
+<p>整个过程对表 t1 和 t2 都做了一次全表扫描，因此<strong>扫描的总行数为10000(表 t1 的数据总量) + 100(表 t2 的数据总量) = 10100</strong>。<strong>并且 join_buffer 里的数据是无序的，因此对表 t1 中的每一行，都要做 100 次判断，所以内存中的判断次数是 100 * 10000= 100 万次。</strong></p>
+<p>这个例子里表 t2 才 100 行，要是表 t2 是一个大表，join_buffer 放不下怎么办呢？·</p>
+<p>join_buffer 的大小是由参数 join_buffer_size 设定的，默认值是 256k。如果放不下表 t2 的所有数据话，策略很简单，就是<strong>分段放</strong>。</p>
+<p>比如 t2 表有1000行记录， join_buffer 一次只能放800行数据，那么执行过程就是先往 join_buffer 里放800行记录，然后从 t1 表里取数据跟 join_buffer 中数据对比得到部分结果，然后清空 join_buffer ，再放入 t2 表剩余200行记录，再次从 t1 表里取数据跟 join_buffer 中数据对比。所以就多扫了一次 t1 表。</p>
+<h3 id="为什么要使用-bnlj-算法呢">为什么要使用 BNLJ 算法呢?</h3>
+<p>如果上面第二条sql使用 Nested-Loop Join，那么扫描行数为 <strong>100 * 10000 = 100万次</strong>，这个是磁盘扫描。</p>
+<p>很显然，用BNL磁盘扫描次数少很多，相比于磁盘扫描，BNL的内存计算会快得多。</p>
+<p>因此MySQL对于被驱动表的关联字段没索引的关联查询，一般都会使用 BNL 算法。如果有索引一般选择 NLJ 算法，有索引的情况下 NLJ 算法比 BNL算法性能更高</p>
+<h3 id="对于关联sql的优化">对于关联sql的优化</h3>
+<ul>
+<li>
+<p>关联字段加索引，让mysql做join操作时尽量选择NLJ算法，驱动表因为需要全部查询出来，所以过滤的条件也尽量要走索引，避免全表扫描，总之，能走索引的过滤条件尽量都走索引</p>
+</li>
+<li>
+<p>小表驱动大表，写多表连接sql时如果明确知道哪张表是小表可以用<code>straight_join</code>写法固定连接驱动方式，省去mysql优化器自己判断的时间</p>
+</li>
+</ul>
+<p>straight_join解释：straight_join功能同join类似，但能让左边的表来驱动右边的表，能改表优化器对于联表查询的执行顺序。</p>
+<p>比如：<code>select * from t2 straight_join t1 on t2.a = t1.a;</code> 代表指定mysql选着 t2 表作为驱动表。</p>
+<ul>
+<li>
+<p>straight_join只适用于inner join，并不适用于left join，right join。（因为left join，right join已经代表指定了表的执行顺序）</p>
+</li>
+<li>
+<p><strong>尽可能让优化器去判断</strong>，因为大部分情况下mysql优化器是比人要聪明的。使用straight_join一定要慎重，因为部分情况下人为指定的执行顺序并不一定会比优化引擎要靠谱。</p>
+</li>
+</ul>
+<h4 id="小表的定义">小表的定义</h4>
+<p>在决定哪个表做驱动表的时候，应该是两个表按照各自的条件过滤，过滤完成之后，计算参与 join 的各个字段的总数据量，数据量小的那个表，就是“小表”，应该作为驱动表。不单单是表的总数据量</p>
+<h2 id="in和exsits优化">in和exsits优化</h2>
+<p>原则：<strong>小表驱动大表</strong>，即小的数据集驱动大的数据集</p>
+<ul>
+<li>in：当B表的数据集小于A表的数据集时，in优于exists</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>select * from A where id in (select id from B)
+</span></span><span style="display:flex;"><span>#等价于： 　　
+</span></span><span style="display:flex;"><span>for(select id from B){
+</span></span><span style="display:flex;"><span>    select * from A where A.id = B.id
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>exists：当A表的数据集小于B表的数据集时，exists优于in</li>
+</ul>
+<p>将主查询A的数据，放到子查询B中做条件验证，根据验证结果（true或false）来决定主查询的数据是否保留</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>select * from A where exists (select 1 from B where B.id = A.id)
+</span></span><span style="display:flex;"><span>#等价于: 
+</span></span><span style="display:flex;"><span>for(select * from A){
+</span></span><span style="display:flex;"><span>  select * from B where B.id = A.id 
+</span></span><span style="display:flex;"><span>} 
+</span></span><span style="display:flex;"><span>#A表与B表的ID字段应建立索引
+</span></span></code></pre></div><h4 id="关于exists">关于Exists</h4>
+<ol>
+<li>
+<p>EXISTS (subquery)只返回TRUE或FALSE,因此子查询中的SELECT * 也可以用SELECT 1替换,官方说法是实际执行时会忽略SELECT清单,因此没有区别</p>
+</li>
+<li>
+<p>EXISTS子查询的实际执行过程可能经过了优化而不是我们理解上的逐条对比</p>
+</li>
+<li>
+<p>EXISTS子查询往往也可以用JOIN来代替，何种最优需要具体问题具体分析</p>
+</li>
+</ol>
+<h2 id="count-查询优化">count 查询优化</h2>
+<p>有下面四条查询语句</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">count</span>(<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">from</span> employees;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">count</span>(id) <span style="color:#ff79c6">from</span> employees;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">count</span>(name) <span style="color:#ff79c6">from</span> employees;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXPLAIN</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">count</span>(<span style="color:#ff79c6">*</span>) <span style="color:#ff79c6">from</span> employees;
+</span></span></code></pre></div><p>只有 count(字段名) 不会把该字段为null 计入总数</p>
+<p>其实上面四条的查询计划都一样，效率上没有太大的差别</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806105225.png" alt=""></p>
+<h4 id="当字段有索引">当字段有索引</h4>
+<p>count(*)≈count(1)&gt;count(字段)&gt;count(主键 id)</p>
+<p>字段有索引，count(字段)统计走二级索引，二级索引存储数据比主键索引少，所以count(字段)&gt;count(主键 id)</p>
+<h4 id="当字段没有索引">当字段没有索引</h4>
+<p>count(*)≈count(1)&gt;count(主键 id)&gt;count(字段)</p>
+<p>字段没有索引count(字段)统计走不了索引，count(主键 id)还可以走主键索引，所以count(主键 id)&gt;count(字段)</p>
+<h4 id="count1">count(1)</h4>
+<p>count(1)跟count(字段)执行过程类似，不过count(1)不需要取出字段统计，就用常量1做统计，count(字段)还需要取出字段，所以理论上count(1)比count(字段)会快一点。</p>
+<h4 id="count">count(*)</h4>
+<p>count(*) 是例外，mysql并不会把全部字段取出来，<strong>而是专门做了优化，不取值，按行累加</strong>，效率很高，<strong>所以不需要用count(列名)或count(常量)来替代 count(*)</strong>。</p>
+<p>为什么对于count(id)，mysql最终选择辅助索引而不是主键聚集索引？因为二级索引相对主键索引存储数据更少，检索性能应该更高，mysql内部做了点优化(应该是在5.7版本才优化)。</p>
+<h3 id="常见优化方法">常见优化方法</h3>
+<ol>
+<li>
+<p>自己维护的总行数</p>
+</li>
+<li>
+<p>show table status<br>
+如果只需要知道表总行数的估计值可以用如下sql查询，性能很高<br>
+<code>show table status like 'employee'</code><br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220806110121.png" alt=""></p>
+</li>
+<li>
+<p>将总数维护到Redis里<br>
+插入或删除表数据行的时候同时维护redis里的表总行数key的计数值(用incr或decr命令)，但是这种方式可能不准，很难保证表操作和redis操作的事务一致性</p>
+</li>
+</ol>
+<h2 id="索引设计原则">索引设计原则</h2>
+<p>索引设计原则</p>
+<p>1、代码先行，索引后上</p>
+<p>等到主体业务功能开发完毕，把涉及到该表相关sql都要拿出来分析之后再建立索引。</p>
+<p>2、联合索引尽量覆盖条件</p>
+<p>比如可以设计一个或者两三个联合索引(尽量少建单值索引)，让每一个联合索引都尽量去包含sql语句里的where、order by、group by的字段，还要确保这些联合索引的字段顺序尽量满足sql查询的最左前缀原则。</p>
+<p>3、不要在<strong>小基数</strong>字段上建立索引</p>
+<p>索引基数是指这个字段在表里总共有多少个不同的值，比如一张表总共100万行记录，其中有个性别字段，其值不是男就是女，那么该字段的基数就是2。</p>
+<p>如果对这种小基数字段建立索引的话，还不如全表扫描了，因为你的索引树里就包含男和女两种值，根本没法进行快速的二分查找，那用索引就没有太大的意义了。</p>
+<p>一般建立索引，尽量使用那些基数比较大的字段，就是值比较多的字段，那么才能发挥出B+树快速二分查找的优势来。</p>
+<p>4、长字符串我们可以采用<strong>前缀索引</strong></p>
+<p>尽量对字段类型较小的列设计索引，比如说什么tinyint之类的，因为字段类型较小的话，占用磁盘空间也会比较小，此时你在搜索的时候性能也会比较好一点。</p>
+<p>当然，这个所谓的字段类型小一点的列，也不是绝对的，很多时候你就是要针对varchar(255)这种字段建立索引，哪怕多占用一些磁盘空间也是有必要的。</p>
+<p>对于这种varchar(255)的大字段可能会比较占用磁盘空间，可以稍微优化下，比如针对这个字段的前20个字符建立索引，就是说，对这个字段里的每个值的前20个字符放在索引树里，类似于 <code>KEY index(name(20),age,position)</code></p>
+<p>此时你在where条件里搜索的时候，如果是根据name字段来搜索，那么此时就会先到索引树里根据name字段的前20个字符去搜索，定位到之后前20个字符的前缀匹配的部分数据之后，再回到聚簇索引提取出来完整的name字段值进行比对。</p>
+<p>但是假如你要是order by name，那么此时你的name因为在索引树里仅仅包含了前20个字符，所以这个排序是<strong>没法用上索引的， group by也是同理</strong></p>
+<p>5、<strong>where与order by冲突时优先where</strong></p>
+<p>在where和order by出现索引设计冲突时，到底是针对where去设计索引，还是针对order by设计索引？到底是让where去用上索引，还是让order by用上索引?</p>
+<p>一般这种时候往往都是让where条件去使用索引来快速筛选出来一部分指定的数据，接着再进行排序。</p>
+<p>因为大多数情况基于索引进行where筛选往往可以最快速度筛选出你要的少部分数据，然后做排序的成本可能会小很多。</p>
+<h3 id="举个例子">举个例子</h3>
+<p>有 employees表，name, age, sex, position  列， 有联合索引 （name, age, sex, position）,</p>
+<p>sex : 性别，取值0 或1</p>
+<p>有如下查询: <code>select id from employees where name = 'zhangsan' and age = 18 and position = 'dev'</code>  因为跳过了 sex 字段，position 无法利用索引</p>
+<p>因为 sex 只有两个取值，我们在查询语句上把 sex 的值全部枚举出来， 如下:</p>
+<p><code>select id from employees where name = 'zhangsan' and age = 18 and sex in (0, 1) and position = 'dev'</code></p>
+<p>这样一来就可以利用全部索引了。</p>
+<h3 id="再举个例子">再举个例子</h3>
+<p>加入我们要查询最近一周登录的用户，首先想到的是 <code>last_login_time &gt; {一周之前的时间}</code></p>
+<p>这是一个范围查询，在后面的所有字段便无法利用索引了，我们可以再设计一个字段，recent_login_flag(tinyint) 标识是否最近登录过。用定时任务定期更新该字段的值。这样就由范围查询变成了等值查询，数据可能不是太及时变化，就看业务是否允许了。</p>
+<p>总之就是想办法最大限度的利用索引。</p>
+
+        </div>
+
+        
+        
+        <div class="article-toc" >
+            <h3></h3>
+            <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#联合索引的首字段用范围查询">联合索引的首字段用范围查询</a></li>
+        <li><a href="#强制走索引">强制走索引</a></li>
+        <li><a href="#覆盖索引优化">覆盖索引优化</a></li>
+        <li><a href="#in和or什么时候会走索引">in和or什么时候会走索引</a></li>
+        <li><a href="#like-xx-一般都会走索引和数据量无关">like xx% 一般都会走索引，和数据量无关</a></li>
+        <li><a href="#索引下推">索引下推</a></li>
+        <li><a href="#为什么范围查找没有用索引下推优化">为什么范围查找没有用索引下推优化？</a></li>
+      </ul>
+    </li>
+    <li><a href="#如何选择索引">如何选择索引</a>
+      <ul>
+        <li><a href="#trace-工具">Trace 工具</a></li>
+      </ul>
+    </li>
+    <li><a href="#深入优化">深入优化</a>
+      <ul>
+        <li><a href="#order-by-和-group-by">order by 和 group by</a></li>
+      </ul>
+    </li>
+    <li><a href="#优化总结">优化总结</a></li>
+    <li><a href="#using-filesort文件排序原理详解">Using filesort文件排序原理详解</a>
+      <ul>
+        <li><a href="#单路排序模式">单路排序模式；</a></li>
+        <li><a href="#双路排序又叫回表排序模式">双路排序（又叫回表排序模式）</a></li>
+      </ul>
+    </li>
+    <li><a href="#分页优化">分页优化</a>
+      <ul>
+        <li><a href="#常规的limit分页">常规的limit分页</a></li>
+        <li><a href="#优化">优化</a></li>
+        <li><a href="#非主键排序的优化">非主键排序的优化</a></li>
+      </ul>
+    </li>
+    <li><a href="#表关联优化">表关联优化</a>
+      <ul>
+        <li><a href="#常见的表关联算法">常见的表关联算法</a></li>
+        <li><a href="#基于块的嵌套循环算法">基于块的嵌套循环算法</a></li>
+        <li><a href="#为什么要使用-bnlj-算法呢">为什么要使用 BNLJ 算法呢?</a></li>
+        <li><a href="#对于关联sql的优化">对于关联sql的优化</a></li>
+      </ul>
+    </li>
+    <li><a href="#in和exsits优化">in和exsits优化</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#count-查询优化">count 查询优化</a>
+      <ul>
+        <li></li>
+        <li><a href="#常见优化方法">常见优化方法</a></li>
+      </ul>
+    </li>
+    <li><a href="#索引设计原则">索引设计原则</a>
+      <ul>
+        <li><a href="#举个例子">举个例子</a></li>
+        <li><a href="#再举个例子">再举个例子</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+        
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/mysql">MySQL
+                    </a>
+                </li>
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/%E7%B4%A2%E5%BC%95">索引
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            MySQL事务和锁详解
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">MySQL内部结构&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

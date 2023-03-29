@@ -1,158 +1,464 @@
-<!doctype html><html><head><title>并发编程之Semaphore和CountDownLatch的用法 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="并发编程之Semaphore和CountDownLatch的用法"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>并发编程之Semaphore和CountDownLatch的用法</h1></header><div class=article-meta><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/ class=article-date><time datetime=2022-10-10T10:40:28.000+00:00 itemprop=datePublished>2022-10-10</time></a></div><div class=article-entry itemprop=articleBody><h1 id=semaphore>Semaphore</h1><p>Semaphore 是信号量的意思，它的作用是控制访问特定资源的<strong>线程数目</strong>，底层依赖 AQS 的状态 State，是在生产当中比较常用的一个工具类。</p><p>可以理解为许可证，或者令牌。线程想要访问某部分资源时，必须先获取一个许可证，才能访问，否则等待，一个经典的应用场景是服务限流(Hystrix 里限流就有基于信号量方式)，</p><h2 id=重要方法>重要方法</h2><h3 id=构造方法>构造方法</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>// 构造方法1
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>// permits 许可证的数量，默认是非公平的方式抢占许可证，许可证用完之后，
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>// 再来的线程要等待其他线程释放许可证
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Semaphore</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> permits<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    sync <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> NonfairSync<span style=color:#ff79c6>(</span>permits<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// 构造方法2
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>// 同上，可以指定公平还是非公平
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Semaphore</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> permits<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>boolean</span> fair<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>	sync <span style=color:#ff79c6>=</span> fair <span style=color:#ff79c6>?</span> <span style=color:#ff79c6>new</span> FairSync<span style=color:#ff79c6>(</span>permits<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>:</span> <span style=color:#ff79c6>new</span> NonfairSync<span style=color:#ff79c6>(</span>permits<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h3 id=获取许可证>获取许可证</h3><h4 id=acquire>acquire()</h4><p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p><ul><li>当前线程获取了 1 个可用的许可证，则会停止等待，继续执行。</li><li>当前线程<strong>被中断</strong>，则会抛出 InterruptedException 异常，并停止等待，继续执行。</li></ul><h4 id=acquireint-permits>acquire(int permits)</h4><p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p><ul><li>当前线程获取了 n 个可用的许可证，则会停止等待，继续执行。</li><li>当前线程<strong>被中断</strong>，则会抛出 InterruptedException 异常，并停止等待，继续执行</li></ul><h4 id=acquireuninterruptiblyint-permits>acquireUninterruptibly(int permits)</h4><p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p><ul><li>当前线程获取了 1 个可用的许可证，则会停止等待，继续执行。</li></ul><p>与前两个的区别是，它不理会中断</p><h4 id=acquireuninterruptiblyint-permits-1>acquireUninterruptibly(int permits)</h4><p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p><ul><li>当前线程获取了 n 个可用的许可证，则会停止等待，继续执行。<br>它不理会中断</li></ul><h4 id=tryacquire>tryAcquire()</h4><p><strong>当前线程尝试去获取 1 个许可证。</strong></p><p>此过程是<strong>非阻塞</strong>的，它只是在方法调用时进行一次尝试。如果当前线程获取了 1 个可用的许可证，则会停止等待，继续执行，并返回 true。如果当前线程没有获得这个许可证，也会停止等待，继续执行，并返回 false。</p><h4 id=tryacquireint-permits>tryAcquire(int permits)</h4><p>当前线程尝试去获取 permits 个许可证。</p><p>此过程是<strong>非阻塞</strong>的，它只是在方法调用时进行一次尝试。如果当前线程获取了 permits 个可用的许可证，则会停止等待，继续执行，并返回 true。如果当前线程没有获得 permits 个许可证，也会停止等待，继续执行，并返回 false。</p><h4 id=tryacquirelong-timeout-timeunit-unit>tryAcquire(long timeout, TimeUnit unit)</h4><p>当前线程在<strong>限定时间内</strong>，阻塞的尝试去获取 1 个许可证。</p><p>此过程是阻塞的，它会一直等待许可证，直到发生以下任意一件事：</p><ul><li>当前线程获取了可用的许可证，则会停止等待，继续执行，并返回 true。</li><li>当前线程等待时间 timeout 超时，则会停止等待，继续执行，并返回 false。</li><li>当前线程在 timeout 时间内被中断，则会抛出 InterruptedException 一次，并停止等待，继续执行。</li></ul><h4 id=tryacquireint-long-timeunit>tryAcquire(int, long, TimeUnit)</h4><p>当前线程在<strong>限定时间内</strong>，阻塞的尝试去<strong>获取 permits 个</strong>许可证。</p><p>此过程是阻塞的，它会一直等待许可证，直到发生以下任意一件事：</p><ul><li>当前线程获取了可用的 permits 个许可证，则会停止等待，继续执行，并返回 true。</li><li>当前线程等待时间 timeout 超时，则会停止等待，继续执行，并返回 false。</li><li>当前线程在 timeout 时间内被中断，则会抛出 InterruptedException 一次，并停止等待，继续执行。</li></ul><h4 id=drainpermits>drainPermits()</h4><p><strong>当前线程获得剩余的所有可用许可证</strong></p><h3 id=释放许可证>释放许可证</h3><h4 id=release>release()</h4><p>当前线程释放一个许可证</p><h4 id=releaseint>release(int)</h4><p>当前线程释放 n 个许可证</p><h3 id=示例>示例</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#ff79c6>import</span> java.util.Date<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> java.util.concurrent.Semaphore<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>SemaphoreRunner</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        Semaphore semaphore <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Semaphore<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>10</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Task<span style=color:#ff79c6>(</span>semaphore<span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#34;任务:&#34;</span> <span style=color:#ff79c6>+</span> i<span style=color:#ff79c6>)).</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Task</span> <span style=color:#8be9fd;font-style:italic>extends</span> Thread <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        Semaphore semaphore<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Task</span><span style=color:#ff79c6>(</span>Semaphore semaphore<span style=color:#ff79c6>,</span> String tname<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>semaphore</span> <span style=color:#ff79c6>=</span> semaphore<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>setName</span><span style=color:#ff79c6>(</span>tname<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>        @Override  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                semaphore<span style=color:#ff79c6>.</span><span style=color:#50fa7b>acquire</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;获得许可证 at time:&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>());</span>  
-</span></span><span style=display:flex><span>                Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>3000</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>                semaphore<span style=color:#ff79c6>.</span><span style=color:#50fa7b>release</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>InterruptedException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>结果:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>任务:0获得许可证 at time:Mon Oct 10 11:42:33 CST 2022
-</span></span><span style=display:flex><span>任务:1获得许可证 at time:Mon Oct 10 11:42:33 CST 2022
-</span></span><span style=display:flex><span>任务:3获得许可证 at time:Mon Oct 10 11:42:36 CST 2022
-</span></span><span style=display:flex><span>任务:2获得许可证 at time:Mon Oct 10 11:42:36 CST 2022
-</span></span><span style=display:flex><span>任务:4获得许可证 at time:Mon Oct 10 11:42:39 CST 2022
-</span></span><span style=display:flex><span>任务:5获得许可证 at time:Mon Oct 10 11:42:39 CST 2022
-</span></span><span style=display:flex><span>任务:7获得许可证 at time:Mon Oct 10 11:42:42 CST 2022
-</span></span><span style=display:flex><span>任务:6获得许可证 at time:Mon Oct 10 11:42:42 CST 2022
-</span></span><span style=display:flex><span>任务:9获得许可证 at time:Mon Oct 10 11:42:45 CST 2022
-</span></span><span style=display:flex><span>任务:8获得许可证 at time:Mon Oct 10 11:42:45 CST 2022
-</span></span></code></pre></div><p>可以看出当设置 2 个许可证时，同时只有两个线程执行</p><h1 id=countdownlatch-与-cyclicbarrier>CountDownLatch 与 CyclicBarrier</h1><p>CountDownLatch 这个类能够使一个线程等待其他线程完成各自的工作后再执行。例如，应用程序的主线程希望在负责启动框架服务的线程已经启动所有的框架服务之后再执行, <strong>它强调的是一个线程等待其他多个线程</strong></p><p>CountDownLatch 其实可以把它看作一个计数器，只不过这个计数器的操作是原子操作，同时只能有一个线程去操作这个计数器，也就是同时只能有一个线程去减这个计数器里面的值。可以向 CountDownLatch 对象设置一个初始的数字作为计数值，任何调用这个对象上的 await()方法都会阻塞，直到这个计数器的计数值被其他的线程减为 0 为止。所以在当前计数到达零之前，await 方法会一直受阻塞。之后，会释放所有等待的线程，await 的所有后续调用都将立即返回。这种现象只出现一次——<strong>计数无法被重置</strong></p><p>CyclicBarrier <strong>允许一组线程互相等待</strong>，直到到达某个公共屏障点 (common barrier point)。在涉及一组固定大小的线程的程序中，这些线程必须不时地<strong>互相等待</strong>，此时 CyclicBarrier 很有用。因为该 barrier 在释放等待线程后可以重用，所以称它为<strong>循环的 barrier</strong>， CyclicBarrier 可以用来模拟并发，类似于 Jmeter, 只有多个线程都到达要并发的位置时，再统一开始执行，就像多个线程运行到一个栅栏前等待，然后把栅栏移除，多个线程同时运行。移除的时机是多个线程全部到达栅栏前</p><h3 id=区别>区别</h3><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221010143333.png alt></p><h3 id=重要方法-1>重要方法</h3><p><strong>CountDownLatch</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>await</span><span style=color:#ff79c6>()</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>await</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>long</span> timeout<span style=color:#ff79c6>,</span> TimeUnit unit<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>countDown</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//将count值减1  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p><strong>使用示例</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>CountDownlatchRunner</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        CountDownLatch countDownLatch <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> CountDownLatch<span style=color:#ff79c6>(</span><span style=color:#bd93f9>5</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>i<span style=color:#ff79c6>&lt;</span><span style=color:#bd93f9>5</span><span style=color:#ff79c6>;</span>i<span style=color:#ff79c6>++){</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> ReadNum<span style=color:#ff79c6>(</span>i<span style=color:#ff79c6>,</span>countDownLatch<span style=color:#ff79c6>)).</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 等待所有线程结束
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        countDownLatch<span style=color:#ff79c6>.</span><span style=color:#50fa7b>await</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;线程执行结束。。。。&#34;</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>ReadNum</span>  <span style=color:#8be9fd;font-style:italic>implements</span> Runnable<span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd;font-style:italic>private</span> CountDownLatch latch<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>ReadNum</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>,</span>CountDownLatch latch<span style=color:#ff79c6>){</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>id</span> <span style=color:#ff79c6>=</span> id<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>latch</span> <span style=color:#ff79c6>=</span> latch<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>        @Override  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            <span style=color:#8be9fd;font-style:italic>synchronized</span> <span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>){</span>  
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;id:&#34;</span><span style=color:#ff79c6>+</span>id<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>                latch<span style=color:#ff79c6>.</span><span style=color:#50fa7b>countDown</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;线程组任务&#34;</span><span style=color:#ff79c6>+</span>id<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34;结束，其他任务继续&#34;</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p><strong>CyclicBarrier</strong></p><p>提供了两个构造器</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// 指定了N个线程互相等待
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>CyclicBarrier</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> parties<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span> <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// 指定N个线程在任务 barrierAction  处互相等待
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>CyclicBarrier</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> parties<span style=color:#ff79c6>,</span> Runnable barrierAction<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span> <span style=color:#ff79c6>}</span> 
-</span></span></code></pre></div><p>等待方法:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>await</span><span style=color:#ff79c6>()</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException<span style=color:#ff79c6>,</span> BrokenBarrierException <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>//挂起当前线程，直至所有线程都到达barrier状态再同时执行后续任务；
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>await</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>long</span> timeout<span style=color:#ff79c6>,</span> TimeUnit unit<span style=color:#ff79c6>)</span><span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException<span style=color:#ff79c6>,</span>BrokenBarrierException<span style=color:#ff79c6>,</span>TimeoutException <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>//让这些线程等待至一定的时间，如果还有线程没有到达barrier状态
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//就直接让到达barrier的线程执行后续任务
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p><strong>示例</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>CyclicBarrierTest</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>	<span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>		CyclicBarrier cyclicBarrier <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> CyclicBarrier<span style=color:#ff79c6>(</span><span style=color:#bd93f9>5</span><span style=color:#ff79c6>,</span> <span style=color:#ff79c6>new</span> Runnable<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>			@Override
-</span></span><span style=display:flex><span>			<span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>				System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;线程组执行结束&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>});</span>
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>5</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> ReadNum<span style=color:#ff79c6>(</span>i<span style=color:#ff79c6>,</span>cyclicBarrier<span style=color:#ff79c6>)).</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>		<span style=color:#6272a4>//CyclicBarrier 可以重复利用，
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>		<span style=color:#6272a4>// 这个是CountDownLatch做不到的
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//        for (int i = 11; i &lt; 16; i++) {
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//            new Thread(new readNum(i,cyclicBarrier)).start();
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//        }
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>	<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>	<span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>ReadNum</span>  <span style=color:#8be9fd;font-style:italic>implements</span> Runnable<span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>		<span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>		<span style=color:#8be9fd;font-style:italic>private</span> CyclicBarrier cyc<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>		<span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>readNum</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>,</span>CyclicBarrier cyc<span style=color:#ff79c6>){</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>id</span> <span style=color:#ff79c6>=</span> id<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>cyc</span> <span style=color:#ff79c6>=</span> cyc<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>		@Override
-</span></span><span style=display:flex><span>		<span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>			<span style=color:#8be9fd;font-style:italic>synchronized</span> <span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>){</span>
-</span></span><span style=display:flex><span>				System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;id:&#34;</span><span style=color:#ff79c6>+</span>id<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>				<span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>				<span style=color:#6272a4>// 线程等待，直到5各线程都运行到这里再一起执行
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>					cyc<span style=color:#ff79c6>.</span><span style=color:#50fa7b>await</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>					System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;线程组任务&#34;</span> <span style=color:#ff79c6>+</span> id <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;结束，其他任务继续&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>				<span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>Exception e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>					e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>				<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>	<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div></div><div class=article-toc><h3></h3><nav id=TableOfContents><ul><li><a href=#重要方法>重要方法</a><ul><li><a href=#构造方法>构造方法</a></li><li><a href=#获取许可证>获取许可证</a></li><li><a href=#释放许可证>释放许可证</a></li><li><a href=#示例>示例</a></li></ul></li></ul><ul><li><ul><li><a href=#区别>区别</a></li><li><a href=#重要方法-1>重要方法</a></li></ul></li></ul></nav></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-并发编程之Atomic和Unsafe魔法类</div></a><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8Baqs%E5%8E%9F%E7%90%86/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>并发编程AQS原理&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>并发编程之Semaphore和CountDownLatch的用法 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="并发编程之Semaphore和CountDownLatch的用法" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">并发编程之Semaphore和CountDownLatch的用法</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/" class="article-date">
+                <time datetime='2022-10-10T10:40:28.000&#43;00:00' itemprop="datePublished">2022-10-10</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h1 id="semaphore">Semaphore</h1>
+<p>Semaphore 是信号量的意思，它的作用是控制访问特定资源的<strong>线程数目</strong>，底层依赖 AQS 的状态 State，是在生产当中比较常用的一个工具类。</p>
+<p>可以理解为许可证，或者令牌。线程想要访问某部分资源时，必须先获取一个许可证，才能访问，否则等待，一个经典的应用场景是服务限流(Hystrix 里限流就有基于信号量方式)，</p>
+<h2 id="重要方法">重要方法</h2>
+<h3 id="构造方法">构造方法</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 构造方法1
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// permits 许可证的数量，默认是非公平的方式抢占许可证，许可证用完之后，
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// 再来的线程要等待其他线程释放许可证
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Semaphore</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> permits<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    sync <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> NonfairSync<span style="color:#ff79c6">(</span>permits<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 构造方法2
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// 同上，可以指定公平还是非公平
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Semaphore</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> permits<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">boolean</span> fair<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	sync <span style="color:#ff79c6">=</span> fair <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">new</span> FairSync<span style="color:#ff79c6">(</span>permits<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">:</span> <span style="color:#ff79c6">new</span> NonfairSync<span style="color:#ff79c6">(</span>permits<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h3 id="获取许可证">获取许可证</h3>
+<h4 id="acquire">acquire()</h4>
+<p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p>
+<ul>
+<li>当前线程获取了 1 个可用的许可证，则会停止等待，继续执行。</li>
+<li>当前线程<strong>被中断</strong>，则会抛出 InterruptedException 异常，并停止等待，继续执行。</li>
+</ul>
+<h4 id="acquireint-permits">acquire(int permits)</h4>
+<p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p>
+<ul>
+<li>当前线程获取了 n 个可用的许可证，则会停止等待，继续执行。</li>
+<li>当前线程<strong>被中断</strong>，则会抛出 InterruptedException 异常，并停止等待，继续执行</li>
+</ul>
+<h4 id="acquireuninterruptiblyint-permits">acquireUninterruptibly(int permits)</h4>
+<p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p>
+<ul>
+<li>当前线程获取了 1 个可用的许可证，则会停止等待，继续执行。</li>
+</ul>
+<p>与前两个的区别是，它不理会中断</p>
+<h4 id="acquireuninterruptiblyint-permits-1">acquireUninterruptibly(int permits)</h4>
+<p>此过程是<strong>阻塞</strong>的，它会一直等待许可证，直到发生以下任意一件事：</p>
+<ul>
+<li>当前线程获取了 n 个可用的许可证，则会停止等待，继续执行。<br>
+它不理会中断</li>
+</ul>
+<h4 id="tryacquire">tryAcquire()</h4>
+<p><strong>当前线程尝试去获取 1 个许可证。</strong></p>
+<p>此过程是<strong>非阻塞</strong>的，它只是在方法调用时进行一次尝试。如果当前线程获取了 1 个可用的许可证，则会停止等待，继续执行，并返回 true。如果当前线程没有获得这个许可证，也会停止等待，继续执行，并返回 false。</p>
+<h4 id="tryacquireint-permits">tryAcquire(int permits)</h4>
+<p>当前线程尝试去获取 permits 个许可证。</p>
+<p>此过程是<strong>非阻塞</strong>的，它只是在方法调用时进行一次尝试。如果当前线程获取了 permits 个可用的许可证，则会停止等待，继续执行，并返回 true。如果当前线程没有获得 permits 个许可证，也会停止等待，继续执行，并返回 false。</p>
+<h4 id="tryacquirelong-timeout-timeunit-unit">tryAcquire(long timeout, TimeUnit unit)</h4>
+<p>当前线程在<strong>限定时间内</strong>，阻塞的尝试去获取 1 个许可证。</p>
+<p>此过程是阻塞的，它会一直等待许可证，直到发生以下任意一件事：</p>
+<ul>
+<li>当前线程获取了可用的许可证，则会停止等待，继续执行，并返回 true。</li>
+<li>当前线程等待时间 timeout 超时，则会停止等待，继续执行，并返回 false。</li>
+<li>当前线程在 timeout 时间内被中断，则会抛出 InterruptedException 一次，并停止等待，继续执行。</li>
+</ul>
+<h4 id="tryacquireint-long-timeunit">tryAcquire(int, long, TimeUnit)</h4>
+<p>当前线程在<strong>限定时间内</strong>，阻塞的尝试去<strong>获取 permits 个</strong>许可证。</p>
+<p>此过程是阻塞的，它会一直等待许可证，直到发生以下任意一件事：</p>
+<ul>
+<li>当前线程获取了可用的 permits 个许可证，则会停止等待，继续执行，并返回 true。</li>
+<li>当前线程等待时间 timeout 超时，则会停止等待，继续执行，并返回 false。</li>
+<li>当前线程在 timeout 时间内被中断，则会抛出 InterruptedException 一次，并停止等待，继续执行。</li>
+</ul>
+<h4 id="drainpermits">drainPermits()</h4>
+<p><strong>当前线程获得剩余的所有可用许可证</strong></p>
+<h3 id="释放许可证">释放许可证</h3>
+<h4 id="release">release()</h4>
+<p>当前线程释放一个许可证</p>
+<h4 id="releaseint">release(int)</h4>
+<p>当前线程释放 n 个许可证</p>
+<h3 id="示例">示例</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Date<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.Semaphore<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SemaphoreRunner</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        Semaphore semaphore <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Semaphore<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Task<span style="color:#ff79c6">(</span>semaphore<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;任务:&#34;</span> <span style="color:#ff79c6">+</span> i<span style="color:#ff79c6">)).</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Task</span> <span style="color:#8be9fd;font-style:italic">extends</span> Thread <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        Semaphore semaphore<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Task</span><span style="color:#ff79c6">(</span>Semaphore semaphore<span style="color:#ff79c6">,</span> String tname<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">semaphore</span> <span style="color:#ff79c6">=</span> semaphore<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">setName</span><span style="color:#ff79c6">(</span>tname<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>        @Override  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                semaphore<span style="color:#ff79c6">.</span><span style="color:#50fa7b">acquire</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;获得许可证 at time:&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">());</span>  
+</span></span><span style="display:flex;"><span>                Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">3000</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>                semaphore<span style="color:#ff79c6">.</span><span style="color:#50fa7b">release</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>InterruptedException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>结果:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>任务:0获得许可证 at time:Mon Oct 10 11:42:33 CST 2022
+</span></span><span style="display:flex;"><span>任务:1获得许可证 at time:Mon Oct 10 11:42:33 CST 2022
+</span></span><span style="display:flex;"><span>任务:3获得许可证 at time:Mon Oct 10 11:42:36 CST 2022
+</span></span><span style="display:flex;"><span>任务:2获得许可证 at time:Mon Oct 10 11:42:36 CST 2022
+</span></span><span style="display:flex;"><span>任务:4获得许可证 at time:Mon Oct 10 11:42:39 CST 2022
+</span></span><span style="display:flex;"><span>任务:5获得许可证 at time:Mon Oct 10 11:42:39 CST 2022
+</span></span><span style="display:flex;"><span>任务:7获得许可证 at time:Mon Oct 10 11:42:42 CST 2022
+</span></span><span style="display:flex;"><span>任务:6获得许可证 at time:Mon Oct 10 11:42:42 CST 2022
+</span></span><span style="display:flex;"><span>任务:9获得许可证 at time:Mon Oct 10 11:42:45 CST 2022
+</span></span><span style="display:flex;"><span>任务:8获得许可证 at time:Mon Oct 10 11:42:45 CST 2022
+</span></span></code></pre></div><p>可以看出当设置 2 个许可证时，同时只有两个线程执行</p>
+<h1 id="countdownlatch-与-cyclicbarrier">CountDownLatch 与 CyclicBarrier</h1>
+<p>CountDownLatch 这个类能够使一个线程等待其他线程完成各自的工作后再执行。例如，应用程序的主线程希望在负责启动框架服务的线程已经启动所有的框架服务之后再执行, <strong>它强调的是一个线程等待其他多个线程</strong></p>
+<p>CountDownLatch 其实可以把它看作一个计数器，只不过这个计数器的操作是原子操作，同时只能有一个线程去操作这个计数器，也就是同时只能有一个线程去减这个计数器里面的值。可以向 CountDownLatch 对象设置一个初始的数字作为计数值，任何调用这个对象上的 await()方法都会阻塞，直到这个计数器的计数值被其他的线程减为 0 为止。所以在当前计数到达零之前，await 方法会一直受阻塞。之后，会释放所有等待的线程，await 的所有后续调用都将立即返回。这种现象只出现一次——<strong>计数无法被重置</strong></p>
+<p>CyclicBarrier <strong>允许一组线程互相等待</strong>，直到到达某个公共屏障点 (common barrier point)。在涉及一组固定大小的线程的程序中，这些线程必须不时地<strong>互相等待</strong>，此时 CyclicBarrier 很有用。因为该 barrier 在释放等待线程后可以重用，所以称它为<strong>循环的 barrier</strong>， CyclicBarrier 可以用来模拟并发，类似于 Jmeter, 只有多个线程都到达要并发的位置时，再统一开始执行，就像多个线程运行到一个栅栏前等待，然后把栅栏移除，多个线程同时运行。移除的时机是多个线程全部到达栅栏前</p>
+<h3 id="区别">区别</h3>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221010143333.png" alt=""></p>
+<h3 id="重要方法-1">重要方法</h3>
+<p><strong>CountDownLatch</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">await</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">await</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">long</span> timeout<span style="color:#ff79c6">,</span> TimeUnit unit<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">countDown</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//将count值减1  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p><strong>使用示例</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CountDownlatchRunner</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        CountDownLatch countDownLatch <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> CountDownLatch<span style="color:#ff79c6">(</span><span style="color:#bd93f9">5</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>i<span style="color:#ff79c6">&lt;</span><span style="color:#bd93f9">5</span><span style="color:#ff79c6">;</span>i<span style="color:#ff79c6">++){</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> ReadNum<span style="color:#ff79c6">(</span>i<span style="color:#ff79c6">,</span>countDownLatch<span style="color:#ff79c6">)).</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 等待所有线程结束
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        countDownLatch<span style="color:#ff79c6">.</span><span style="color:#50fa7b">await</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程执行结束。。。。&#34;</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ReadNum</span>  <span style="color:#8be9fd;font-style:italic">implements</span> Runnable<span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">private</span> CountDownLatch latch<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReadNum</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">,</span>CountDownLatch latch<span style="color:#ff79c6">){</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">id</span> <span style="color:#ff79c6">=</span> id<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">latch</span> <span style="color:#ff79c6">=</span> latch<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>        @Override  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">synchronized</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">){</span>  
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;id:&#34;</span><span style="color:#ff79c6">+</span>id<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>                latch<span style="color:#ff79c6">.</span><span style="color:#50fa7b">countDown</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程组任务&#34;</span><span style="color:#ff79c6">+</span>id<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;结束，其他任务继续&#34;</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p><strong>CyclicBarrier</strong></p>
+<p>提供了两个构造器</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 指定了N个线程互相等待
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">CyclicBarrier</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> parties<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span> <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 指定N个线程在任务 barrierAction  处互相等待
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">CyclicBarrier</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> parties<span style="color:#ff79c6">,</span> Runnable barrierAction<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span> <span style="color:#ff79c6">}</span> 
+</span></span></code></pre></div><p>等待方法:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">await</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException<span style="color:#ff79c6">,</span> BrokenBarrierException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//挂起当前线程，直至所有线程都到达barrier状态再同时执行后续任务；
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">await</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">long</span> timeout<span style="color:#ff79c6">,</span> TimeUnit unit<span style="color:#ff79c6">)</span><span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException<span style="color:#ff79c6">,</span>BrokenBarrierException<span style="color:#ff79c6">,</span>TimeoutException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//让这些线程等待至一定的时间，如果还有线程没有到达barrier状态
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//就直接让到达barrier的线程执行后续任务
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p><strong>示例</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CyclicBarrierTest</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		CyclicBarrier cyclicBarrier <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> CyclicBarrier<span style="color:#ff79c6">(</span><span style="color:#bd93f9">5</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> Runnable<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>			@Override
+</span></span><span style="display:flex;"><span>			<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>				System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程组执行结束&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> ReadNum<span style="color:#ff79c6">(</span>i<span style="color:#ff79c6">,</span>cyclicBarrier<span style="color:#ff79c6">)).</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">//CyclicBarrier 可以重复利用，
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		<span style="color:#6272a4">// 这个是CountDownLatch做不到的
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//        for (int i = 11; i &lt; 16; i++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//            new Thread(new readNum(i,cyclicBarrier)).start();
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//        }
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ReadNum</span>  <span style="color:#8be9fd;font-style:italic">implements</span> Runnable<span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd;font-style:italic">private</span> CyclicBarrier cyc<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">readNum</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">,</span>CyclicBarrier cyc<span style="color:#ff79c6">){</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">id</span> <span style="color:#ff79c6">=</span> id<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">cyc</span> <span style="color:#ff79c6">=</span> cyc<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		@Override
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8be9fd;font-style:italic">synchronized</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">){</span>
+</span></span><span style="display:flex;"><span>				System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;id:&#34;</span><span style="color:#ff79c6">+</span>id<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#6272a4">// 线程等待，直到5各线程都运行到这里再一起执行
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>					cyc<span style="color:#ff79c6">.</span><span style="color:#50fa7b">await</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>					System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程组任务&#34;</span> <span style="color:#ff79c6">+</span> id <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;结束，其他任务继续&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>					e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div>
+        </div>
+
+        
+        
+        <div class="article-toc" >
+            <h3></h3>
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#重要方法">重要方法</a>
+      <ul>
+        <li><a href="#构造方法">构造方法</a></li>
+        <li><a href="#获取许可证">获取许可证</a></li>
+        <li><a href="#释放许可证">释放许可证</a></li>
+        <li><a href="#示例">示例</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#区别">区别</a></li>
+        <li><a href="#重要方法-1">重要方法</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+        
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            并发编程之Atomic和Unsafe魔法类
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8Baqs%E5%8E%9F%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">并发编程AQS原理&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>
