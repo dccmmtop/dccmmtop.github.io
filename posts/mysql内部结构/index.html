@@ -1,198 +1,21 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>MySQL内部结构 // 超的博客</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    
-    
-    
-
-        <meta property="og:title" content="MySQL内部结构" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/" />
-    
-
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    
-    
-
-    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
-
-    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
-    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
-    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
-    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
-    
-
-    <meta name="generator" content="Hugo 0.111.3">
-</head>
-
-<body>
-    <div id="container">
-        <header id="header">
-    <div id="header-outer" class="outer">
-        <div id="header-inner" class="inner">
-            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
-            <nav id="main-nav">
-                
-                <a class="main-nav-link" href="../../posts/">文章</a>
-                
-                <a class="main-nav-link" href="../../tags/">标签</a>
-                
-                <a class="main-nav-link" href="../../about/">我</a>
-                
-                <a class="main-nav-link" id="search" >
-                  <input id="inputSearch" placeholder="search">
-                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
-            </nav>
-            <nav id="sub-nav">
-                <div id="search-form-wrap">
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body searchResults">
-          </div>
-        </div>
-      </div>
-    </div>
-</header>
-
-        <section id="main" class="outer">
-            <article class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        <header class="article-header">
-            <h1 class="article-title" itemprop="name">MySQL内部结构</h1>
-        </header>
-        
-        <div class="article-meta">
-            <a href="../../posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/" class="article-date">
-                <time datetime='2022-08-01T22:20:58.000&#43;00:00' itemprop="datePublished">2022-08-01</time>
-            </a>
-            
-            
-            
-        </div>
-        <div class="article-entry" itemprop="articleBody">
-            <p>大体来说，MySQL可以分为 server 层和存储引擎层两部分，如下图</p>
-<img src='https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220801222250.png'/>
-<h2 id="server层">Server层</h2>
-<p>主要包括连接器、查询缓存、分析器、优化器、执行器等，涵盖 MySQL 的大多数核心服务功能，以及所有的内置函数   （如日期、时间、数学和加密函数等），所有<strong>跨存储引擎</strong>的功能都在这一层实现，比如存储过程、触发器、视图等。</p>
-<h2 id="store层">Store层</h2>
-<p>存储引擎层负责数据的存储和提取。其架构模式是插件式的，支持 InnoDB、MyISAM、Memory 等多个存储引擎。现在最常用的存储引擎是 InnoDB，它从 MySQL 5.5.5 版本开始成为了默认存储引擎。也就是说如果我们在create table时不指定表的存储引擎类型,默认会给你设置存储引擎为InnoDB。</p>
-<h2 id="连接器">连接器</h2>
-<p>顾名思义，他主要与客户端连接打交道</p>
-<p>连接器负责跟客户端<strong>建立连接、获取权限、维持和管理连接</strong>。连接命令一般是这么写的：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql ‐h <span style="color:#ff79c6">host</span>[数据库地址] ‐u root[用户] ‐p root[密码] ‐P <span style="color:#bd93f9">3306</span>  
-</span></span></code></pre></div><p>连接命令中的 mysql 是客户端工具，用来跟服务端建立连接。在完成经典的 TCP 握手后，连接器就要开始认证你的身份，  这个时候用的就是你输入的用户名和密码。</p>
-<p>1.如果用户名或密码不对，你就会收到一个&quot;Access denied for user&quot;的错误，然后客户端程序结束执行。<br>
-2.如果用户名密码认证通过，连接器会到权限表里面查出你拥有的权限。之后，这个连接里面的权限判断逻辑，都将依赖于此时读到的权限。</p>
-<p>这就意味着，一个用户成功建立连接后，即使你用管理员账号对这个用户的权限做了修改，也不会影响已经存在连接的权限。修改完成后，只有再新建的连接才会使用新的权限设置。用户的权限表在系统表空间的mysql的user表中。</p>
-<p>说到这里就有一个问题，为什么MySQL的权限不做成实时生效的呢？ 答案只有一个—— 为了性能</p>
-<p>来看一下 MySQL 系统用户表:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">Host</span>,<span style="color:#ff79c6">User</span>,Password <span style="color:#ff79c6">from</span> <span style="color:#ff79c6">user</span>;
-</span></span></code></pre></div><img src='https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220801223648.png'/>
-<p>可以直接修改表中的数据来修改某个用户的权限</p>
-<h3 id="长连接和短连接">长连接和短连接</h3>
-<p>数据库里面，长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。</p>
-<p>短连接则是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</p>
-<p>开发当中我们大多数时候用的都是长连接,把连接放在Pool内进行管理，但是长连接有些时候会导致 MySQL 占用内存涨得特别快，这是因为 MySQL 在执行过程中临时使用的内存是管理在连接对象里面的。这些资源会在连接断开的时候才释放。所以如果长连接累积下来，可能导致内存占用太大，被系统强行杀掉（OOM），从现象看就是 MySQL 异常重启了。</p>
-<p><strong>怎么解决这类问题呢</strong></p>
-<ol>
-<li>定期断开长连接。使用一段时间，或者程序里面判断执行过一个占用内存的大查询后，断开连接，之后要查询再重连。</li>
-<li>如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。这个过程不需要重连和重新做权限验证，但是会将连接恢复到刚刚创建完时的状态。</li>
-</ol>
-<h2 id="查询缓存">查询缓存</h2>
-<p>参见<a href="https://dccmmtop.github.io/posts/mysql%E4%B8%AD%E7%9A%84%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98/">查询缓存</a></p>
-<h2 id="分析器">分析器</h2>
-<p>如果没有命中查询缓存，就要开始真正的执行语句了，但是 MySQL 怎么知道你要查询的是哪张表格， 哪个字段，条件是什么呢？</p>
-<p>这就是分析器大显身手的时候了，他会分析我们的 sql 语句，把你要查询的表，字段 和条件等都解析出来，形成特殊的结构，方便后续操作</p>
-<p>如果 sql 语法不对，就会得到 &ldquo;You have an error in your SQL syntax&rdquo; 的错误提醒, 如下 from 错误的写成 form</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>mysql<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> fro test <span style="color:#ff79c6">where</span> id<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;  
-</span></span><span style="display:flex;"><span>ERROR <span style="color:#bd93f9">1064</span> (<span style="color:#bd93f9">42000</span>): You have an error <span style="color:#ff79c6">in</span> your <span style="color:#ff79c6">SQL</span> syntax; <span style="color:#ff79c6">check</span> the manual that corresponds t   o your MySQL server <span style="color:#ff79c6">version</span> <span style="color:#ff79c6">for</span> the <span style="color:#ff79c6">right</span> syntax <span style="color:#ff79c6">to</span> use near <span style="color:#f1fa8c">&#39;fro test where id=1&#39;</span> <span style="color:#ff79c6">at</span> line <span style="color:#bd93f9">1</span>
-</span></span></code></pre></div><p>但是分析器是如何解析sql语句的呢？ 底层是怎么工作的呢？</p>
-<h4 id="词法分析器原理">词法分析器原理</h4>
-<p>词法分析器分成6个主要步骤完成对sql语句的分析</p>
-<ol>
-<li>词法分析</li>
-<li>语法分析</li>
-<li>语义分析</li>
-<li>构造执行树</li>
-<li>生成执行计划</li>
-<li>计划的执行</li>
-</ol>
-<p>SQL语句的分析分为<strong>词法分析与语法分析</strong>，mysql的词法分析由MySQLLex[MySQL自己实现的]完成，语法分析由Bison生成。关于语法树大家如果想要深入研究可以参考<a href="https://en.wikipedia.org/wiki/LR_parser">这篇wiki文章</a></p>
-<p>这里给出一个解析后的语法树，供参考</p>
-<img src='https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220801231233.png'/>
-<h2 id="优化器">优化器</h2>
-<p>经历过分析器后，MySQL 就知道自己需要做什么了， 但是程序员写出的 sql 语句可能不是最优的，这时，优化器可以对一些 sql 语句做出优化，不改变查询结果的前提下，使查询更高效</p>
-<p>还可以决定某条 sql 使用那个索引查询更快。 或者会决定表关联的顺序 等等</p>
-<p>有如下例子:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test1 <span style="color:#ff79c6">join</span> test2 <span style="color:#ff79c6">using</span>(ID) <span style="color:#ff79c6">where</span> test1.name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;张珊&#39;</span> <span style="color:#ff79c6">and</span> test2.name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;莉丝&#39;</span>;  
-</span></span></code></pre></div><p>既可以先从表 test1 里面取出 name=&lsquo;张珊&rsquo; ID 值，再根据 ID 值关联到表 test2，再判断 test2 里面 name的值是否等于 &lsquo;莉丝&rsquo;</p>
-<p>也可以先从表 test2 里面取出 name=&lsquo;莉丝&rsquo; 的记录的 ID 值，再根据 ID 值关联到 test1，再判断 test1 里面 name 的值是否等于 &lsquo;张珊&rsquo;</p>
-<p>这两种执行方法的逻辑结果是一样的，但是执行的效率会有不同，而优化器的作用就是决定选择使用哪一个方案。优化器阶段完成后，这个语句的执行方案就确定下来了，然后进入执行器阶段</p>
-<h2 id="执行器">执行器</h2>
-<p>开始执行的时候，要先判断一下你对这个表 T 有没有执行查询的权限，如果没有，就会返回没有权限的错误，如下所示 (在 工程实现上，如果命中查询缓存，会在查询缓存返回结果的时候，做权限验证。查询也会在优化器之前调用 precheck 验证权 限)。</p>
-<p>要注意区分 连接器 中使用的权限， 连接器中的权限使用户级别的，而执行器中的权限使表级别的</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">select</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">from</span> test <span style="color:#ff79c6">where</span> id<span style="color:#ff79c6">=</span><span style="color:#bd93f9">10</span>;  
-</span></span></code></pre></div><p>如果有权限，就打开表继续执行。打开表的时候，执行器就会根据表的引擎定义，去使用这个引擎提供的接口。</p>
-<p>比如我们这个例子中的表 test 中，ID 字段没有索引，那么执行器的执行流程是这样的：</p>
-<ol>
-<li>调用 InnoDB 引擎接口取这个表的第一行，判断 ID 值是不是 10，如果不是则跳过，如果是则将这行存在结果集中；</li>
-<li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li>
-<li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li>
-</ol>
-<p>至此，这个语句就执行完成了。对于有索引的表，执行的逻辑也差不多。第一次调用的是“取满足条件的第一行”这个接 口，之后循环取“满足条件的下一行”这个接口，这些接口都是引擎中已经定义好的。你会在数据库的慢查询日志中看到一个rows_examined 的字段，表示这个语句执行过程中扫描了多少行。这个值就是在执行器每次调用引擎获取数据行的时候累加的。在有些场景下，执行器调用一次，在引擎内部则扫描了多行，因此引擎扫描行数跟 rows_examined 并不是完全相同的</p>
-<h2 id="bin_log-的使用">bin_log 的使用</h2>
-<p>经常听到删库跑路的消息，其实删除库之后也不用跑路，MySQL 会把我们执行的每条SQL都记录到 bin-log中， 那么什么是 bin-log 呢？</p>
-<p>binlog是Server层实现的二进制日志,他会记录我们的cud操作。Binlog有以下几个特点：</p>
-<ol>
-<li>Binlog在MySQL的Server层实现（引擎共用）</li>
-<li>Binlog为逻辑日志,记录的是一条语句的原始逻辑</li>
-<li>Binlog不限大小,追加写入,不会覆盖以前的日志</li>
-</ol>
-<p>如果，我们误删了数据库,可以使用binlog进行归档!要使用binlog归档，首先我们得记录binlog，因此需要先开启MySQL的binlog功能。</p>
-<h3 id="配置mycnf">配置my.cnf</h3>
-<pre tabindex="0"><code class="language-cnf" data-lang="cnf">log-bin=/usr/local/mysql/data/binlog/mysql-bin 
+<!doctype html><html><head><title>MySQL内部结构 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="MySQL内部结构"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>我</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>MySQL内部结构</h1></header><div class=article-meta><a href=../../posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/ class=article-date><time datetime=2022-08-01T22:20:58.000+00:00 itemprop=datePublished>2022-08-01</time></a></div><div class=article-entry itemprop=articleBody><p>大体来说，MySQL可以分为 server 层和存储引擎层两部分，如下图</p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220801222250.png><h2 id=server层>Server层</h2><p>主要包括连接器、查询缓存、分析器、优化器、执行器等，涵盖 MySQL 的大多数核心服务功能，以及所有的内置函数 （如日期、时间、数学和加密函数等），所有<strong>跨存储引擎</strong>的功能都在这一层实现，比如存储过程、触发器、视图等。</p><h2 id=store层>Store层</h2><p>存储引擎层负责数据的存储和提取。其架构模式是插件式的，支持 InnoDB、MyISAM、Memory 等多个存储引擎。现在最常用的存储引擎是 InnoDB，它从 MySQL 5.5.5 版本开始成为了默认存储引擎。也就是说如果我们在create table时不指定表的存储引擎类型,默认会给你设置存储引擎为InnoDB。</p><h2 id=连接器>连接器</h2><p>顾名思义，他主要与客户端连接打交道</p><p>连接器负责跟客户端<strong>建立连接、获取权限、维持和管理连接</strong>。连接命令一般是这么写的：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span>mysql ‐h <span style=color:#ff79c6>host</span>[数据库地址] ‐u root[用户] ‐p root[密码] ‐P <span style=color:#bd93f9>3306</span>  
+</span></span></code></pre></div><p>连接命令中的 mysql 是客户端工具，用来跟服务端建立连接。在完成经典的 TCP 握手后，连接器就要开始认证你的身份， 这个时候用的就是你输入的用户名和密码。</p><p>1.如果用户名或密码不对，你就会收到一个"Access denied for user"的错误，然后客户端程序结束执行。<br>2.如果用户名密码认证通过，连接器会到权限表里面查出你拥有的权限。之后，这个连接里面的权限判断逻辑，都将依赖于此时读到的权限。</p><p>这就意味着，一个用户成功建立连接后，即使你用管理员账号对这个用户的权限做了修改，也不会影响已经存在连接的权限。修改完成后，只有再新建的连接才会使用新的权限设置。用户的权限表在系统表空间的mysql的user表中。</p><p>说到这里就有一个问题，为什么MySQL的权限不做成实时生效的呢？ 答案只有一个—— 为了性能</p><p>来看一下 MySQL 系统用户表:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>select</span> <span style=color:#ff79c6>Host</span>,<span style=color:#ff79c6>User</span>,Password <span style=color:#ff79c6>from</span> <span style=color:#ff79c6>user</span>;
+</span></span></code></pre></div><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220801223648.png><p>可以直接修改表中的数据来修改某个用户的权限</p><h3 id=长连接和短连接>长连接和短连接</h3><p>数据库里面，长连接是指连接成功后，如果客户端持续有请求，则一直使用同一个连接。</p><p>短连接则是指每次执行完很少的几次查询就断开连接，下次查询再重新建立一个。</p><p>开发当中我们大多数时候用的都是长连接,把连接放在Pool内进行管理，但是长连接有些时候会导致 MySQL 占用内存涨得特别快，这是因为 MySQL 在执行过程中临时使用的内存是管理在连接对象里面的。这些资源会在连接断开的时候才释放。所以如果长连接累积下来，可能导致内存占用太大，被系统强行杀掉（OOM），从现象看就是 MySQL 异常重启了。</p><p><strong>怎么解决这类问题呢</strong></p><ol><li>定期断开长连接。使用一段时间，或者程序里面判断执行过一个占用内存的大查询后，断开连接，之后要查询再重连。</li><li>如果你用的是 MySQL 5.7 或更新版本，可以在每次执行一个比较大的操作后，通过执行 mysql_reset_connection 来重新初始化连接资源。这个过程不需要重连和重新做权限验证，但是会将连接恢复到刚刚创建完时的状态。</li></ol><h2 id=查询缓存>查询缓存</h2><p>参见<a href=https://dccmmtop.github.io/posts/mysql%E4%B8%AD%E7%9A%84%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98/>查询缓存</a></p><h2 id=分析器>分析器</h2><p>如果没有命中查询缓存，就要开始真正的执行语句了，但是 MySQL 怎么知道你要查询的是哪张表格， 哪个字段，条件是什么呢？</p><p>这就是分析器大显身手的时候了，他会分析我们的 sql 语句，把你要查询的表，字段 和条件等都解析出来，形成特殊的结构，方便后续操作</p><p>如果 sql 语法不对，就会得到 &ldquo;You have an error in your SQL syntax&rdquo; 的错误提醒, 如下 from 错误的写成 form</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span>mysql<span style=color:#ff79c6>&gt;</span> <span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> fro test <span style=color:#ff79c6>where</span> id<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span>;  
+</span></span><span style=display:flex><span>ERROR <span style=color:#bd93f9>1064</span> (<span style=color:#bd93f9>42000</span>): You have an error <span style=color:#ff79c6>in</span> your <span style=color:#ff79c6>SQL</span> syntax; <span style=color:#ff79c6>check</span> the manual that corresponds t   o your MySQL server <span style=color:#ff79c6>version</span> <span style=color:#ff79c6>for</span> the <span style=color:#ff79c6>right</span> syntax <span style=color:#ff79c6>to</span> use near <span style=color:#f1fa8c>&#39;fro test where id=1&#39;</span> <span style=color:#ff79c6>at</span> line <span style=color:#bd93f9>1</span>
+</span></span></code></pre></div><p>但是分析器是如何解析sql语句的呢？ 底层是怎么工作的呢？</p><h4 id=词法分析器原理>词法分析器原理</h4><p>词法分析器分成6个主要步骤完成对sql语句的分析</p><ol><li>词法分析</li><li>语法分析</li><li>语义分析</li><li>构造执行树</li><li>生成执行计划</li><li>计划的执行</li></ol><p>SQL语句的分析分为<strong>词法分析与语法分析</strong>，mysql的词法分析由MySQLLex[MySQL自己实现的]完成，语法分析由Bison生成。关于语法树大家如果想要深入研究可以参考<a href=https://en.wikipedia.org/wiki/LR_parser>这篇wiki文章</a></p><p>这里给出一个解析后的语法树，供参考</p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220801231233.png><h2 id=优化器>优化器</h2><p>经历过分析器后，MySQL 就知道自己需要做什么了， 但是程序员写出的 sql 语句可能不是最优的，这时，优化器可以对一些 sql 语句做出优化，不改变查询结果的前提下，使查询更高效</p><p>还可以决定某条 sql 使用那个索引查询更快。 或者会决定表关联的顺序 等等</p><p>有如下例子:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> test1 <span style=color:#ff79c6>join</span> test2 <span style=color:#ff79c6>using</span>(ID) <span style=color:#ff79c6>where</span> test1.name<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;张珊&#39;</span> <span style=color:#ff79c6>and</span> test2.name<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#39;莉丝&#39;</span>;  
+</span></span></code></pre></div><p>既可以先从表 test1 里面取出 name=&lsquo;张珊&rsquo; ID 值，再根据 ID 值关联到表 test2，再判断 test2 里面 name的值是否等于 &lsquo;莉丝&rsquo;</p><p>也可以先从表 test2 里面取出 name=&lsquo;莉丝&rsquo; 的记录的 ID 值，再根据 ID 值关联到 test1，再判断 test1 里面 name 的值是否等于 &lsquo;张珊&rsquo;</p><p>这两种执行方法的逻辑结果是一样的，但是执行的效率会有不同，而优化器的作用就是决定选择使用哪一个方案。优化器阶段完成后，这个语句的执行方案就确定下来了，然后进入执行器阶段</p><h2 id=执行器>执行器</h2><p>开始执行的时候，要先判断一下你对这个表 T 有没有执行查询的权限，如果没有，就会返回没有权限的错误，如下所示 (在 工程实现上，如果命中查询缓存，会在查询缓存返回结果的时候，做权限验证。查询也会在优化器之前调用 precheck 验证权 限)。</p><p>要注意区分 连接器 中使用的权限， 连接器中的权限使用户级别的，而执行器中的权限使表级别的</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#ff79c6>select</span> <span style=color:#ff79c6>*</span> <span style=color:#ff79c6>from</span> test <span style=color:#ff79c6>where</span> id<span style=color:#ff79c6>=</span><span style=color:#bd93f9>10</span>;  
+</span></span></code></pre></div><p>如果有权限，就打开表继续执行。打开表的时候，执行器就会根据表的引擎定义，去使用这个引擎提供的接口。</p><p>比如我们这个例子中的表 test 中，ID 字段没有索引，那么执行器的执行流程是这样的：</p><ol><li>调用 InnoDB 引擎接口取这个表的第一行，判断 ID 值是不是 10，如果不是则跳过，如果是则将这行存在结果集中；</li><li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li><li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li></ol><p>至此，这个语句就执行完成了。对于有索引的表，执行的逻辑也差不多。第一次调用的是“取满足条件的第一行”这个接 口，之后循环取“满足条件的下一行”这个接口，这些接口都是引擎中已经定义好的。你会在数据库的慢查询日志中看到一个rows_examined 的字段，表示这个语句执行过程中扫描了多少行。这个值就是在执行器每次调用引擎获取数据行的时候累加的。在有些场景下，执行器调用一次，在引擎内部则扫描了多行，因此引擎扫描行数跟 rows_examined 并不是完全相同的</p><h2 id=bin_log-的使用>bin_log 的使用</h2><p>经常听到删库跑路的消息，其实删除库之后也不用跑路，MySQL 会把我们执行的每条SQL都记录到 bin-log中， 那么什么是 bin-log 呢？</p><p>binlog是Server层实现的二进制日志,他会记录我们的cud操作。Binlog有以下几个特点：</p><ol><li>Binlog在MySQL的Server层实现（引擎共用）</li><li>Binlog为逻辑日志,记录的是一条语句的原始逻辑</li><li>Binlog不限大小,追加写入,不会覆盖以前的日志</li></ol><p>如果，我们误删了数据库,可以使用binlog进行归档!要使用binlog归档，首先我们得记录binlog，因此需要先开启MySQL的binlog功能。</p><h3 id=配置mycnf>配置my.cnf</h3><pre tabindex=0><code class=language-cnf data-lang=cnf>log-bin=/usr/local/mysql/data/binlog/mysql-bin 
 
 # 注意5.7以及更高版本需要配置本项：（自定义,保证唯一性)
 # server-id=123454
@@ -201,132 +24,15 @@ binlog-format=ROW
 
 #表示每1次执行写入就与硬盘同步，会影响性能，为0时表示，事务提交时mysql不做刷盘操作，由系统决定
 sync-binlog=1
-</code></pre><h3 id="binlog命令">binlog命令</h3>
-<p>查看bin-log是否开启</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> show variables like <span style="color:#f1fa8c">&#39;%log_bin%&#39;</span>;
-</span></span></code></pre></div><p>会多一个最新的bin-log日志</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span> flush logs;
-</span></span></code></pre></div><p>查看最后一个bin-log日志的相关信息</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>show master status;
-</span></span></code></pre></div><p>清空所有的bin-log日志</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>reset master;
-</span></span></code></pre></div><p>查看binlog内容</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001
-</span></span></code></pre></div><h3 id="数据恢复">数据恢复</h3>
-<h4 id="恢复全部数据">恢复全部数据</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p test <span style="color:#6272a4"># test 是数据库名</span>
-</span></span></code></pre></div><h4 id="恢复指定时间段数据">恢复指定时间段数据</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p test
-</span></span></code></pre></div><h3 id="恢复指定位置数据">恢复指定位置数据</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults --start-position<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;408&#34;</span> --stop-position<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;731&#34;</span>  /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p <span style="color:#8be9fd;font-style:italic">test</span>
-</span></span></code></pre></div><p>&ndash;start-position  = &ldquo;408&rdquo; &ndash;start-position  = &lsquo;&lsquo;731&quot;</p>
-<p>怎么找到呢？</p>
-<p>我们需要使用工具查看bin-log信息:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p test
-</span></span></code></pre></div><p>信息如下:<br>
-<img src='https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220802112217.png'/></p>
-<p>由此便可以恢复指定位置或日期的数据了.</p>
-
-        </div>
-
-        
-
-        
-
-
-        
-        <footer class="article-footer">
-            <ul class="article-tag-list">
-                
-                <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/mysql">MySQL
-                    </a>
-                </li>
-                
-            </ul>
-        </footer>
-        
-    </div>
-    
-<nav id="article-nav">
-    
-    <a href="../../posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
-        <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            索引优化
-        </div>
-    </a>
-    
-    
-    <a href="../../posts/explain%E8%AF%A6%E8%A7%A3/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">Explain详解&nbsp;<span>&gt;</span></div>
-    </a>
-    
-</nav>
-
-
-</article>
-            
-        </section>
-
-        <div>
-            
-
-            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
-                label="Comment" theme="github-light" crossorigin="anonymous" async>
-                </script>
-            
-
-        </div>
-
-        <footer id="footer">
-    <div class="outer">
-        <div id="footer-info" class="inner">
-            &copy; 2023 dc
-            <br />
-            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
-                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
-
-
-        </div>
-    </div>
-    
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
-        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
-        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    <script>
-        document.getElementById('main-nav-toggle').addEventListener('click', function () {
-            var header = document.getElementById('header');
-            if (header.classList.contains('mobile-on')) {
-                header.classList.remove('mobile-on');
-            } else {
-                header.classList.add('mobile-on');
-            }
-        });
-    </script>
-    <style>
-        #footer-info {
-            line-height: 1.4em;
-            font-size: 10px;
-        }
-
-        .custom-blog-info {
-            font-family: 'Long Cang', cursive;
-            border-top: 1px dashed #333;
-            font-size: 16px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.4em;
-        }
-    </style>
-</footer>
-
-    </div>
-</body>
-
-</html>
+</code></pre><h3 id=binlog命令>binlog命令</h3><p>查看bin-log是否开启</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span> show variables like <span style=color:#f1fa8c>&#39;%log_bin%&#39;</span>;
+</span></span></code></pre></div><p>会多一个最新的bin-log日志</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span> flush logs;
+</span></span></code></pre></div><p>查看最后一个bin-log日志的相关信息</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>show master status;
+</span></span></code></pre></div><p>清空所有的bin-log日志</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>reset master;
+</span></span></code></pre></div><p>查看binlog内容</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001
+</span></span></code></pre></div><h3 id=数据恢复>数据恢复</h3><h4 id=恢复全部数据>恢复全部数据</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p test <span style=color:#6272a4># test 是数据库名</span>
+</span></span></code></pre></div><h4 id=恢复指定时间段数据>恢复指定时间段数据</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p test
+</span></span></code></pre></div><h3 id=恢复指定位置数据>恢复指定位置数据</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults --start-position<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;408&#34;</span> --stop-position<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;731&#34;</span>  /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p <span style=color:#8be9fd;font-style:italic>test</span>
+</span></span></code></pre></div><p>&ndash;start-position = &ldquo;408&rdquo; &ndash;start-position = &lsquo;&lsquo;731"</p><p>怎么找到呢？</p><p>我们需要使用工具查看bin-log信息:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p test
+</span></span></code></pre></div><p>信息如下:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220802112217.png></p><p>由此便可以恢复指定位置或日期的数据了.</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/mysql>MySQL</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+索引优化</div></a><a href=../../posts/explain%E8%AF%A6%E8%A7%A3/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>Explain详解&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
