@@ -1,13 +1,265 @@
-<!doctype html><html><head><title>Redis 内存清理策略 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="Redis 内存清理策略"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/redis%E5%86%85%E5%AD%98%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>Redis 内存清理策略</h1></header><div class=article-meta><a href=../../posts/redis%E5%86%85%E5%AD%98%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5/ class=article-date><time datetime=2023-03-30T08:14:20.000+00:00 itemprop=datePublished>2023-03-30</time></a></div><div class=article-entry itemprop=articleBody><ul><li><a href=#%E4%B8%89%E7%A7%8D%E6%B8%85%E8%A7%A6%E7%AD%96%E7%95%A5>三种清触策略</a><ul><li><a href=#%E9%92%88%E5%AF%B9%E8%AE%BE%E7%BD%AE%E4%BA%86%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4%E7%9A%84-key>针对设置了过期时间的 key</a></li><li><a href=#%E9%92%88%E5%AF%B9%E6%89%80%E6%9C%89%E7%9A%84-key>针对所有的 key</a></li><li><a href=#%E4%B8%8D%E5%A4%84%E7%90%86>不处理</a></li></ul></li><li><a href=#lru-%E7%AE%97%E6%B3%95leastrecentlyused%E6%9C%80%E8%BF%91%E6%9C%80%E5%B0%91%E4%BD%BF%E7%94%A8>LRU 算法（Least Recently Used，最近最少使用）</a></li><li><a href=#lfu-%E7%AE%97%E6%B3%95leastfrequentlyused%E6%9C%80%E4%B8%8D%E7%BB%8F%E5%B8%B8%E4%BD%BF%E7%94%A8>LFU 算法（Least Frequently Used，最不经常使用）</a></li><li><a href=#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8>实际应用</a></li></ul><h2 id=三种清触策略>三种清触策略</h2><ul><li>被动清除<br>当读写一个已经过期的 key 时，会触发惰性删除策略，直接删除掉这个过期的 key</li><li>主动删除<br>由于惰性删除无法保证冷数据及时清理，所以 redis 会定期主动淘汰<strong>已经过期</strong>的部分 key，默认是每 100ms 一次。这里只是部分已过期的 key，所以可能会出现部分 key 已经过期，但没有清理掉的情况，导致内存并没有释放</li><li>maxmemory 限定<br>当前内存使用超过 maxmemory 限定时，触发主动清理策略</li></ul><p>主动清理策略在 redis 4.0 之前一共实现了 6 种内存淘汰算法，4.0 之后，又增加了 2 中，共 8 种。可以按照针对 key 是否设置过期时间分为两大类：</p><h3 id=针对设置了过期时间的-key>针对设置了过期时间的 key</h3><ol><li>volatile-ttl: 会针对设置了过期时间的 key，根据过期时间的先后进行清理，越早过期的，越先被删除</li><li>volatile-random: 在设置了过期时间的 key 中，随机选择删除</li><li>volatile-lru: 会使用 lru 算法来选择设置了过期时间的 key 进行删除</li><li>volatile-lfu: 会使用 lfu 算法来选择设置了过期时间的 key 进行删除</li></ol><h3 id=针对所有的-key>针对所有的 key</h3><ol start=5><li>allkeys-random: 从所有的键值对中随机选择并删除</li><li>allkeys-lru: 从所有的键值对中使用 lru 算法选择并删除</li><li>allkeys-lfu: 从所有的键值对中使用 lfu 算法选择并删除</li></ol><h3 id=不处理>不处理</h3><ol start=8><li>noeviction：不会剔除任何数据，拒绝所有写入操作并返回客户端错误信息"(error) OOM command not allowed when used memory"，此时 Redis 只响应读操作。</li></ol><h2 id=lru-算法leastrecentlyused最近最少使用>LRU 算法（Least Recently Used，最近最少使用）</h2><p>淘汰很久没被访问过的数据，以最近一次访问时间作为参考。</p><h2 id=lfu-算法leastfrequentlyused最不经常使用>LFU 算法（Least Frequently Used，最不经常使用）</h2><p>淘汰最近一段时间被访问次数最少的数据，以次数作为参考。</p><h2 id=实际应用>实际应用</h2><p>当存在热点数据时，LRU 的效率很好，但偶发性的、周期性的批量操作会导致 LRU 命中率急剧下降，缓存污染情况比较严重。这时使用 LFU 可能更好点。</p><p>根据自身业务类型，配置好 maxmemory-policy（默认是 noeviction)，推荐使用 volatile-lru。如果不设置最大内存，当 Redis 内存超出物理内存限制时，内存的数据会开始和磁盘产生频繁的交换 (swap)，会让 Redis 的性能急剧下降。</p><p>当 Redis 运行在主从模式时，只有主结点才会执行过期删除策略，然后把删除操作”del key”同步到从结点删除数据。</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/redis>redis</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/redis%E4%BD%BF%E7%94%A8%E8%A7%84%E8%8C%83%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>redis 使用规范与性能优化&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Redis 内存清理策略 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="Redis 内存清理策略" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/redis%E5%86%85%E5%AD%98%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">Redis 内存清理策略</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/redis%E5%86%85%E5%AD%98%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5/" class="article-date">
+                <time datetime='2023-03-30T08:14:20.000&#43;00:00' itemprop="datePublished">2023-03-30</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <ul>
+<li><a href="#%E4%B8%89%E7%A7%8D%E6%B8%85%E8%A7%A6%E7%AD%96%E7%95%A5">三种清触策略</a>
+<ul>
+<li><a href="#%E9%92%88%E5%AF%B9%E8%AE%BE%E7%BD%AE%E4%BA%86%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4%E7%9A%84-key">针对设置了过期时间的 key</a></li>
+<li><a href="#%E9%92%88%E5%AF%B9%E6%89%80%E6%9C%89%E7%9A%84-key">针对所有的 key</a></li>
+<li><a href="#%E4%B8%8D%E5%A4%84%E7%90%86">不处理</a></li>
+</ul>
+</li>
+<li><a href="#lru-%E7%AE%97%E6%B3%95leastrecentlyused%E6%9C%80%E8%BF%91%E6%9C%80%E5%B0%91%E4%BD%BF%E7%94%A8">LRU 算法（Least Recently Used，最近最少使用）</a></li>
+<li><a href="#lfu-%E7%AE%97%E6%B3%95leastfrequentlyused%E6%9C%80%E4%B8%8D%E7%BB%8F%E5%B8%B8%E4%BD%BF%E7%94%A8">LFU 算法（Least Frequently Used，最不经常使用）</a></li>
+<li><a href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8">实际应用</a></li>
+</ul>
+<h2 id="三种清触策略">三种清触策略</h2>
+<ul>
+<li>被动清除<br>
+当读写一个已经过期的 key 时，会触发惰性删除策略，直接删除掉这个过期的 key</li>
+<li>主动删除<br>
+由于惰性删除无法保证冷数据及时清理，所以 redis 会定期主动淘汰<strong>已经过期</strong>的部分 key，默认是每 100ms 一次。这里只是部分已过期的 key，所以可能会出现部分 key 已经过期，但没有清理掉的情况，导致内存并没有释放</li>
+<li>maxmemory 限定<br>
+当前内存使用超过 maxmemory 限定时，触发主动清理策略</li>
+</ul>
+<p>主动清理策略在 redis 4.0 之前一共实现了 6 种内存淘汰算法，4.0 之后，又增加了 2 中，共 8 种。可以按照针对 key 是否设置过期时间分为两大类：</p>
+<h3 id="针对设置了过期时间的-key">针对设置了过期时间的 key</h3>
+<ol>
+<li>volatile-ttl: 会针对设置了过期时间的 key，根据过期时间的先后进行清理，越早过期的，越先被删除</li>
+<li>volatile-random: 在设置了过期时间的 key 中，随机选择删除</li>
+<li>volatile-lru: 会使用 lru 算法来选择设置了过期时间的 key 进行删除</li>
+<li>volatile-lfu: 会使用 lfu 算法来选择设置了过期时间的 key 进行删除</li>
+</ol>
+<h3 id="针对所有的-key">针对所有的 key</h3>
+<ol start="5">
+<li>allkeys-random: 从所有的键值对中随机选择并删除</li>
+<li>allkeys-lru: 从所有的键值对中使用 lru 算法选择并删除</li>
+<li>allkeys-lfu: 从所有的键值对中使用 lfu 算法选择并删除</li>
+</ol>
+<h3 id="不处理">不处理</h3>
+<ol start="8">
+<li>noeviction：不会剔除任何数据，拒绝所有写入操作并返回客户端错误信息&quot;(error) OOM command not allowed when used memory&quot;，此时 Redis 只响应读操作。</li>
+</ol>
+<h2 id="lru-算法leastrecentlyused最近最少使用">LRU 算法（Least Recently Used，最近最少使用）</h2>
+<p>淘汰很久没被访问过的数据，以最近一次访问时间作为参考。</p>
+<h2 id="lfu-算法leastfrequentlyused最不经常使用">LFU 算法（Least Frequently Used，最不经常使用）</h2>
+<p>淘汰最近一段时间被访问次数最少的数据，以次数作为参考。</p>
+<h2 id="实际应用">实际应用</h2>
+<p>当存在热点数据时，LRU 的效率很好，但偶发性的、周期性的批量操作会导致 LRU 命中率急剧下降，缓存污染情况比较严重。这时使用 LFU 可能更好点。</p>
+<p>根据自身业务类型，配置好 maxmemory-policy（默认是 noeviction)，推荐使用 volatile-lru。如果不设置最大内存，当 Redis 内存超出物理内存限制时，内存的数据会开始和磁盘产生频繁的交换 (swap)，会让 Redis 的性能急剧下降。</p>
+<p>当 Redis 运行在主从模式时，只有主结点才会执行过期删除策略，然后把删除操作”del key”同步到从结点删除数据。</p>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/redis">redis
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/mq%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            MQ 的基本概念和五种模式使用示例
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/redis%E4%BD%BF%E7%94%A8%E8%A7%84%E8%8C%83%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">redis 使用规范与性能优化&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>
