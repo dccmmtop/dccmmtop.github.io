@@ -9,16 +9,7 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Tue, 11 Apr 2023 21:51:57 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>你要</title>
-      <link>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</link>
-      <pubDate>Tue, 11 Apr 2023 21:51:57 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</guid>
-      <description>你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。</description>
-    </item>
-    
+    <lastBuildDate>Fri, 07 Apr 2023 23:27:52 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MQ 的基本概念和五种模式使用示例</title>
       <link>https://dccmmtop.github.io/posts/mq%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/</link>
@@ -1677,6 +1668,15 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/</guid>
       <description>生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</description>
+    </item>
+    
+    <item>
+      <title>你要</title>
+      <link>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</link>
+      <pubDate>Fri, 11 Apr 1023 21:51:57 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</guid>
+      <description>你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。</description>
     </item>
     
     <item>
