@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/">并发编程之Semaphore和CountDownLatch的用法</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/" class="article-date">
+                        <time datetime='2022-10-10T10:40:28.000&#43;00:00' itemprop="datePublished">2022-10-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Semaphore Semaphore 是信号量的意思，它的作用是控制访问特定资源的线程数目，底层依赖 AQS 的状态 State，是在生产当中比较常用的一个工具类。 可以理解为许可证，或者令牌。线程想要访问某部分资源时，必须先获取一个许可证，才能
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8Baqs%E5%8E%9F%E7%90%86/">并发编程AQS原理</a></h1>
                 </header>
                 
@@ -629,45 +668,6 @@
                     <p>
                         
                     线程共享 每个线程开启的时候都会划分几块内存空间，线程栈，程序计数器，本地方法栈。这几个内存空间是依附于线程的，线程结束后，这些空间也会释放 所有线程共享 除此之外还有堆，方法区，类加载子系统，字节码执行引
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%92%8C%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/">java中的类加载器和双亲委派机制</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%92%8C%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" class="article-date">
-                        <time datetime='2022-08-14T14:03:08.000&#43;00:00' itemprop="datePublished">2022-08-14</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    类加载是什么 把磁盘中的java文件加载到内存中的过程叫做类加载 当我们用java命令运行某个类的main函数启动程序时，首先需要通过类加载器把主类加载到JVM. 有如下 User 类 package dc.dccmmtop; public Class User { public static void main(String[] args) { System.out.println(&#34;hello&#34;); } } 运
                     </p>
                     
                 </div>

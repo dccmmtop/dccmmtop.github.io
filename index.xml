@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Fri, 07 Apr 2023 23:27:52 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Apr 2023 11:33:58 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpringBoot 与 RabbitMQ 集成和高级用法</title>
+      <link>https://dccmmtop.github.io/posts/springboot%E4%B8%8Erabbitmq%E9%9B%86%E6%88%90%E5%92%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</link>
+      <pubDate>Wed, 12 Apr 2023 11:33:58 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/springboot%E4%B8%8Erabbitmq%E9%9B%86%E6%88%90%E5%92%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</guid>
+      <description>简单示例 项目结构 依赖 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-amqp&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;RELEASE&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;compile&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; 配置 spring: rabbitmq: host: 127.0.0.1 port: 5672 username: dc password: Aa111111 virtual-host: /dc0407 # 让发布者可以收到消息是否投递成功的回调 # 默认是 false publisher-confirms: true listener: simple: # 消费者开启手动确认模式，默认是 none acknowledge-mode: manual # 每次消费一个 prefetch:</description>
+    </item>
+    
     <item>
       <title>MQ 的基本概念和五种模式使用示例</title>
       <link>https://dccmmtop.github.io/posts/mq%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/</link>

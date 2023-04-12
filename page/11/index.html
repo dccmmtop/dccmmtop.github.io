@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%8E%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E8%A1%8C/">去除重复行</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%8E%BB%E9%99%A4%E9%87%8D%E5%A4%8D%E8%A1%8C/" class="article-date">
+                        <time datetime='2019-11-09T18:05:59.000&#43;00:00' itemprop="datePublished">2019-11-09</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    先sort排序，再去重 :sort //直接排序 :g/^\(.*\)$\n\1$/d //去除重复行 :g/\%(^\1$\n\)\@&lt;=\(.*\)$/d //功能同上，也是去除重复行 :g/\%(^\1\&gt;.*$\n\)\@&lt;=\(\k\+\).*$/d //功能同上，也是去除重复行 使用awk awk '!a[$0]++' file 解析： awk流程是逐行处理的，默认从文件的第一行一直处理到文件最后一行 还
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/whenever%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F/">whenever使用方式</a></h1>
                 </header>
                 
@@ -666,45 +705,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/ruby">ruby
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/">rails_多态关联</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/" class="article-date">
-                        <time datetime='2018-11-21T15:35:41.000&#43;00:00' itemprop="datePublished">2018-11-21</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    什么是多态关联 假如有三个模型，分别是 用户， 产品， 图片。图片为用户所有，也为产品所有。我们可以创建两个 picture 的模型，如下 rails g modle picture_user user_id:integer name:string url:string rails g modle picture_product product_id:integer name:string url:string class PictureUser &lt; ApplicationRecord belongs_to :user end class PictureProduct &lt; ApplicationRecord belongs_to :product end 这样我们就可以使用user.p
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
                             </a>
                         </li>
                         
