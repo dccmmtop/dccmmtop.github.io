@@ -102,6 +102,34 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%A4%9A%E8%A1%8C%E5%8F%98%E5%8D%95%E8%A1%8C/">多行变单行</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%A4%9A%E8%A1%8C%E5%8F%98%E5%8D%95%E8%A1%8C/" class="article-date">
+                        <time datetime='2021-07-10T16:58:13.000&#43;00:00' itemprop="datePublished">2021-07-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    ps -ef | grep nginx | awk -F ' ' '{print $2}'| xargs
+                    </p>
+                    
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%89%A9%E5%B1%95git%E5%8A%9F%E8%83%BD%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E5%BC%8F/">扩展git功能的一种方式</a></h1>
                 </header>
                 
@@ -666,45 +694,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/color">color
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/">rails发送qq邮件的配置</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rails%E5%8F%91%E9%80%81qq%E9%82%AE%E4%BB%B6%E7%9A%84%E9%85%8D%E7%BD%AE/" class="article-date">
-                        <time datetime='2018-11-28T17:26:31.000&#43;00:00' itemprop="datePublished">2018-11-28</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    rails 中使用邮件服务是非常方便的，直接加配置文件就可以，参考指南 qq 邮箱正确的配置如下 production.rb / development.rb ActionMailer::Base.delivery_method = :smtp config.action_mailer.perform_deliveries = true config.action_mailer.raise_delivery_errors = true config.action_mailer.default :charset =&gt; &#34;utf-8&#34; ActionMailer::Base.smtp_settings = { :address =&gt; &#39;smtp.qq.com&#39;, :port =&gt; 465, :domain =&gt; &#39;qq.com&#39;, :user_name =&gt; ENV[&#39;qq_mail_address&#39;] # 授权码 :password =&gt; ENV[&#39;qq_mail_address&#39;] :authentication =&gt; &#39;plain&#39;, :ssl =&gt; true, :enable_starttls_auto =&gt; true } 切记，qq 邮箱后台要开启
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
                             </a>
                         </li>
                         
