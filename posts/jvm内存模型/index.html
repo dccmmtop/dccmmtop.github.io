@@ -1,467 +1,107 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>jvm内存模型 // 超的博客</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    
-    
-    
-
-        <meta property="og:title" content="jvm内存模型" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" />
-    
-
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    
-    
-
-    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
-
-    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
-    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
-    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
-    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
-    
-
-    <meta name="generator" content="Hugo 0.111.3">
-</head>
-
-<body>
-    <div id="container">
-        <header id="header">
-    <div id="header-outer" class="outer">
-        <div id="header-inner" class="inner">
-            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
-            <nav id="main-nav">
-                
-                <a class="main-nav-link" href="../../posts/">文章</a>
-                
-                <a class="main-nav-link" href="../../tags/">标签</a>
-                
-                <a class="main-nav-link" href="../../about/">我</a>
-                
-                <a class="main-nav-link" id="search" >
-                  <input id="inputSearch" placeholder="search">
-                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
-            </nav>
-            <nav id="sub-nav">
-                <div id="search-form-wrap">
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body searchResults">
-          </div>
-        </div>
-      </div>
-    </div>
-</header>
-
-        <section id="main" class="outer">
-            <article class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        <header class="article-header">
-            <h1 class="article-title" itemprop="name">jvm内存模型</h1>
-        </header>
-        
-        <div class="article-meta">
-            <a href="../../posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" class="article-date">
-                <time datetime='2022-08-22T07:58:28.000&#43;00:00' itemprop="datePublished">2022-08-22</time>
-            </a>
-            
-            
-            
-        </div>
-        <div class="article-entry" itemprop="articleBody">
-            <p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220822080313.png" alt=""></p>
-<h2 id="线程共享">线程共享</h2>
-<p>每个线程开启的时候都会划分几块内存空间，线程栈，程序计数器，本地方法栈。这几个内存空间是依附于线程的，线程结束后，这些空间也会释放</p>
-<h2 id="所有线程共享">所有线程共享</h2>
-<p>除此之外还有堆，方法区，类加载子系统，字节码执行引擎。这些是所有线程共享的</p>
-<h2 id="本地方法栈">本地方法栈</h2>
-<ul>
-<li>本地方法<br>
-简单地讲，<strong>一个Native Method就是一个Java调用非Java代码的接囗</strong>。该方法的实现由非Java语言实现，比如C。这个特征并非Java所特有，很多其它的编程语言都有这一机制，比如在C++中，你可以用extern &ldquo;C&rdquo; 告知C++编译器去调用一个C的函数。</li>
-</ul>
-<p>在定义一个native method时，并不提供实现体（有些像定义一个Java interface），因为其实现体是由非java语言在外面实现的。</p>
-<p>例如<code>java.lang.Object</code>中的<code>public final native Class&lt;?&gt; getClass()</code>方法；又如<code>java.lang.Thread</code>中的<code>private native void start0()</code>方法&hellip; &hellip;</p>
-<p>本地接口的作用是融合不同的编程语言为Java所用，它的初衷是融合C/C++程序。</p>
-<ul>
-<li>本地方法栈<br>
-Java虚拟机栈于管理Java方法的调用，而<strong>本地方法栈（Native Method Stack）用于管理本地方法的调用</strong>。<br>
-本地方法栈，也是线程私有的。</li>
-</ul>
-<h2 id="程序计数器pc">程序计数器(PC)</h2>
-<p>在介绍jvm中的程序计数器(下面简称PC)之前，先看一下CPU 中的 PC:</p>
-<ul>
-<li>CPU 中的 PC<br>
-我们用高级语言编写的复杂的程序最后都会转换成 CPU 可执行的指令，当程序运行的线程被中断的时候，需要用程序计数器记录当前执行到哪一条指令了，之后等待恢复的时候再从程序计数器中获取到被中断时执行的位置。也就是为 中断——恢复 提供一个记录</li>
-</ul>
-<p>CPU中的PC是一个大小为一个字的存储设备（<strong>寄存器</strong>），在任何时候，PC中存储的都是内存地址（是不是有点像指针？），而CPU就根据PC中的内存地址，到相应的内存取出指令然后执行并且在更新PC的值。在计算机通电后这个过程会一直不断的反复进行。计算机的核心也在于此。</p>
-<ul>
-<li>JVM 中的 PC</li>
-</ul>
-<p>在CPU中PC是一个物理设备，而java中PC则是一个一块比较小的<strong>内存空间</strong>，它是当前线程字节码执行的<strong>行号指示器</strong>。在java的概念模型中，字节码解释器就是通过改变这个计数器中的值来选取下一条执行的字节码指令的，它的程序控制流的指示器，分支，线程恢复等功能都依赖于这个计数器。</p>
-<p>我们知道多线程的实现是多个线程轮流占用CPU而实现的，而在线程切换的时候就需要保存当前线程的执行状态，这样在这个线程重新占用CPU的时候才能恢复到之前的状态，而在JVM状态的保存是依赖于PC实现的，所以PC是线程所私有的内存区域，这个区域也是java运行时数据区域<strong>唯一不会发生OOM的区域</strong></p>
-<h3 id="jvm-指令概览">jvm 指令概览</h3>
-<p>随便找一个class 文件， 执行下main命令可以解析 class 文件</p>
-<pre tabindex="0"><code class="language-sell" data-lang="sell">javap -v App.class
-</code></pre><p>输出:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>Classfile /F:/code/java/io/dc/App.class
-</span></span><span style="display:flex;"><span>  Last modified 2022-8-19; size 1229 bytes
-</span></span><span style="display:flex;"><span>  MD5 checksum debb75f708cef09b6b1bf483b3e345ec
-</span></span><span style="display:flex;"><span>  Compiled from &#34;App.java&#34;
-</span></span><span style="display:flex;"><span>public class io.dc.App
-</span></span><span style="display:flex;"><span>  minor version: 0
-</span></span><span style="display:flex;"><span>  major version: 52
-</span></span><span style="display:flex;"><span>  flags: ACC_PUBLIC, ACC_SUPER
-</span></span><span style="display:flex;"><span>Constant pool:
-</span></span><span style="display:flex;"><span>   #1 = Methodref          #18.#31        // java/lang/Object.&#34;&lt;init&gt;&#34;:()V
-</span></span><span style="display:flex;"><span>   #2 = Class              #32            // io/dc/App$MyClassLoader
-</span></span><span style="display:flex;"><span>   #3 = String             #33            // F:/code/java1
-</span></span><span style="display:flex;"><span>   #4 = Methodref          #2.#34         // io/dc/App$MyClassLoader.&#34;&lt;init&gt;&#34;:(Ljava/lang/String;)V
-</span></span><span style="display:flex;"><span>   #5 = String             #35            // io.dc.User
-</span></span><span style="display:flex;"><span>   #6 = Methodref          #2.#36         // io/dc/App$MyClassLoader.loadClass:(Ljava/lang/String;)Ljava/lang/Class;
-</span></span><span style="display:flex;"><span>   #7 = Methodref          #37.#38        // java/lang/Class.newInstance:()Ljava/lang/Object;
-</span></span><span style="display:flex;"><span>  .... 省略
-</span></span><span style="display:flex;"><span>public static void main(java.lang.String[]) throws java.lang.Exception;
-</span></span><span style="display:flex;"><span>descriptor: ([Ljava/lang/String;)V
-</span></span><span style="display:flex;"><span>flags: ACC_PUBLIC, ACC_STATIC
-</span></span><span style="display:flex;"><span>Code:
-</span></span><span style="display:flex;"><span>  stack=3, locals=9, args_size=1
-</span></span><span style="display:flex;"><span>	 0: new           #2                  // class io/dc/App$MyClassLoader
-</span></span><span style="display:flex;"><span>	 3: dup
-</span></span><span style="display:flex;"><span>	 4: ldc           #3                  // String F:/code/java1
-</span></span><span style="display:flex;"><span>	 6: invokespecial #4                  // Method io/dc/App$MyClassLoader.&#34;&lt;init&gt;&#34;:(Ljava/lang/String;)V
-</span></span><span style="display:flex;"><span>	 9: astore_1
-</span></span><span style="display:flex;"><span>	10: aload_1
-</span></span><span style="display:flex;"><span>	11: ldc           #5                  // String io.dc.User
-</span></span><span style="display:flex;"><span>	13: invokevirtual #6                  // Method io/dc/App$MyClassLoader.loadClass:(Ljava/lang/String;)Ljava/lang/Class;
-</span></span><span style="display:flex;"><span>	16: astore_2
-</span></span><span style="display:flex;"><span>	17: aload_2
-</span></span><span style="display:flex;"><span>	18: invokevirtual #7                  // Method java/lang/Class.newInstance:()Ljava/lang/Object;
-</span></span><span style="display:flex;"><span>	21: astore_3
-</span></span><span style="display:flex;"><span>	22: aload_2
-</span></span><span style="display:flex;"><span>	23: ldc           #8                  // String sout
-</span></span></code></pre></div><p>其中 #1 #2 #3  就是程序计数器保存的内容，对应指令的位置<br>
-可以去官网找到每条指令的含义，示例如下:</p>
-<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220822102447.png" alt=""></p>
-<h2 id="栈线程">栈线程</h2>
-<p>栈具有先进后出的特性，线程栈内还有栈帧的概念，在一个线程中，每遇到一个方法都会开辟一个新的栈帧来存放方法相关的内容，栈帧内存放的还有局部变量表，操作数栈，动态链接，方法出口</p>
-<p>栈线程的空间可以按需调整，有时我们会看到 StackOverflow 栈溢出错误，就是栈帧过多，空间不够用了，往往发生无限制的递归调用中。</p>
-<h3 id="局部变量表">局部变量表</h3>
-<p>顾名思义就是存放局部变量的一个表, 存放编译器生成的各种类型</p>
-<ul>
-<li>基本类型（boolean,byte,char, short, float,long, double）</li>
-<li>对象的引用</li>
-<li>try catch 中的异常</li>
-<li>方法中的参数</li>
-</ul>
-<p>局部变量表是以槽(shot)为单位的,其中<strong>64位长度（long,double）类型数据占用俩个变量槽，而32位的占一个变量槽</strong>。</p>
-<p>用一个简单的demo 看一下槽的使用</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Main</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span> <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span> <span style="color:#8be9fd">int</span> a<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span> <span style="color:#8be9fd">int</span> b<span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span> System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>a<span style="color:#ff79c6">+</span>b<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><p>反编译之后的jvm指令</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>public static void main(java.lang.String[]) throws java.io.IOException;
-</span></span><span style="display:flex;"><span> descriptor: ([Ljava/lang/String;)V
-</span></span><span style="display:flex;"><span> flags: ACC_PUBLIC, ACC_STATIC
-</span></span><span style="display:flex;"><span> Code:
-</span></span><span style="display:flex;"><span> stack=3, locals=3, args_size=1   //local就是局部变量表的大小
-</span></span><span style="display:flex;"><span> 0: iconst_1
-</span></span><span style="display:flex;"><span> 1: istore_1    //栈顶元素弹出存入变量表的槽1
-</span></span><span style="display:flex;"><span> 2: iconst_2
-</span></span><span style="display:flex;"><span> 3: istore_2    //栈顶元素弹出存入变量表的槽2
-</span></span><span style="display:flex;"><span> 4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
-</span></span><span style="display:flex;"><span> 7: iload_1
-</span></span><span style="display:flex;"><span> 8: iload_2
-</span></span><span style="display:flex;"><span> 9: iadd
-</span></span><span style="display:flex;"><span> 10: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V
-</span></span><span style="display:flex;"><span> 13: return
-</span></span><span style="display:flex;"><span> LineNumberTable:
-</span></span><span style="display:flex;"><span> line 18: 0
-</span></span><span style="display:flex;"><span> line 19: 2
-</span></span><span style="display:flex;"><span> line 20: 4
-</span></span><span style="display:flex;"><span> line 21: 13
-</span></span><span style="display:flex;"><span> LocalVariableTable:
-</span></span><span style="display:flex;"><span> Start  Length  Slot  Name   Signature
-</span></span><span style="display:flex;"><span> 0      14     0  args   [Ljava/lang/String;
-</span></span><span style="display:flex;"><span> 2      12     1     a   I
-</span></span><span style="display:flex;"><span> 4      10     2     b   I
-</span></span><span style="display:flex;"><span> Exceptions:
-</span></span><span style="display:flex;"><span> throws java.io.IOException
-</span></span></code></pre></div><p>从上面的字节码文件中我们可以看出，在java源代码被编译成class文件后每一个方法的变量表的大小就已经确定（locals的值）。而且JVM是通过<strong>索引</strong>来操作变量表的，当使用的是32位数据类型时就索引N代表使用第N个变量槽。64位则代表第N和第N+1个变量槽，因为64为占用两个变量槽</p>
-<h3 id="操作数栈">操作数栈</h3>
-<p>Operand Stack，可以理解为存放操作数的栈。它的大小也是在编译期就已经确定好了的，就是上面反编译代码中出现的stack，栈元素可以是包括long和double在内的任意的java数据类型。</p>
-<p>当一个方法刚开始执行的时候，操作数栈是空的，在方法执行的过程中字节码指令会往操作数栈内写入和取出元素。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>java<span style="color:#ff79c6">.</span><span style="color:#50fa7b">lang</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">String</span><span style="color:#ff79c6">[])</span> <span style="color:#8be9fd;font-style:italic">throws</span> java<span style="color:#ff79c6">.</span><span style="color:#50fa7b">io</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">IOException</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span> descriptor<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">([</span>Ljava<span style="color:#ff79c6">/</span>lang<span style="color:#ff79c6">/</span>String<span style="color:#ff79c6">;)</span>V
-</span></span><span style="display:flex;"><span> flags<span style="color:#ff79c6">:</span> ACC_PUBLIC<span style="color:#ff79c6">,</span> ACC_STATIC
-</span></span><span style="display:flex;"><span> Code<span style="color:#ff79c6">:</span>
-</span></span><span style="display:flex;"><span> stack<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3</span><span style="color:#ff79c6">,</span> locals<span style="color:#ff79c6">=</span><span style="color:#bd93f9">3</span><span style="color:#ff79c6">,</span> args_size<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>  <span style="color:#6272a4">//栈深度最大为3，3个变量槽
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">:</span> iconst_1             <span style="color:#6272a4">//常量1压入操作数栈 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> istore_1             <span style="color:#6272a4">//栈顶元素出栈存入变量槽1
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> iconst_2             <span style="color:#6272a4">//常量2压入操作数栈
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">3</span><span style="color:#ff79c6">:</span> istore_2             <span style="color:#6272a4">//栈顶元素出栈存入变量槽2
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">4</span><span style="color:#ff79c6">:</span> getstatic     #<span style="color:#bd93f9">2</span>                  <span style="color:#6272a4">// Field java/lang/System.out:Ljava/io/PrintStream; 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#6272a4">//调用静态方法main
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">7</span><span style="color:#ff79c6">:</span> iload_1           <span style="color:#6272a4">//将变量槽1中值压入操作数栈
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">8</span><span style="color:#ff79c6">:</span> iload_2           <span style="color:#6272a4">//将变量槽2中值压入操作数栈
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">9</span><span style="color:#ff79c6">:</span> iadd              <span style="color:#6272a4">//从栈顶弹出俩个元素相加并且压入操作数栈
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">:</span> invokevirtual #<span style="color:#bd93f9">3</span>                  <span style="color:#6272a4">// Method java/io/PrintStream.println:(I)V
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#6272a4">//调用虚方法
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span> <span style="color:#bd93f9">13</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">return</span>   <span style="color:#6272a4">//返回
-</span></span></span></code></pre></div><h3 id="动态链接">动态链接</h3>
-<p>。。。 待续</p>
-<h3 id="方法出口">方法出口</h3>
-<p>在方法调用结束后，必须返回到该方法最初被调用时的位置，程序才能继续运行，所以在栈帧中要保存一些信息，用来帮助恢复它的上层主调方法的执行状态。方法返回地址就可以是主调方法在调用该方法的指令的下一条指令的地址</p>
-<h2 id="堆">堆</h2>
-<p>JVM中的堆是用来存放对象的内存空间，<strong>几乎所有的Java对象、数组</strong>都存储在JVM的堆内存中。比如当我们new一个对象或者创建一个数组的时候，就会在堆内存中分配出一段空间用来存放。类加载器读取了类文件后，需要把<strong>类、方法、常变量</strong>放到堆内存中，保存所有<strong>引用类型</strong>的真实信息，便于后续的执行。</p>
-<p>物理上可以不是连续的，逻辑上是连续的</p>
-<p>堆时JVM区域内存占用最大的一块，时垃圾回收的主要对象</p>
-<h3 id="堆内的划分">堆内的划分</h3>
-<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220822151130.png" alt=""></p>
-<ul>
-<li>新生代与老年代的默认比例  1:2</li>
-<li>新生代区的默认比例是  8:1:1</li>
-</ul>
-<p>在 HotSpot 中，Eden 空间和另外两个 SurvIvor 空间缺省所占的比例是 8:1:1</p>
-<h3 id="垃圾回收简述">垃圾回收简述</h3>
-<p>随着程序的运行，Eden 区空间不足时会触发一次 Minor GC , 查找所有对 GC Root 的引用，包含间接引用。 每个对象都会被标记非垃圾，然后将非垃圾复制到 Survivor S0 中，同时给这些非垃圾对象打上一个经历Minor GC 的次数—— 代数，每经历一次 Minor GC ，就加1, 然后清空 Eden 区域，等下次 Eden 再次空间不足时，执行一次 GC,将 Eden 区 和 S0 区中的非垃圾复制到 S1 区， 对象的代数增加1，然后清空 Eden 和 S0 区。</p>
-<p>S0 和 S1 这种左手换右手的方式不是无休止的，当代数增加到 15 ，就会把对象移到老年代，成为长期存在的对象。 除此之外，还有一种情况，即是当从Eden区复制内容到Survivor区时，复制内容大小超过S0或S1任一区域一半大小，也会直接被放入到老年代中，所以老年代才会需要那么大的区域</p>
-<p>虽然老年代空间比较大，但终究也会有满的时候，当老年代的空间也满了,比较麻烦的事情就来了，会引发一次 full GC，在 full gc 时，jvm 会先触发 STW(Stop-The-World),暂停所有线程，回收整个内存模型中的内存资源，从而造成用户用户响应超时，或者系统无响应，对于并发高的系统影响极大。</p>
-<p>通过gc机制，我们就可以得出一个简单有效的JVM优化办法，那就是减少full gc的次数，如何减少呢？只需要调整老年代和年轻代的内存空间分配使得在minor gc的过程中尽可能的消除大部分的垃圾对象。</p>
-<p>比如这种`java -Xmx3072 -Xms3072M -Xmn2048M -Xss1M</p>
-<p><strong>GC Roots</strong>：在上面的gc过程中，我们还提到了JVM是如何判断垃圾对象的。简单地来说，就是从gc roots的根出发（即局部变量表中的引用对象），一路沿着引用关系找，凡是能够被找到的对象都是非垃圾对象，并且会被移动到下一个它应该去的区域中。剩下的对象，会在区域清空时，一同被清理掉而无须关心</p>
-<h3 id="jvm-参数简单介绍">jvm 参数简单介绍</h3>
-<p>​ -Xmx3072M：设置JVM最大可用内存为3072M。<br>
-​ -Xms3072M：设置JVM初始内存为3072M。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。<br>
-​ -Xmn2048M：设置年轻代大小为2G。增大年轻代后，将会减小年老代大小。不过此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。<br>
-​ -Xss1M：设置每个线程的堆栈大小。JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。更具应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。</p>
-<h2 id="方法区">方法区</h2>
-<p><strong>方法区的基本理解：</strong></p>
-<ol>
-<li>方法区（Method Area) 与 Java 堆一样，是各个线程共享的内存区域。</li>
-<li>方法区在 JVM 启动的时候创建，并且它的实际的物理内存空间和 Java 堆区一样都可以是不连续的。</li>
-<li>方法区的大小，跟堆空间一样，可以选择固定大小或者可扩展。</li>
-<li>方法区的大小决定了<strong>系统可以保存多少个类</strong>，如果系统定义了太多的类，导致方法区的溢出，虚拟机同样会抛出内存溢出错误： java.lang.OutOfMemoryError:PermGen space 或者 java.lang.OutOfMemoryError:Metaspace</li>
-<li>关闭 JVM 就会释放这个内存区域。</li>
-</ol>
-<p><strong>方法区内存设置</strong></p>
-<ul>
-<li>元数据大小可以使用参数 -XX:MetaspaceSize 和 -XX:MaxMetaspaceSize 指定。</li>
-<li>默认值依赖于平台。windows 下，-XX:MetaspaceSize 是 21M， -XX:MaxMetaspaceSize 的值是 -1，即没有限制。</li>
-<li>与永久代不同，如果不指定大小，默认情况下，虚拟机会耗尽所有的可用系统内存。如果元数据发生异常，虚拟机一样会抛出异常 OutOfMemoryError:Metaspace</li>
-<li>-XX:MetaspaceSize 设置初始的元空间大小。对于一个 64 位的服务器 JVM 来说，其默认的 -XX:MetaspaceSize 值为21MB 。这就是初始的高水位线，一旦触及这个水位线， Full GC 将会被触发并卸载没用的类（即这些类对应的类加载器不再存活），然后这个高水位线将会重置。新的高水位线取决于 GC 释放了多少空间。如果释放的空间不足，那么在不超过 MaxMetaspaceSize时，适当提高该值。如果释放空间过多，则适当降低该值。</li>
-<li>如果初始化的高水位线设置过低，上述高水位线调整情况会发生很多次。通过垃圾回收器的日志可以观察到 Full GC 多次调用。为了避免频繁的GC,建议将 -XX:MetaSpaceSize 设置为一个相对较高的值。</li>
-</ul>
-<h3 id="存储内容">存储内容</h3>
-<p>它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码缓存等。</p>
-<h4 id="类型信息">类型信息</h4>
-<p>对每个加载的类型（类 class、接口 interface、枚举enum、注解annotation），JVM 方法区中存储以下类型信息：</p>
-<ol>
-<li>这个类型的完整有效名称（全名=包名.类名）</li>
-<li>这个类型直接父类的完整有效名（对于 interface 或是 java.lang.Object，都没有父类）</li>
-<li>这个类型的修饰符（public,abstract ,final 的某个子集）</li>
-<li>这个类型直接接口的一个有序列表</li>
-</ol>
-<h4 id="域field信息">域（Field)信息</h4>
-<ol>
-<li>JVM 必须在方法区中保存类型的所有域的相关信息以及域的声明顺序。</li>
-<li>域的相关信息包括：域名称、域类型、域修饰符（public,private,protected,static,final,volatile,transient 的某个子集)</li>
-</ol>
-<h4 id="方法信息">方法信息</h4>
-<p>JVM 必须保存所有方法的以下信息，同域信息一样包括声明顺序:</p>
-<p>1.方法名称<br>
-2.方法的返回类型<br>
-3.方法参数的数量和类型（按顺序）<br>
-4.方法的修饰符（public ,private, protected , static ,final, synchronized, native,abstract 的一个子集）<br>
-5.方法的字节码（bytecodes)、操作数栈、局部变量表及大小（abstract 和 native方法除外）<br>
-6.异常表 （abstract 和 native 方法除外） 每个异常处理的开始位置、结束位置、代码处理在程序计数器中的偏移地址、被捕获的异常类的常量池索引<br>
-7.<strong>non-final 的类变量</strong> 静态变量和类关联在一起，随着类的加载而加载，他们成为类数据在逻辑上的一部分。<br>
-8.<strong>全局常量：static final</strong>, 被声明为 final 的类变量的处理方法则不同，每个全局常量在编译的时候就会被分配了。</p>
-<h3 id="运行时常量池-vs-常量池">运行时常量池 vs 常量池</h3>
-<ul>
-<li>方法区中，内部包含了运行时常量池</li>
-<li>字节码文件，内部包含了常量池</li>
-</ul>
-<h3 id="为什么需要常量池">为什么需要常量池</h3>
-<p>一个java源文件中类、接口、编译后产生一个字节码文件。而Java 中的字节码需要数据支持，通常这种数据会很大以至于不能直接存到字节码里，换另一种方式，可以存到常量池，这个字节码包含了指向常量池的引用。在动态链接的时候会用到运行时常量池，比如：如下的代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SimpleClass</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">(){</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><p>虽然只有 194 字节，但是里面却使用了 String、 System、PrintStream及 Object 等结构。这里代码量其实已经很小了。如果代码多，应用到的结构会更多！这里就需要常量池了！</p>
-<p><strong>小结</strong></p>
-<p>常量池，可以看做是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等类型。</p>
-<h3 id="运行时常量池">运行时常量池</h3>
-<ul>
-<li>运行时常量池（Runtime Constant Pool) 是方法区的一部分。</li>
-<li>常量池表（Constant Pool Table) 是 <strong>Class 文件的一部分</strong>，用于存放编译期生成的各种字面量与符号应用，这部分内容将在类加载后存放到<strong>方法区的运行时常量池中</strong></li>
-<li>在加载类和接口到虚拟机后，就会创建对应的运行时常量池。</li>
-<li>JVM 为每个已加载到类型（类或接口）都维护了一个常量池。池中的数据项像数组项一样，是通过索引访问的。</li>
-<li>运行时常量池中包含多种不同的常量，包括编译器就已经明确的数值字面量，也包括到运行期解析后才能够获得的方法或者字段引用。此时不再是常量池中的符号地址了，这里换为真实地址。</li>
-<li>运行时常量池，相对于 Class 文件常量池的另一重要特征是：具备动态性。</li>
-<li>运行时常量池类似于传统编程语言中的符号表（symbol table),但是它所包含的数据却比符号表要更加丰富一些。</li>
-<li>当创建类或者接口的运行时常量池时，如果构造运行时常量池所需的内存空间超过了方法区所提供的最大值，则 JVM 会抛 OutOfMemoryError 异常。</li>
-</ul>
-<h3 id="方法区中的垃圾回收">方法区中的垃圾回收</h3>
-<p>方法区内常量池中主要存放的两大类常量：<strong>字面量</strong>和<strong>符号引用</strong>。字面量比较接近 Java语言层次的常量概念，如文本字符串、被声明为final的常量值等。而符号引用则属于<strong>编译原理</strong>方面的概念，包括下面三类常量：<br>
-1.类和接口的权限定名<br>
-2.字段的名称和描述符<br>
-3.方法的名称和描述符</p>
-<p>HotSpot 虚拟机对常量池的回收策略是很明确的，之前常量池中的常量没有被任何地方引用，就可以回收。回收废弃常量与回收 java 堆中的对象非常类似。</p>
-<p>判定一个常量是否“废弃”还是相对简单的，而要判定一个类型是否属于<strong>不再被使用的类</strong>的条件就比较苛刻了。需要同事满足下面三个条件：</p>
-<ol>
-<li>该类的所有实例都已经被回收了，也就是 java 堆中不存在该类及其任何派生子类的实例。</li>
-<li>加载该类的类加载器已经被回收，这个条件除非是经过精心设计的可替换类加载器的场景如 OSGI、JSP 的重加载等，否则通常是很难达成的。</li>
-<li>该类对应的 java.lang.Class 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
-</ol>
-
-        </div>
-
-        
-
-        
-
-
-        
-        <footer class="article-footer">
-            <ul class="article-tag-list">
-                
-                <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
-                    </a>
-                </li>
-                
-            </ul>
-        </footer>
-        
-    </div>
-    
-<nav id="article-nav">
-    
-    <a href="../../posts/jvm%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" id="article-nav-newer" class="article-nav-link-wrap">
-        <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            jvm内存分配
-        </div>
-    </a>
-    
-    
-    <a href="../../posts/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%92%8C%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">java中的类加载器和双亲委派机制&nbsp;<span>&gt;</span></div>
-    </a>
-    
-</nav>
-
-
-</article>
-            
-        </section>
-
-        <div>
-            
-
-            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
-                label="Comment" theme="github-light" crossorigin="anonymous" async>
-                </script>
-            
-
-        </div>
-
-        <footer id="footer">
-    <div class="outer">
-        <div id="footer-info" class="inner">
-            &copy; 2023 dc
-            <br />
-            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
-                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
-
-
-        </div>
-    </div>
-    
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
-        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
-        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    <script>
-        document.getElementById('main-nav-toggle').addEventListener('click', function () {
-            var header = document.getElementById('header');
-            if (header.classList.contains('mobile-on')) {
-                header.classList.remove('mobile-on');
-            } else {
-                header.classList.add('mobile-on');
-            }
-        });
-    </script>
-    <style>
-        #footer-info {
-            line-height: 1.4em;
-            font-size: 10px;
-        }
-
-        .custom-blog-info {
-            font-family: 'Long Cang', cursive;
-            border-top: 1px dashed #333;
-            font-size: 16px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.4em;
-        }
-    </style>
-</footer>
-
-    </div>
-</body>
-
-</html>
+<!doctype html><html><head><title>jvm内存模型 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="jvm内存模型"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>我</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>jvm内存模型</h1></header><div class=article-meta><a href=../../posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/ class=article-date><time datetime=2022-08-22T07:58:28.000+00:00 itemprop=datePublished>2022-08-22</time></a></div><div class=article-entry itemprop=articleBody><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220822080313.png alt></p><h2 id=线程共享>线程共享</h2><p>每个线程开启的时候都会划分几块内存空间，线程栈，程序计数器，本地方法栈。这几个内存空间是依附于线程的，线程结束后，这些空间也会释放</p><h2 id=所有线程共享>所有线程共享</h2><p>除此之外还有堆，方法区，类加载子系统，字节码执行引擎。这些是所有线程共享的</p><h2 id=本地方法栈>本地方法栈</h2><ul><li>本地方法<br>简单地讲，<strong>一个Native Method就是一个Java调用非Java代码的接囗</strong>。该方法的实现由非Java语言实现，比如C。这个特征并非Java所特有，很多其它的编程语言都有这一机制，比如在C++中，你可以用extern &ldquo;C&rdquo; 告知C++编译器去调用一个C的函数。</li></ul><p>在定义一个native method时，并不提供实现体（有些像定义一个Java interface），因为其实现体是由非java语言在外面实现的。</p><p>例如<code>java.lang.Object</code>中的<code>public final native Class&lt;?> getClass()</code>方法；又如<code>java.lang.Thread</code>中的<code>private native void start0()</code>方法&mldr; &mldr;</p><p>本地接口的作用是融合不同的编程语言为Java所用，它的初衷是融合C/C++程序。</p><ul><li>本地方法栈<br>Java虚拟机栈于管理Java方法的调用，而<strong>本地方法栈（Native Method Stack）用于管理本地方法的调用</strong>。<br>本地方法栈，也是线程私有的。</li></ul><h2 id=程序计数器pc>程序计数器(PC)</h2><p>在介绍jvm中的程序计数器(下面简称PC)之前，先看一下CPU 中的 PC:</p><ul><li>CPU 中的 PC<br>我们用高级语言编写的复杂的程序最后都会转换成 CPU 可执行的指令，当程序运行的线程被中断的时候，需要用程序计数器记录当前执行到哪一条指令了，之后等待恢复的时候再从程序计数器中获取到被中断时执行的位置。也就是为 中断——恢复 提供一个记录</li></ul><p>CPU中的PC是一个大小为一个字的存储设备（<strong>寄存器</strong>），在任何时候，PC中存储的都是内存地址（是不是有点像指针？），而CPU就根据PC中的内存地址，到相应的内存取出指令然后执行并且在更新PC的值。在计算机通电后这个过程会一直不断的反复进行。计算机的核心也在于此。</p><ul><li>JVM 中的 PC</li></ul><p>在CPU中PC是一个物理设备，而java中PC则是一个一块比较小的<strong>内存空间</strong>，它是当前线程字节码执行的<strong>行号指示器</strong>。在java的概念模型中，字节码解释器就是通过改变这个计数器中的值来选取下一条执行的字节码指令的，它的程序控制流的指示器，分支，线程恢复等功能都依赖于这个计数器。</p><p>我们知道多线程的实现是多个线程轮流占用CPU而实现的，而在线程切换的时候就需要保存当前线程的执行状态，这样在这个线程重新占用CPU的时候才能恢复到之前的状态，而在JVM状态的保存是依赖于PC实现的，所以PC是线程所私有的内存区域，这个区域也是java运行时数据区域<strong>唯一不会发生OOM的区域</strong></p><h3 id=jvm-指令概览>jvm 指令概览</h3><p>随便找一个class 文件， 执行下main命令可以解析 class 文件</p><pre tabindex=0><code class=language-sell data-lang=sell>javap -v App.class
+</code></pre><p>输出:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>Classfile /F:/code/java/io/dc/App.class
+</span></span><span style=display:flex><span>  Last modified 2022-8-19; size 1229 bytes
+</span></span><span style=display:flex><span>  MD5 checksum debb75f708cef09b6b1bf483b3e345ec
+</span></span><span style=display:flex><span>  Compiled from &#34;App.java&#34;
+</span></span><span style=display:flex><span>public class io.dc.App
+</span></span><span style=display:flex><span>  minor version: 0
+</span></span><span style=display:flex><span>  major version: 52
+</span></span><span style=display:flex><span>  flags: ACC_PUBLIC, ACC_SUPER
+</span></span><span style=display:flex><span>Constant pool:
+</span></span><span style=display:flex><span>   #1 = Methodref          #18.#31        // java/lang/Object.&#34;&lt;init&gt;&#34;:()V
+</span></span><span style=display:flex><span>   #2 = Class              #32            // io/dc/App$MyClassLoader
+</span></span><span style=display:flex><span>   #3 = String             #33            // F:/code/java1
+</span></span><span style=display:flex><span>   #4 = Methodref          #2.#34         // io/dc/App$MyClassLoader.&#34;&lt;init&gt;&#34;:(Ljava/lang/String;)V
+</span></span><span style=display:flex><span>   #5 = String             #35            // io.dc.User
+</span></span><span style=display:flex><span>   #6 = Methodref          #2.#36         // io/dc/App$MyClassLoader.loadClass:(Ljava/lang/String;)Ljava/lang/Class;
+</span></span><span style=display:flex><span>   #7 = Methodref          #37.#38        // java/lang/Class.newInstance:()Ljava/lang/Object;
+</span></span><span style=display:flex><span>  .... 省略
+</span></span><span style=display:flex><span>public static void main(java.lang.String[]) throws java.lang.Exception;
+</span></span><span style=display:flex><span>descriptor: ([Ljava/lang/String;)V
+</span></span><span style=display:flex><span>flags: ACC_PUBLIC, ACC_STATIC
+</span></span><span style=display:flex><span>Code:
+</span></span><span style=display:flex><span>  stack=3, locals=9, args_size=1
+</span></span><span style=display:flex><span>	 0: new           #2                  // class io/dc/App$MyClassLoader
+</span></span><span style=display:flex><span>	 3: dup
+</span></span><span style=display:flex><span>	 4: ldc           #3                  // String F:/code/java1
+</span></span><span style=display:flex><span>	 6: invokespecial #4                  // Method io/dc/App$MyClassLoader.&#34;&lt;init&gt;&#34;:(Ljava/lang/String;)V
+</span></span><span style=display:flex><span>	 9: astore_1
+</span></span><span style=display:flex><span>	10: aload_1
+</span></span><span style=display:flex><span>	11: ldc           #5                  // String io.dc.User
+</span></span><span style=display:flex><span>	13: invokevirtual #6                  // Method io/dc/App$MyClassLoader.loadClass:(Ljava/lang/String;)Ljava/lang/Class;
+</span></span><span style=display:flex><span>	16: astore_2
+</span></span><span style=display:flex><span>	17: aload_2
+</span></span><span style=display:flex><span>	18: invokevirtual #7                  // Method java/lang/Class.newInstance:()Ljava/lang/Object;
+</span></span><span style=display:flex><span>	21: astore_3
+</span></span><span style=display:flex><span>	22: aload_2
+</span></span><span style=display:flex><span>	23: ldc           #8                  // String sout
+</span></span></code></pre></div><p>其中 #1 #2 #3 就是程序计数器保存的内容，对应指令的位置<br>可以去官网找到每条指令的含义，示例如下:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220822102447.png alt></p><h2 id=栈线程>栈线程</h2><p>栈具有先进后出的特性，线程栈内还有栈帧的概念，在一个线程中，每遇到一个方法都会开辟一个新的栈帧来存放方法相关的内容，栈帧内存放的还有局部变量表，操作数栈，动态链接，方法出口</p><p>栈线程的空间可以按需调整，有时我们会看到 StackOverflow 栈溢出错误，就是栈帧过多，空间不够用了，往往发生无限制的递归调用中。</p><h3 id=局部变量表>局部变量表</h3><p>顾名思义就是存放局部变量的一个表, 存放编译器生成的各种类型</p><ul><li>基本类型（boolean,byte,char, short, float,long, double）</li><li>对象的引用</li><li>try catch 中的异常</li><li>方法中的参数</li></ul><p>局部变量表是以槽(shot)为单位的,其中<strong>64位长度（long,double）类型数据占用俩个变量槽，而32位的占一个变量槽</strong>。</p><p>用一个简单的demo 看一下槽的使用</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Main</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span> <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span> <span style=color:#8be9fd>int</span> a<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span> <span style=color:#8be9fd>int</span> b<span style=color:#ff79c6>=</span><span style=color:#bd93f9>2</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span> System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>a<span style=color:#ff79c6>+</span>b<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span> <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><p>反编译之后的jvm指令</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>public static void main(java.lang.String[]) throws java.io.IOException;
+</span></span><span style=display:flex><span> descriptor: ([Ljava/lang/String;)V
+</span></span><span style=display:flex><span> flags: ACC_PUBLIC, ACC_STATIC
+</span></span><span style=display:flex><span> Code:
+</span></span><span style=display:flex><span> stack=3, locals=3, args_size=1   //local就是局部变量表的大小
+</span></span><span style=display:flex><span> 0: iconst_1
+</span></span><span style=display:flex><span> 1: istore_1    //栈顶元素弹出存入变量表的槽1
+</span></span><span style=display:flex><span> 2: iconst_2
+</span></span><span style=display:flex><span> 3: istore_2    //栈顶元素弹出存入变量表的槽2
+</span></span><span style=display:flex><span> 4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+</span></span><span style=display:flex><span> 7: iload_1
+</span></span><span style=display:flex><span> 8: iload_2
+</span></span><span style=display:flex><span> 9: iadd
+</span></span><span style=display:flex><span> 10: invokevirtual #3                  // Method java/io/PrintStream.println:(I)V
+</span></span><span style=display:flex><span> 13: return
+</span></span><span style=display:flex><span> LineNumberTable:
+</span></span><span style=display:flex><span> line 18: 0
+</span></span><span style=display:flex><span> line 19: 2
+</span></span><span style=display:flex><span> line 20: 4
+</span></span><span style=display:flex><span> line 21: 13
+</span></span><span style=display:flex><span> LocalVariableTable:
+</span></span><span style=display:flex><span> Start  Length  Slot  Name   Signature
+</span></span><span style=display:flex><span> 0      14     0  args   [Ljava/lang/String;
+</span></span><span style=display:flex><span> 2      12     1     a   I
+</span></span><span style=display:flex><span> 4      10     2     b   I
+</span></span><span style=display:flex><span> Exceptions:
+</span></span><span style=display:flex><span> throws java.io.IOException
+</span></span></code></pre></div><p>从上面的字节码文件中我们可以看出，在java源代码被编译成class文件后每一个方法的变量表的大小就已经确定（locals的值）。而且JVM是通过<strong>索引</strong>来操作变量表的，当使用的是32位数据类型时就索引N代表使用第N个变量槽。64位则代表第N和第N+1个变量槽，因为64为占用两个变量槽</p><h3 id=操作数栈>操作数栈</h3><p>Operand Stack，可以理解为存放操作数的栈。它的大小也是在编译期就已经确定好了的，就是上面反编译代码中出现的stack，栈元素可以是包括long和double在内的任意的java数据类型。</p><p>当一个方法刚开始执行的时候，操作数栈是空的，在方法执行的过程中字节码指令会往操作数栈内写入和取出元素。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>java<span style=color:#ff79c6>.</span><span style=color:#50fa7b>lang</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>String</span><span style=color:#ff79c6>[])</span> <span style=color:#8be9fd;font-style:italic>throws</span> java<span style=color:#ff79c6>.</span><span style=color:#50fa7b>io</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>IOException</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span> descriptor<span style=color:#ff79c6>:</span> <span style=color:#ff79c6>([</span>Ljava<span style=color:#ff79c6>/</span>lang<span style=color:#ff79c6>/</span>String<span style=color:#ff79c6>;)</span>V
+</span></span><span style=display:flex><span> flags<span style=color:#ff79c6>:</span> ACC_PUBLIC<span style=color:#ff79c6>,</span> ACC_STATIC
+</span></span><span style=display:flex><span> Code<span style=color:#ff79c6>:</span>
+</span></span><span style=display:flex><span> stack<span style=color:#ff79c6>=</span><span style=color:#bd93f9>3</span><span style=color:#ff79c6>,</span> locals<span style=color:#ff79c6>=</span><span style=color:#bd93f9>3</span><span style=color:#ff79c6>,</span> args_size<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span>  <span style=color:#6272a4>//栈深度最大为3，3个变量槽
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>:</span> iconst_1             <span style=color:#6272a4>//常量1压入操作数栈 
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>:</span> istore_1             <span style=color:#6272a4>//栈顶元素出栈存入变量槽1
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>2</span><span style=color:#ff79c6>:</span> iconst_2             <span style=color:#6272a4>//常量2压入操作数栈
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>3</span><span style=color:#ff79c6>:</span> istore_2             <span style=color:#6272a4>//栈顶元素出栈存入变量槽2
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>4</span><span style=color:#ff79c6>:</span> getstatic     #<span style=color:#bd93f9>2</span>                  <span style=color:#6272a4>// Field java/lang/System.out:Ljava/io/PrintStream; 
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#6272a4>//调用静态方法main
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>7</span><span style=color:#ff79c6>:</span> iload_1           <span style=color:#6272a4>//将变量槽1中值压入操作数栈
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>8</span><span style=color:#ff79c6>:</span> iload_2           <span style=color:#6272a4>//将变量槽2中值压入操作数栈
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>9</span><span style=color:#ff79c6>:</span> iadd              <span style=color:#6272a4>//从栈顶弹出俩个元素相加并且压入操作数栈
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>10</span><span style=color:#ff79c6>:</span> invokevirtual #<span style=color:#bd93f9>3</span>                  <span style=color:#6272a4>// Method java/io/PrintStream.println:(I)V
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#6272a4>//调用虚方法
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span> <span style=color:#bd93f9>13</span><span style=color:#ff79c6>:</span> <span style=color:#ff79c6>return</span>   <span style=color:#6272a4>//返回
+</span></span></span></code></pre></div><h3 id=动态链接>动态链接</h3><p>。。。 待续</p><h3 id=方法出口>方法出口</h3><p>在方法调用结束后，必须返回到该方法最初被调用时的位置，程序才能继续运行，所以在栈帧中要保存一些信息，用来帮助恢复它的上层主调方法的执行状态。方法返回地址就可以是主调方法在调用该方法的指令的下一条指令的地址</p><h2 id=堆>堆</h2><p>JVM中的堆是用来存放对象的内存空间，<strong>几乎所有的Java对象、数组</strong>都存储在JVM的堆内存中。比如当我们new一个对象或者创建一个数组的时候，就会在堆内存中分配出一段空间用来存放。类加载器读取了类文件后，需要把<strong>类、方法、常变量</strong>放到堆内存中，保存所有<strong>引用类型</strong>的真实信息，便于后续的执行。</p><p>物理上可以不是连续的，逻辑上是连续的</p><p>堆时JVM区域内存占用最大的一块，时垃圾回收的主要对象</p><h3 id=堆内的划分>堆内的划分</h3><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220822151130.png alt></p><ul><li>新生代与老年代的默认比例 1:2</li><li>新生代区的默认比例是 8:1:1</li></ul><p>在 HotSpot 中，Eden 空间和另外两个 SurvIvor 空间缺省所占的比例是 8:1:1</p><h3 id=垃圾回收简述>垃圾回收简述</h3><p>随着程序的运行，Eden 区空间不足时会触发一次 Minor GC , 查找所有对 GC Root 的引用，包含间接引用。 每个对象都会被标记非垃圾，然后将非垃圾复制到 Survivor S0 中，同时给这些非垃圾对象打上一个经历Minor GC 的次数—— 代数，每经历一次 Minor GC ，就加1, 然后清空 Eden 区域，等下次 Eden 再次空间不足时，执行一次 GC,将 Eden 区 和 S0 区中的非垃圾复制到 S1 区， 对象的代数增加1，然后清空 Eden 和 S0 区。</p><p>S0 和 S1 这种左手换右手的方式不是无休止的，当代数增加到 15 ，就会把对象移到老年代，成为长期存在的对象。 除此之外，还有一种情况，即是当从Eden区复制内容到Survivor区时，复制内容大小超过S0或S1任一区域一半大小，也会直接被放入到老年代中，所以老年代才会需要那么大的区域</p><p>虽然老年代空间比较大，但终究也会有满的时候，当老年代的空间也满了,比较麻烦的事情就来了，会引发一次 full GC，在 full gc 时，jvm 会先触发 STW(Stop-The-World),暂停所有线程，回收整个内存模型中的内存资源，从而造成用户用户响应超时，或者系统无响应，对于并发高的系统影响极大。</p><p>通过gc机制，我们就可以得出一个简单有效的JVM优化办法，那就是减少full gc的次数，如何减少呢？只需要调整老年代和年轻代的内存空间分配使得在minor gc的过程中尽可能的消除大部分的垃圾对象。</p><p>比如这种`java -Xmx3072 -Xms3072M -Xmn2048M -Xss1M</p><p><strong>GC Roots</strong>：在上面的gc过程中，我们还提到了JVM是如何判断垃圾对象的。简单地来说，就是从gc roots的根出发（即局部变量表中的引用对象），一路沿着引用关系找，凡是能够被找到的对象都是非垃圾对象，并且会被移动到下一个它应该去的区域中。剩下的对象，会在区域清空时，一同被清理掉而无须关心</p><h3 id=jvm-参数简单介绍>jvm 参数简单介绍</h3><p>​ -Xmx3072M：设置JVM最大可用内存为3072M。<br>​ -Xms3072M：设置JVM初始内存为3072M。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。<br>​ -Xmn2048M：设置年轻代大小为2G。增大年轻代后，将会减小年老代大小。不过此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。<br>​ -Xss1M：设置每个线程的堆栈大小。JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。更具应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。</p><h2 id=方法区>方法区</h2><p><strong>方法区的基本理解：</strong></p><ol><li>方法区（Method Area) 与 Java 堆一样，是各个线程共享的内存区域。</li><li>方法区在 JVM 启动的时候创建，并且它的实际的物理内存空间和 Java 堆区一样都可以是不连续的。</li><li>方法区的大小，跟堆空间一样，可以选择固定大小或者可扩展。</li><li>方法区的大小决定了<strong>系统可以保存多少个类</strong>，如果系统定义了太多的类，导致方法区的溢出，虚拟机同样会抛出内存溢出错误： java.lang.OutOfMemoryError:PermGen space 或者 java.lang.OutOfMemoryError:Metaspace</li><li>关闭 JVM 就会释放这个内存区域。</li></ol><p><strong>方法区内存设置</strong></p><ul><li>元数据大小可以使用参数 -XX:MetaspaceSize 和 -XX:MaxMetaspaceSize 指定。</li><li>默认值依赖于平台。windows 下，-XX:MetaspaceSize 是 21M， -XX:MaxMetaspaceSize 的值是 -1，即没有限制。</li><li>与永久代不同，如果不指定大小，默认情况下，虚拟机会耗尽所有的可用系统内存。如果元数据发生异常，虚拟机一样会抛出异常 OutOfMemoryError:Metaspace</li><li>-XX:MetaspaceSize 设置初始的元空间大小。对于一个 64 位的服务器 JVM 来说，其默认的 -XX:MetaspaceSize 值为21MB 。这就是初始的高水位线，一旦触及这个水位线， Full GC 将会被触发并卸载没用的类（即这些类对应的类加载器不再存活），然后这个高水位线将会重置。新的高水位线取决于 GC 释放了多少空间。如果释放的空间不足，那么在不超过 MaxMetaspaceSize时，适当提高该值。如果释放空间过多，则适当降低该值。</li><li>如果初始化的高水位线设置过低，上述高水位线调整情况会发生很多次。通过垃圾回收器的日志可以观察到 Full GC 多次调用。为了避免频繁的GC,建议将 -XX:MetaSpaceSize 设置为一个相对较高的值。</li></ul><h3 id=存储内容>存储内容</h3><p>它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码缓存等。</p><h4 id=类型信息>类型信息</h4><p>对每个加载的类型（类 class、接口 interface、枚举enum、注解annotation），JVM 方法区中存储以下类型信息：</p><ol><li>这个类型的完整有效名称（全名=包名.类名）</li><li>这个类型直接父类的完整有效名（对于 interface 或是 java.lang.Object，都没有父类）</li><li>这个类型的修饰符（public,abstract ,final 的某个子集）</li><li>这个类型直接接口的一个有序列表</li></ol><h4 id=域field信息>域（Field)信息</h4><ol><li>JVM 必须在方法区中保存类型的所有域的相关信息以及域的声明顺序。</li><li>域的相关信息包括：域名称、域类型、域修饰符（public,private,protected,static,final,volatile,transient 的某个子集)</li></ol><h4 id=方法信息>方法信息</h4><p>JVM 必须保存所有方法的以下信息，同域信息一样包括声明顺序:</p><p>1.方法名称<br>2.方法的返回类型<br>3.方法参数的数量和类型（按顺序）<br>4.方法的修饰符（public ,private, protected , static ,final, synchronized, native,abstract 的一个子集）<br>5.方法的字节码（bytecodes)、操作数栈、局部变量表及大小（abstract 和 native方法除外）<br>6.异常表 （abstract 和 native 方法除外） 每个异常处理的开始位置、结束位置、代码处理在程序计数器中的偏移地址、被捕获的异常类的常量池索引<br>7.<strong>non-final 的类变量</strong> 静态变量和类关联在一起，随着类的加载而加载，他们成为类数据在逻辑上的一部分。<br>8.<strong>全局常量：static final</strong>, 被声明为 final 的类变量的处理方法则不同，每个全局常量在编译的时候就会被分配了。</p><h3 id=运行时常量池-vs-常量池>运行时常量池 vs 常量池</h3><ul><li>方法区中，内部包含了运行时常量池</li><li>字节码文件，内部包含了常量池</li></ul><h3 id=为什么需要常量池>为什么需要常量池</h3><p>一个java源文件中类、接口、编译后产生一个字节码文件。而Java 中的字节码需要数据支持，通常这种数据会很大以至于不能直接存到字节码里，换另一种方式，可以存到常量池，这个字节码包含了指向常量池的引用。在动态链接的时候会用到运行时常量池，比如：如下的代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>SimpleClass</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>sayHello</span><span style=color:#ff79c6>(){</span>
+</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;hello&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><p>虽然只有 194 字节，但是里面却使用了 String、 System、PrintStream及 Object 等结构。这里代码量其实已经很小了。如果代码多，应用到的结构会更多！这里就需要常量池了！</p><p><strong>小结</strong></p><p>常量池，可以看做是一张表，虚拟机指令根据这张常量表找到要执行的类名、方法名、参数类型、字面量等类型。</p><h3 id=运行时常量池>运行时常量池</h3><ul><li>运行时常量池（Runtime Constant Pool) 是方法区的一部分。</li><li>常量池表（Constant Pool Table) 是 <strong>Class 文件的一部分</strong>，用于存放编译期生成的各种字面量与符号应用，这部分内容将在类加载后存放到<strong>方法区的运行时常量池中</strong></li><li>在加载类和接口到虚拟机后，就会创建对应的运行时常量池。</li><li>JVM 为每个已加载到类型（类或接口）都维护了一个常量池。池中的数据项像数组项一样，是通过索引访问的。</li><li>运行时常量池中包含多种不同的常量，包括编译器就已经明确的数值字面量，也包括到运行期解析后才能够获得的方法或者字段引用。此时不再是常量池中的符号地址了，这里换为真实地址。</li><li>运行时常量池，相对于 Class 文件常量池的另一重要特征是：具备动态性。</li><li>运行时常量池类似于传统编程语言中的符号表（symbol table),但是它所包含的数据却比符号表要更加丰富一些。</li><li>当创建类或者接口的运行时常量池时，如果构造运行时常量池所需的内存空间超过了方法区所提供的最大值，则 JVM 会抛 OutOfMemoryError 异常。</li></ul><h3 id=方法区中的垃圾回收>方法区中的垃圾回收</h3><p>方法区内常量池中主要存放的两大类常量：<strong>字面量</strong>和<strong>符号引用</strong>。字面量比较接近 Java语言层次的常量概念，如文本字符串、被声明为final的常量值等。而符号引用则属于<strong>编译原理</strong>方面的概念，包括下面三类常量：<br>1.类和接口的权限定名<br>2.字段的名称和描述符<br>3.方法的名称和描述符</p><p>HotSpot 虚拟机对常量池的回收策略是很明确的，之前常量池中的常量没有被任何地方引用，就可以回收。回收废弃常量与回收 java 堆中的对象非常类似。</p><p>判定一个常量是否“废弃”还是相对简单的，而要判定一个类型是否属于<strong>不再被使用的类</strong>的条件就比较苛刻了。需要同事满足下面三个条件：</p><ol><li>该类的所有实例都已经被回收了，也就是 java 堆中不存在该类及其任何派生子类的实例。</li><li>加载该类的类加载器已经被回收，这个条件除非是经过精心设计的可替换类加载器的场景如 OSGI、JSP 的重加载等，否则通常是很难达成的。</li><li>该类对应的 java.lang.Class 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li></ol></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/jvm%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+jvm内存分配</div></a><a href=../../posts/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%92%8C%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>java中的类加载器和双亲委派机制&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
