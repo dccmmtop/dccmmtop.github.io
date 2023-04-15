@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Wed, 12 Apr 2023 11:33:58 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 15 Apr 2023 10:32:37 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>常用软件清单</title>
+      <link>https://dccmmtop.github.io/posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/</link>
+      <pubDate>Sat, 15 Apr 2023 10:32:37 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/</guid>
+      <description>谷歌浏览器 clash https://github.com/Dreamacro/clash/releases terminal 应用商店 draw.io 应用商店 powershell https://github.com/PowerShell/PowerShell wsl2 ubuntu 子系统 choco oh-my-posh choco install neovim choco install lsd choco install hugo Hach Nerd 字体 链接: https://pan.baidu.com/s/1Cts0PCJeeB8Nb3gO7laeRA 提取码: t49r windows docker desktop https://www.docker.com/products/docker-desktop/ vscode java ruby go localsend 局域网文件传输，最好用，没有之一 https://localsend.org/#/download cpu 内存等监控 qq 音乐 洛雪音乐 https://github.com/lyswhut/lx-music-desktop Bandzip 压缩软件 https://www.bandisoft.com/bandizip/ BCUninstall 卸载工具 https://github.com/Klocman/Bulk-Crap-Uninstaller</description>
+    </item>
+    
     <item>
       <title>SpringBoot 与 RabbitMQ 集成和高级用法</title>
       <link>https://dccmmtop.github.io/posts/springboot%E4%B8%8Erabbitmq%E9%9B%86%E6%88%90%E5%92%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</link>
@@ -17,6 +26,15 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/springboot%E4%B8%8Erabbitmq%E9%9B%86%E6%88%90%E5%92%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</guid>
       <description>简单示例 项目结构 依赖 配置 生产者 消费者 消息的可靠投递示例 confirm return 消费者确认机制 消费端限流 TTL 单条消息 整个队列设置 TTL 死信队列 死信队列的实现步骤 延迟队列 消息幂等设计 简单示例 项目结构 依赖 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-amqp&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt;</description>
+    </item>
+    
+    <item>
+      <title>你要</title>
+      <link>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</link>
+      <pubDate>Tue, 11 Apr 2023 21:51:57 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</guid>
+      <description>你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。</description>
     </item>
     
     <item>
@@ -1677,15 +1695,6 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/</guid>
       <description>生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</description>
-    </item>
-    
-    <item>
-      <title>你要</title>
-      <link>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</link>
-      <pubDate>Fri, 11 Apr 1023 21:51:57 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E4%BD%A0%E8%A6%81/</guid>
-      <description>你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。</description>
     </item>
     
     <item>

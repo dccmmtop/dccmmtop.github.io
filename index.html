@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="./posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/">常用软件清单</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="./posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/" class="article-date">
+                        <time datetime='2023-04-15T10:32:37.000&#43;00:00' itemprop="datePublished">2023-04-15</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    谷歌浏览器 clash https://github.com/Dreamacro/clash/releases terminal 应用商店 draw.io 应用商店 powershell https://github.com/PowerShell/PowerShell wsl2 ubuntu 子系统 choco oh-my-posh choco install neovim choco install lsd choco install hugo Hach Nerd 字体 链接: https://pan.baidu.com/s/1Cts0PCJeeB8Nb3gO7laeRA 提取码: t49r windows docker desktop https://www.docker.com/products/docker-desktop/ vscode java ruby go localsend 局域网文件传输，最好用，没有之一 https://localsend.org/#/download cpu 内存等监控 qq 音乐 洛雪音乐 https://github.com/lyswhut/lx-music-desktop Bandzip 压缩软件 https://www.bandisoft.com/bandizip/ BCUninstall 卸载工具 https://github.com/Klocman/Bulk-Crap-Uninstaller
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/windows">windows
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="./posts/springboot%E4%B8%8Erabbitmq%E9%9B%86%E6%88%90%E5%92%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/">SpringBoot 与 RabbitMQ 集成和高级用法</a></h1>
                 </header>
                 
@@ -127,6 +166,45 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="./posts/%E4%BD%A0%E8%A6%81/">你要</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="./posts/%E4%BD%A0%E8%A6%81/" class="article-date">
+                        <time datetime='2023-04-11T21:51:57.000&#43;00:00' itemprop="datePublished">2023-04-11</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
                             </a>
                         </li>
                         
@@ -609,89 +687,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="./posts/%E8%8E%B7%E5%8F%96%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E8%BF%9B%E7%A8%8B/">获取正在运行的进程</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="./posts/%E8%8E%B7%E5%8F%96%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E8%BF%9B%E7%A8%8B/" class="article-date">
-                        <time datetime='2022-11-09T13:10:41.000&#43;00:00' itemprop="datePublished">2022-11-09</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    获取系统中正在运行的进程。和平台无关 import ( ps &#34;github.com/mitchellh/go-ps&#34; ) func running() bool { processList, err := ps.Processes() if err != nil { fmt.Printf(&#34;err %v\n&#34;,err); return false } var process ps.Process num := 0 for x := range processList { process = processList[x] if process.Executable() == &#34;test.exe&#34; { num ++ if num &gt;= 2 { fmt.Println(&#34;on running&#34;) return true } } } return false }
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="./posts/springioc%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E7%AE%80%E8%A6%81%E4%BB%8B%E7%BB%8D/">spring IOC 加载过程简要介绍</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="./posts/springioc%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E7%AE%80%E8%A6%81%E4%BB%8B%E7%BB%8D/" class="article-date">
-                        <time datetime='2022-11-08T14:48:39.000&#43;00:00' itemprop="datePublished">2022-11-08</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    本文从源码层面简要介绍一下 Spring IoC 加载过程，以及这个过程遇到的重点方法，重点类。 new AnnotationConfigApplicationContext() 一切的根源都要从 new AnnotationConfigApplicationContext() 方法开始，这是 Spring 启动的入口，先准备如下代码： public class ContextDemo { public static void main(String[] args) { AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class); context.getBean(&#34;car&#34;,Car.class); } } @Configuration @ComponentScan(basePackageClasses = {Car.class}) class Config{ @Bean public User1 user(){
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -748,6 +743,10 @@
     
     
     <a href="./page/13/">13</a>
+    
+    
+    
+    <a href="./page/14/">14</a>
     
     
 

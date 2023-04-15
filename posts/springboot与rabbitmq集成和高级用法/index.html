@@ -538,10 +538,20 @@
 <p>六秒后:</p>
 <p><img src="../../images/2023-04-13-23-03-48.png" alt=""></p>
 <h2 id="延迟队列">延迟队列</h2>
-<p>TODO</p>
+<p>RabbitMQ 没有自己实现延迟队列，但是我们可以借助TTL 和死信队列完成延迟队列的功能。</p>
+<ol>
+<li>把需要延时处理的消息设置TTL,并发送到带有死信的队列中。</li>
+<li>消费者监听死信队列</li>
+</ol>
 <h2 id="消息幂等设计">消息幂等设计</h2>
-<p>TODO</p>
-
+<p>幂等设计是一种设计思想，一次或多次请求同一个资源，对资源本身应该有同样的结果，也就是说任意执行多次对资源本身产生的影响与执行一次的影响相同</p>
+<p>在MQ中，消费多条相同的消息应该与只消费一次带来的效果相同</p>
+<p>可以采用乐观锁的方式实现消息幂等：</p>
+<p>以sql 更新语句为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#6272a4">-- version 某时刻等于 1
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">update</span> account <span style="color:#ff79c6">set</span> price <span style="color:#ff79c6">=</span> price <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">100</span>, <span style="color:#ff79c6">version</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">version</span> <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">where</span> id <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">and</span> <span style="color:#ff79c6">version</span>  <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">-- 把版本号作为更新语句的条件，同时版本号自增
+</span></span></span></code></pre></div>
         </div>
 
         
@@ -565,9 +575,15 @@
     
 <nav id="article-nav">
     
+    <a href="../../posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            常用软件清单
+        </div>
+    </a>
     
-    <a href="../../posts/mq%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">MQ 的基本概念和五种模式使用示例&nbsp;<span>&gt;</span></div>
+    
+    <a href="../../posts/%E4%BD%A0%E8%A6%81/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">你要&nbsp;<span>&gt;</span></div>
     </a>
     
 </nav>
