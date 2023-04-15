@@ -1,693 +1,420 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>自定义注解 // 超的博客</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    
-    
-    
-
-        <meta property="og:title" content="自定义注解" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/" />
-    
-
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    
-    
-
-    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
-
-    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
-    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
-    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
-    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
-    
-
-    <meta name="generator" content="Hugo 0.111.3">
-</head>
-
-<body>
-    <div id="container">
-        <header id="header">
-    <div id="header-outer" class="outer">
-        <div id="header-inner" class="inner">
-            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
-            <nav id="main-nav">
-                
-                <a class="main-nav-link" href="../../posts/">文章</a>
-                
-                <a class="main-nav-link" href="../../tags/">标签</a>
-                
-                <a class="main-nav-link" href="../../about/">我</a>
-                
-                <a class="main-nav-link" id="search" >
-                  <input id="inputSearch" placeholder="search">
-                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
-            </nav>
-            <nav id="sub-nav">
-                <div id="search-form-wrap">
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body searchResults">
-          </div>
-        </div>
-      </div>
-    </div>
-</header>
-
-        <section id="main" class="outer">
-            <article class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        <header class="article-header">
-            <h1 class="article-title" itemprop="name">自定义注解</h1>
-        </header>
-        
-        <div class="article-meta">
-            <a href="../../posts/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/" class="article-date">
-                <time datetime='2022-11-03T10:56:39.000&#43;00:00' itemprop="datePublished">2022-11-03</time>
-            </a>
-            
-            
-            
-        </div>
-        <div class="article-entry" itemprop="articleBody">
-            <p>注解也被称为元数据，它为我们在代码中添加信息提供了一种形式化的方法，使我们可以在稍后某个时刻非常方便的使用这些数据。</p>
-<p>注解是受c#启发，在 javaSE5 中引入的，虽然javaSE5 预先定义了一些注解，但一般来说，主要还是程序员添加新的注解，并按自己的方式使用他们。</p>
-<h2 id="内置注解">内置注解</h2>
-<p>java SE5 内置了三种注解：</p>
-<ul>
-<li>@Override, 表示当前的方法覆盖超类中的方法。如果拼写错误，或者方法签名对不上被覆盖的方法，编译器就会发出错误提示，</li>
-<li>@Deprecated, 标记方法被弃用了，如果使用了被它标记的元素，编译器会发出警告信息</li>
-<li>@SuppressWarnings, 关闭不当的编译器警告信息。</li>
-</ul>
-<p>之外，java还提供了四种注解，专门负责新注解的创建，也被称为元注解。</p>
-<h2 id="元注解">元注解</h2>
-<h3 id="target">@Target</h3>
-<p>用来定义你的注解将用于什么地方，例如用在方法上，类上 还是字段上等， 使用方式： <code>@Target(ElementType.METHOD)</code>,  其中 ElementType 的取值有下面几种:</p>
-<ul>
-<li><code>CONSTRUCTOR</code> 构造器</li>
-<li><code>FIELD</code> 域， 包括 enum 的实例</li>
-<li><code>LOCAL_VARIABLE</code> 局部变量</li>
-<li><code>METHOD</code> 方法上</li>
-<li><code>PACKAGE</code> 包</li>
-<li><code>PAEAMETER</code> 参数</li>
-<li><code>TYPE</code> 类， 接口，包括注解类型 或 enum</li>
-</ul>
-<h3 id="retention">@Retention</h3>
-<p>表示在什么级别保存该注解的信息，例如源码中，类文件中，或者运行时，使用方式： <code>@Retention(RetentionPolicy.RUNTIME)</code>, 其中 RetentionPolicy 的取值有：</p>
-<ul>
-<li><code>SOURCE</code> 注解将被编译器丢弃</li>
-<li><code>CLASS</code> 注解在class文件中可用，但会被 JVM 丢弃</li>
-<li><code>RUNTIME</code> JVM 在运行期也保留注解，因此可以通过反射机制读取注解信息</li>
-</ul>
-<h3 id="documented">@Documented</h3>
-<p>将此注解包含在 javadoc中</p>
-<h3 id="inherited">@Inherited</h3>
-<p>允许子类继承父类中的注解</p>
-<h2 id="编写注解">编写注解</h2>
-<p>一个注解得以工作要有三个要素：</p>
-<ol>
-<li>定义注解</li>
-<li>使用注解</li>
-<li>注解处理器</li>
-</ol>
-<p>下面用一个对象/关系映射功能 ORM的简单例子来展现如何编写自定义注解：</p>
-<ol>
-<li>@DBTable 将此注解用于 JavaBean 上，以便生成一个数据库表</li>
-<li>@Constrains此注解用于字段上，描述该字段有一些约束，比如不能为空，要唯一等</li>
-<li>@SQLString 将此注解用于字段上，会生成一个 varchar 类型的列</li>
-<li>@SQLInt 将此注解用于字段上，会生成一个 int 类型的列</li>
-</ol>
-<h3 id="定义注解">定义注解</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 注解定义
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">TYPE</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> @interface DBTable<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 表名, 规定：必须要有一个默认值，
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String <span style="color:#50fa7b">name</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 字段的约束
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">FIELD</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> @interface Constraints<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 是否是主键
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">primary</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 是否可以为空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">allowNull</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 是否唯一
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">unique</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 生成 varchar 类型的列
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">FIELD</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> @interface SQLString<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *  让value代表 varchar的长度，value 是个比较特殊的名字，在使用该注解的时候，
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *  如果该元素是唯一需要赋值的元素。那么可以简写，无需使用 名———值 语法，而是
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *  @SQLString(30)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 列的名字
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String <span style="color:#50fa7b">name</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 生成 int 类型的列
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">FIELD</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> @interface SQLInt<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 列的名字
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String <span style="color:#50fa7b">name</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><h3 id="注解的使用">注解的使用</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 注解使用
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@DBTable<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;users&#34;</span><span style="color:#ff79c6">)</span><span style="color:#6272a4">// 表名是useres
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 设置id是主键，唯一， 不能为空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    @Constraints<span style="color:#ff79c6">(</span>primary <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span> allowNull <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">,</span> unique <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    @SQLInt
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @SQLInt
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span>  <span style="color:#8be9fd">int</span> age<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @SQLString<span style="color:#ff79c6">(</span><span style="color:#bd93f9">20</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String name<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getId</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setId</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">id</span> <span style="color:#ff79c6">=</span> id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getAge</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> age<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setAge</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> age<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">age</span> <span style="color:#ff79c6">=</span> age<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> name<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setName</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span> <span style="color:#ff79c6">=</span> name<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><h3 id="注解处理器">注解处理器</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 注解处理器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">TableCreator</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">createTableSQLString</span><span style="color:#ff79c6">(</span>Class<span style="color:#ff79c6">&lt;?&gt;</span> cl<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取类上的 DBTable 注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        DBTable table <span style="color:#ff79c6">=</span> cl<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>DBTable<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>table <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取 DBTable 注解中的 name 参数
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String tableName <span style="color:#ff79c6">=</span> table<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 保存所有列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> columnNameList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 反射的方式遍历类中的字段
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Field field <span style="color:#ff79c6">:</span> cl<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDeclaredFields</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            String columnName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 遍历字段上的注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Annotation annotation <span style="color:#ff79c6">:</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotations</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// 如果包含 SQLInt 注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>annotation <span style="color:#ff79c6">instanceof</span> SQLInt<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    SQLInt sint <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>SQLInt<span style="color:#ff79c6">)</span> annotation<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>sint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        columnName <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">toLowerCase</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 如果没有设置name属性，就用字段名作为列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        columnName <span style="color:#ff79c6">=</span> sint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                    columnName <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#34; INT&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 获取字段上的约束类型的注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    Constraints con <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>Constraints<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    columnName <span style="color:#ff79c6">+=</span> buildConstraints<span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 否则检查是否包含 @SQLString 注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>annotation <span style="color:#ff79c6">instanceof</span> SQLString<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    SQLString sString <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>SQLString<span style="color:#ff79c6">)</span> annotation<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>sString<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        columnName <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">toLowerCase</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 如果没有设置name属性，就用字段名作为列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        columnName <span style="color:#ff79c6">=</span> sString<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 获取字段长度属性
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    columnName <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#34; VARCHAR(&#34;</span> <span style="color:#ff79c6">+</span> sString<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;)&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 获取字段上的约束类型的注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    Constraints con <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>Constraints<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    columnName <span style="color:#ff79c6">+=</span> buildConstraints<span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            columnNameList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>columnName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        StringBuilder createConmmand <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> StringBuilder<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;CREATE TABLE &#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span>tableName<span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;(&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> length <span style="color:#ff79c6">=</span> columnNameList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">size</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> length<span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;\n    &#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span>columnNameList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>i<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">!=</span> length <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>                createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;,&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;);&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">buildConstraints</span><span style="color:#ff79c6">(</span>Constraints con<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>con <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(!</span>con<span style="color:#ff79c6">.</span><span style="color:#50fa7b">allowNull</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34; NOT NULL&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">.</span><span style="color:#50fa7b">primary</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34; PRIMARY KEY&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">.</span><span style="color:#50fa7b">unique</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34; UNIQUE&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AnnotationDemo</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> ClassNotFoundException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Class<span style="color:#ff79c6">&lt;?&gt;</span> userClass <span style="color:#ff79c6">=</span> Class<span style="color:#ff79c6">.</span><span style="color:#50fa7b">forName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;io.dc.User&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        String sql <span style="color:#ff79c6">=</span>  <span style="color:#ff79c6">new</span> TableCreator<span style="color:#ff79c6">().</span><span style="color:#50fa7b">createTableSQLString</span><span style="color:#ff79c6">(</span>userClass<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 直接下面的也行
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//        String sql =  new TableCreator().createTableSQLString(User.class);
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>sql<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><h2 id="注解使用注意">注解使用注意</h2>
-<ul>
-<li>不同注解可以组合使用，但同类型的注解不能重复使用</li>
-<li>目前注解不支持继承</li>
-<li>注解中的属性不能为 null, 本例中的 @SQLString name() 不能为 null, 必须设置 default</li>
-<li>注解元素只能一下几种,否则编译器会报错
-<ul>
-<li>所有基本类型(int, float, boolean 等)</li>
-<li>String</li>
-<li>Class</li>
-<li>enum</li>
-<li>Annotation</li>
-<li>以上类型的数组</li>
-</ul>
-</li>
-</ul>
-<h2 id="完整代码">完整代码</h2>
-<p>为了测试方便，把所有类都放在一个文件中了：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.lang.annotation.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.lang.reflect.Field<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 注解定义
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">TYPE</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@interface DBTable<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 表名, 规定：必须要有一个默认值，
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String <span style="color:#50fa7b">name</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 字段的约束
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">FIELD</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@interface Constraints<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 是否是主键
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">primary</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 是否可以为空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">allowNull</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 是否唯一
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">unique</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 生成 varchar 类型的列
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">FIELD</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@interface SQLString<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *  让value代表 varchar的长度，value 是个比较特殊的名字，在使用该注解的时候，
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *  如果该元素是唯一需要赋值的元素。那么可以简写，无需使用 名———值 语法，而是
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *  @SQLString(30)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 列的名字
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String <span style="color:#50fa7b">name</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 生成 int 类型的列
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">FIELD</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>@interface SQLInt<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 列的名字
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String <span style="color:#50fa7b">name</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">default</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 注解使用
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span>@DBTable<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;users&#34;</span><span style="color:#ff79c6">)</span><span style="color:#6272a4">// 表名是useres
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 设置id是主键，唯一， 不能为空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    @Constraints<span style="color:#ff79c6">(</span>primary <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span> allowNull <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">,</span> unique <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    @SQLInt
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @SQLInt
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span>  <span style="color:#8be9fd">int</span> age<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @SQLString<span style="color:#ff79c6">(</span><span style="color:#bd93f9">20</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String name<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getId</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setId</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> id<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">id</span> <span style="color:#ff79c6">=</span> id<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getAge</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> age<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setAge</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> age<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">age</span> <span style="color:#ff79c6">=</span> age<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> name<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setName</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span> <span style="color:#ff79c6">=</span> name<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 注解处理器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">TableCreator</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">createTableSQLString</span><span style="color:#ff79c6">(</span>Class<span style="color:#ff79c6">&lt;?&gt;</span> cl<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取类上的 DBTable 注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        DBTable table <span style="color:#ff79c6">=</span> cl<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>DBTable<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>table <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取 DBTable 注解中的 name 参数
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String tableName <span style="color:#ff79c6">=</span> table<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 保存所有列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> columnNameList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 反射的方式遍历类中的字段
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Field field <span style="color:#ff79c6">:</span> cl<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDeclaredFields</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            String columnName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 遍历字段上的注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Annotation annotation <span style="color:#ff79c6">:</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotations</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// 如果包含 SQLInt 注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>annotation <span style="color:#ff79c6">instanceof</span> SQLInt<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    SQLInt sint <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>SQLInt<span style="color:#ff79c6">)</span> annotation<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>sint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        columnName <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">toLowerCase</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 如果没有设置name属性，就用字段名作为列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        columnName <span style="color:#ff79c6">=</span> sint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                    columnName <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#34; INT&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 获取字段上的约束类型的注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    Constraints con <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>Constraints<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    columnName <span style="color:#ff79c6">+=</span> buildConstraints<span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 否则检查是否包含 @SQLString 注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>annotation <span style="color:#ff79c6">instanceof</span> SQLString<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    SQLString sString <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>SQLString<span style="color:#ff79c6">)</span> annotation<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>sString<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        columnName <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">toLowerCase</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 如果没有设置name属性，就用字段名作为列名
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        columnName <span style="color:#ff79c6">=</span> sString<span style="color:#ff79c6">.</span><span style="color:#50fa7b">name</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 获取字段长度属性
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    columnName <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#34; VARCHAR(&#34;</span> <span style="color:#ff79c6">+</span> sString<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;)&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 获取字段上的约束类型的注解
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    Constraints con <span style="color:#ff79c6">=</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>Constraints<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    columnName <span style="color:#ff79c6">+=</span> buildConstraints<span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            columnNameList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>columnName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        StringBuilder createConmmand <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> StringBuilder<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;CREATE TABLE &#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span>tableName<span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;(&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> length <span style="color:#ff79c6">=</span> columnNameList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">size</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> length<span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;\n    &#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span>columnNameList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>i<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">!=</span> length <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>                createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;,&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;);&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> createConmmand<span style="color:#ff79c6">.</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">buildConstraints</span><span style="color:#ff79c6">(</span>Constraints con<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>con <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(!</span>con<span style="color:#ff79c6">.</span><span style="color:#50fa7b">allowNull</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34; NOT NULL&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">.</span><span style="color:#50fa7b">primary</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34; PRIMARY KEY&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>con<span style="color:#ff79c6">.</span><span style="color:#50fa7b">unique</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34; UNIQUE&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AnnotationDemo</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> ClassNotFoundException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Class<span style="color:#ff79c6">&lt;?&gt;</span> userClass <span style="color:#ff79c6">=</span> Class<span style="color:#ff79c6">.</span><span style="color:#50fa7b">forName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;io.dc.User&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        String sql <span style="color:#ff79c6">=</span>  <span style="color:#ff79c6">new</span> TableCreator<span style="color:#ff79c6">().</span><span style="color:#50fa7b">createTableSQLString</span><span style="color:#ff79c6">(</span>userClass<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 直接下面的也行
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//        String sql =  new TableCreator().createTableSQLString(User.class);
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>sql<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><p>结果:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>CREATE TABLE users(
-</span></span><span style="display:flex;"><span>    id INT NOT NULL,
-</span></span><span style="display:flex;"><span>    age INT,
-</span></span><span style="display:flex;"><span>    name VARCHAR(20));
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Process finished with exit code 0
-</span></span></code></pre></div>
-        </div>
-
-        
-
-        
-
-
-        
-        <footer class="article-footer">
-            <ul class="article-tag-list">
-                
-                <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
-                    </a>
-                </li>
-                
-            </ul>
-        </footer>
-        
-    </div>
-    
-<nav id="article-nav">
-    
-    <a href="../../posts/ioc%E6%80%9D%E6%83%B3%E8%AE%B2%E8%A7%A3%E5%92%8C%E5%AE%9E%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
-        <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            IoC 思想和实现
-        </div>
-    </a>
-    
-    
-    <a href="../../posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">动态代理与静态代理&nbsp;<span>&gt;</span></div>
-    </a>
-    
-</nav>
-
-
-</article>
-            
-        </section>
-
-        <div>
-            
-
-            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
-                label="Comment" theme="github-light" crossorigin="anonymous" async>
-                </script>
-            
-
-        </div>
-
-        <footer id="footer">
-    <div class="outer">
-        <div id="footer-info" class="inner">
-            &copy; 2023 dc
-            <br />
-            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
-                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
-
-
-        </div>
-    </div>
-    
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
-        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
-        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    <script>
-        document.getElementById('main-nav-toggle').addEventListener('click', function () {
-            var header = document.getElementById('header');
-            if (header.classList.contains('mobile-on')) {
-                header.classList.remove('mobile-on');
-            } else {
-                header.classList.add('mobile-on');
-            }
-        });
-    </script>
-    <style>
-        #footer-info {
-            line-height: 1.4em;
-            font-size: 10px;
-        }
-
-        .custom-blog-info {
-            font-family: 'Long Cang', cursive;
-            border-top: 1px dashed #333;
-            font-size: 16px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.4em;
-        }
-    </style>
-</footer>
-
-    </div>
-</body>
-
-</html>
+<!doctype html><html><head><title>自定义注解 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="自定义注解"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>我</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>自定义注解</h1></header><div class=article-meta><a href=../../posts/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3/ class=article-date><time datetime=2022-11-03T10:56:39.000+00:00 itemprop=datePublished>2022-11-03</time></a></div><div class=article-entry itemprop=articleBody><p>注解也被称为元数据，它为我们在代码中添加信息提供了一种形式化的方法，使我们可以在稍后某个时刻非常方便的使用这些数据。</p><p>注解是受c#启发，在 javaSE5 中引入的，虽然javaSE5 预先定义了一些注解，但一般来说，主要还是程序员添加新的注解，并按自己的方式使用他们。</p><h2 id=内置注解>内置注解</h2><p>java SE5 内置了三种注解：</p><ul><li>@Override, 表示当前的方法覆盖超类中的方法。如果拼写错误，或者方法签名对不上被覆盖的方法，编译器就会发出错误提示，</li><li>@Deprecated, 标记方法被弃用了，如果使用了被它标记的元素，编译器会发出警告信息</li><li>@SuppressWarnings, 关闭不当的编译器警告信息。</li></ul><p>之外，java还提供了四种注解，专门负责新注解的创建，也被称为元注解。</p><h2 id=元注解>元注解</h2><h3 id=target>@Target</h3><p>用来定义你的注解将用于什么地方，例如用在方法上，类上 还是字段上等， 使用方式： <code>@Target(ElementType.METHOD)</code>, 其中 ElementType 的取值有下面几种:</p><ul><li><code>CONSTRUCTOR</code> 构造器</li><li><code>FIELD</code> 域， 包括 enum 的实例</li><li><code>LOCAL_VARIABLE</code> 局部变量</li><li><code>METHOD</code> 方法上</li><li><code>PACKAGE</code> 包</li><li><code>PAEAMETER</code> 参数</li><li><code>TYPE</code> 类， 接口，包括注解类型 或 enum</li></ul><h3 id=retention>@Retention</h3><p>表示在什么级别保存该注解的信息，例如源码中，类文件中，或者运行时，使用方式： <code>@Retention(RetentionPolicy.RUNTIME)</code>, 其中 RetentionPolicy 的取值有：</p><ul><li><code>SOURCE</code> 注解将被编译器丢弃</li><li><code>CLASS</code> 注解在class文件中可用，但会被 JVM 丢弃</li><li><code>RUNTIME</code> JVM 在运行期也保留注解，因此可以通过反射机制读取注解信息</li></ul><h3 id=documented>@Documented</h3><p>将此注解包含在 javadoc中</p><h3 id=inherited>@Inherited</h3><p>允许子类继承父类中的注解</p><h2 id=编写注解>编写注解</h2><p>一个注解得以工作要有三个要素：</p><ol><li>定义注解</li><li>使用注解</li><li>注解处理器</li></ol><p>下面用一个对象/关系映射功能 ORM的简单例子来展现如何编写自定义注解：</p><ol><li>@DBTable 将此注解用于 JavaBean 上，以便生成一个数据库表</li><li>@Constrains此注解用于字段上，描述该字段有一些约束，比如不能为空，要唯一等</li><li>@SQLString 将此注解用于字段上，会生成一个 varchar 类型的列</li><li>@SQLInt 将此注解用于字段上，会生成一个 int 类型的列</li></ol><h3 id=定义注解>定义注解</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 注解定义
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>TYPE</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> @interface DBTable<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 表名, 规定：必须要有一个默认值，
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String <span style=color:#50fa7b>name</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 字段的约束
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>FIELD</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> @interface Constraints<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 是否是主键
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>primary</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 是否可以为空
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>allowNull</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 是否唯一
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>unique</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 生成 varchar 类型的列
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>FIELD</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> @interface SQLString<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *  让value代表 varchar的长度，value 是个比较特殊的名字，在使用该注解的时候，
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *  如果该元素是唯一需要赋值的元素。那么可以简写，无需使用 名———值 语法，而是
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *  @SQLString(30)
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>value</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 列的名字
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String <span style=color:#50fa7b>name</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 生成 int 类型的列
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>FIELD</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> @interface SQLInt<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 列的名字
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String <span style=color:#50fa7b>name</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h3 id=注解的使用>注解的使用</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 注解使用
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@DBTable<span style=color:#ff79c6>(</span>name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;users&#34;</span><span style=color:#ff79c6>)</span><span style=color:#6272a4>// 表名是useres
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>User</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 设置id是主键，唯一， 不能为空
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
+</span></span><span style=display:flex><span>    @Constraints<span style=color:#ff79c6>(</span>primary <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>,</span> allowNull <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>,</span> unique <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    @SQLInt
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @SQLInt
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span>  <span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @SQLString<span style=color:#ff79c6>(</span><span style=color:#bd93f9>20</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> String name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getId</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> id<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setId</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>id</span> <span style=color:#ff79c6>=</span> id<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getAge</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setAge</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>age</span> <span style=color:#ff79c6>=</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setName</span><span style=color:#ff79c6>(</span>String name<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span> <span style=color:#ff79c6>=</span> name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h3 id=注解处理器>注解处理器</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 注解处理器
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>TableCreator</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>createTableSQLString</span><span style=color:#ff79c6>(</span>Class<span style=color:#ff79c6>&lt;?&gt;</span> cl<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 获取类上的 DBTable 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        DBTable table <span style=color:#ff79c6>=</span> cl<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotation</span><span style=color:#ff79c6>(</span>DBTable<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>table <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 获取 DBTable 注解中的 name 参数
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        String tableName <span style=color:#ff79c6>=</span> table<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 保存所有列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        List<span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>&gt;</span> columnNameList <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> ArrayList<span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>&gt;();</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 反射的方式遍历类中的字段
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Field field <span style=color:#ff79c6>:</span> cl<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getDeclaredFields</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            String columnName <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 遍历字段上的注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Annotation annotation <span style=color:#ff79c6>:</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotations</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                <span style=color:#6272a4>// 如果包含 SQLInt 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>annotation <span style=color:#ff79c6>instanceof</span> SQLInt<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                    SQLInt sint <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>SQLInt<span style=color:#ff79c6>)</span> annotation<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>sint<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        columnName <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>toLowerCase</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        <span style=color:#6272a4>// 如果没有设置name属性，就用字段名作为列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        columnName <span style=color:#ff79c6>=</span> sint<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>                    columnName <span style=color:#ff79c6>+=</span> <span style=color:#f1fa8c>&#34; INT&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 获取字段上的约束类型的注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    Constraints con <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotation</span><span style=color:#ff79c6>(</span>Constraints<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>                    columnName <span style=color:#ff79c6>+=</span> buildConstraints<span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 否则检查是否包含 @SQLString 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>annotation <span style=color:#ff79c6>instanceof</span> SQLString<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                    SQLString sString <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>SQLString<span style=color:#ff79c6>)</span> annotation<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>sString<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        columnName <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>toLowerCase</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        <span style=color:#6272a4>// 如果没有设置name属性，就用字段名作为列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        columnName <span style=color:#ff79c6>=</span> sString<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 获取字段长度属性
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    columnName <span style=color:#ff79c6>+=</span> <span style=color:#f1fa8c>&#34; VARCHAR(&#34;</span> <span style=color:#ff79c6>+</span> sString<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;)&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 获取字段上的约束类型的注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    Constraints con <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotation</span><span style=color:#ff79c6>(</span>Constraints<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>                    columnName <span style=color:#ff79c6>+=</span> buildConstraints<span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>                <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>            columnNameList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span>columnName<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        StringBuilder createConmmand <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> StringBuilder<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;CREATE TABLE &#34;</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span>tableName<span style=color:#ff79c6>).</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;(&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#8be9fd>int</span> length <span style=color:#ff79c6>=</span> columnNameList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>size</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> length<span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;\n    &#34;</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span>columnNameList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>get</span><span style=color:#ff79c6>(</span>i<span style=color:#ff79c6>));</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>!=</span> length <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>                createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;,&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;);&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>toString</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>buildConstraints</span><span style=color:#ff79c6>(</span>Constraints con<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>con <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(!</span>con<span style=color:#ff79c6>.</span><span style=color:#50fa7b>allowNull</span><span style=color:#ff79c6>()){</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34; NOT NULL&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>.</span><span style=color:#50fa7b>primary</span><span style=color:#ff79c6>()){</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34; PRIMARY KEY&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>.</span><span style=color:#50fa7b>unique</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34; UNIQUE&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>AnnotationDemo</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> ClassNotFoundException <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        Class<span style=color:#ff79c6>&lt;?&gt;</span> userClass <span style=color:#ff79c6>=</span> Class<span style=color:#ff79c6>.</span><span style=color:#50fa7b>forName</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;io.dc.User&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        String sql <span style=color:#ff79c6>=</span>  <span style=color:#ff79c6>new</span> TableCreator<span style=color:#ff79c6>().</span><span style=color:#50fa7b>createTableSQLString</span><span style=color:#ff79c6>(</span>userClass<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 直接下面的也行
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>//        String sql =  new TableCreator().createTableSQLString(User.class);
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>sql<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h2 id=注解使用注意>注解使用注意</h2><ul><li>不同注解可以组合使用，但同类型的注解不能重复使用</li><li>目前注解不支持继承</li><li>注解中的属性不能为 null, 本例中的 @SQLString name() 不能为 null, 必须设置 default</li><li>注解元素只能一下几种,否则编译器会报错<ul><li>所有基本类型(int, float, boolean 等)</li><li>String</li><li>Class</li><li>enum</li><li>Annotation</li><li>以上类型的数组</li></ul></li></ul><h2 id=完整代码>完整代码</h2><p>为了测试方便，把所有类都放在一个文件中了：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#ff79c6>package</span> io.dc<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> java.lang.annotation.*<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> java.lang.reflect.Field<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> java.util.ArrayList<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> java.util.List<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 注解定义
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>TYPE</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@interface DBTable<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 表名, 规定：必须要有一个默认值，
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String <span style=color:#50fa7b>name</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 字段的约束
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>FIELD</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@interface Constraints<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 是否是主键
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>primary</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 是否可以为空
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>allowNull</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 是否唯一
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>unique</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 生成 varchar 类型的列
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>FIELD</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@interface SQLString<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *  让value代表 varchar的长度，value 是个比较特殊的名字，在使用该注解的时候，
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *  如果该元素是唯一需要赋值的元素。那么可以简写，无需使用 名———值 语法，而是
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *  @SQLString(30)
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>value</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 列的名字
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String <span style=color:#50fa7b>name</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 生成 int 类型的列
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@Target<span style=color:#ff79c6>(</span>ElementType<span style=color:#ff79c6>.</span><span style=color:#50fa7b>FIELD</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@Retention<span style=color:#ff79c6>(</span>RetentionPolicy<span style=color:#ff79c6>.</span><span style=color:#50fa7b>RUNTIME</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>@interface SQLInt<span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 列的名字
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String <span style=color:#50fa7b>name</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>default</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 注解使用
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span>@DBTable<span style=color:#ff79c6>(</span>name <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;users&#34;</span><span style=color:#ff79c6>)</span><span style=color:#6272a4>// 表名是useres
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>User</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 设置id是主键，唯一， 不能为空
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
+</span></span><span style=display:flex><span>    @Constraints<span style=color:#ff79c6>(</span>primary <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>,</span> allowNull <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>,</span> unique <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    @SQLInt
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @SQLInt
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span>  <span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    @SQLString<span style=color:#ff79c6>(</span><span style=color:#bd93f9>20</span><span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> String name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getId</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> id<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setId</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> id<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>id</span> <span style=color:#ff79c6>=</span> id<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>getAge</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setAge</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> age<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>age</span> <span style=color:#ff79c6>=</span> age<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setName</span><span style=color:#ff79c6>(</span>String name<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span> <span style=color:#ff79c6>=</span> name<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> * 注解处理器
+</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>TableCreator</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>createTableSQLString</span><span style=color:#ff79c6>(</span>Class<span style=color:#ff79c6>&lt;?&gt;</span> cl<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 获取类上的 DBTable 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        DBTable table <span style=color:#ff79c6>=</span> cl<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotation</span><span style=color:#ff79c6>(</span>DBTable<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>table <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 获取 DBTable 注解中的 name 参数
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        String tableName <span style=color:#ff79c6>=</span> table<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 保存所有列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        List<span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>&gt;</span> columnNameList <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> ArrayList<span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>&gt;();</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 反射的方式遍历类中的字段
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Field field <span style=color:#ff79c6>:</span> cl<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getDeclaredFields</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            String columnName <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 遍历字段上的注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Annotation annotation <span style=color:#ff79c6>:</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotations</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                <span style=color:#6272a4>// 如果包含 SQLInt 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>annotation <span style=color:#ff79c6>instanceof</span> SQLInt<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                    SQLInt sint <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>SQLInt<span style=color:#ff79c6>)</span> annotation<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>sint<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        columnName <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>toLowerCase</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        <span style=color:#6272a4>// 如果没有设置name属性，就用字段名作为列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        columnName <span style=color:#ff79c6>=</span> sint<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>                    columnName <span style=color:#ff79c6>+=</span> <span style=color:#f1fa8c>&#34; INT&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 获取字段上的约束类型的注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    Constraints con <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotation</span><span style=color:#ff79c6>(</span>Constraints<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>                    columnName <span style=color:#ff79c6>+=</span> buildConstraints<span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 否则检查是否包含 @SQLString 注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>annotation <span style=color:#ff79c6>instanceof</span> SQLString<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                    SQLString sString <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>SQLString<span style=color:#ff79c6>)</span> annotation<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>sString<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        columnName <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>toLowerCase</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span><span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                        <span style=color:#6272a4>// 如果没有设置name属性，就用字段名作为列名
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        columnName <span style=color:#ff79c6>=</span> sString<span style=color:#ff79c6>.</span><span style=color:#50fa7b>name</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 获取字段长度属性
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    columnName <span style=color:#ff79c6>+=</span> <span style=color:#f1fa8c>&#34; VARCHAR(&#34;</span> <span style=color:#ff79c6>+</span> sString<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;)&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 获取字段上的约束类型的注解
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    Constraints con <span style=color:#ff79c6>=</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getAnnotation</span><span style=color:#ff79c6>(</span>Constraints<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>                    columnName <span style=color:#ff79c6>+=</span> buildConstraints<span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>                <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>            columnNameList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span>columnName<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        StringBuilder createConmmand <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> StringBuilder<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;CREATE TABLE &#34;</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span>tableName<span style=color:#ff79c6>).</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;(&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#8be9fd>int</span> length <span style=color:#ff79c6>=</span> columnNameList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>size</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> length<span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;\n    &#34;</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span>columnNameList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>get</span><span style=color:#ff79c6>(</span>i<span style=color:#ff79c6>));</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>!=</span> length <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>                createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;,&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>append</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;);&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> createConmmand<span style=color:#ff79c6>.</span><span style=color:#50fa7b>toString</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> String <span style=color:#50fa7b>buildConstraints</span><span style=color:#ff79c6>(</span>Constraints con<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>con <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(!</span>con<span style=color:#ff79c6>.</span><span style=color:#50fa7b>allowNull</span><span style=color:#ff79c6>()){</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34; NOT NULL&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>.</span><span style=color:#50fa7b>primary</span><span style=color:#ff79c6>()){</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34; PRIMARY KEY&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>con<span style=color:#ff79c6>.</span><span style=color:#50fa7b>unique</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34; UNIQUE&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> <span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>AnnotationDemo</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> ClassNotFoundException <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        Class<span style=color:#ff79c6>&lt;?&gt;</span> userClass <span style=color:#ff79c6>=</span> Class<span style=color:#ff79c6>.</span><span style=color:#50fa7b>forName</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;io.dc.User&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        String sql <span style=color:#ff79c6>=</span>  <span style=color:#ff79c6>new</span> TableCreator<span style=color:#ff79c6>().</span><span style=color:#50fa7b>createTableSQLString</span><span style=color:#ff79c6>(</span>userClass<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 直接下面的也行
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>//        String sql =  new TableCreator().createTableSQLString(User.class);
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>sql<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><p>结果:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>CREATE TABLE users(
+</span></span><span style=display:flex><span>    id INT NOT NULL,
+</span></span><span style=display:flex><span>    age INT,
+</span></span><span style=display:flex><span>    name VARCHAR(20));
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>Process finished with exit code 0
+</span></span></code></pre></div></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/ioc%E6%80%9D%E6%83%B3%E8%AE%B2%E8%A7%A3%E5%92%8C%E5%AE%9E%E7%8E%B0/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+IoC 思想和实现</div></a><a href=../../posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>动态代理与静态代理&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
