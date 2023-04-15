@@ -102,50 +102,6 @@
                 
                 
                 <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E6%B1%A0/">Go池</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/go%E6%B1%A0/" class="article-date">
-                        <time datetime='2021-12-15T19:56:44.000&#43;00:00' itemprop="datePublished">2021-12-15</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    为什么需要池 用来约束创建和复用昂贵的场景，比如数据库连接 Go是怎么实现的池 通过 sync.Pool 包实现，并发安全 怎么使用 Get 方法，首先检查池中是否有可用的实例返回给调用者,如果没有，调用New 方法创建新的实例,并返回 使
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
-                            </a>
-                        </li>
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%B1%A0%E5%8C%96">池化
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/go%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">Go单元测试</a></h1>
                 </header>
                 
@@ -667,6 +623,45 @@
                     <p>
                         
                     Go的模板动作就是嵌入模板的命令 条件动作 {{ if arg }} some content {{ else }} other content {{ end }} 迭代动作 迭代动作可以对数组，切片，映射，或者通道进行迭代, 在迭代循环内部， 点(.) 会被设置正在当前迭代内容 设置动作 设置动作允许为指定
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/">Go的模板引擎</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/" class="article-date">
+                        <time datetime='2021-11-01T22:51:35.000&#43;00:00' itemprop="datePublished">2021-11-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Go的模板都是文本文档（其中Web应用的模板通常都是HTML），它们都嵌入了一些称为动作（action）的指令。从模板引擎的角度来说，模板就是嵌入了动作的文本（这些文本通常包含在模板文件里面），而模板
                     </p>
                     
                 </div>
