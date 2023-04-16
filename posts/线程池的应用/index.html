@@ -1,87 +1,401 @@
-<!doctype html><html><head><title>线程池的应用与原理 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="线程池的应用与原理"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>线程池的应用与原理</h1></header><div class=article-meta><a href=../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8/ class=article-date><time datetime=2022-10-19T20:19:52.000+00:00 itemprop=datePublished>2022-10-19</time></a></div><div class=article-entry itemprop=articleBody><h1 id=java-中的线程>java 中的线程</h1><p>线程是调度 CPU 资源的最小单位，线程模型分为 KLT 模型与 ULT 模型，JVM 使用的 KLT 模<br>型，<strong>Java 线程与 OS 线程保持 1:1 的映射关系，也就是说有一个 java 线程也会在操作系统里有一个对应的线程。</strong></p><p>Java 线程有多种生命状态 ：</p><ul><li>NEW, 新建</li><li>RUNNABLE, 运行</li><li>BLOCKED, 阻塞</li><li>WAITING, 等待</li><li>TIMED_WAITING, 超时等待</li><li>TERMINATED，终结</li></ul><h1 id=池化思想>池化思想</h1><p><strong>池化技术</strong>指的是<strong>提前准备</strong>一些资源，在需要时可以<strong>重复使用</strong>这些预先准备的资源。而这种资源创建的成本比较高，例如线程，大对象，数据库连接等。</p><p>所以池化技术的关键是：</p><ol><li>被池化的对象创建成本高</li><li>提前准备</li><li>重复使用</li></ol><h1 id=线程池>线程池</h1><p>线程池”，顾名思义就是一个线程缓存，线程是稀缺资源，如果被无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，因此 Java 中提供线程池对线程进行统一分配、调优和监控</p><h2 id=什么时候使用线程池>什么时候使用线程池？</h2><ol><li>单个任务处理时间比较短</li><li>需要处理的任务数量很大</li></ol><h2 id=线程池优势>线程池优势</h2><ol><li>重用存在的线程，减少线程创建，消亡的开销，提高性能</li><li>提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。</li><li>提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控</li></ol><h1 id=线程池的使用>线程池的使用</h1><p>有常见的 5 种创建线程的方式，说是 5 种，其实就 2 种。一种是通过 Executors 工厂类提供的方法，该类提供了 4 种不同的线程池可供使用。另一类是通过 ThreadPoolExecutor 类进行自定义创建。</p><h2 id=newcachedthreadpool>newCachedThreadPool</h2><p>会创建一个可缓冲的线程池，线程数不够时，会一直增加到最大值(Integer.MAXVALUE)，如果线程过多，用不到了，会缓存 60 秒后销毁</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>createCachedThreadPool</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ExecutorService executorService <span style=color:#ff79c6>=</span> Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newCachedThreadPool</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>10</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd>int</span> index <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            executorService<span style=color:#ff79c6>.</span><span style=color:#50fa7b>execute</span><span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentMillions</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span> <span style=color:#ff79c6>+</span> index<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                sleep<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>});</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h2 id=newfixedthreadpool>newFixedThreadPool</h2><p>创建一个固定线程数量的线程池，处理不过来的任务会放到队列中，这个队列是无界队列，没有大小</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>createFixedThreadPool</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ExecutorService executorService <span style=color:#ff79c6>=</span> Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newFixedThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>3</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>10</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd>int</span> index <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            executorService<span style=color:#ff79c6>.</span><span style=color:#50fa7b>execute</span><span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; &#34;</span> <span style=color:#ff79c6>+</span> index<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                sleep<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>});</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h2 id=newscheduledthreadpool>newScheduledThreadPool</h2><p>创建一个周期性的线程池，可以定时周期性的执行任务，底层利用的是延时队列</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>createScheduledThreadPool</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ScheduledExecutorService executorService <span style=color:#ff79c6>=</span> Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newScheduledThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>3</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>DateUtil<span style=color:#ff79c6>.</span><span style=color:#50fa7b>now</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; 提交任务&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>10</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd>int</span> index <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            executorService<span style=color:#ff79c6>.</span><span style=color:#50fa7b>schedule</span><span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>DateUtil<span style=color:#ff79c6>.</span><span style=color:#50fa7b>now</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; &#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; &#34;</span> <span style=color:#ff79c6>+</span> index<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                sleep<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>},</span> <span style=color:#bd93f9>3</span><span style=color:#ff79c6>,</span> TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>SECONDS</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h2 id=newsinglethreadexcutor>newSingleThreadExcutor</h2><p>只有一个线程的线程池</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>createSingleThreadPool</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ExecutorService executorService <span style=color:#ff79c6>=</span> Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newSingleThreadExecutor</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> i <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>10</span><span style=color:#ff79c6>;</span> i<span style=color:#ff79c6>++)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd>int</span> index <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            executorService<span style=color:#ff79c6>.</span><span style=color:#50fa7b>execute</span><span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>DateUtil<span style=color:#ff79c6>.</span><span style=color:#50fa7b>now</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; &#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; &#34;</span> <span style=color:#ff79c6>+</span> index<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                sleep<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>});</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>上面四种是 java 为我们提供的几个便捷方法，来创建不同用途的线程池，虽然比较便捷，参数很少，减轻开发者的负担，但是也正是因为这样，并不能很好的使用与实际生产环境，比如 newFixedThreadPool ，使用的是无界队列，这在生产中是不允许的。<strong>阿里巴巴 java 开发规范中明确禁止使用上面四种方式创建线程池</strong>，而是使用下面自定义线程池的方式。</p><h2 id=threadpoolexecutor--自定义线程池>ThreadPoolExecutor 自定义线程池</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>ThreadPoolExecutor</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> corePoolSize<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                              <span style=color:#8be9fd>int</span> maximumPoolSize<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                              <span style=color:#8be9fd>long</span> keepAliveTime<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                              TimeUnit unit<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                              BlockingQueue<span style=color:#ff79c6>&lt;</span>Runnable<span style=color:#ff79c6>&gt;</span> workQueue<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                              ThreadFactory threadFactory<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                              RejectedExecutionHandler handler<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h3 id=参数解释>参数解释</h3><p>共 7 个参数如下：</p><ol><li><code>corePoolSize</code>：核心线程数，线程池中始终存活的线程数。</li><li><code>maximumPoolSize</code>: 最大线程数，线程池中允许的最大线程数。</li><li><code>keepAliveTime</code>: 存活时间，线程没有任务执行时最多保持多久时间会终止。</li><li><code>unit</code>: 单位，参数 keepAliveTime 的时间单位，7 种可选。<ul><li><code>TimeUnit.DAYS</code> 天</li><li><code>TimeUnit.HOURS</code> 小时</li><li><code>TimeUnit.MINUTES</code> 分</li><li><code>TimeUnit.SECONDS</code> 秒</li><li><code>TimeUnit.MILLISECONDS</code> 毫秒</li><li><code>TimeUnit.MICROSECONDS</code> 微妙</li><li><code>TimeUnit.NANOSECONDS</code> 纳秒</li></ul></li><li><code>workQueue</code>: 一个阻塞队列，用来存储等待执行的任务，均为线程安全，7 种：<ul><li><code>ArrayBlockingQueue</code> 一个由数组结构组成的有界阻塞队列。</li><li><code>LinkedBlockingQueue</code> 一个由链表结构组成的有界阻塞队列。</li><li><code>SynchronousQueue</code> 一个不存储元素的阻塞队列，即直接提交给线程不保持它们。</li><li><code>PriorityBlockingQueue</code> 一个支持优先级排序的无界阻塞队列。</li><li><code>DelayQueue</code> 一个使用优先级队列实现的无界阻塞队列，只有在延迟期满时才能从中提取元素。</li><li><code>LinkedTransferQueue</code> 一个由链表结构组成的无界阻塞队列。与 SynchronousQueue 类似，还含有非阻塞方法。</li><li><code>LinkedBlockingDeque</code> 一个由链表结构组成的双向阻塞队列</li></ul></li></ol><p>较常用的是 LinkedBlockingQueue 和 Synchronous。线程池的排队策略与 BlockingQueue 有关</p><ol start=6><li><p>threadFactory: 线程工厂，主要用来创建线程，默及正常优先级、非守护线程。</p></li><li><p>handler：拒绝策略，拒绝处理任务时的策略，4 种可选，默认为 AbortPolicoy</p><ul><li><code>AbortPolicy</code> ` 拒绝并抛出异常。</li><li><code>CallerRunsPolicy</code> 重试提交当前的任务，即再次调用运行该任务的 execute()方法。</li><li><code>DiscardOldestPolicy</code> 抛弃队列头部（最旧）的一个任务，并执行当前任务。</li><li><code>DiscardPolicy</code> 抛弃当前任务。</li></ul></li></ol><h3 id=线程执行的顺序>线程执行的顺序</h3><ol><li>当线程数小于核心线程数时，创建线程。</li><li>当线程数大于等于核心线程数，且任务队列未满时，将任务放入任务队列。</li><li>当线程数大于等于核心线程数，且任务队列已满：</li><li>若线程数小于最大线程数，创建线程。</li><li>若线程数等于最大线程数，抛出异常，拒绝任务。</li></ol><p>优先级： 核心线程数 > 任务队列 > 最大线程数 > 拒绝任 j 务</p><h1 id=不同线程池源码的差-j-异>不同线程池源码的差 j 异</h1><p>Executors 工程类提供的四种方法其实底层还是调用了 ThreadPollExecutor, 只不过是参数不同罢了</p><p>我们来看一下这 4 中方法底层的代码:</p><h2 id=newcachedthreadpool-1>newCachedThreadPool</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> ExecutorService <span style=color:#50fa7b>newCachedThreadPool</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>	<span style=color:#ff79c6>return</span> <span style=color:#ff79c6>new</span> ThreadPoolExecutor<span style=color:#ff79c6>(</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>,</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MAX_VALUE</span><span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>								  <span style=color:#bd93f9>60L</span><span style=color:#ff79c6>,</span> TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>SECONDS</span><span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>								  <span style=color:#ff79c6>new</span> SynchronousQueue<span style=color:#ff79c6>&lt;</span>Runnable<span style=color:#ff79c6>&gt;());</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>核心数为 0，最大线程数为整型最大值，允许最大空闲时间 60s, SynchronousQueue 是 BlockingQueue 的一种，所以 SynchronousQueue 是线程安全的。SynchronousQueue 和其他的 BlockingQueue 不同的是 SynchronousQueue 的 capacity 是 0。即 SynchronousQueue 不存储任何元素。<strong>即来一个任务创建一个线程</strong>。</p><h2 id=newfixedthreadpool-1>newFixedThreadPool</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> ExecutorService <span style=color:#50fa7b>newFixedThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> nThreads<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>return</span> <span style=color:#ff79c6>new</span> ThreadPoolExecutor<span style=color:#ff79c6>(</span>nThreads<span style=color:#ff79c6>,</span> nThreads<span style=color:#ff79c6>,</span>  
-</span></span><span style=display:flex><span>							  <span style=color:#bd93f9>0</span>L<span style=color:#ff79c6>,</span> TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MILLISECONDS</span><span style=color:#ff79c6>,</span>  
-</span></span><span style=display:flex><span>							  <span style=color:#ff79c6>new</span> LinkedBlockingQueue<span style=color:#ff79c6>&lt;</span>Runnable<span style=color:#ff79c6>&gt;());</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>核心线程数和最大线程数一样，允许线程永久等待，即没有设置超时时间， 队列使用的是 LinkedBlockingQueue 无界队列。</p><h2 id=newscheduledthreadpool-1>newScheduledThreadPool</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> ScheduledExecutorService <span style=color:#50fa7b>newScheduledThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> corePoolSize<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>new</span> ScheduledThreadPoolExecutor<span style=color:#ff79c6>(</span>corePoolSize<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>ScheduledThreadPoolExecutor</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> corePoolSize<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>super</span><span style=color:#ff79c6>(</span>corePoolSize<span style=color:#ff79c6>,</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MAX_VALUE</span><span style=color:#ff79c6>,</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>,</span> NANOSECONDS<span style=color:#ff79c6>,</span>  
-</span></span><span style=display:flex><span>          <span style=color:#ff79c6>new</span> DelayedWorkQueue<span style=color:#ff79c6>());</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>指定核心线程数，最大线程数是 MX_VALUE, 不设置超时时间， 任务队列是延时队列</p><h2 id=newsinglethreadexecutor>newSingleThreadExecutor</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> ExecutorService <span style=color:#50fa7b>newSingleThreadExecutor</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>new</span> FinalizableDelegatedExecutorService  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> ThreadPoolExecutor<span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>,</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>,</span>  
-</span></span><span style=display:flex><span>                                <span style=color:#bd93f9>0</span>L<span style=color:#ff79c6>,</span> TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MILLISECONDS</span><span style=color:#ff79c6>,</span>  
-</span></span><span style=display:flex><span>                                <span style=color:#ff79c6>new</span> LinkedBlockingQueue<span style=color:#ff79c6>&lt;</span>Runnable<span style=color:#ff79c6>&gt;()));</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>核心线程数和最大线程数都是1， 不设置超时时间，使用无界队列存放任务。</p><p>通过查看以上源码发现，这4中特定的线程池都是以不同参数调用了 <code>ThreadPoolExecutor</code> 来实现的。</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-线程池原理</div></a><a href=../../posts/arraylist%E5%92%8Ccopyonwritearraylist/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>ArrayList和CopyOnWriteArrayList&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>线程池的应用与原理 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="线程池的应用与原理" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">线程池的应用与原理</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
+                <time datetime='2022-10-19T20:19:52.000&#43;00:00' itemprop="datePublished">2022-10-19</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h1 id="java-中的线程">java 中的线程</h1>
+<p>线程是调度 CPU 资源的最小单位，线程模型分为 KLT 模型与 ULT 模型，JVM 使用的 KLT 模<br>
+型，<strong>Java 线程与 OS 线程保持 1:1 的映射关系，也就是说有一个 java 线程也会在操作系统里有一个对应的线程。</strong></p>
+<p>Java 线程有多种生命状态 ：</p>
+<ul>
+<li>NEW, 新建</li>
+<li>RUNNABLE, 运行</li>
+<li>BLOCKED, 阻塞</li>
+<li>WAITING, 等待</li>
+<li>TIMED_WAITING, 超时等待</li>
+<li>TERMINATED，终结</li>
+</ul>
+<h1 id="池化思想">池化思想</h1>
+<p><strong>池化技术</strong>指的是<strong>提前准备</strong>一些资源，在需要时可以<strong>重复使用</strong>这些预先准备的资源。而这种资源创建的成本比较高，例如线程，大对象，数据库连接等。</p>
+<p>所以池化技术的关键是：</p>
+<ol>
+<li>被池化的对象创建成本高</li>
+<li>提前准备</li>
+<li>重复使用</li>
+</ol>
+<h1 id="线程池">线程池</h1>
+<p>线程池”，顾名思义就是一个线程缓存，线程是稀缺资源，如果被无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，因此 Java 中提供线程池对线程进行统一分配、调优和监控</p>
+<h2 id="什么时候使用线程池">什么时候使用线程池？</h2>
+<ol>
+<li>单个任务处理时间比较短</li>
+<li>需要处理的任务数量很大</li>
+</ol>
+<h2 id="线程池优势">线程池优势</h2>
+<ol>
+<li>重用存在的线程，减少线程创建，消亡的开销，提高性能</li>
+<li>提高响应速度。当任务到达时，任务可以不需要的等到线程创建就能立即执行。</li>
+<li>提高线程的可管理性。线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控</li>
+</ol>
+<h1 id="线程池的使用">线程池的使用</h1>
+<p>有常见的 5 种创建线程的方式，说是 5 种，其实就 2 种。一种是通过 Executors 工厂类提供的方法，该类提供了 4 种不同的线程池可供使用。另一类是通过 ThreadPoolExecutor 类进行自定义创建。</p>
+<h2 id="newcachedthreadpool">newCachedThreadPool</h2>
+<p>会创建一个可缓冲的线程池，线程数不够时，会一直增加到最大值(Integer.MAXVALUE)，如果线程过多，用不到了，会缓存 60 秒后销毁</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">createCachedThreadPool</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ExecutorService executorService <span style="color:#ff79c6">=</span> Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newCachedThreadPool</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            executorService<span style="color:#ff79c6">.</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentMillions</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> index<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                sleep<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h2 id="newfixedthreadpool">newFixedThreadPool</h2>
+<p>创建一个固定线程数量的线程池，处理不过来的任务会放到队列中，这个队列是无界队列，没有大小</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">createFixedThreadPool</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ExecutorService executorService <span style="color:#ff79c6">=</span> Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newFixedThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">3</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            executorService<span style="color:#ff79c6">.</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; &#34;</span> <span style="color:#ff79c6">+</span> index<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                sleep<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h2 id="newscheduledthreadpool">newScheduledThreadPool</h2>
+<p>创建一个周期性的线程池，可以定时周期性的执行任务，底层利用的是延时队列</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">createScheduledThreadPool</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ScheduledExecutorService executorService <span style="color:#ff79c6">=</span> Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newScheduledThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">3</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>DateUtil<span style="color:#ff79c6">.</span><span style="color:#50fa7b">now</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; 提交任务&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            executorService<span style="color:#ff79c6">.</span><span style="color:#50fa7b">schedule</span><span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>DateUtil<span style="color:#ff79c6">.</span><span style="color:#50fa7b">now</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; &#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; &#34;</span> <span style="color:#ff79c6">+</span> index<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                sleep<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">},</span> <span style="color:#bd93f9">3</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h2 id="newsinglethreadexcutor">newSingleThreadExcutor</h2>
+<p>只有一个线程的线程池</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">createSingleThreadPool</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ExecutorService executorService <span style="color:#ff79c6">=</span> Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newSingleThreadExecutor</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            executorService<span style="color:#ff79c6">.</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>DateUtil<span style="color:#ff79c6">.</span><span style="color:#50fa7b">now</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; &#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; &#34;</span> <span style="color:#ff79c6">+</span> index<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                sleep<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>上面四种是 java 为我们提供的几个便捷方法，来创建不同用途的线程池，虽然比较便捷，参数很少，减轻开发者的负担，但是也正是因为这样，并不能很好的使用与实际生产环境，比如 newFixedThreadPool ，使用的是无界队列，这在生产中是不允许的。<strong>阿里巴巴 java 开发规范中明确禁止使用上面四种方式创建线程池</strong>，而是使用下面自定义线程池的方式。</p>
+<h2 id="threadpoolexecutor--自定义线程池">ThreadPoolExecutor  自定义线程池</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ThreadPoolExecutor</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> corePoolSize<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                              <span style="color:#8be9fd">int</span> maximumPoolSize<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                              <span style="color:#8be9fd">long</span> keepAliveTime<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                              TimeUnit unit<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                              BlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;</span> workQueue<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                              ThreadFactory threadFactory<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                              RejectedExecutionHandler handler<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h3 id="参数解释">参数解释</h3>
+<p>共 7 个参数如下：</p>
+<ol>
+<li><code>corePoolSize</code>：核心线程数，线程池中始终存活的线程数。</li>
+<li><code>maximumPoolSize</code>: 最大线程数，线程池中允许的最大线程数。</li>
+<li><code>keepAliveTime</code>: 存活时间，线程没有任务执行时最多保持多久时间会终止。</li>
+<li><code>unit</code>: 单位，参数 keepAliveTime 的时间单位，7 种可选。
+<ul>
+<li><code>TimeUnit.DAYS</code> 天</li>
+<li><code>TimeUnit.HOURS</code> 小时</li>
+<li><code>TimeUnit.MINUTES</code> 分</li>
+<li><code>TimeUnit.SECONDS</code>  秒</li>
+<li><code>TimeUnit.MILLISECONDS</code>  毫秒</li>
+<li><code>TimeUnit.MICROSECONDS</code>  微妙</li>
+<li><code>TimeUnit.NANOSECONDS</code>  纳秒</li>
+</ul>
+</li>
+<li><code>workQueue</code>: 一个阻塞队列，用来存储等待执行的任务，均为线程安全，7 种：
+<ul>
+<li><code>ArrayBlockingQueue</code>  一个由数组结构组成的有界阻塞队列。</li>
+<li><code>LinkedBlockingQueue</code>  一个由链表结构组成的有界阻塞队列。</li>
+<li><code>SynchronousQueue</code>  一个不存储元素的阻塞队列，即直接提交给线程不保持它们。</li>
+<li><code>PriorityBlockingQueue</code>  一个支持优先级排序的无界阻塞队列。</li>
+<li><code>DelayQueue</code>  一个使用优先级队列实现的无界阻塞队列，只有在延迟期满时才能从中提取元素。</li>
+<li><code>LinkedTransferQueue</code>  一个由链表结构组成的无界阻塞队列。与 SynchronousQueue 类似，还含有非阻塞方法。</li>
+<li><code>LinkedBlockingDeque</code>  一个由链表结构组成的双向阻塞队列</li>
+</ul>
+</li>
+</ol>
+<p>较常用的是 LinkedBlockingQueue 和 Synchronous。线程池的排队策略与 BlockingQueue 有关</p>
+<ol start="6">
+<li>
+<p>threadFactory: 线程工厂，主要用来创建线程，默及正常优先级、非守护线程。</p>
+</li>
+<li>
+<p>handler：拒绝策略，拒绝处理任务时的策略，4 种可选，默认为 AbortPolicoy</p>
+<ul>
+<li><code>AbortPolicy</code> ` 拒绝并抛出异常。</li>
+<li><code>CallerRunsPolicy</code>  重试提交当前的任务，即再次调用运行该任务的 execute()方法。</li>
+<li><code>DiscardOldestPolicy</code>  抛弃队列头部（最旧）的一个任务，并执行当前任务。</li>
+<li><code>DiscardPolicy</code>  抛弃当前任务。</li>
+</ul>
+</li>
+</ol>
+<h3 id="线程执行的顺序">线程执行的顺序</h3>
+<ol>
+<li>当线程数小于核心线程数时，创建线程。</li>
+<li>当线程数大于等于核心线程数，且任务队列未满时，将任务放入任务队列。</li>
+<li>当线程数大于等于核心线程数，且任务队列已满：</li>
+<li>若线程数小于最大线程数，创建线程。</li>
+<li>若线程数等于最大线程数，抛出异常，拒绝任务。</li>
+</ol>
+<p>优先级： 核心线程数 &gt; 任务队列 &gt; 最大线程数 &gt; 拒绝任 j 务</p>
+<h1 id="不同线程池源码的差-j-异">不同线程池源码的差 j 异</h1>
+<p>Executors 工程类提供的四种方法其实底层还是调用了 ThreadPollExecutor, 只不过是参数不同罢了</p>
+<p>我们来看一下这 4 中方法底层的代码:</p>
+<h2 id="newcachedthreadpool-1">newCachedThreadPool</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> ExecutorService <span style="color:#50fa7b">newCachedThreadPool</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> ThreadPoolExecutor<span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MAX_VALUE</span><span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>								  <span style="color:#bd93f9">60L</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>								  <span style="color:#ff79c6">new</span> SynchronousQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;());</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>核心数为 0，最大线程数为整型最大值，允许最大空闲时间 60s, SynchronousQueue 是 BlockingQueue 的一种，所以 SynchronousQueue 是线程安全的。SynchronousQueue 和其他的 BlockingQueue 不同的是 SynchronousQueue 的 capacity 是 0。即 SynchronousQueue 不存储任何元素。<strong>即来一个任务创建一个线程</strong>。</p>
+<h2 id="newfixedthreadpool-1">newFixedThreadPool</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> ExecutorService <span style="color:#50fa7b">newFixedThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> nThreads<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> ThreadPoolExecutor<span style="color:#ff79c6">(</span>nThreads<span style="color:#ff79c6">,</span> nThreads<span style="color:#ff79c6">,</span>  
+</span></span><span style="display:flex;"><span>							  <span style="color:#bd93f9">0</span>L<span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">,</span>  
+</span></span><span style="display:flex;"><span>							  <span style="color:#ff79c6">new</span> LinkedBlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;());</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>核心线程数和最大线程数一样，允许线程永久等待，即没有设置超时时间， 队列使用的是 LinkedBlockingQueue 无界队列。</p>
+<h2 id="newscheduledthreadpool-1">newScheduledThreadPool</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> ScheduledExecutorService <span style="color:#50fa7b">newScheduledThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> corePoolSize<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> ScheduledThreadPoolExecutor<span style="color:#ff79c6">(</span>corePoolSize<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ScheduledThreadPoolExecutor</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> corePoolSize<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">(</span>corePoolSize<span style="color:#ff79c6">,</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MAX_VALUE</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> NANOSECONDS<span style="color:#ff79c6">,</span>  
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">new</span> DelayedWorkQueue<span style="color:#ff79c6">());</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>指定核心线程数，最大线程数是 MX_VALUE, 不设置超时时间， 任务队列是延时队列</p>
+<h2 id="newsinglethreadexecutor">newSingleThreadExecutor</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> ExecutorService <span style="color:#50fa7b">newSingleThreadExecutor</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> FinalizableDelegatedExecutorService  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> ThreadPoolExecutor<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">,</span>  
+</span></span><span style="display:flex;"><span>                                <span style="color:#bd93f9">0</span>L<span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">,</span>  
+</span></span><span style="display:flex;"><span>                                <span style="color:#ff79c6">new</span> LinkedBlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;()));</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>核心线程数和最大线程数都是1， 不设置超时时间，使用无界队列存放任务。</p>
+<p>通过查看以上源码发现，这4中特定的线程池都是以不同参数调用了 <code>ThreadPoolExecutor</code> 来实现的。</p>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            线程池原理
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/arraylist%E5%92%8Ccopyonwritearraylist/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">ArrayList和CopyOnWriteArrayList&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

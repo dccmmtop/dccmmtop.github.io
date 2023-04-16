@@ -1,205 +1,475 @@
-<!doctype html><html><head><title>定时任务和周期性任务线程池的应用及原理 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="定时任务和周期性任务线程池的应用及原理"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%91%A8%E6%9C%9F%E6%80%A7%E4%BB%BB%E5%8A%A1%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86/"><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>定时任务和周期性任务线程池的应用及原理</h1></header><div class=article-meta><a href=../../posts/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%91%A8%E6%9C%9F%E6%80%A7%E4%BB%BB%E5%8A%A1%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86/ class=article-date><time datetime=2022-10-24T08:55:22.000+00:00 itemprop=datePublished>2022-10-24</time></a></div><div class=article-entry itemprop=articleBody><p>在 <a href=https://blog.csdn.net/a141210104/article/details/127416459>线程池的应用</a> 一文中，讲解了常见几种线程池的使用方法与差别，今天再深入学一下其中定时任务线程池的用法和原理。</p><h1 id=定时任务线程池>定时任务线程池</h1><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>User</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 创建一个定时任务线程池
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        ScheduledExecutorService executor <span style=color:#ff79c6>=</span>Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newScheduledThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 提交任务，1 秒后开始执行
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        executor<span style=color:#ff79c6>.</span><span style=color:#50fa7b>schedule</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Task<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2</span><span style=color:#ff79c6>),</span> <span style=color:#bd93f9>1000</span><span style=color:#ff79c6>,</span>TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MILLISECONDS</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 关闭线程池，不再接受新任务
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        executor<span style=color:#ff79c6>.</span><span style=color:#50fa7b>shutdown</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// 任务
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Task</span> <span style=color:#8be9fd;font-style:italic>implements</span> Runnable <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Task</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>i</span> <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    @Override
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span><span style=color:#ff79c6>+</span> i <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 模拟任务要执行 4 秒钟
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>4000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>InterruptedException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p><strong>结果</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>提交任务的时间是：Mon Oct 24 10:30:41 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 10:30:42 CST 2022:2:pool-1-thread-1
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 10:30:46 CST 2022
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>Process finished with exit code 0
-</span></span></code></pre></div><p>可以看到任务一秒后开始执行</p><p>这就是定时任务线程池的使用， 下面看一下定时 + 周期任务的使用方法</p><h1 id=周期任务>周期任务</h1><h2 id=scheduleatfixedrate>scheduleAtFixedRate</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>User</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ScheduledExecutorService executor <span style=color:#ff79c6>=</span>Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newScheduledThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;提交任务的时间是：&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>()));</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 参数分别是： 任务， 多久后开始执行， 每隔多久执行一次（周期），时间单位
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        executor<span style=color:#ff79c6>.</span><span style=color:#50fa7b>scheduleAtFixedRate</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Task<span style=color:#ff79c6>(</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>),</span> <span style=color:#bd93f9>1000</span><span style=color:#ff79c6>,</span><span style=color:#bd93f9>2000</span><span style=color:#ff79c6>,</span> TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MILLISECONDS</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Task</span> <span style=color:#8be9fd;font-style:italic>implements</span> Runnable <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Task</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>i</span> <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    @Override
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;开始执行任务：&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span><span style=color:#ff79c6>+</span> i <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>4000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>InterruptedException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;任务执行结束：&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>设置任务的执行时间是 4 秒， 但周期是 2 秒，也就是说任务还没有执行结束，就要开始执行下一个任务。 但是线程池是不会这样做的，而是等到当前任务执行结束，如果已经超过了周期，会立刻开始执行下一个任务。</p><p><strong>结果</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>提交任务的时间是：Mon Oct 24 10:34:01 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 10:34:02 CST 2022:1:pool-1-thread-1 // 延迟 1s 才开始执行任务
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 10:34:06 CST 2022 // 任务执行了 4s
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 10:34:06 CST 2022:1:pool-1-thread-1 // 又立刻开始下一个任务
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 10:34:10 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 10:34:10 CST 2022:1:pool-1-thread-1
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 10:34:14 CST 2022
-</span></span></code></pre></div><p>修改一下： 任务执行时间是 1 秒， 周期是 3 秒，执行结果如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>提交任务的时间是：Mon Oct 24 11:21:53 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 11:21:54 CST 2022:1:pool-1-thread-1 // 延迟 1s 开始执行
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 11:21:55 CST 2022 // 任务执行了 1s
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 11:21:57 CST 2022:1:pool-1-thread-1 // 54 + 3 , 3 秒后开始执行下一个任务
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 11:21:58 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 11:22:00 CST 2022:1:pool-1-thread-2
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 11:22:01 CST 2022
-</span></span></code></pre></div><h2 id=schedulewithfixeddelay>scheduleWithFixedDelay</h2><p>固定延迟时间，在上一个任务执行结束后，固定延迟设置的时间，再执行下一个任务</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>User</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ScheduledExecutorService executor <span style=color:#ff79c6>=</span>Executors<span style=color:#ff79c6>.</span><span style=color:#50fa7b>newScheduledThreadPool</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>4</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;提交任务的时间是：&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>()));</span>
-</span></span><span style=display:flex><span>        executor<span style=color:#ff79c6>.</span><span style=color:#50fa7b>scheduleWithFixedDelay</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Task<span style=color:#ff79c6>(</span><span style=color:#bd93f9>2</span><span style=color:#ff79c6>),</span> <span style=color:#bd93f9>1000</span><span style=color:#ff79c6>,</span><span style=color:#bd93f9>3000</span><span style=color:#ff79c6>,</span> TimeUnit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MILLISECONDS</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Task</span> <span style=color:#8be9fd;font-style:italic>implements</span> Runnable <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>Task</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>i</span> <span style=color:#ff79c6>=</span> i<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    @Override
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;开始执行任务：&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span><span style=color:#ff79c6>+</span> i <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;:&#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>2000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>InterruptedException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;任务执行结束：&#34;</span> <span style=color:#ff79c6>+</span> <span style=color:#ff79c6>new</span> Date<span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>设置每个任务执行的间隔是 3s（上个任务结束到下个任务开始的间隔），任务执行时间需要 2s，看下结果：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>提交任务的时间是：Mon Oct 24 11:32:41 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 11:32:42 CST 2022:2:pool-1-thread-1 // 延迟 1s 才开始执行任务
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 11:32:44 CST 2022 // 任务执行了 2s
-</span></span><span style=display:flex><span>// 44 + 3 = 47, 固定延迟 3 秒开始执行下一个任务
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 11:32:47 CST 2022:2:pool-1-thread-1 
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 11:32:49 CST 2022
-</span></span><span style=display:flex><span>开始执行任务：Mon Oct 24 11:32:52 CST 2022:2:pool-1-thread-2
-</span></span><span style=display:flex><span>任务执行结束：Mon Oct 24 11:32:54 CST 2022
-</span></span></code></pre></div><h1 id=周期性任务线程池应用场景>周期性任务线程池应用场景</h1><h2 id=redis-锁续命>redis 锁续命</h2><p>当我们使用 redis 作为分布式锁时，需要给这个锁设置一个超时时间，避免因为程序出错而用不释放锁，但是这个超时时间不好估量，设置的短了，任务还没结束就释放锁了，设置的过长，程序异常情况下会长时间持有锁，影响程序性能。可以在获取锁之后使用一个周期性任务每秒检查锁是否存在，如果扔存在，就给这个锁延长时间，这样只需把锁的超时时间设置一个比较短的时间，后面依赖周期性任务续命即可。</p><h2 id=微服务注册中心>微服务注册中心</h2><p>各个微服务需要定时向注册中心上报自己的信息，确保该服务在正常运行</p><h1 id=与-timer-的区别>与 Timer 的区别</h1><ul><li>Timer 也可以实现周期性任务，但是他是单线程的，如果任务执行中抛出异常，线程会终止，无法再次添加任务。</li><li>ScheduledThreadPool 在任务发生异常后，也会结束执行任务的线程，但紧接着会再创建一个新的线程去继续执行其他任务，但是这个发生异常的任务就从队列中移除了，无法再周期性执行。这也是特别需要注意的地方。在一点在 <a href=https://blog.csdn.net/a141210104/article/details/127449620>线程池原理</a> 讲过</li></ul><h1 id=延迟任务线程池的实现原理>延迟任务线程池的实现原理</h1><p>上述的延迟任务线程池底层采用<code>DelayQueue</code>存储等待的任务</p><ol><li>DelayQueue 内部封装了一个 PriorityQueue，它会根据 time 的先后时间排序，若 time 相同则根据 sequenceNumber 排序；</li><li>DelayQueue 也是一个无界队列；</li></ol><h2 id=工作线程执行的过程>工作线程执行的过程：</h2><ul><li>工作线程会从 DelayQueue 取已经到期的任务去执行；</li><li>执行结束后重新设置任务的到期时间，再次放回 DelayQueue</li></ul><p>下面从源码层面看一下大体流程：</p><h2 id=新建线程池>新建线程池</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>ScheduledThreadPoolExecutor</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> corePoolSize<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>super</span><span style=color:#ff79c6>(</span>corePoolSize<span style=color:#ff79c6>,</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MAX_VALUE</span><span style=color:#ff79c6>,</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>,</span> NANOSECONDS<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>new</span> DelayedWorkQueue<span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>可以看出底层还是调用 <code>ThreadPoolExecutor</code> 类，默认使用延时队列当做任务队列。</p><p>下面看一下任务是如何添加到队列中的，以及如何执行的</p><h2 id=添加任务>添加任务</h2><p>在文章前半部分的应用示例中<code>executor.scheduleWithFixedDelay(new Task(2), 1000,3000, TimeUnit.MILLISECONDS);</code> 就是提交任务的入口了。进一步查看源码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> ScheduledFuture<span style=color:#ff79c6>&lt;?&gt;</span> scheduleWithFixedDelay<span style=color:#ff79c6>(</span>Runnable command<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                                                     <span style=color:#8be9fd>long</span> initialDelay<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                                                     <span style=color:#8be9fd>long</span> delay<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                                                     TimeUnit unit<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>command <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span> <span style=color:#ff79c6>||</span> unit <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>throw</span> <span style=color:#ff79c6>new</span> NullPointerException<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>delay <span style=color:#ff79c6>&lt;=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>throw</span> <span style=color:#ff79c6>new</span> IllegalArgumentException<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 将任务包装成 ScheduledFutureTask 类型
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        ScheduledFutureTask<span style=color:#ff79c6>&lt;</span>Void<span style=color:#ff79c6>&gt;</span> sft <span style=color:#ff79c6>=</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>new</span> ScheduledFutureTask<span style=color:#ff79c6>&lt;</span>Void<span style=color:#ff79c6>&gt;(</span>command<span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                                          <span style=color:#ff79c6>null</span><span style=color:#ff79c6>,</span>
-</span></span><span style=display:flex><span>                                          triggerTime<span style=color:#ff79c6>(</span>initialDelay<span style=color:#ff79c6>,</span> unit<span style=color:#ff79c6>),</span>
-</span></span><span style=display:flex><span>                                          unit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>toNanos</span><span style=color:#ff79c6>(-</span>delay<span style=color:#ff79c6>));</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 再次装饰任务，可以复写 decorateTask 方法，定制化任务 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        RunnableScheduledFuture<span style=color:#ff79c6>&lt;</span>Void<span style=color:#ff79c6>&gt;</span> t <span style=color:#ff79c6>=</span> decorateTask<span style=color:#ff79c6>(</span>command<span style=color:#ff79c6>,</span> sft<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        sft<span style=color:#ff79c6>.</span><span style=color:#50fa7b>outerTask</span> <span style=color:#ff79c6>=</span> t<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 放入延时队列中，ScheduledFutureTask 是接口 RunnableScheduledFuture 的一个实现类 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#6272a4>// 所以放入队列还是 ScheduledFutureTask 类型的
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        delayedExecute<span style=color:#ff79c6>(</span>t<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> t<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>将任务放入队列中：<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/2022-10-24-17-38-06.png alt></p><h2 id=取出任务>取出任务</h2><p>因为把任务放在了延迟队列中，在取出任务的时候不能再和普通的阻塞队列那样：只要有任务就可以取出来。</p><p>延迟队列中的每个任务都有一个到期时间，只有到期的任务才可以被取出，否则取出动作会被阻塞。这里不细讲延迟队列的实现方式，只需知道延迟队列中的元素要实现 Delayed 接口中的 getDelayed() 方法，这个方法返回了该任务还有多久到期。源码如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>long</span> <span style=color:#50fa7b>getDelay</span><span style=color:#ff79c6>(</span>TimeUnit unit<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 下次要执行的时间 - 当前时间
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>return</span> unit<span style=color:#ff79c6>.</span><span style=color:#50fa7b>convert</span><span style=color:#ff79c6>(</span>time <span style=color:#ff79c6>-</span> now<span style=color:#ff79c6>(),</span> NANOSECONDS<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>如果 getDelay 返回的值小于等于 0，那么就可以执行该任务了。 time 属性是任务下次执行的时间，下面会讲到。</p><h2 id=执行任务>执行任务</h2><p>通过一个线程执行任务时，多半是调用这个任务的 <code>run()</code> 方法，现在看一下 <code>ScheduledFutureTask</code> 的实现：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>boolean</span> periodic <span style=color:#ff79c6>=</span> isPeriodic<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 如果线程已经不支持执行任务，则取消任务 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(!</span>canRunInCurrentRunState<span style=color:#ff79c6>(</span>periodic<span style=color:#ff79c6>))</span>
-</span></span><span style=display:flex><span>        cancel<span style=color:#ff79c6>(</span><span style=color:#ff79c6>false</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>   <span style=color:#6272a4>// 如果该任务不是周期性的，直接执行 run 方法，然后结束
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(!</span>periodic<span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>        ScheduledFutureTask<span style=color:#ff79c6>.</span><span style=color:#50fa7b>super</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>run</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 如果需要周期执行，那么先执行，然后设置下次执行时间
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>ScheduledFutureTask<span style=color:#ff79c6>.</span><span style=color:#50fa7b>super</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>runAndReset</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 计算下次执行该任务的时间
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        setNextRunTime<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 再次将任务添加到队列中，重复执行 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        reExecutePeriodic<span style=color:#ff79c6>(</span>outerTask<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h2 id=计算下次执行任务的时间>计算下次执行任务的时间</h2><p>已经讲过，有两种执行任务的方式，一种是周期性的任务，在底层是这样区分的</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/2022-10-24-17-54-38.png alt></p><p>巧妙地利用正负作为一个任务类型的标识，在后面的判断中就可以利用正负号区分，计算时，把负数转成正数即可</p><p>如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>// 计算下次执行时间
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>setNextRunTime</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>long</span> p <span style=color:#ff79c6>=</span> period<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//  固定周期型任务
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>p <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>        time <span style=color:#ff79c6>+=</span> p<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>else</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 固定间隔型任务，细节不再展开
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        time <span style=color:#ff79c6>=</span> triggerTime<span style=color:#ff79c6>(-</span>p<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>我们已经看了任务的添加，以及任务的执行</p><h1 id=延时队列的特性>延时队列的特性</h1><p>以上就是一个周期性任务执行的全部了。但是没有说队列中如果存在多个任务怎么办？</p><h1 id=任务的排序>任务的排序</h1><p>如果队列中包含多个任务，延迟队列还会把任务以到期时间排序，对头永远是最先到期的那个任务，如果到期时间相同，则按进入队列的顺序排。</p><p>&ldquo;延迟队列还会把任务以到期时间排序&rdquo;, 这其实并不是延时队列实现的功能，而是调用了队列中任务的 <code>compareTo</code> 方法来排序的，这就要求队列中的元素实现 Comparable 接口中的 compareTo 方法。 是的， ScheduledFutureTask 正是实现了这个方法：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>compareTo</span><span style=color:#ff79c6>(</span>Delayed other<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>other <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>this</span><span style=color:#ff79c6>)</span> <span style=color:#6272a4>// compare zero if same object
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>other <span style=color:#ff79c6>instanceof</span> ScheduledFutureTask<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        ScheduledFutureTask<span style=color:#ff79c6>&lt;?&gt;</span> x <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>ScheduledFutureTask<span style=color:#ff79c6>&lt;?&gt;)</span>other<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 比较到期时间
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#8be9fd>long</span> diff <span style=color:#ff79c6>=</span> time <span style=color:#ff79c6>-</span> x<span style=color:#ff79c6>.</span><span style=color:#50fa7b>time</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>diff <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 当前任务小，
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>diff <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 当前任务大
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>sequenceNumber <span style=color:#ff79c6>&lt;</span> x<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sequenceNumber</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 如果相等，按 sequenceNumber 排序，小的在前
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>else</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>long</span> diff <span style=color:#ff79c6>=</span> getDelay<span style=color:#ff79c6>(</span>NANOSECONDS<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>-</span> other<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getDelay</span><span style=color:#ff79c6>(</span>NANOSECONDS<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>(</span>diff <span style=color:#ff79c6>&lt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>?</span> <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span> <span style=color:#ff79c6>:</span> <span style=color:#ff79c6>(</span>diff <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>?</span> <span style=color:#bd93f9>1</span> <span style=color:#ff79c6>:</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>每次只是从对头获取元素，所以只需保证对头的元素是最小的即可。底层并没有把整个队列中的元素做全排序，而是维护了一个堆的逻辑数据结构保证对头元素永远是最小的。关于堆的介绍，后续会写篇博客单独介绍</p><p>这篇文章并没有太过详细的讲解线程池更底层的逻辑，只是介绍了几个重点方法，因为大致思想和之前讲的 AQS 差不太多，需要考虑很多并发的场景，加入很多限制</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/hidden>hidden</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/idea%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8F%92%E4%BB%B6%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E6%96%B9%E6%B3%95/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-idea配置和插件导入导出的方法</div></a><a href=../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>线程池原理&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>定时任务和周期性任务线程池的应用及原理 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="定时任务和周期性任务线程池的应用及原理" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%91%A8%E6%9C%9F%E6%80%A7%E4%BB%BB%E5%8A%A1%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">定时任务和周期性任务线程池的应用及原理</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%91%A8%E6%9C%9F%E6%80%A7%E4%BB%BB%E5%8A%A1%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86/" class="article-date">
+                <time datetime='2022-10-24T08:55:22.000&#43;00:00' itemprop="datePublished">2022-10-24</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <p>在 <a href="https://blog.csdn.net/a141210104/article/details/127416459">线程池的应用</a> 一文中，讲解了常见几种线程池的使用方法与差别，今天再深入学一下其中定时任务线程池的用法和原理。</p>
+<h1 id="定时任务线程池">定时任务线程池</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 创建一个定时任务线程池
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        ScheduledExecutorService executor <span style="color:#ff79c6">=</span>Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newScheduledThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 提交任务，1 秒后开始执行
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        executor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">schedule</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Task<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">),</span> <span style="color:#bd93f9">1000</span><span style="color:#ff79c6">,</span>TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 关闭线程池，不再接受新任务
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        executor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 任务
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Task</span> <span style="color:#8be9fd;font-style:italic">implements</span> Runnable <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Task</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">i</span> <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span><span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 模拟任务要执行 4 秒钟
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">4000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>InterruptedException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p><strong>结果</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>提交任务的时间是：Mon Oct 24 10:30:41 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 10:30:42 CST 2022:2:pool-1-thread-1
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 10:30:46 CST 2022
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Process finished with exit code 0
+</span></span></code></pre></div><p>可以看到任务一秒后开始执行</p>
+<p>这就是定时任务线程池的使用， 下面看一下定时 + 周期任务的使用方法</p>
+<h1 id="周期任务">周期任务</h1>
+<h2 id="scheduleatfixedrate">scheduleAtFixedRate</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ScheduledExecutorService executor <span style="color:#ff79c6">=</span>Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newScheduledThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;提交任务的时间是：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">()));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 参数分别是： 任务， 多久后开始执行， 每隔多久执行一次（周期），时间单位
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        executor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">scheduleAtFixedRate</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Task<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">),</span> <span style="color:#bd93f9">1000</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">2000</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Task</span> <span style="color:#8be9fd;font-style:italic">implements</span> Runnable <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Task</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">i</span> <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;开始执行任务：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span><span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">4000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>InterruptedException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;任务执行结束：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>设置任务的执行时间是 4 秒， 但周期是 2 秒，也就是说任务还没有执行结束，就要开始执行下一个任务。 但是线程池是不会这样做的，而是等到当前任务执行结束，如果已经超过了周期，会立刻开始执行下一个任务。</p>
+<p><strong>结果</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>提交任务的时间是：Mon Oct 24 10:34:01 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 10:34:02 CST 2022:1:pool-1-thread-1 // 延迟 1s 才开始执行任务
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 10:34:06 CST 2022 // 任务执行了 4s
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 10:34:06 CST 2022:1:pool-1-thread-1 // 又立刻开始下一个任务
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 10:34:10 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 10:34:10 CST 2022:1:pool-1-thread-1
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 10:34:14 CST 2022
+</span></span></code></pre></div><p>修改一下： 任务执行时间是  1 秒， 周期是 3 秒，执行结果如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>提交任务的时间是：Mon Oct 24 11:21:53 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 11:21:54 CST 2022:1:pool-1-thread-1 // 延迟 1s 开始执行
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 11:21:55 CST 2022 // 任务执行了 1s
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 11:21:57 CST 2022:1:pool-1-thread-1 // 54 + 3 , 3 秒后开始执行下一个任务
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 11:21:58 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 11:22:00 CST 2022:1:pool-1-thread-2
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 11:22:01 CST 2022
+</span></span></code></pre></div><h2 id="schedulewithfixeddelay">scheduleWithFixedDelay</h2>
+<p>固定延迟时间，在上一个任务执行结束后，固定延迟设置的时间，再执行下一个任务</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ScheduledExecutorService executor <span style="color:#ff79c6">=</span>Executors<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newScheduledThreadPool</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">4</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;提交任务的时间是：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">()));</span>
+</span></span><span style="display:flex;"><span>        executor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">scheduleWithFixedDelay</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Task<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">),</span> <span style="color:#bd93f9">1000</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">3000</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Task</span> <span style="color:#8be9fd;font-style:italic">implements</span> Runnable <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Task</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">i</span> <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;开始执行任务：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span><span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">2000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>InterruptedException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;任务执行结束：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> Date<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>设置每个任务执行的间隔是 3s（上个任务结束到下个任务开始的间隔），任务执行时间需要 2s，看下结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>提交任务的时间是：Mon Oct 24 11:32:41 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 11:32:42 CST 2022:2:pool-1-thread-1 // 延迟 1s 才开始执行任务
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 11:32:44 CST 2022 // 任务执行了 2s
+</span></span><span style="display:flex;"><span>// 44 + 3 = 47, 固定延迟 3 秒开始执行下一个任务
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 11:32:47 CST 2022:2:pool-1-thread-1 
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 11:32:49 CST 2022
+</span></span><span style="display:flex;"><span>开始执行任务：Mon Oct 24 11:32:52 CST 2022:2:pool-1-thread-2
+</span></span><span style="display:flex;"><span>任务执行结束：Mon Oct 24 11:32:54 CST 2022
+</span></span></code></pre></div><h1 id="周期性任务线程池应用场景">周期性任务线程池应用场景</h1>
+<h2 id="redis-锁续命">redis 锁续命</h2>
+<p>当我们使用 redis 作为分布式锁时，需要给这个锁设置一个超时时间，避免因为程序出错而用不释放锁，但是这个超时时间不好估量，设置的短了，任务还没结束就释放锁了，设置的过长，程序异常情况下会长时间持有锁，影响程序性能。可以在获取锁之后使用一个周期性任务每秒检查锁是否存在，如果扔存在，就给这个锁延长时间，这样只需把锁的超时时间设置一个比较短的时间，后面依赖周期性任务续命即可。</p>
+<h2 id="微服务注册中心">微服务注册中心</h2>
+<p>各个微服务需要定时向注册中心上报自己的信息，确保该服务在正常运行</p>
+<h1 id="与-timer-的区别">与 Timer 的区别</h1>
+<ul>
+<li>Timer 也可以实现周期性任务，但是他是单线程的，如果任务执行中抛出异常，线程会终止，无法再次添加任务。</li>
+<li>ScheduledThreadPool 在任务发生异常后，也会结束执行任务的线程，但紧接着会再创建一个新的线程去继续执行其他任务，但是这个发生异常的任务就从队列中移除了，无法再周期性执行。这也是特别需要注意的地方。在一点在 <a href="https://blog.csdn.net/a141210104/article/details/127449620">线程池原理</a> 讲过</li>
+</ul>
+<h1 id="延迟任务线程池的实现原理">延迟任务线程池的实现原理</h1>
+<p>上述的延迟任务线程池底层采用<code>DelayQueue</code>存储等待的任务</p>
+<ol>
+<li>DelayQueue 内部封装了一个 PriorityQueue，它会根据 time 的先后时间排序，若 time 相同则根据 sequenceNumber 排序；</li>
+<li>DelayQueue 也是一个无界队列；</li>
+</ol>
+<h2 id="工作线程执行的过程">工作线程执行的过程：</h2>
+<ul>
+<li>工作线程会从 DelayQueue 取已经到期的任务去执行；</li>
+<li>执行结束后重新设置任务的到期时间，再次放回 DelayQueue</li>
+</ul>
+<p>下面从源码层面看一下大体流程：</p>
+<h2 id="新建线程池">新建线程池</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ScheduledThreadPoolExecutor</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> corePoolSize<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">super</span><span style="color:#ff79c6">(</span>corePoolSize<span style="color:#ff79c6">,</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MAX_VALUE</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> NANOSECONDS<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> DelayedWorkQueue<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>可以看出底层还是调用 <code>ThreadPoolExecutor</code> 类，默认使用延时队列当做任务队列。</p>
+<p>下面看一下任务是如何添加到队列中的，以及如何执行的</p>
+<h2 id="添加任务">添加任务</h2>
+<p>在文章前半部分的应用示例中<code>executor.scheduleWithFixedDelay(new Task(2), 1000,3000, TimeUnit.MILLISECONDS);</code> 就是提交任务的入口了。进一步查看源码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> ScheduledFuture<span style="color:#ff79c6">&lt;?&gt;</span> scheduleWithFixedDelay<span style="color:#ff79c6">(</span>Runnable command<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                                                     <span style="color:#8be9fd">long</span> initialDelay<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                                                     <span style="color:#8be9fd">long</span> delay<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                                                     TimeUnit unit<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>command <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">||</span> unit <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> NullPointerException<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>delay <span style="color:#ff79c6">&lt;=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> IllegalArgumentException<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 将任务包装成 ScheduledFutureTask 类型
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        ScheduledFutureTask<span style="color:#ff79c6">&lt;</span>Void<span style="color:#ff79c6">&gt;</span> sft <span style="color:#ff79c6">=</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> ScheduledFutureTask<span style="color:#ff79c6">&lt;</span>Void<span style="color:#ff79c6">&gt;(</span>command<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                                          <span style="color:#ff79c6">null</span><span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>                                          triggerTime<span style="color:#ff79c6">(</span>initialDelay<span style="color:#ff79c6">,</span> unit<span style="color:#ff79c6">),</span>
+</span></span><span style="display:flex;"><span>                                          unit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">toNanos</span><span style="color:#ff79c6">(-</span>delay<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 再次装饰任务，可以复写 decorateTask 方法，定制化任务 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        RunnableScheduledFuture<span style="color:#ff79c6">&lt;</span>Void<span style="color:#ff79c6">&gt;</span> t <span style="color:#ff79c6">=</span> decorateTask<span style="color:#ff79c6">(</span>command<span style="color:#ff79c6">,</span> sft<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        sft<span style="color:#ff79c6">.</span><span style="color:#50fa7b">outerTask</span> <span style="color:#ff79c6">=</span> t<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 放入延时队列中，ScheduledFutureTask 是接口 RunnableScheduledFuture 的一个实现类 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 所以放入队列还是 ScheduledFutureTask 类型的
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        delayedExecute<span style="color:#ff79c6">(</span>t<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> t<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>将任务放入队列中：<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/2022-10-24-17-38-06.png" alt=""></p>
+<h2 id="取出任务">取出任务</h2>
+<p>因为把任务放在了延迟队列中，在取出任务的时候不能再和普通的阻塞队列那样：只要有任务就可以取出来。</p>
+<p>延迟队列中的每个任务都有一个到期时间，只有到期的任务才可以被取出，否则取出动作会被阻塞。这里不细讲延迟队列的实现方式，只需知道延迟队列中的元素要实现 Delayed 接口中的 getDelayed() 方法，这个方法返回了该任务还有多久到期。源码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">getDelay</span><span style="color:#ff79c6">(</span>TimeUnit unit<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 下次要执行的时间 - 当前时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> unit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">convert</span><span style="color:#ff79c6">(</span>time <span style="color:#ff79c6">-</span> now<span style="color:#ff79c6">(),</span> NANOSECONDS<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>如果 getDelay 返回的值小于等于 0，那么就可以执行该任务了。 time 属性是任务下次执行的时间，下面会讲到。</p>
+<h2 id="执行任务">执行任务</h2>
+<p>通过一个线程执行任务时，多半是调用这个任务的 <code>run()</code> 方法，现在看一下 <code>ScheduledFutureTask</code> 的实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">boolean</span> periodic <span style="color:#ff79c6">=</span> isPeriodic<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 如果线程已经不支持执行任务，则取消任务 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>canRunInCurrentRunState<span style="color:#ff79c6">(</span>periodic<span style="color:#ff79c6">))</span>
+</span></span><span style="display:flex;"><span>        cancel<span style="color:#ff79c6">(</span><span style="color:#ff79c6">false</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">// 如果该任务不是周期性的，直接执行 run 方法，然后结束
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>periodic<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>        ScheduledFutureTask<span style="color:#ff79c6">.</span><span style="color:#50fa7b">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">run</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 如果需要周期执行，那么先执行，然后设置下次执行时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ScheduledFutureTask<span style="color:#ff79c6">.</span><span style="color:#50fa7b">super</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">runAndReset</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 计算下次执行该任务的时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        setNextRunTime<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 再次将任务添加到队列中，重复执行 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        reExecutePeriodic<span style="color:#ff79c6">(</span>outerTask<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h2 id="计算下次执行任务的时间">计算下次执行任务的时间</h2>
+<p>已经讲过，有两种执行任务的方式，一种是周期性的任务，在底层是这样区分的</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/2022-10-24-17-54-38.png" alt=""></p>
+<p>巧妙地利用正负作为一个任务类型的标识，在后面的判断中就可以利用正负号区分，计算时，把负数转成正数即可</p>
+<p>如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 计算下次执行时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setNextRunTime</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">long</span> p <span style="color:#ff79c6">=</span> period<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//  固定周期型任务
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>p <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>        time <span style="color:#ff79c6">+=</span> p<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 固定间隔型任务，细节不再展开
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        time <span style="color:#ff79c6">=</span> triggerTime<span style="color:#ff79c6">(-</span>p<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>我们已经看了任务的添加，以及任务的执行</p>
+<h1 id="延时队列的特性">延时队列的特性</h1>
+<p>以上就是一个周期性任务执行的全部了。但是没有说队列中如果存在多个任务怎么办？</p>
+<h1 id="任务的排序">任务的排序</h1>
+<p>如果队列中包含多个任务，延迟队列还会把任务以到期时间排序，对头永远是最先到期的那个任务，如果到期时间相同，则按进入队列的顺序排。</p>
+<p>&ldquo;延迟队列还会把任务以到期时间排序&rdquo;, 这其实并不是延时队列实现的功能，而是调用了队列中任务的 <code>compareTo</code> 方法来排序的，这就要求队列中的元素实现 Comparable 接口中的 compareTo 方法。 是的， ScheduledFutureTask 正是实现了这个方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">compareTo</span><span style="color:#ff79c6">(</span>Delayed other<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>other <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">)</span> <span style="color:#6272a4">// compare zero if same object
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>other <span style="color:#ff79c6">instanceof</span> ScheduledFutureTask<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        ScheduledFutureTask<span style="color:#ff79c6">&lt;?&gt;</span> x <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>ScheduledFutureTask<span style="color:#ff79c6">&lt;?&gt;)</span>other<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 比较到期时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">long</span> diff <span style="color:#ff79c6">=</span> time <span style="color:#ff79c6">-</span> x<span style="color:#ff79c6">.</span><span style="color:#50fa7b">time</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>diff <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 当前任务小，
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>diff <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 当前任务大
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>sequenceNumber <span style="color:#ff79c6">&lt;</span> x<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sequenceNumber</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果相等，按 sequenceNumber 排序，小的在前
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">long</span> diff <span style="color:#ff79c6">=</span> getDelay<span style="color:#ff79c6">(</span>NANOSECONDS<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">-</span> other<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDelay</span><span style="color:#ff79c6">(</span>NANOSECONDS<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">(</span>diff <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">:</span> <span style="color:#ff79c6">(</span>diff <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">?</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>每次只是从对头获取元素，所以只需保证对头的元素是最小的即可。底层并没有把整个队列中的元素做全排序，而是维护了一个堆的逻辑数据结构保证对头元素永远是最小的。关于堆的介绍，后续会写篇博客单独介绍</p>
+<p>这篇文章并没有太过详细的讲解线程池更底层的逻辑，只是介绍了几个重点方法，因为大致思想和之前讲的 AQS 差不太多，需要考虑很多并发的场景，加入很多限制</p>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/hidden">hidden
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/idea%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8F%92%E4%BB%B6%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E6%96%B9%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            idea配置和插件导入导出的方法
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">线程池原理&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

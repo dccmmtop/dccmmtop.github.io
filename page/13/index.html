@@ -1,28 +1,752 @@
-<!doctype html><html><head><title>超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="超的博客"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/"><link href=https://dccmmtop.github.io/index.xml rel=alternate type=application/rss+xml title=超的博客><link rel=icon type=image/x-icon href=../../favicon.ico><link rel=stylesheet href=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<script src=https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/>ActiveRecord_Store用法示例</a></h1></header><div class=article-meta><a href=../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/ class=article-date><time datetime=2018-08-07T22:53:19.000+00:00 itemprop=datePublished>2018-08-07</time></a></div><div class=article-entry itemprop=articleBody><p>转载 http://api.rubyonrails.org/classes/ActiveRecord/Store.html 阅读 http://api.rubyonrails.org 相关的笔记 使用 Model 里面的一个字段作为一个序列化的封装，用来存储一个 key/value 文档里面提到，对应的存储字段的类型最好是 text， 以便确保有足够的存储空间 Make sure that you declare the database column used for the serialized store as a text, so there's plenty of room. 假设 Model</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/rails>rails</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/wget%E6%95%B4%E7%AB%99%E4%B8%8B%E8%BD%BD/>wget整站下载</a></h1></header><div class=article-meta><a href=../../posts/wget%E6%95%B4%E7%AB%99%E4%B8%8B%E8%BD%BD/ class=article-date><time datetime=2018-06-22T10:56:46.000+00:00 itemprop=datePublished>2018-06-22</time></a></div><div class=article-entry itemprop=articleBody><p>这个命令可以以递归的方式下载整站，并可以将下载的页面中的链接转换为本地链接。 wget 加上参数之后，即可成为相当强大的下载工具。 wget -r -p -np -k http://xxx.com/abc/ -r, &ndash;recursive（递归） specify recursive download.（指</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/linux>linux</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E9%83%A8%E7%BD%B2rails/>部署Rails</a></h1></header><div class=article-meta><a href=../../posts/%E9%83%A8%E7%BD%B2rails/ class=article-date><time datetime=2018-05-29T15:26:09.000+00:00 itemprop=datePublished>2018-05-29</time></a></div><div class=article-entry itemprop=articleBody><p>添加新用户 在服务器添加一个新的用户，用户名为 deploy教程 执行命令sudo adduser 用户名 按提示输入密码 设置一些个人信息，可以直接按 enter 键，设为空 添加权限 在 root 用户下，打开/etc/sudoers文件 # # This file MUST</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/rails>rails</a></li><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E9%83%A8%E7%BD%B2>部署</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/>ssh免密码登录</a></h1></header><div class=article-meta><a href=../../posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/ class=article-date><time datetime=2018-05-29T11:24:54.000+00:00 itemprop=datePublished>2018-05-29</time></a></div><div class=article-entry itemprop=articleBody><p>生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/linux>linux</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E5%A5%87%E8%91%A9/>奇葩</a></h1></header><div class=article-meta><a href=../../posts/%E5%A5%87%E8%91%A9/ class=article-date><time datetime=1023-04-15T14:07:16.000+00:00 itemprop=datePublished>1023-04-15</time></a></div><div class=article-entry itemprop=articleBody><p>管好自己 但行好事 不渡他人 不谈内心秩序 只讲爱与和平 我们一路奋战，不是为了能改变世界，而是为了不让世界改变我们</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E4%BD%A0%E8%A6%81/>你要</a></h1></header><div class=article-meta><a href=../../posts/%E4%BD%A0%E8%A6%81/ class=article-date><time datetime=1023-04-11T21:51:57.000+00:00 itemprop=datePublished>1023-04-11</time></a></div><div class=article-entry itemprop=articleBody><p>你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E6%88%91%E6%83%B3/>我想</a></h1></header><div class=article-meta><a href=../../posts/%E6%88%91%E6%83%B3/ class=article-date><time datetime=1023-03-30T23:50:26.000+00:00 itemprop=datePublished>1023-03-30</time></a></div><div class=article-entry itemprop=articleBody><p>我想 我想爱你而不用抓住你 欣赏你而不需批判你 和你一起参与而不强求你 离开你亦无需言歉疚 帮助你而没有半点低看你 那么我俩的相处就是真诚的 并且能彼此滋养 ————萨提亚</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E9%9A%90%E6%99%A6/>隐晦</a></h1></header><div class=article-meta><a href=../../posts/%E9%9A%90%E6%99%A6/ class=article-date><time datetime=1023-03-26T16:48:35.000+00:00 itemprop=datePublished>1023-03-26</time></a></div><div class=article-entry itemprop=articleBody><p>你的眼睛真好看 里面有晴雨日月 山川江河云雾花鸟 但我的眼睛更好看 因为我的眼里有你 ———— 余光中 遇见你我变得很低很低 一直低到尘埃里去 但我的心里是欢喜的 并在那里开出一朵花来 ———— 张爱玲 手，我是有的 就是不知如</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94/>被讨厌的勇气</a></h1></header><div class=article-meta><a href=../../posts/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94/ class=article-date><time datetime=1023-03-26T16:20:44.000+00:00 itemprop=datePublished>1023-03-26</time></a></div><div class=article-entry itemprop=articleBody><p>人并不受过去的原因所左右，而是朝着自己定下的目标前进 我有一位年轻朋友，虽然梦想着成为小说家，但却总是写不出作品。他说是因为工作太忙、写小说的时间非常有限，所以才写不出来作品，也从未参加过任何比赛。 但真</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E4%BD%A0%E6%98%AF%E4%BA%BA%E9%97%B4%E5%9B%9B%E6%9C%88%E5%A4%A9/>你是人间四月天</a></h1></header><div class=article-meta><a href=../../posts/%E4%BD%A0%E6%98%AF%E4%BA%BA%E9%97%B4%E5%9B%9B%E6%9C%88%E5%A4%A9/ class=article-date><time datetime=1023-03-26T16:01:37.000+00:00 itemprop=datePublished>1023-03-26</time></a></div><div class=article-entry itemprop=articleBody><p>我说你是人间的四月天； 笑响点亮了四面风； 轻灵在春的光艳中交舞着变。 你是四月早天里的云烟， 黄昏吹着风的软， 星子在无意中闪， 细雨点洒在花前。 那轻，那娉婷，你是， 鲜妍百花的冠冕你戴着， 你是天真，庄严， 你是夜</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 itemprop=name><a class=article-title href=../../posts/%E5%BD%93%E6%88%91%E5%BC%80%E5%A7%8B%E7%88%B1%E8%87%AA%E5%B7%B1/>当我开始爱自己</a></h1></header><div class=article-meta><a href=../../posts/%E5%BD%93%E6%88%91%E5%BC%80%E5%A7%8B%E7%88%B1%E8%87%AA%E5%B7%B1/ class=article-date><time datetime=1023-03-25T19:10:22.000+00:00 itemprop=datePublished>1023-03-25</time></a></div><div class=article-entry itemprop=articleBody><p>《当我开始爱自己》——查理 · 卓别林 当我开始爱自己 我才发现所有的苦痛只是在警示 我背离了本真 今天我懂得，这是 &ldquo;真实&rdquo; 当我开始爱自己 我才明白有一种冒犯 是把我的欲求强加于人 尽管我知道时</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98>文摘</a></li></ul></footer></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><div class=article-meta><a href=../../posts/fastjson%E5%BA%8F%E5%88%97%E5%8C%96/ class=article-date><time datetime=0001-01-01T00:00:00.000+00:00 itemprop=datePublished>0001-01-01</time></a></div><div class=article-entry itemprop=articleBody><p>fastJson序列化 Map &lt; String , Object > jsonMap = new HashMap&lt; String , Object>(); jsonMap.put("a",1); jsonMap.put("b",""); jsonMap.put("c",null); jsonMap.put("d","wuzhuti.cn"); String str = JSONObject.toJSONString(jsonMap); System.out.println(str); //输出结果:{"a":1,"b":"",d:"wuzhuti.cn"</p></div></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><div class=article-meta><a href=../../posts/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/ class=article-date><time datetime=0001-01-01T00:00:00.000+00:00 itemprop=datePublished>0001-01-01</time></a></div><div class=article-entry itemprop=articleBody><p>HTTP 代理 代理使用同一种协议，网关使用不同的协议连接端 作用 监视流量并修改 儿童过滤器 安全防火墙 缓存 反向代理 假扮服务器 文档访问控制，统一输入密码 转码器 图片格式，语言 匿名者 从报文中删除身份特征，ip,首部，co</p></div></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><div class=article-meta><a href=../../posts/java%E7%9F%A5%E8%AF%86%E7%82%B9/ class=article-date><time datetime=0001-01-01T00:00:00.000+00:00 itemprop=datePublished>0001-01-01</time></a></div><div class=article-entry itemprop=articleBody><p>java知识点 java 变量初始化顺序 总结一下对象的创建过程,假设有个名为Dog的类 1.即使没有显式地使用 static关键字,构造器实际上也是静态方法。因此,当首次创建类型为Dog的对象时(构造器可以看成静态</p></div></div></article><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><div class=article-meta><a href=../../posts/%E7%BC%93%E5%AD%98/ class=article-date><time datetime=0001-01-01T00:00:00.000+00:00 itemprop=datePublished>0001-01-01</time></a></div><div class=article-entry itemprop=articleBody><p>缓存 2.2 使用 Redis 缓存 注意：@Cacheable / @CachePut /@CacheEvict 注解需使用在 public 修饰的方法上 2.2.2 缓存注解使用 @Cacheable @Cacheable(value = "test", key = "#msg") public String put(String msg) { return msg; } 使用 @Cacheable 注解，会以 value::key 的形式作为 key，将方法的返回值做为 value，进行缓存。例如示</p></div></div></article><nav id=page-nav><a href=../../page/12/ rel=prev class="extend prev">&#171;</a>
-<a href=../../>1</a>
-<a href=../../page/2/>2</a>
-<a href=../../page/3/>3</a>
-<a href=../../page/4/>4</a>
-<a href=../../page/5/>5</a>
-<a href=../../page/6/>6</a>
-<a href=../../page/7/>7</a>
-<a href=../../page/8/>8</a>
-<a href=../../page/9/>9</a>
-<a href=../../page/10/>10</a>
-<a href=../../page/11/>11</a>
-<a href=../../page/12/>12</a>
-<span class="page-number current">13</span>
-<a href=../../page/14/>14</a>
-<a href=../../page/14/ rel=next class="extend next">&#187;</a></nav></section><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="超的博客" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/" />
+    
+<link href="https://dccmmtop.github.io/index.xml" rel="alternate" type="application/rss+xml" title="超的博客" />
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    
+    
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+<body>
+<div id="container">
+
+    <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+    <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/">ActiveRecord_Store用法示例</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/" class="article-date">
+                        <time datetime='2018-08-07T22:53:19.000&#43;00:00' itemprop="datePublished">2018-08-07</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    转载 http://api.rubyonrails.org/classes/ActiveRecord/Store.html 阅读 http://api.rubyonrails.org 相关的笔记 使用 Model 里面的一个字段作为一个序列化的封装，用来存储一个 key/value 文档里面提到，对应的存储字段的类型最好是 text， 以便确保有足够的存储空间 Make sure that you declare the database column used for the serialized store as a text, so there&#39;s plenty of room. 假设 Model
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/wget%E6%95%B4%E7%AB%99%E4%B8%8B%E8%BD%BD/">wget整站下载</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/wget%E6%95%B4%E7%AB%99%E4%B8%8B%E8%BD%BD/" class="article-date">
+                        <time datetime='2018-06-22T10:56:46.000&#43;00:00' itemprop="datePublished">2018-06-22</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    这个命令可以以递归的方式下载整站，并可以将下载的页面中的链接转换为本地链接。 wget 加上参数之后，即可成为相当强大的下载工具。 wget -r -p -np -k http://xxx.com/abc/ -r, &ndash;recursive（递归） specify recursive download.（指
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E9%83%A8%E7%BD%B2rails/">部署Rails</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E9%83%A8%E7%BD%B2rails/" class="article-date">
+                        <time datetime='2018-05-29T15:26:09.000&#43;00:00' itemprop="datePublished">2018-05-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    添加新用户 在服务器添加一个新的用户，用户名为 deploy教程 执行命令sudo adduser 用户名 按提示输入密码 设置一些个人信息，可以直接按 enter 键，设为空 添加权限 在 root 用户下，打开/etc/sudoers文件 # # This file MUST
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E9%83%A8%E7%BD%B2">部署
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/">ssh免密码登录</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/" class="article-date">
+                        <time datetime='2018-05-29T11:24:54.000&#43;00:00' itemprop="datePublished">2018-05-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%A5%87%E8%91%A9/">奇葩</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%A5%87%E8%91%A9/" class="article-date">
+                        <time datetime='1023-04-15T14:07:16.000&#43;00:00' itemprop="datePublished">1023-04-15</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    管好自己 但行好事 不渡他人 不谈内心秩序 只讲爱与和平 我们一路奋战，不是为了能改变世界，而是为了不让世界改变我们
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E4%BD%A0%E8%A6%81/">你要</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E4%BD%A0%E8%A6%81/" class="article-date">
+                        <time datetime='1023-04-11T21:51:57.000&#43;00:00' itemprop="datePublished">1023-04-11</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    你要忍，忍到春暖花开； 你要走，走到灯火通明； 你要看过世界辽阔，再评判是好是坏； 你要卯足劲变好，再旗鼓相当的站在不敢想象的人身边； 你要变成想像中的样子，这件事，一步都不能退让。
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%88%91%E6%83%B3/">我想</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E6%88%91%E6%83%B3/" class="article-date">
+                        <time datetime='1023-03-30T23:50:26.000&#43;00:00' itemprop="datePublished">1023-03-30</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    我想 我想爱你而不用抓住你 欣赏你而不需批判你 和你一起参与而不强求你 离开你亦无需言歉疚 帮助你而没有半点低看你 那么我俩的相处就是真诚的 并且能彼此滋养 ————萨提亚
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E9%9A%90%E6%99%A6/">隐晦</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E9%9A%90%E6%99%A6/" class="article-date">
+                        <time datetime='1023-03-26T16:48:35.000&#43;00:00' itemprop="datePublished">1023-03-26</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    你的眼睛真好看 里面有晴雨日月 山川江河云雾花鸟 但我的眼睛更好看 因为我的眼里有你 ———— 余光中 遇见你我变得很低很低 一直低到尘埃里去 但我的心里是欢喜的 并在那里开出一朵花来 ———— 张爱玲 手，我是有的 就是不知如
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94/">被讨厌的勇气</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E8%A2%AB%E8%AE%A8%E5%8E%8C%E7%9A%84%E5%8B%87%E6%B0%94/" class="article-date">
+                        <time datetime='1023-03-26T16:20:44.000&#43;00:00' itemprop="datePublished">1023-03-26</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    人并不受过去的原因所左右，而是朝着自己定下的目标前进 我有一位年轻朋友，虽然梦想着成为小说家，但却总是写不出作品。他说是因为工作太忙、写小说的时间非常有限，所以才写不出来作品，也从未参加过任何比赛。 但真
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E4%BD%A0%E6%98%AF%E4%BA%BA%E9%97%B4%E5%9B%9B%E6%9C%88%E5%A4%A9/">你是人间四月天</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E4%BD%A0%E6%98%AF%E4%BA%BA%E9%97%B4%E5%9B%9B%E6%9C%88%E5%A4%A9/" class="article-date">
+                        <time datetime='1023-03-26T16:01:37.000&#43;00:00' itemprop="datePublished">1023-03-26</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    我说你是人间的四月天； 笑响点亮了四面风； 轻灵在春的光艳中交舞着变。 你是四月早天里的云烟， 黄昏吹着风的软， 星子在无意中闪， 细雨点洒在花前。 那轻，那娉婷，你是， 鲜妍百花的冠冕你戴着， 你是天真，庄严， 你是夜
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%BD%93%E6%88%91%E5%BC%80%E5%A7%8B%E7%88%B1%E8%87%AA%E5%B7%B1/">当我开始爱自己</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%BD%93%E6%88%91%E5%BC%80%E5%A7%8B%E7%88%B1%E8%87%AA%E5%B7%B1/" class="article-date">
+                        <time datetime='1023-03-25T19:10:22.000&#43;00:00' itemprop="datePublished">1023-03-25</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    《当我开始爱自己》——查理 · 卓别林 当我开始爱自己 我才发现所有的苦痛只是在警示 我背离了本真 今天我懂得，这是 &ldquo;真实&rdquo; 当我开始爱自己 我才明白有一种冒犯 是把我的欲求强加于人 尽管我知道时
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%96%87%E6%91%98">文摘
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <div class="article-meta">
+                    <a href="../../posts/fastjson%E5%BA%8F%E5%88%97%E5%8C%96/" class="article-date">
+                        <time datetime='0001-01-01T00:00:00.000&#43;00:00' itemprop="datePublished">0001-01-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    fastJson序列化 Map &lt; String , Object &gt; jsonMap = new HashMap&lt; String , Object&gt;(); jsonMap.put(&#34;a&#34;,1); jsonMap.put(&#34;b&#34;,&#34;&#34;); jsonMap.put(&#34;c&#34;,null); jsonMap.put(&#34;d&#34;,&#34;wuzhuti.cn&#34;); String str = JSONObject.toJSONString(jsonMap); System.out.println(str); //输出结果:{&#34;a&#34;:1,&#34;b&#34;:&#34;&#34;,d:&#34;wuzhuti.cn&#34;
+                    </p>
+                    
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <div class="article-meta">
+                    <a href="../../posts/http%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/" class="article-date">
+                        <time datetime='0001-01-01T00:00:00.000&#43;00:00' itemprop="datePublished">0001-01-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    HTTP 代理 代理使用同一种协议，网关使用不同的协议连接端 作用 监视流量并修改 儿童过滤器 安全防火墙 缓存 反向代理 假扮服务器 文档访问控制，统一输入密码 转码器 图片格式，语言 匿名者 从报文中删除身份特征，ip,首部，co
+                    </p>
+                    
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <div class="article-meta">
+                    <a href="../../posts/java%E7%9F%A5%E8%AF%86%E7%82%B9/" class="article-date">
+                        <time datetime='0001-01-01T00:00:00.000&#43;00:00' itemprop="datePublished">0001-01-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    java知识点 java 变量初始化顺序 总结一下对象的创建过程,假设有个名为Dog的类 1.即使没有显式地使用 static关键字,构造器实际上也是静态方法。因此,当首次创建类型为Dog的对象时(构造器可以看成静态
+                    </p>
+                    
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E7%BC%93%E5%AD%98/" class="article-date">
+                        <time datetime='0001-01-01T00:00:00.000&#43;00:00' itemprop="datePublished">0001-01-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    缓存 2.2 使用 Redis 缓存 注意：@Cacheable / @CachePut /@CacheEvict 注解需使用在 public 修饰的方法上 2.2.2 缓存注解使用 @Cacheable @Cacheable(value = &#34;test&#34;, key = &#34;#msg&#34;) public String put(String msg) { return msg; } 使用 @Cacheable 注解，会以 value::key 的形式作为 key，将方法的返回值做为 value，进行缓存。例如示
+                    </p>
+                    
+                </div>
+
+                
+            </div>
+        </article>
+        
+
+        
+
+<nav id="page-nav">
+    
+    <a href="../../page/12/" rel="prev" class="extend prev">&laquo; </a>
+    
+    
+    
+    <a href="../../">1</a>
+    
+    
+    
+    <a href="../../page/2/">2</a>
+    
+    
+    
+    <a href="../../page/3/">3</a>
+    
+    
+    
+    <a href="../../page/4/">4</a>
+    
+    
+    
+    <a href="../../page/5/">5</a>
+    
+    
+    
+    <a href="../../page/6/">6</a>
+    
+    
+    
+    <a href="../../page/7/">7</a>
+    
+    
+    
+    <a href="../../page/8/">8</a>
+    
+    
+    
+    <a href="../../page/9/">9</a>
+    
+    
+    
+    <a href="../../page/10/">10</a>
+    
+    
+    
+    <a href="../../page/11/">11</a>
+    
+    
+    
+    <a href="../../page/12/">12</a>
+    
+    
+    
+    <span class="page-number current">13</span>
+    
+    
+    
+    <a href="../../page/14/">14</a>
+    
+    
+
+    
+    <a href="../../page/14/" rel="next" class="extend next"> &raquo;</a>
+    
+</nav>
+
+
+    </section>
+    <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+</div>
+</body>
+</html>
