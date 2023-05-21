@@ -1,248 +1,520 @@
-<!doctype html><html><head><title>HashMap底层原理 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="HashMap底层原理"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/hashmap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/"><link rel=icon type=image/x-icon href=../../favicon.ico><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>HashMap底层原理</h1></header><div class=article-meta><a href=../../posts/hashmap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/ class=article-date><time datetime=2022-10-15T11:15:24.000+00:00 itemprop=datePublished>2022-10-15</time></a></div><div class=article-entry itemprop=articleBody><p>在 JDK 1.8 版本之前，HashMap 底层的数据结构是数组 + 链表，如下图：<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221015111829.png alt></p><p>在 1.8 及以后是数组 + 链表 + 红黑树</p><h3 id=重要的几个变量>重要的几个变量</h3><ul><li>DEFAULT_INITIAL_CAPACITY = 1 &#171; 4; Hash 表默认初始容量</li><li>MAXIMUM_CAPACITY = 1 &#171; 30; 最大 Hash 表容量</li><li>DEFAULT_LOAD_FACTOR = 0.75f；默认加载因子</li><li>TREEIFY_THRESHOLD = 8；链表转红黑树阈值</li><li>UNTREEIFY_THRESHOLD = 6；红黑树转链表阈值</li><li>MIN_TREEIFY_CAPACITY = 64；链表转红黑树时 hash 表最小容量阈值，达不到优先扩容</li></ul><h3 id=存放数据>存放数据</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>Map <span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>,</span>Employee<span style=color:#ff79c6>&gt;</span> map <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> HashMap <span style=color:#ff79c6>&lt;&gt;</span> <span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>Employee e0 <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Employee<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;zhangshan&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>map<span style=color:#ff79c6>.</span><span style=color:#50fa7b>put</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;zhangshan&#34;</span><span style=color:#ff79c6>,</span> e0<span style=color:#ff79c6>);</span>
-</span></span></code></pre></div><p>会对 &ldquo;zhangshan&rdquo; 进行一次 hash 运算, 把 “zhangshan” 这个字符串映射成一个小于数组长度的整型值。就像下面这样:</p><p><code>int i = hash("zhangshan")</code> 假如 i 等于 1，就会把 e0 构造成一个节点，放入数组下标为 1 的位置。数组存放的是一个节点，该节点有指向下一个节点的指针 <code>next</code>, 如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Node</span><span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> <span style=color:#8be9fd;font-style:italic>implements</span> Map<span style=color:#ff79c6>.</span><span style=color:#50fa7b>Entry</span><span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd>int</span> hash<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>final</span> K key<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    V value<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    Node <span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> next<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p><code>int i = hash("zhangshan")</code> 把字符串映射成一个整型，不同的字符串可能映射成相同的位置，有下面这种可能：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>hash<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;zhangshan&#34;</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>==</span> hash<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;lisi&#34;</span><span style=color:#ff79c6>)</span>
-</span></span></code></pre></div><p>这就是 hash 碰撞，出现碰撞后，会以链表的方式追加在后面，就形成了上图中的结构。</p><h3 id=如何确定-key-在数组中的位置>如何确定 key 在数组中的位置</h3><p>先看 jdk 1.7 中的实现:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> V <span style=color:#50fa7b>put</span><span style=color:#ff79c6>(</span>K key<span style=color:#ff79c6>,</span> V value<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>table <span style=color:#ff79c6>==</span> EMPTY_TABLE<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        inflateTable<span style=color:#ff79c6>(</span>threshold<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>key <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> putForNullKey<span style=color:#ff79c6>(</span>value<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//  获取 key 对应的整型 hash值
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>int</span> hash <span style=color:#ff79c6>=</span> hash<span style=color:#ff79c6>(</span>key<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 再将这个hash值转换为小于这个数组的整型值 i，然后将节点插入数组i位置
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> indexFor<span style=color:#ff79c6>(</span>hash<span style=color:#ff79c6>,</span> table<span style=color:#ff79c6>.</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Entry<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> e <span style=color:#ff79c6>=</span> table<span style=color:#ff79c6>[</span>i<span style=color:#ff79c6>];</span> e <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span> e <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        Object k<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span> <span style=color:#ff79c6>==</span> hash <span style=color:#ff79c6>&amp;&amp;</span> <span style=color:#ff79c6>((</span>k <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>key</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>==</span> key <span style=color:#ff79c6>||</span> key<span style=color:#ff79c6>.</span><span style=color:#50fa7b>equals</span><span style=color:#ff79c6>(</span>k<span style=color:#ff79c6>)))</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            V oldValue <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span> <span style=color:#ff79c6>=</span> value<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>recordAccess</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> oldValue<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    modCount<span style=color:#ff79c6>++;</span>  
-</span></span><span style=display:flex><span>    addEntry<span style=color:#ff79c6>(</span>hash<span style=color:#ff79c6>,</span> key<span style=color:#ff79c6>,</span> value<span style=color:#ff79c6>,</span> i<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;}</span>
-</span></span></code></pre></div><p>其中 <code>hash</code> 方法如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>hash</span><span style=color:#ff79c6>(</span>Object k<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> h <span style=color:#ff79c6>=</span> hashSeed<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span><span style=color:#bd93f9>0</span> <span style=color:#ff79c6>!=</span> h <span style=color:#ff79c6>&amp;&amp;</span> k <span style=color:#ff79c6>instanceof</span> String<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> sun<span style=color:#ff79c6>.</span><span style=color:#50fa7b>misc</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>Hashing</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>stringHash32</span><span style=color:#ff79c6>((</span>String<span style=color:#ff79c6>)</span> k<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    h <span style=color:#ff79c6>^=</span> k<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hashCode</span><span style=color:#ff79c6>();</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// This function ensures that hashCodes that differ only by  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#6272a4>// constant multiples at each bit position have a bounded    // number of collisions (approximately 8 at default load factor).    
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    h <span style=color:#ff79c6>^=</span> <span style=color:#ff79c6>(</span>h <span style=color:#ff79c6>&gt;&gt;&gt;</span> <span style=color:#bd93f9>20</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>^</span> <span style=color:#ff79c6>(</span>h <span style=color:#ff79c6>&gt;&gt;&gt;</span> <span style=color:#bd93f9>12</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> h <span style=color:#ff79c6>^</span> <span style=color:#ff79c6>(</span>h <span style=color:#ff79c6>&gt;&gt;&gt;</span> <span style=color:#bd93f9>7</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>^</span> <span style=color:#ff79c6>(</span>h <span style=color:#ff79c6>&gt;&gt;&gt;</span> <span style=color:#bd93f9>4</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>我们无需关注实现细节，只需知道这个 <code>hash</code> 方法会返回一个尽量分散的整型值 K. 下面一个关键步骤是如何把 k 转换为一个小于数组长度的值呢？ 我们想到最直接的方法是取余运算 <code>%</code>, 即： <code>K % table.length</code> , 是的。这样结果完全没问题，但是性能有问题，在我们常见的 <code>+ - * / %</code> 运算中， <code>%</code> 效率是最低的。而 <code>HashMap</code> 作为一个 java 内置的数据结构，会有大量的场景使用。对性能的要求就比较高，自然这里的 <code>indexFor</code> 方法用的不是取余运算，而是 <code>&</code> 运算, 如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * Returns index for hash code h. 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * */</span>  
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>indexFor</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> h<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>int</span> length<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// assert Integer.bitCount(length) == 1 : &#34;length must be a non-zero power of 2&#34;;  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>return</span> h <span style=color:#ff79c6>&amp;</span> <span style=color:#ff79c6>(</span>length<span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>这段代码中的注释说。length 必须是 2 的 N 次方，我们来看看这是为什么</p><p><code>&</code> 运算的规则是，同时为 1，结果才是 1，否则是 0，即 <code>1 & 1 == 1</code> <code>1 & 0 ==0</code> <code>0 & 0 == 0</code><br>而 2 的 N 次方减一，的二进制一定是全为 1，比如 3 ， 7 ， 15 的二进制是 <code>11</code> <code>111</code> <code>1111</code> 。正因为是这种结构， r = h & ( 2 ^ n -1) 的结果 r 一定小于 n, 且 r 取决于 h 的值，由此可以代替取余运算，像这种二进制的 <code>& | ! ^</code> 运算是最接近计算机底层的，运算速度远远高于 <code>%</code> 运算，我简单测试一下，大约相差 10 倍。</p><h3 id=hashmap-的容量>HashMap 的容量</h3><p>但是要保证上述运算的准确性和效率，其中数组的长度 length 必须是 2 的 N 次方。那么我们在项目中的这种代码：<code>new HashMap&lt;>(13)</code> , 数组的长度是 13 吗？ 当然不是，而是以第一个大于 13 且是 2 的 N 次方的数 16, 作为数组的长度。我们先看一下 JDK 1.7 代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> V <span style=color:#50fa7b>put</span><span style=color:#ff79c6>(</span>K key<span style=color:#ff79c6>,</span> V value<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>   <span style=color:#6272a4>//  如果数组为空，初始化数组，而不是在HashMap的构造方法中进行的的
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>table <span style=color:#ff79c6>==</span> EMPTY_TABLE<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        inflateTable<span style=color:#ff79c6>(</span>threshold<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>key <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> putForNullKey<span style=color:#ff79c6>(</span>value<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> hash <span style=color:#ff79c6>=</span> hash<span style=color:#ff79c6>(</span>key<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> indexFor<span style=color:#ff79c6>(</span>hash<span style=color:#ff79c6>,</span> table<span style=color:#ff79c6>.</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Entry<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> e <span style=color:#ff79c6>=</span> table<span style=color:#ff79c6>[</span>i<span style=color:#ff79c6>];</span> e <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span> e <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        Object k<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span> <span style=color:#ff79c6>==</span> hash <span style=color:#ff79c6>&amp;&amp;</span> <span style=color:#ff79c6>((</span>k <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>key</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>==</span> key <span style=color:#ff79c6>||</span> key<span style=color:#ff79c6>.</span><span style=color:#50fa7b>equals</span><span style=color:#ff79c6>(</span>k<span style=color:#ff79c6>)))</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            V oldValue <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span> <span style=color:#ff79c6>=</span> value<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>recordAccess</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> oldValue<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    modCount<span style=color:#ff79c6>++;</span>  
-</span></span><span style=display:flex><span>    addEntry<span style=color:#ff79c6>(</span>hash<span style=color:#ff79c6>,</span> key<span style=color:#ff79c6>,</span> value<span style=color:#ff79c6>,</span> i<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>初始化方法：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>inflateTable</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> toSize<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 找到第一个大于等于 toSize 的 2的 N次方的值
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd>int</span> capacity <span style=color:#ff79c6>=</span> roundUpToPowerOf2<span style=color:#ff79c6>(</span>toSize<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    threshold <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span><span style=color:#ff79c6>)</span> Math<span style=color:#ff79c6>.</span><span style=color:#50fa7b>min</span><span style=color:#ff79c6>(</span>capacity <span style=color:#ff79c6>*</span> loadFactor<span style=color:#ff79c6>,</span> MAXIMUM_CAPACITY <span style=color:#ff79c6>+</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    table <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Entry<span style=color:#ff79c6>[</span>capacity<span style=color:#ff79c6>];</span>  
-</span></span><span style=display:flex><span>    initHashSeedAsNeeded<span style=color:#ff79c6>(</span>capacity<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>roundUpToPowerOf2</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> number<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// assert number &gt;= 0 : &#34;number must be non-negative&#34;;  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>return</span> number <span style=color:#ff79c6>&gt;=</span> MAXIMUM_CAPACITY  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>?</span> MAXIMUM_CAPACITY  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>:</span> <span style=color:#ff79c6>(</span>number <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>?</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>highestOneBit</span><span style=color:#ff79c6>((</span>number <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>&lt;&lt;</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>:</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// 巧妙的通过或运算和位移运算得出第一个大于i的 2 的 N 的数值
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>int</span> <span style=color:#50fa7b>highestOneBit</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> i<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// HD, Figure 3-1  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    i <span style=color:#ff79c6>|=</span> <span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>&gt;&gt;</span>  <span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    i <span style=color:#ff79c6>|=</span> <span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>&gt;&gt;</span>  <span style=color:#bd93f9>2</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    i <span style=color:#ff79c6>|=</span> <span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>&gt;&gt;</span>  <span style=color:#bd93f9>4</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    i <span style=color:#ff79c6>|=</span> <span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>&gt;&gt;</span>  <span style=color:#bd93f9>8</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    i <span style=color:#ff79c6>|=</span> <span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>&gt;&gt;</span> <span style=color:#bd93f9>16</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> i <span style=color:#ff79c6>-</span> <span style=color:#ff79c6>(</span>i <span style=color:#ff79c6>&gt;&gt;&gt;</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>关于这个运算原理的讲解参考： <a href=https://segmentfault.com/a/1190000039392972>https://segmentfault.com/a/1190000039392972</a></p><p>在后续的数组扩容中，新的数组容量也要遵循这个规则，这一点， JDK 1.8 和 1.8 之前的核心实现差不多。</p><h2 id=hashmap-的扩容>HashMap 的扩容</h2><p>并不是等到节点数量达到容量后才进行的扩容，而是设置了一个阈值，阈值小于等于容量。当节点数量达到阈值后就开始扩容，容量变为原来的 2 倍，在 1.8 之前，阈值 = 容量 * 加载因子。而在 1.8 中，阈值也是原来的 2 倍；如下：</p><h3 id=容量和阈值的增长>容量和阈值的增长</h3><p><strong>1.8</strong><br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016214135.png alt></p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016213253.png alt><br><strong>1.7</strong></p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016214534.png alt></p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016213405.png alt></p><h2 id=节点的移动方式>节点的移动方式</h2><p>在底层数组的扩容方法上，1.8 版本和 1.8 之前的版本相差最大，其中 1.8 之前，HashMap 的扩容在多线程下会产生死循环的问题。</p><p>我们先看一下 1.7 版本的扩容 ：</p><h3 id=17版本-节点移动步骤>1.7版本 节点移动步骤</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>/**
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> * Transfers all entries from current table to newTable.
-</span></span></span><span style=display:flex><span><span style=color:#6272a4> */</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd>void</span> <span style=color:#50fa7b>transfer</span><span style=color:#ff79c6>(</span>Entry<span style=color:#ff79c6>[]</span> newTable<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>boolean</span> rehash<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>	<span style=color:#8be9fd>int</span> newCapacity <span style=color:#ff79c6>=</span> newTable<span style=color:#ff79c6>.</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>	<span style=color:#6272a4>// 遍历旧数组
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>	<span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Entry<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> e <span style=color:#ff79c6>:</span> table<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>	    <span style=color:#6272a4>// 遍历链表
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>		<span style=color:#ff79c6>while</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>null</span> <span style=color:#ff79c6>!=</span> e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>			Entry<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> next <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>rehash<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>				e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span> <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span> <span style=color:#ff79c6>==</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>key</span> <span style=color:#ff79c6>?</span> <span style=color:#bd93f9>0</span> <span style=color:#ff79c6>:</span> hash<span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>key</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>			<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>			<span style=color:#6272a4>// 重新计算当前节点在新数组中的位置
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>			<span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> indexFor<span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span><span style=color:#ff79c6>,</span> newCapacity<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>			<span style=color:#6272a4>// 修改节点的指向
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>			e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span> <span style=color:#ff79c6>=</span> newTable<span style=color:#ff79c6>[</span>i<span style=color:#ff79c6>];</span>
-</span></span><span style=display:flex><span>			newTable<span style=color:#ff79c6>[</span>i<span style=color:#ff79c6>]</span> <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>			<span style=color:#6272a4>// 下一次循环
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>			e <span style=color:#ff79c6>=</span> next<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>		<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>	<span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>1.7 版本扩容的核心方法只有上面一段，理解起来也不难，主要有下几个步骤:</p><ol><li>外层遍历数组，假设当前元素: e0</li><li>内层遍历数组指向的链表，即 e0 为头节点的链表</li><li>扫描链表的每个节点，重新计算节点的在新数组的位置，将节点移动到新数组中对应的位置，以头插法的方式处理有 Hash 冲突的节点。</li></ol><p>一图胜千言:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016145737.png alt><br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016145849.png alt></p><p>用头插法会导致链表的顺序发生变化。其中每一步不再详解。下面看一下这种扩容方法在多线程下的问题</p><h4 id=并发导致的死循环问题>并发导致的死循环问题</h4><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016161231.png alt><br>经过几次循环形成了环，Thread1 线程后面在进行 Put 数据时，如果某个key 落在了这个有环节点位置，就会发生死循环。如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> V <span style=color:#50fa7b>put</span><span style=color:#ff79c6>(</span>K key<span style=color:#ff79c6>,</span> V value<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>table <span style=color:#ff79c6>==</span> EMPTY_TABLE<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        inflateTable<span style=color:#ff79c6>(</span>threshold<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>key <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> putForNullKey<span style=color:#ff79c6>(</span>value<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> hash <span style=color:#ff79c6>=</span> hash<span style=color:#ff79c6>(</span>key<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> indexFor<span style=color:#ff79c6>(</span>hash<span style=color:#ff79c6>,</span> table<span style=color:#ff79c6>.</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>);</span> 
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 因为形成了环，导致 e != null 永远成立。死循环 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>Entry<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> e <span style=color:#ff79c6>=</span> table<span style=color:#ff79c6>[</span>i<span style=color:#ff79c6>];</span> e <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span> e <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        Object k<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span> <span style=color:#ff79c6>==</span> hash <span style=color:#ff79c6>&amp;&amp;</span> <span style=color:#ff79c6>((</span>k <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>key</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>==</span> key <span style=color:#ff79c6>||</span> key<span style=color:#ff79c6>.</span><span style=color:#50fa7b>equals</span><span style=color:#ff79c6>(</span>k<span style=color:#ff79c6>)))</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            V oldValue <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>value</span> <span style=color:#ff79c6>=</span> value<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>recordAccess</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> oldValue<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>    modCount<span style=color:#ff79c6>++;</span>  
-</span></span><span style=display:flex><span>    addEntry<span style=color:#ff79c6>(</span>hash<span style=color:#ff79c6>,</span> key<span style=color:#ff79c6>,</span> value<span style=color:#ff79c6>,</span> i<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>下面我们对比看一下 1.8 版本是如何解决这个问题的。</p><h3 id=18版本-节点移动步骤>1.8版本 节点移动步骤</h3><p>在1.8版本中仍保留了 数组+链表的结构，只有当HashMap中的容量大于某个值时，才会把链表转换为红黑树，提高检索效率。现在我们只关注扩容部分。</p><p>扩容的关键代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>final</span> Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;[]</span> <span style=color:#50fa7b>resize</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>    Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;[]</span> oldTab <span style=color:#ff79c6>=</span> table<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> oldCap <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>oldTab <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>?</span> <span style=color:#bd93f9>0</span> <span style=color:#ff79c6>:</span> oldTab<span style=color:#ff79c6>.</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> oldThr <span style=color:#ff79c6>=</span> threshold<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd>int</span> newCap<span style=color:#ff79c6>,</span> newThr <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>oldCap <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>oldCap <span style=color:#ff79c6>&gt;=</span> MAXIMUM_CAPACITY<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            threshold <span style=color:#ff79c6>=</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MAX_VALUE</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> oldTab<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>((</span>newCap <span style=color:#ff79c6>=</span> oldCap <span style=color:#ff79c6>&lt;&lt;</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>&lt;</span> MAXIMUM_CAPACITY <span style=color:#ff79c6>&amp;&amp;</span>  
-</span></span><span style=display:flex><span>                 oldCap <span style=color:#ff79c6>&gt;=</span> DEFAULT_INITIAL_CAPACITY<span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>            newThr <span style=color:#ff79c6>=</span> oldThr <span style=color:#ff79c6>&lt;&lt;</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span> <span style=color:#6272a4>// double threshold  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>oldThr <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#6272a4>// initial capacity was placed in threshold  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        newCap <span style=color:#ff79c6>=</span> oldThr<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>{</span>               <span style=color:#6272a4>// zero initial threshold signifies using defaults  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        newCap <span style=color:#ff79c6>=</span> DEFAULT_INITIAL_CAPACITY<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        newThr <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span><span style=color:#ff79c6>)(</span>DEFAULT_LOAD_FACTOR <span style=color:#ff79c6>*</span> DEFAULT_INITIAL_CAPACITY<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>newThr <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>float</span> ft <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>float</span><span style=color:#ff79c6>)</span>newCap <span style=color:#ff79c6>*</span> loadFactor<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>        newThr <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>newCap <span style=color:#ff79c6>&lt;</span> MAXIMUM_CAPACITY <span style=color:#ff79c6>&amp;&amp;</span> ft <span style=color:#ff79c6>&lt;</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>float</span><span style=color:#ff79c6>)</span>MAXIMUM_CAPACITY <span style=color:#ff79c6>?</span>  
-</span></span><span style=display:flex><span>                  <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span><span style=color:#ff79c6>)</span>ft <span style=color:#ff79c6>:</span> Integer<span style=color:#ff79c6>.</span><span style=color:#50fa7b>MAX_VALUE</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    threshold <span style=color:#ff79c6>=</span> newThr<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    @SuppressWarnings<span style=color:#ff79c6>({</span><span style=color:#f1fa8c>&#34;rawtypes&#34;</span><span style=color:#ff79c6>,</span><span style=color:#f1fa8c>&#34;unchecked&#34;</span><span style=color:#ff79c6>})</span>  
-</span></span><span style=display:flex><span>    Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;[]</span> newTab <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>(</span>Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;[])</span><span style=color:#ff79c6>new</span> Node<span style=color:#ff79c6>[</span>newCap<span style=color:#ff79c6>];</span>  
-</span></span><span style=display:flex><span>    table <span style=color:#ff79c6>=</span> newTab<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>oldTab <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span><span style=color:#8be9fd>int</span> j <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span> j <span style=color:#ff79c6>&lt;</span> oldCap<span style=color:#ff79c6>;</span> <span style=color:#ff79c6>++</span>j<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>            Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>((</span>e <span style=color:#ff79c6>=</span> oldTab<span style=color:#ff79c6>[</span>j<span style=color:#ff79c6>])</span> <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                oldTab<span style=color:#ff79c6>[</span>j<span style=color:#ff79c6>]</span> <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span> <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>                    newTab<span style=color:#ff79c6>[</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span> <span style=color:#ff79c6>&amp;</span> <span style=color:#ff79c6>(</span>newCap <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>)]</span> <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>e <span style=color:#ff79c6>instanceof</span> TreeNode<span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>((</span>TreeNode<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;)</span>e<span style=color:#ff79c6>).</span><span style=color:#50fa7b>split</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>this</span><span style=color:#ff79c6>,</span> newTab<span style=color:#ff79c6>,</span> j<span style=color:#ff79c6>,</span> oldCap<span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>{</span> <span style=color:#6272a4>// preserve order  
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                   <span style=color:#6272a4>// 定义了四个指针
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> loHead <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>,</span> loTail <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                    Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> hiHead <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>,</span> hiTail <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                    Node<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span>V<span style=color:#ff79c6>&gt;</span> next<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 开始扩容
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    <span style=color:#ff79c6>do</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                        next <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                        <span style=color:#6272a4>// 节点的hash值与 旧数组的容量相与，oldCap 是2的N次方
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#6272a4>// 一个数和 2的N次方相与时，结果只能是0或 oldCap
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>((</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hash</span> <span style=color:#ff79c6>&amp;</span> oldCap<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>==</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                            <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>loTail <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>                                <span style=color:#6272a4>// 指定头指针的位置
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                                loHead <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                            <span style=color:#ff79c6>else</span>
-</span></span><span style=display:flex><span>                                <span style=color:#6272a4>// 前一个指针的后继节点是当前节点                 
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                                loTail<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span> <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                            <span style=color:#6272a4>// 尾指针锚定当前节点
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                            loTail <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                            <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>hiTail <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>  
-</span></span><span style=display:flex><span>                                hiHead <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                            <span style=color:#ff79c6>else</span>                                
-</span></span><span style=display:flex><span>                                hiTail<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span> <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                             hiTail <span style=color:#ff79c6>=</span> e<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>while</span> <span style=color:#ff79c6>((</span>e <span style=color:#ff79c6>=</span> next<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>);</span>  
-</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 低位节点的下标不变
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>loTail <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                        loTail<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span> <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                        newTab<span style=color:#ff79c6>[</span>j<span style=color:#ff79c6>]</span> <span style=color:#ff79c6>=</span> loHead<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>                    <span style=color:#6272a4>// 高位节点下标增加 oldCap
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>hiTail <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
-</span></span><span style=display:flex><span>                        hiTail<span style=color:#ff79c6>.</span><span style=color:#50fa7b>next</span> <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                        newTab<span style=color:#ff79c6>[</span>j <span style=color:#ff79c6>+</span> oldCap<span style=color:#ff79c6>]</span> <span style=color:#ff79c6>=</span> hiHead<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> newTab<span style=color:#ff79c6>;</span>  
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>这里定义了四个指针，将某个链表分为两部分，链表节点和数组长度相与的结果作为分隔，等于0的放在以loHead为头节点的链表中，等1的放在以hiHead为头节点的链表中。如下图:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016210441.png alt><br>如上所示。这种移动方式没有改变节点关系的方向，所以并发之下也没有问题</p><h3 id=扩容因子为什么是075>扩容因子为什么是0.75</h3><h2 id=18版本链表与红黑树的转换>1.8版本链表与红黑树的转换</h2><ol><li>链表长度 > 8</li><li>容量 > 64</li><li>性能提升的不是很高，在大量数据下，可能会提升5% ~10%, 数据量不大时。没有什么区别</li><li>红黑树</li></ol></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/concurrenthashmap%E4%B8%8Ehashtable/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-ConcurrentHashMap与HashTable</div></a><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>并发编程之Atomic和Unsafe魔法类&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HashMap底层原理 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="HashMap底层原理" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/hashmap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">HashMap底层原理</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/hashmap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" class="article-date">
+                <time datetime='2022-10-15T11:15:24.000&#43;00:00' itemprop="datePublished">2022-10-15</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <p>在 JDK 1.8 版本之前，HashMap 底层的数据结构是数组 + 链表，如下图：<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221015111829.png" alt=""></p>
+<p>在 1.8 及以后是数组 + 链表 + 红黑树</p>
+<h3 id="重要的几个变量">重要的几个变量</h3>
+<ul>
+<li>DEFAULT_INITIAL_CAPACITY = 1 &laquo; 4; Hash 表默认初始容量</li>
+<li>MAXIMUM_CAPACITY = 1 &laquo; 30; 最大 Hash 表容量</li>
+<li>DEFAULT_LOAD_FACTOR = 0.75f；默认加载因子</li>
+<li>TREEIFY_THRESHOLD = 8；链表转红黑树阈值</li>
+<li>UNTREEIFY_THRESHOLD = 6；红黑树转链表阈值</li>
+<li>MIN_TREEIFY_CAPACITY = 64；链表转红黑树时 hash 表最小容量阈值，达不到优先扩容</li>
+</ul>
+<h3 id="存放数据">存放数据</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Map <span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span>Employee<span style="color:#ff79c6">&gt;</span> map <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap <span style="color:#ff79c6">&lt;&gt;</span> <span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>Employee e0 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Employee<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhangshan&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>map<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhangshan&#34;</span><span style="color:#ff79c6">,</span> e0<span style="color:#ff79c6">);</span>
+</span></span></code></pre></div><p>会对 &ldquo;zhangshan&rdquo; 进行一次 hash 运算,  把 “zhangshan” 这个字符串映射成一个小于数组长度的整型值。就像下面这样:</p>
+<p><code>int i = hash(&quot;zhangshan&quot;)</code> 假如 i 等于 1，就会把 e0 构造成一个节点，放入数组下标为 1 的位置。数组存放的是一个节点，该节点有指向下一个节点的指针 <code>next</code>, 如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Node</span><span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">implements</span> Map<span style="color:#ff79c6">.</span><span style="color:#50fa7b">Entry</span><span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> hash<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">final</span> K key<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    V value<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    Node <span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> next<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p><code>int i = hash(&quot;zhangshan&quot;)</code> 把字符串映射成一个整型，不同的字符串可能映射成相同的位置，有下面这种可能：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>hash<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhangshan&#34;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">==</span> hash<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;lisi&#34;</span><span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>这就是 hash 碰撞，出现碰撞后，会以链表的方式追加在后面，就形成了上图中的结构。</p>
+<h3 id="如何确定-key-在数组中的位置">如何确定 key 在数组中的位置</h3>
+<p>先看 jdk 1.7 中的实现:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> V <span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>K key<span style="color:#ff79c6">,</span> V value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>table <span style="color:#ff79c6">==</span> EMPTY_TABLE<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        inflateTable<span style="color:#ff79c6">(</span>threshold<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>key <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> putForNullKey<span style="color:#ff79c6">(</span>value<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//  获取 key 对应的整型 hash值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> hash <span style="color:#ff79c6">=</span> hash<span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 再将这个hash值转换为小于这个数组的整型值 i，然后将节点插入数组i位置
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> indexFor<span style="color:#ff79c6">(</span>hash<span style="color:#ff79c6">,</span> table<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Entry<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> e <span style="color:#ff79c6">=</span> table<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">];</span> e <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span> e <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        Object k<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span> <span style="color:#ff79c6">==</span> hash <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">((</span>k <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">key</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">==</span> key <span style="color:#ff79c6">||</span> key<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>k<span style="color:#ff79c6">)))</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            V oldValue <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">recordAccess</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> oldValue<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    modCount<span style="color:#ff79c6">++;</span>  
+</span></span><span style="display:flex;"><span>    addEntry<span style="color:#ff79c6">(</span>hash<span style="color:#ff79c6">,</span> key<span style="color:#ff79c6">,</span> value<span style="color:#ff79c6">,</span> i<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;}</span>
+</span></span></code></pre></div><p>其中 <code>hash</code> 方法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">hash</span><span style="color:#ff79c6">(</span>Object k<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> h <span style="color:#ff79c6">=</span> hashSeed<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span> <span style="color:#ff79c6">!=</span> h <span style="color:#ff79c6">&amp;&amp;</span> k <span style="color:#ff79c6">instanceof</span> String<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> sun<span style="color:#ff79c6">.</span><span style="color:#50fa7b">misc</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">Hashing</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">stringHash32</span><span style="color:#ff79c6">((</span>String<span style="color:#ff79c6">)</span> k<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    h <span style="color:#ff79c6">^=</span> k<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hashCode</span><span style="color:#ff79c6">();</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// This function ensures that hashCodes that differ only by  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// constant multiples at each bit position have a bounded    // number of collisions (approximately 8 at default load factor).    
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    h <span style="color:#ff79c6">^=</span> <span style="color:#ff79c6">(</span>h <span style="color:#ff79c6">&gt;&gt;&gt;</span> <span style="color:#bd93f9">20</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">^</span> <span style="color:#ff79c6">(</span>h <span style="color:#ff79c6">&gt;&gt;&gt;</span> <span style="color:#bd93f9">12</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> h <span style="color:#ff79c6">^</span> <span style="color:#ff79c6">(</span>h <span style="color:#ff79c6">&gt;&gt;&gt;</span> <span style="color:#bd93f9">7</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">^</span> <span style="color:#ff79c6">(</span>h <span style="color:#ff79c6">&gt;&gt;&gt;</span> <span style="color:#bd93f9">4</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>我们无需关注实现细节，只需知道这个 <code>hash</code> 方法会返回一个尽量分散的整型值 K. 下面一个关键步骤是如何把 k 转换为一个小于数组长度的值呢？ 我们想到最直接的方法是取余运算 <code>%</code>, 即： <code>K % table.length</code> , 是的。这样结果完全没问题，但是性能有问题，在我们常见的 <code> + - * / %</code> 运算中， <code>%</code> 效率是最低的。而 <code>HashMap</code>  作为一个 java 内置的数据结构，会有大量的场景使用。对性能的要求就比较高，自然这里的 <code>indexFor</code>  方法用的不是取余运算，而是 <code>&amp;</code> 运算, 如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * Returns index for hash code h. 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * */</span>  
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">indexFor</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> h<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> length<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// assert Integer.bitCount(length) == 1 : &#34;length must be a non-zero power of 2&#34;;  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> h <span style="color:#ff79c6">&amp;</span> <span style="color:#ff79c6">(</span>length<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>这段代码中的注释说。length 必须是 2 的 N 次方，我们来看看这是为什么</p>
+<p><code>&amp;</code> 运算的规则是，同时为 1，结果才是 1，否则是 0，即 <code>1 &amp; 1 == 1</code> <code>1 &amp; 0 ==0 </code> <code>0 &amp; 0 == 0</code><br>
+而 2 的 N 次方减一，的二进制一定是全为 1，比如 3 ， 7 ， 15 的二进制是 <code>11</code> <code>111</code> <code>1111</code> 。正因为是这种结构， r = h &amp; ( 2 ^ n  -1) 的结果 r 一定小于  n, 且 r 取决于 h 的值，由此可以代替取余运算，像这种二进制的 <code>&amp; | ! ^</code>  运算是最接近计算机底层的，运算速度远远高于 <code>%</code> 运算，我简单测试一下，大约相差 10 倍。</p>
+<h3 id="hashmap-的容量">HashMap 的容量</h3>
+<p>但是要保证上述运算的准确性和效率，其中数组的长度 length 必须是 2 的 N 次方。那么我们在项目中的这种代码：<code>new HashMap&lt;&gt;(13)</code> , 数组的长度是 13 吗？ 当然不是，而是以第一个大于 13 且是 2 的 N 次方的数 16, 作为数组的长度。我们先看一下 JDK 1.7 代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> V <span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>K key<span style="color:#ff79c6">,</span> V value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">//  如果数组为空，初始化数组，而不是在HashMap的构造方法中进行的的
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>table <span style="color:#ff79c6">==</span> EMPTY_TABLE<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        inflateTable<span style="color:#ff79c6">(</span>threshold<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>key <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> putForNullKey<span style="color:#ff79c6">(</span>value<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> hash <span style="color:#ff79c6">=</span> hash<span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> indexFor<span style="color:#ff79c6">(</span>hash<span style="color:#ff79c6">,</span> table<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Entry<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> e <span style="color:#ff79c6">=</span> table<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">];</span> e <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span> e <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        Object k<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span> <span style="color:#ff79c6">==</span> hash <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">((</span>k <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">key</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">==</span> key <span style="color:#ff79c6">||</span> key<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>k<span style="color:#ff79c6">)))</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            V oldValue <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">recordAccess</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> oldValue<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    modCount<span style="color:#ff79c6">++;</span>  
+</span></span><span style="display:flex;"><span>    addEntry<span style="color:#ff79c6">(</span>hash<span style="color:#ff79c6">,</span> key<span style="color:#ff79c6">,</span> value<span style="color:#ff79c6">,</span> i<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>初始化方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">inflateTable</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> toSize<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 找到第一个大于等于 toSize 的 2的 N次方的值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> capacity <span style="color:#ff79c6">=</span> roundUpToPowerOf2<span style="color:#ff79c6">(</span>toSize<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    threshold <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">)</span> Math<span style="color:#ff79c6">.</span><span style="color:#50fa7b">min</span><span style="color:#ff79c6">(</span>capacity <span style="color:#ff79c6">*</span> loadFactor<span style="color:#ff79c6">,</span> MAXIMUM_CAPACITY <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    table <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Entry<span style="color:#ff79c6">[</span>capacity<span style="color:#ff79c6">];</span>  
+</span></span><span style="display:flex;"><span>    initHashSeedAsNeeded<span style="color:#ff79c6">(</span>capacity<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">roundUpToPowerOf2</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> number<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// assert number &gt;= 0 : &#34;number must be non-negative&#34;;  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> number <span style="color:#ff79c6">&gt;=</span> MAXIMUM_CAPACITY  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">?</span> MAXIMUM_CAPACITY  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">:</span> <span style="color:#ff79c6">(</span>number <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">?</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">highestOneBit</span><span style="color:#ff79c6">((</span>number <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 巧妙的通过或运算和位移运算得出第一个大于i的 2 的 N 的数值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">highestOneBit</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// HD, Figure 3-1  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    i <span style="color:#ff79c6">|=</span> <span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">&gt;&gt;</span>  <span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    i <span style="color:#ff79c6">|=</span> <span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">&gt;&gt;</span>  <span style="color:#bd93f9">2</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    i <span style="color:#ff79c6">|=</span> <span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">&gt;&gt;</span>  <span style="color:#bd93f9">4</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    i <span style="color:#ff79c6">|=</span> <span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">&gt;&gt;</span>  <span style="color:#bd93f9">8</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    i <span style="color:#ff79c6">|=</span> <span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">16</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> i <span style="color:#ff79c6">-</span> <span style="color:#ff79c6">(</span>i <span style="color:#ff79c6">&gt;&gt;&gt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>关于这个运算原理的讲解参考： <a href="https://segmentfault.com/a/1190000039392972">https://segmentfault.com/a/1190000039392972</a></p>
+<p>在后续的数组扩容中，新的数组容量也要遵循这个规则，这一点， JDK 1.8 和 1.8 之前的核心实现差不多。</p>
+<h2 id="hashmap-的扩容">HashMap 的扩容</h2>
+<p>并不是等到节点数量达到容量后才进行的扩容，而是设置了一个阈值，阈值小于等于容量。当节点数量达到阈值后就开始扩容，容量变为原来的 2 倍，在 1.8 之前，阈值 = 容量 * 加载因子。而在 1.8 中，阈值也是原来的 2 倍；如下：</p>
+<h3 id="容量和阈值的增长">容量和阈值的增长</h3>
+<p><strong>1.8</strong><br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016214135.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016213253.png" alt=""><br>
+<strong>1.7</strong></p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016214534.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016213405.png" alt=""></p>
+<h2 id="节点的移动方式">节点的移动方式</h2>
+<p>在底层数组的扩容方法上，1.8 版本和 1.8 之前的版本相差最大，其中 1.8 之前，HashMap 的扩容在多线程下会产生死循环的问题。</p>
+<p>我们先看一下 1.7 版本的扩容 ：</p>
+<h3 id="17版本-节点移动步骤">1.7版本 节点移动步骤</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * Transfers all entries from current table to newTable.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">transfer</span><span style="color:#ff79c6">(</span>Entry<span style="color:#ff79c6">[]</span> newTable<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">boolean</span> rehash<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">int</span> newCapacity <span style="color:#ff79c6">=</span> newTable<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">// 遍历旧数组
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Entry<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> e <span style="color:#ff79c6">:</span> table<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>	    <span style="color:#6272a4">// 遍历链表
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		<span style="color:#ff79c6">while</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">null</span> <span style="color:#ff79c6">!=</span> e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>			Entry<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> next <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>rehash<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>				e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">==</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">key</span> <span style="color:#ff79c6">?</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">:</span> hash<span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">key</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// 重新计算当前节点在新数组中的位置
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>			<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> indexFor<span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span><span style="color:#ff79c6">,</span> newCapacity<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// 修改节点的指向
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>			e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> newTable<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">];</span>
+</span></span><span style="display:flex;"><span>			newTable<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#6272a4">// 下一次循环
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>			e <span style="color:#ff79c6">=</span> next<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>1.7 版本扩容的核心方法只有上面一段，理解起来也不难，主要有下几个步骤:</p>
+<ol>
+<li>外层遍历数组，假设当前元素: e0</li>
+<li>内层遍历数组指向的链表，即 e0 为头节点的链表</li>
+<li>扫描链表的每个节点，重新计算节点的在新数组的位置，将节点移动到新数组中对应的位置，以头插法的方式处理有 Hash 冲突的节点。</li>
+</ol>
+<p>一图胜千言:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016145737.png" alt=""><br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016145849.png" alt=""></p>
+<p>用头插法会导致链表的顺序发生变化。其中每一步不再详解。下面看一下这种扩容方法在多线程下的问题</p>
+<h4 id="并发导致的死循环问题">并发导致的死循环问题</h4>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016161231.png" alt=""><br>
+经过几次循环形成了环，Thread1 线程后面在进行 Put 数据时，如果某个key 落在了这个有环节点位置，就会发生死循环。如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> V <span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>K key<span style="color:#ff79c6">,</span> V value<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>table <span style="color:#ff79c6">==</span> EMPTY_TABLE<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        inflateTable<span style="color:#ff79c6">(</span>threshold<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>key <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> putForNullKey<span style="color:#ff79c6">(</span>value<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> hash <span style="color:#ff79c6">=</span> hash<span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> indexFor<span style="color:#ff79c6">(</span>hash<span style="color:#ff79c6">,</span> table<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">);</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 因为形成了环，导致 e != null 永远成立。死循环 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Entry<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> e <span style="color:#ff79c6">=</span> table<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">];</span> e <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span> e <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        Object k<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span> <span style="color:#ff79c6">==</span> hash <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">((</span>k <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">key</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">==</span> key <span style="color:#ff79c6">||</span> key<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>k<span style="color:#ff79c6">)))</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            V oldValue <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">value</span> <span style="color:#ff79c6">=</span> value<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">recordAccess</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> oldValue<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    modCount<span style="color:#ff79c6">++;</span>  
+</span></span><span style="display:flex;"><span>    addEntry<span style="color:#ff79c6">(</span>hash<span style="color:#ff79c6">,</span> key<span style="color:#ff79c6">,</span> value<span style="color:#ff79c6">,</span> i<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>下面我们对比看一下 1.8 版本是如何解决这个问题的。</p>
+<h3 id="18版本-节点移动步骤">1.8版本 节点移动步骤</h3>
+<p>在1.8版本中仍保留了 数组+链表的结构，只有当HashMap中的容量大于某个值时，才会把链表转换为红黑树，提高检索效率。现在我们只关注扩容部分。</p>
+<p>扩容的关键代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">final</span> Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;[]</span> <span style="color:#50fa7b">resize</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>    Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;[]</span> oldTab <span style="color:#ff79c6">=</span> table<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> oldCap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>oldTab <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">?</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">:</span> oldTab<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> oldThr <span style="color:#ff79c6">=</span> threshold<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> newCap<span style="color:#ff79c6">,</span> newThr <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>oldCap <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>oldCap <span style="color:#ff79c6">&gt;=</span> MAXIMUM_CAPACITY<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            threshold <span style="color:#ff79c6">=</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MAX_VALUE</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> oldTab<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">((</span>newCap <span style="color:#ff79c6">=</span> oldCap <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&lt;</span> MAXIMUM_CAPACITY <span style="color:#ff79c6">&amp;&amp;</span>  
+</span></span><span style="display:flex;"><span>                 oldCap <span style="color:#ff79c6">&gt;=</span> DEFAULT_INITIAL_CAPACITY<span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>            newThr <span style="color:#ff79c6">=</span> oldThr <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span> <span style="color:#6272a4">// double threshold  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>oldThr <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#6272a4">// initial capacity was placed in threshold  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        newCap <span style="color:#ff79c6">=</span> oldThr<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>               <span style="color:#6272a4">// zero initial threshold signifies using defaults  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        newCap <span style="color:#ff79c6">=</span> DEFAULT_INITIAL_CAPACITY<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        newThr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">)(</span>DEFAULT_LOAD_FACTOR <span style="color:#ff79c6">*</span> DEFAULT_INITIAL_CAPACITY<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>newThr <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">float</span> ft <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">float</span><span style="color:#ff79c6">)</span>newCap <span style="color:#ff79c6">*</span> loadFactor<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>        newThr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>newCap <span style="color:#ff79c6">&lt;</span> MAXIMUM_CAPACITY <span style="color:#ff79c6">&amp;&amp;</span> ft <span style="color:#ff79c6">&lt;</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">float</span><span style="color:#ff79c6">)</span>MAXIMUM_CAPACITY <span style="color:#ff79c6">?</span>  
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">)</span>ft <span style="color:#ff79c6">:</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MAX_VALUE</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    threshold <span style="color:#ff79c6">=</span> newThr<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    @SuppressWarnings<span style="color:#ff79c6">({</span><span style="color:#f1fa8c">&#34;rawtypes&#34;</span><span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;unchecked&#34;</span><span style="color:#ff79c6">})</span>  
+</span></span><span style="display:flex;"><span>    Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;[]</span> newTab <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;[])</span><span style="color:#ff79c6">new</span> Node<span style="color:#ff79c6">[</span>newCap<span style="color:#ff79c6">];</span>  
+</span></span><span style="display:flex;"><span>    table <span style="color:#ff79c6">=</span> newTab<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>oldTab <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> j <span style="color:#ff79c6">&lt;</span> oldCap<span style="color:#ff79c6">;</span> <span style="color:#ff79c6">++</span>j<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>            Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">((</span>e <span style="color:#ff79c6">=</span> oldTab<span style="color:#ff79c6">[</span>j<span style="color:#ff79c6">])</span> <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                oldTab<span style="color:#ff79c6">[</span>j<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>                    newTab<span style="color:#ff79c6">[</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span> <span style="color:#ff79c6">&amp;</span> <span style="color:#ff79c6">(</span>newCap <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)]</span> <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>e <span style="color:#ff79c6">instanceof</span> TreeNode<span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">((</span>TreeNode<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;)</span>e<span style="color:#ff79c6">).</span><span style="color:#50fa7b">split</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">,</span> newTab<span style="color:#ff79c6">,</span> j<span style="color:#ff79c6">,</span> oldCap<span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span> <span style="color:#6272a4">// preserve order  
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                   <span style="color:#6272a4">// 定义了四个指针
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> loHead <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">,</span> loTail <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                    Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> hiHead <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">,</span> hiTail <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                    Node<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span>V<span style="color:#ff79c6">&gt;</span> next<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 开始扩容
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">do</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                        next <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 节点的hash值与 旧数组的容量相与，oldCap 是2的N次方
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#6272a4">// 一个数和 2的N次方相与时，结果只能是0或 oldCap
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">((</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hash</span> <span style="color:#ff79c6">&amp;</span> oldCap<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>loTail <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>                                <span style="color:#6272a4">// 指定头指针的位置
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                                loHead <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                            <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>                                <span style="color:#6272a4">// 前一个指针的后继节点是当前节点                 
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                                loTail<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                            <span style="color:#6272a4">// 尾指针锚定当前节点
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                            loTail <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>hiTail <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>  
+</span></span><span style="display:flex;"><span>                                hiHead <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                            <span style="color:#ff79c6">else</span>                                
+</span></span><span style="display:flex;"><span>                                hiTail<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                             hiTail <span style="color:#ff79c6">=</span> e<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">((</span>e <span style="color:#ff79c6">=</span> next<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>  
+</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 低位节点的下标不变
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>loTail <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                        loTail<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                        newTab<span style="color:#ff79c6">[</span>j<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> loHead<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 高位节点下标增加 oldCap
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>hiTail <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
+</span></span><span style="display:flex;"><span>                        hiTail<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                        newTab<span style="color:#ff79c6">[</span>j <span style="color:#ff79c6">+</span> oldCap<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> hiHead<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> newTab<span style="color:#ff79c6">;</span>  
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>这里定义了四个指针，将某个链表分为两部分，链表节点和数组长度相与的结果作为分隔，等于0的放在以loHead为头节点的链表中，等1的放在以hiHead为头节点的链表中。如下图:</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221016210441.png" alt=""><br>
+如上所示。这种移动方式没有改变节点关系的方向，所以并发之下也没有问题</p>
+<h3 id="扩容因子为什么是075">扩容因子为什么是0.75</h3>
+<h2 id="18版本链表与红黑树的转换">1.8版本链表与红黑树的转换</h2>
+<ol>
+<li>链表长度 &gt; 8</li>
+<li>容量 &gt; 64</li>
+<li>性能提升的不是很高，在大量数据下，可能会提升5% ~10%, 数据量不大时。没有什么区别</li>
+<li>红黑树</li>
+</ol>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/concurrenthashmap%E4%B8%8Ehashtable/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            ConcurrentHashMap与HashTable
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">并发编程之Atomic和Unsafe魔法类&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

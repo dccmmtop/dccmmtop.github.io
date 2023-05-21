@@ -1,153 +1,450 @@
-<!doctype html><html><head><title>并发编程中的可见性,原子性，有序性问题 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="并发编程中的可见性,原子性，有序性问题"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E5%8E%9F%E5%AD%90%E6%80%A7%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98/"><link rel=icon type=image/x-icon href=../../favicon.ico><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>并发编程中的可见性,原子性，有序性问题</h1></header><div class=article-meta><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E5%8E%9F%E5%AD%90%E6%80%A7%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98/ class=article-date><time datetime=2022-09-15T08:16:56.000+00:00 itemprop=datePublished>2022-09-15</time></a></div><div class=article-entry itemprop=articleBody><h2 id=java内存模型-jmm>java内存模型 （JMM）</h2><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915082649.png alt></p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915083920.png alt><br>这种模型和 jvm 中的堆不同， JMM 是抽象概念，不真实存在。<strong>它是一种规范，指定了程序中的各变量的访问方式</strong></p><h3 id=主内存>主内存</h3><p>JMM 规定所有变量都存放在主内存，主内存是所有线程共享的，但是线程的操作在线程的工作内存中进行，先从主内存读取到线程的工作内存中，然后执行操作，再将工作内存中的值写入主内存中。线程不能直接操作主内存中的数据</p><h3 id=工作内存>工作内存</h3><p>工作内存是线程独有的，不同的线程无法访问到对方的工作内存，线程间的通信必须通过主内存传值进行</p><p>JMM 描述的是变量在共享区域和私有区域的访问方式，变量的访问在多线程下会有 可见性，原子性，可见性三大问题</p><h2 id=可见性问题>可见性问题</h2><p>因为有工作内存的划分，一个线程操作修改某变量的值，没有同步到主内存前，其他线程是无法读取到该变量最新的值，就导致了变量在另外的线程不可见。<br>示例:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>CodeVisibility</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>boolean</span> initFlag <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// private volatile static boolean initFlag = false;
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>int</span> counter <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>refresh</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;refresh data.......&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        initFlag <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;refresh data success.......&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        Thread threadA <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>while</span> <span style=color:#ff79c6>(!</span>initFlag<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                counter<span style=color:#ff79c6>++;</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>            System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;线程：&#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span>
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;当前线程嗅探到initFlag的状态的改变, counter: &#34;</span> <span style=color:#ff79c6>+</span> counter<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>},</span> <span style=color:#f1fa8c>&#34;threadA&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        threadA<span style=color:#ff79c6>.</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>500</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>InterruptedException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        Thread threadB <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            refresh<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>},</span> <span style=color:#f1fa8c>&#34;threadB&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        threadB<span style=color:#ff79c6>.</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>结果:</p><p><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915090631.png alt></p><p>可见看到线程A久久不能结束，虽然线程B此时已经修改了 initFlag 的值，但是线程A无法读取到最新值，因为一直没有和主内存同步</p><h3 id=volatile>volatile</h3><p>这个关键词可以让变量被修改后立刻使其他线程中的副本可见。在上面的示例代码中，把第3行注释，第4行取消注释后再运行:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915091211.png alt><br>可以看到线程A可以立即结束</p><h3 id=volatile--原理>volatile 原理</h3><ol><li>使用 volatile 关键字会强制将在某个线程中修改的共享变量的值立即写入主内存。</li><li>使用 volatile 关键字， 当线程 2 进行修改时， 会导致线程 1 的工作内存中变量的缓存行无效（反映到硬件层的话， 就是 CPU 的 L1或者 L2 缓存中对应的缓存行无效);</li><li>由于线程 1 的工作内存中变量的缓存行无效，所以线程1再次读取变量的值时会去主存读取。</li></ol><h3 id=特性>特性</h3><ol><li>只能控制变量的可见性</li><li>不能解决原子性问题</li><li>还可以禁止CPU指令重排（见下）</li></ol><h3 id=volatile--番外>volatile 番外</h3><p>如果不对 initFlag 添加 volatile 标识，线程A就永远无法读取到initFlag的最新值吗？</p><p>不一定， 在判断 initFlag 的值时，CPU 先从缓存中取值，只要缓存失效，就会重新在从内存中加载。那么什么时候缓存会失效呢？ 对于CPU缓存来说，分为 L1 L2 L3 三级缓存，也就是离CPU最近的那些寄存器，他们的速度依次递减，容量依次递增。而每次CPU缓存的最小单位不是某个变量所占的空间大小，而是固定的字节 ，这样就能减少CPU和内存交互的次数，更好的利用空间局部原理和时间局部性原理。具体细节可以搜索 CPU缓存相关信息</p><p>因为CPU一次会让一批缓存失效，有可能 initFlag 的缓存会随着其他值失效而重新从内存加载最新值。如下例子:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>CodeVisibility</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// initFlag 不再用 volatile 修饰
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>boolean</span> initFlag <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>false</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 这里 counter 类型从 int 修改成 Integer
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> Integer counter <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>refresh</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;refresh data.......&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        initFlag <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>true</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;refresh data success.......&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        Thread threadA <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>while</span> <span style=color:#ff79c6>(!</span>initFlag<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                counter<span style=color:#ff79c6>++;</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 线程仍然可以很快的结束，因为 counter 会导致 cpu 缓存失效，重新从主内存加载最新数据
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;线程：&#34;</span> <span style=color:#ff79c6>+</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>()</span>
-</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;当前线程嗅探到initFlag的状态的改变, counter: &#34;</span> <span style=color:#ff79c6>+</span> counter<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>},</span> <span style=color:#f1fa8c>&#34;threadA&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        threadA<span style=color:#ff79c6>.</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>500</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>InterruptedException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        Thread threadB <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(()</span> <span style=color:#ff79c6>-&gt;</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            refresh<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>},</span> <span style=color:#f1fa8c>&#34;threadB&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        threadB<span style=color:#ff79c6>.</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>结果:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915095555.png alt><br>那么问题又来了，为什么用 int 不会 导致 cpu 缓存失效呢？</p><p>个人推测可能使因为 int 比 Integer 所占用的内存更小，CPU缓存放得下，一直没有触发缓存失效。</p><h2 id=有序性问题>有序性问题</h2><p>先看一个例子:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>VolatileReOrderSample</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//定义四个静态变量
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>int</span> x<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>,</span>y<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>int</span> a<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>,</span>b<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>int</span> i<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>while</span> <span style=color:#ff79c6>(</span><span style=color:#ff79c6>true</span><span style=color:#ff79c6>){</span>
-</span></span><span style=display:flex><span>            i<span style=color:#ff79c6>++;</span>
-</span></span><span style=display:flex><span>            x<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>y<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>a<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>b<span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>//开两个线程，第一个线程执行a=1;x=b;第二个线程执行b=1;y=a
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            Thread thread1<span style=color:#ff79c6>=</span><span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Runnable<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                @Override
-</span></span><span style=display:flex><span>                <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                    <span style=color:#6272a4>//线程1会比线程2先执行，因此用nanoTime让线程1等待线程2 0.01毫秒
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                    shortWait<span style=color:#ff79c6>(</span><span style=color:#bd93f9>10000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                    a<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>                    x<span style=color:#ff79c6>=</span>b<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>});</span>
-</span></span><span style=display:flex><span>            Thread thread2<span style=color:#ff79c6>=</span><span style=color:#ff79c6>new</span> Thread<span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> Runnable<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                @Override
-</span></span><span style=display:flex><span>                <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>run</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                    b<span style=color:#ff79c6>=</span><span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>                    y<span style=color:#ff79c6>=</span>a<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>});</span>
-</span></span><span style=display:flex><span>            thread1<span style=color:#ff79c6>.</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>            thread2<span style=color:#ff79c6>.</span><span style=color:#50fa7b>start</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>            thread1<span style=color:#ff79c6>.</span><span style=color:#50fa7b>join</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>            thread2<span style=color:#ff79c6>.</span><span style=color:#50fa7b>join</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>//等两个线程都执行完毕后拼接结果
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            String result<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;第&#34;</span><span style=color:#ff79c6>+</span>i<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34;次执行x=&#34;</span><span style=color:#ff79c6>+</span>x<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34;y=&#34;</span><span style=color:#ff79c6>+</span>y<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>//如果x=0且y=0，则跳出循环
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>x<span style=color:#ff79c6>==</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>&amp;&amp;</span>y<span style=color:#ff79c6>==</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>){</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>result<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                <span style=color:#ff79c6>break</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span><span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>result<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>//等待interval纳秒
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>shortWait</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>long</span> interval<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>long</span> start<span style=color:#ff79c6>=</span>System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nanoTime</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>long</span> end<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>do</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            end<span style=color:#ff79c6>=</span>System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nanoTime</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span><span style=color:#ff79c6>while</span> <span style=color:#ff79c6>(</span>start<span style=color:#ff79c6>+</span>interval<span style=color:#ff79c6>&gt;=</span>end<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>复制代码
-</span></span></code></pre></div><p>按照正常思维，永远不会发生 x=0 y=0的场景，但事实并非如此:<br>下面是线程A B 可能的<strong>正常</strong>执行情况</p><ol><li>线程A执行完 线程B执行<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084801.png alt></li><li>线程B执行完 线程A执行：<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084827.png alt></li><li>线程A B 交叉执行<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084855.png alt></li></ol><p><strong>发生指令重排的情况</strong><br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084927.png alt></p><h3 id=指令重排>指令重排</h3><p>处理器为了程序的性能可以对程序的执行顺序进行重排，但是，必须满足重排后的执行结果在<strong>单线程下结果不能发生改变</strong> 这就是 as-if-serial 语义</p><p>为了遵守 as-if-serial 语义,编译器和处理器不会对存在数据依赖的操作进行重排，因为会改变执行结果，如果两个操作不存在依赖关系，就有可能会被重排，就入上面的代码，在线程A中<code>a=1;x=b</code>这两各操作没有依赖关系，就有可能会重新排序成<code>x=b;a=1</code> , 线程B同理。</p><p>这个执行重排的操作在单线程下没有关系，因为没有影响到最终的执行的结果，但是如果是多线程的场景，就像上面的那个例子，就会发生错误</p><h3 id=如何禁止指令重排>如何禁止指令重排</h3><h4 id=volatile-1>volatile</h4><p>volatile 另一个作用是禁止指令重排，避免多线程下出现乱序执行的情况<br>重排规则表:<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916184429.png alt></p><p>从上面的规则可以看出：</p><ul><li>当第二个操作是 volatile 写时，不管第一个操作是什么，都不能发生重排，</li><li>当第一个操作是 volatile 读时，不管第二个操作是什么，都不能发生重排</li><li>当第一个操作时 volatile 写，第二个操作是 volatile 读时，不能发生重排</li></ul><h4 id=加锁保证有序性>加锁保证有序性</h4><p>另外还可以使用 synchronize 和 lock 来保证有序性，因为加锁后，每时每刻只有一个线程执行代码，<strong>指令重排对单线程没有影响</strong></p><h3 id=禁止指令重排的经典应用>禁止指令重排的经典应用</h3><p>看下懒汉模式的单例的问题:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>// 懒汉模式 + synchronized 同步锁 + double-check
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Singleton</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> Singleton instance<span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span><span style=color:#6272a4>// 不实例化
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#50fa7b>Singleton</span><span style=color:#ff79c6>(){}</span><span style=color:#6272a4>// 构造函数
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> Singleton <span style=color:#50fa7b>getInstance</span><span style=color:#ff79c6>(){</span><span style=color:#6272a4>// 加同步锁，通过该函数向整个系统提供实例
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>null</span> <span style=color:#ff79c6>==</span> instance<span style=color:#ff79c6>){</span><span style=color:#6272a4>// 第一次判断，当 instance 为 null 时，则实例化对象，否则直接返回对象
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>          <span style=color:#8be9fd;font-style:italic>synchronized</span> <span style=color:#ff79c6>(</span>Singleton<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>){</span><span style=color:#6272a4>// 同步锁
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>             <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>null</span> <span style=color:#ff79c6>==</span> instance<span style=color:#ff79c6>){</span><span style=color:#6272a4>// 第二次判断
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>                instance <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> Singleton<span style=color:#ff79c6>();</span><span style=color:#6272a4>// 实例化对象
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>             <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>          <span style=color:#ff79c6>}</span> 
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> instance<span style=color:#ff79c6>;</span><span style=color:#6272a4>// 返回已存在的对象
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><p>为了在多线程并发场景下单例仍然有效，加了锁以及双重检测，但是就万无一失了吗？</p><p>在第一个判断 <code>if(null == instance)</code> 中，会出先变量instance有值，但是内存区域是空的（没有初始化 ），从而导致程序出现问题。造成这个问题的原因在于 <code>instance = new Singleton()</code>，事实上初始化对象操作不是原子性的，它包含下面两个动作:</p><ol><li>给对象分配内存空间，</li><li>内存空间的初始化</li><li>将内存地址赋值给变量</li></ol><p>其中2，3没有依赖关系，经过 编译器或者cpu指令重排后，可能会导致 2,3顺序发生变化：</p><ol><li>给对象分配内存空间，</li><li>将内存地址赋值给变量 //此时变量已经不等于 null, 但是变量指向的内存区域还没有初始化</li><li>内存空间的初始化</li></ol><p>假设线程A按照第二种顺序执行，在执行完步骤3时，还没有执行步骤2，线程B执行到第一个<code>if(null == instance)</code>判断，就会直接返回 instance。 这样对于线程B来说 <code>getInstance()</code> 方法返回的是一个没有经过初始化的对象，导致程序出现问题</p><p>解决问题的方法很简单： <code>private volatile static Singleton instance= null;</code> 使用 volatile 关键词禁止 instance 变量被执行指令重排优化即可</p><h2 id=原子性问题>原子性问题</h2><p>指的使一个操作是不可中断的，即使在多线程环境下，一旦操作开始就不会被其他线程影响</p><p>java 中可以通过 synchronize 和 lock 保证原子性，它们能保证任意时刻只有一个线程访问代码</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/hidden>hidden</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-java常量池</div></a><a href=../../posts/jvm%E8%B0%83%E4%BC%98%E5%B7%A5%E5%85%B7/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>JVM调优工具&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>并发编程中的可见性,原子性，有序性问题 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="并发编程中的可见性,原子性，有序性问题" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E5%8E%9F%E5%AD%90%E6%80%A7%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">并发编程中的可见性,原子性，有序性问题</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E5%8E%9F%E5%AD%90%E6%80%A7%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98/" class="article-date">
+                <time datetime='2022-09-15T08:16:56.000&#43;00:00' itemprop="datePublished">2022-09-15</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="java内存模型-jmm">java内存模型 （JMM）</h2>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915082649.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915083920.png" alt=""><br>
+这种模型和 jvm 中的堆不同， JMM 是抽象概念，不真实存在。<strong>它是一种规范，指定了程序中的各变量的访问方式</strong></p>
+<h3 id="主内存">主内存</h3>
+<p>JMM 规定所有变量都存放在主内存，主内存是所有线程共享的，但是线程的操作在线程的工作内存中进行，先从主内存读取到线程的工作内存中，然后执行操作，再将工作内存中的值写入主内存中。线程不能直接操作主内存中的数据</p>
+<h3 id="工作内存">工作内存</h3>
+<p>工作内存是线程独有的，不同的线程无法访问到对方的工作内存，线程间的通信必须通过主内存传值进行</p>
+<p>JMM 描述的是变量在共享区域和私有区域的访问方式，变量的访问在多线程下会有 可见性，原子性，可见性三大问题</p>
+<h2 id="可见性问题">可见性问题</h2>
+<p>因为有工作内存的划分，一个线程操作修改某变量的值，没有同步到主内存前，其他线程是无法读取到该变量最新的值，就导致了变量在另外的线程不可见。<br>
+示例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CodeVisibility</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">boolean</span> initFlag <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// private volatile static boolean initFlag = false;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> counter <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">refresh</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;refresh data.......&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        initFlag <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;refresh data success.......&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        Thread threadA <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(!</span>initFlag<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                counter<span style="color:#ff79c6">++;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程：&#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;当前线程嗅探到initFlag的状态的改变, counter: &#34;</span> <span style="color:#ff79c6">+</span> counter<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">},</span> <span style="color:#f1fa8c">&#34;threadA&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        threadA<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">500</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>InterruptedException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Thread threadB <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            refresh<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">},</span> <span style="color:#f1fa8c">&#34;threadB&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        threadB<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>结果:</p>
+<p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915090631.png" alt=""></p>
+<p>可见看到线程A久久不能结束，虽然线程B此时已经修改了 initFlag 的值，但是线程A无法读取到最新值，因为一直没有和主内存同步</p>
+<h3 id="volatile">volatile</h3>
+<p>这个关键词可以让变量被修改后立刻使其他线程中的副本可见。在上面的示例代码中，把第3行注释，第4行取消注释后再运行:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915091211.png" alt=""><br>
+可以看到线程A可以立即结束</p>
+<h3 id="volatile--原理">volatile  原理</h3>
+<ol>
+<li>使用 volatile 关键字会强制将在某个线程中修改的共享变量的值立即写入主内存。</li>
+<li>使用 volatile 关键字， 当线程 2 进行修改时， 会导致线程 1 的工作内存中变量的缓存行无效（反映到硬件层的话， 就是 CPU 的 L1或者 L2 缓存中对应的缓存行无效);</li>
+<li>由于线程 1 的工作内存中变量的缓存行无效，所以线程1再次读取变量的值时会去主存读取。</li>
+</ol>
+<h3 id="特性">特性</h3>
+<ol>
+<li>只能控制变量的可见性</li>
+<li>不能解决原子性问题</li>
+<li>还可以禁止CPU指令重排（见下）</li>
+</ol>
+<h3 id="volatile--番外">volatile  番外</h3>
+<p>如果不对 initFlag  添加 volatile 标识，线程A就永远无法读取到initFlag的最新值吗？</p>
+<p>不一定， 在判断 initFlag 的值时，CPU 先从缓存中取值，只要缓存失效，就会重新在从内存中加载。那么什么时候缓存会失效呢？ 对于CPU缓存来说，分为 L1 L2 L3 三级缓存，也就是离CPU最近的那些寄存器，他们的速度依次递减，容量依次递增。而每次CPU缓存的最小单位不是某个变量所占的空间大小，而是固定的字节 ，这样就能减少CPU和内存交互的次数，更好的利用空间局部原理和时间局部性原理。具体细节可以搜索 CPU缓存相关信息</p>
+<p>因为CPU一次会让一批缓存失效，有可能 initFlag 的缓存会随着其他值失效而重新从内存加载最新值。如下例子:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CodeVisibility</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// initFlag 不再用 volatile 修饰
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">boolean</span> initFlag <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 这里 counter 类型从 int 修改成 Integer
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Integer counter <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">refresh</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;refresh data.......&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        initFlag <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;refresh data success.......&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        Thread threadA <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(!</span>initFlag<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                counter<span style="color:#ff79c6">++;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 线程仍然可以很快的结束，因为 counter 会导致 cpu 缓存失效，重新从主内存加载最新数据
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程：&#34;</span> <span style="color:#ff79c6">+</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;当前线程嗅探到initFlag的状态的改变, counter: &#34;</span> <span style="color:#ff79c6">+</span> counter<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">},</span> <span style="color:#f1fa8c">&#34;threadA&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        threadA<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">500</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>InterruptedException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Thread threadB <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            refresh<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">},</span> <span style="color:#f1fa8c">&#34;threadB&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        threadB<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>结果:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220915095555.png" alt=""><br>
+那么问题又来了，为什么用 int 不会 导致 cpu 缓存失效呢？</p>
+<p>个人推测可能使因为 int 比 Integer 所占用的内存更小，CPU缓存放得下，一直没有触发缓存失效。</p>
+<h2 id="有序性问题">有序性问题</h2>
+<p>先看一个例子:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">VolatileReOrderSample</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//定义四个静态变量
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> x<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span>y<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> a<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span>b<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">){</span>
+</span></span><span style="display:flex;"><span>            i<span style="color:#ff79c6">++;</span>
+</span></span><span style="display:flex;"><span>            x<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>y<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>a<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>b<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//开两个线程，第一个线程执行a=1;x=b;第二个线程执行b=1;y=a
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Thread thread1<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Runnable<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                @Override
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">//线程1会比线程2先执行，因此用nanoTime让线程1等待线程2 0.01毫秒
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    shortWait<span style="color:#ff79c6">(</span><span style="color:#bd93f9">10000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                    a<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>                    x<span style="color:#ff79c6">=</span>b<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>            Thread thread2<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Runnable<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                @Override
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                    b<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>                    y<span style="color:#ff79c6">=</span>a<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>            thread1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            thread2<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            thread1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">join</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            thread2<span style="color:#ff79c6">.</span><span style="color:#50fa7b">join</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//等两个线程都执行完毕后拼接结果
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            String result<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;第&#34;</span><span style="color:#ff79c6">+</span>i<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;次执行x=&#34;</span><span style="color:#ff79c6">+</span>x<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;y=&#34;</span><span style="color:#ff79c6">+</span>y<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//如果x=0且y=0，则跳出循环
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>x<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>y<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">){</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>result<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">break</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span><span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>result<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//等待interval纳秒
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">shortWait</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">long</span> interval<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">long</span> start<span style="color:#ff79c6">=</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">nanoTime</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">long</span> end<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">do</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            end<span style="color:#ff79c6">=</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">nanoTime</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span><span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span>start<span style="color:#ff79c6">+</span>interval<span style="color:#ff79c6">&gt;=</span>end<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>复制代码
+</span></span></code></pre></div><p>按照正常思维，永远不会发生 x=0 y=0的场景，但事实并非如此:<br>
+下面是线程A B 可能的<strong>正常</strong>执行情况</p>
+<ol>
+<li>线程A执行完 线程B执行<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084801.png" alt=""></li>
+<li>线程B执行完 线程A执行：<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084827.png" alt=""></li>
+<li>线程A B 交叉执行<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084855.png" alt=""></li>
+</ol>
+<p><strong>发生指令重排的情况</strong><br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916084927.png" alt=""></p>
+<h3 id="指令重排">指令重排</h3>
+<p>处理器为了程序的性能可以对程序的执行顺序进行重排，但是，必须满足重排后的执行结果在<strong>单线程下结果不能发生改变</strong> 这就是 as-if-serial 语义</p>
+<p>为了遵守 as-if-serial 语义,编译器和处理器不会对存在数据依赖的操作进行重排，因为会改变执行结果，如果两个操作不存在依赖关系，就有可能会被重排，就入上面的代码，在线程A中<code>a=1;x=b</code>这两各操作没有依赖关系，就有可能会重新排序成<code>x=b;a=1</code> , 线程B同理。</p>
+<p>这个执行重排的操作在单线程下没有关系，因为没有影响到最终的执行的结果，但是如果是多线程的场景，就像上面的那个例子，就会发生错误</p>
+<h3 id="如何禁止指令重排">如何禁止指令重排</h3>
+<h4 id="volatile-1">volatile</h4>
+<p>volatile 另一个作用是禁止指令重排，避免多线程下出现乱序执行的情况<br>
+重排规则表:<br>
+<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220916184429.png" alt=""></p>
+<p>从上面的规则可以看出：</p>
+<ul>
+<li>当第二个操作是 volatile 写时，不管第一个操作是什么，都不能发生重排，</li>
+<li>当第一个操作是 volatile 读时，不管第二个操作是什么，都不能发生重排</li>
+<li>当第一个操作时 volatile 写，第二个操作是 volatile 读时，不能发生重排</li>
+</ul>
+<h4 id="加锁保证有序性">加锁保证有序性</h4>
+<p>另外还可以使用 synchronize 和 lock 来保证有序性，因为加锁后，每时每刻只有一个线程执行代码，<strong>指令重排对单线程没有影响</strong></p>
+<h3 id="禁止指令重排的经典应用">禁止指令重排的经典应用</h3>
+<p>看下懒汉模式的单例的问题:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 懒汉模式 + synchronized 同步锁 + double-check
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Singleton</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Singleton instance<span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span><span style="color:#6272a4">// 不实例化
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">Singleton</span><span style="color:#ff79c6">(){}</span><span style="color:#6272a4">// 构造函数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Singleton <span style="color:#50fa7b">getInstance</span><span style="color:#ff79c6">(){</span><span style="color:#6272a4">// 加同步锁，通过该函数向整个系统提供实例
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">null</span> <span style="color:#ff79c6">==</span> instance<span style="color:#ff79c6">){</span><span style="color:#6272a4">// 第一次判断，当 instance 为 null 时，则实例化对象，否则直接返回对象
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>          <span style="color:#8be9fd;font-style:italic">synchronized</span> <span style="color:#ff79c6">(</span>Singleton<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">){</span><span style="color:#6272a4">// 同步锁
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>             <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">null</span> <span style="color:#ff79c6">==</span> instance<span style="color:#ff79c6">){</span><span style="color:#6272a4">// 第二次判断
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                instance <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Singleton<span style="color:#ff79c6">();</span><span style="color:#6272a4">// 实例化对象
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>             <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">}</span> 
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instance<span style="color:#ff79c6">;</span><span style="color:#6272a4">// 返回已存在的对象
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>为了在多线程并发场景下单例仍然有效，加了锁以及双重检测，但是就万无一失了吗？</p>
+<p>在第一个判断 <code>if(null == instance)</code> 中，会出先变量instance有值，但是内存区域是空的（没有初始化 ），从而导致程序出现问题。造成这个问题的原因在于 <code>instance = new Singleton()</code>，事实上初始化对象操作不是原子性的，它包含下面两个动作:</p>
+<ol>
+<li>给对象分配内存空间，</li>
+<li>内存空间的初始化</li>
+<li>将内存地址赋值给变量</li>
+</ol>
+<p>其中2，3没有依赖关系，经过 编译器或者cpu指令重排后，可能会导致 2,3顺序发生变化：</p>
+<ol>
+<li>给对象分配内存空间，</li>
+<li>将内存地址赋值给变量 //此时变量已经不等于 null, 但是变量指向的内存区域还没有初始化</li>
+<li>内存空间的初始化</li>
+</ol>
+<p>假设线程A按照第二种顺序执行，在执行完步骤3时，还没有执行步骤2，线程B执行到第一个<code>if(null == instance)</code>判断，就会直接返回 instance。  这样对于线程B来说 <code>getInstance()</code> 方法返回的是一个没有经过初始化的对象，导致程序出现问题</p>
+<p>解决问题的方法很简单： <code>private volatile static Singleton instance= null;</code> 使用 volatile 关键词禁止 instance 变量被执行指令重排优化即可</p>
+<h2 id="原子性问题">原子性问题</h2>
+<p>指的使一个操作是不可中断的，即使在多线程环境下，一旦操作开始就不会被其他线程影响</p>
+<p>java 中可以通过 synchronize 和 lock 保证原子性，它们能保证任意时刻只有一个线程访问代码</p>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/hidden">hidden
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            java常量池
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/jvm%E8%B0%83%E4%BC%98%E5%B7%A5%E5%85%B7/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">JVM调优工具&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

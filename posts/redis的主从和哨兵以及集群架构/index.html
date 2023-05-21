@@ -1,15 +1,121 @@
-<!doctype html><html><head><title>Redis 的主从和哨兵以及集群架构 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="Redis 的主从和哨兵以及集群架构"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/redis%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%92%8C%E5%93%A8%E5%85%B5%E4%BB%A5%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/"><link rel=icon type=image/x-icon href=../../favicon.ico><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
-<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
-<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
-<script src=https://dccmmtop.github.io/js/fuse.js></script>
-<script src=https://dccmmtop.github.io/js/custom.js></script>
-<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
-<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
-<a class=main-nav-link href=../../tags/>标签</a>
-<a class=main-nav-link href=../../about/>我</a>
-<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
-<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>Redis 的主从和哨兵以及集群架构</h1></header><div class=article-meta><a href=../../posts/redis%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%92%8C%E5%93%A8%E5%85%B5%E4%BB%A5%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/ class=article-date><time datetime=2023-03-23T08:01:20.000+00:00 itemprop=datePublished>2023-03-23</time></a></div><div class=article-entry itemprop=articleBody><h2 id=redis-的主从架构>Redis 的主从架构</h2><p><img src=../../images/2023-03-23-08-05-13.png alt></p><h3 id=主从架构搭建步骤>主从架构搭建步骤</h3><h4 id=1-添加从节点>1. 添加从节点</h4><p>复制一份 redis.conf 文件，将相关配置修改如下：</p><pre tabindex=0><code class=language-conf data-lang=conf># 如果在不同机器上部署，端口可以不用修改
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Redis 的主从和哨兵以及集群架构 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="Redis 的主从和哨兵以及集群架构" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/redis%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%92%8C%E5%93%A8%E5%85%B5%E4%BB%A5%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">Redis 的主从和哨兵以及集群架构</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/redis%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%92%8C%E5%93%A8%E5%85%B5%E4%BB%A5%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" class="article-date">
+                <time datetime='2023-03-23T08:01:20.000&#43;00:00' itemprop="datePublished">2023-03-23</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="redis-的主从架构">Redis 的主从架构</h2>
+<p><img src="../../images/2023-03-23-08-05-13.png" alt=""></p>
+<h3 id="主从架构搭建步骤">主从架构搭建步骤</h3>
+<h4 id="1-添加从节点">1. 添加从节点</h4>
+<p>复制一份 redis.conf 文件，将相关配置修改如下：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf"># 如果在不同机器上部署，端口可以不用修改
 port 6380
 # 把 pid 进程号写入 pidfile 配置的文件
 pidfile /var/run/redis_6380.pid  
@@ -25,7 +131,40 @@ dir /usr/local/redis-5.0.3/data/6380
 replicaof 192.168.2.10 6379   
 # 配置从节点只读
 replica-read-only yes  
-</code></pre><h4 id=2-启动从节点>2. 启动从节点</h4><p><code>redis-server redis.conf</code></p><h4 id=3-连接从节点>3. 连接从节点</h4><p><code>redis-cli -p 6380</code></p><h4 id=4-测试>4. 测试</h4><p>在主节点 6379 上写如数据，然后在 6380 上看看是否能读取到</p><h4 id=5-同理再添加一个-6381-节点>5. 同理，再添加一个 6381 节点</h4><h3 id=redis-主从工作原理>Redis 主从工作原理</h3><ol><li>如果为一个 master 配置一个 slave ，不管这个 slave 是否第一次连接上 Master， 它都会发送一个 PSYNC 命令给 master， 请求复制数据。</li><li>master 接收到 PSYNC 命令后，会在后台通过 bgsave 命令，生成最新的 rdb 快照文件，在持久化期间，master 会继续接收客户端请求，<strong>把可能修改数据的请求记录在内存中</strong>，master 会把 rdb 文件发给 slave，salve 接收到 rdb 文件后，保存在本地，然后加载到内存中。 之后，master 会把刚刚记录在内存中的修改数据的命令再发给 slave， slave 再依次执行这些命令。达到数据一致。</li><li>当 master 与 slave 之间因为网络问题而断开时， slave 能够自动连接到 master。 如果 master 收到多个 slave 的连接请求，它只会进行一次持久化动作，而不是每个连接一次，然后再把这持久化文件发送给各个 slave。</li></ol><h3 id=主从全量复制的流程>主从全量复制的流程</h3><p><img src=../../images/2023-03-23-08-23-27.png alt></p><h3 id=数据的部分复制>数据的部分复制</h3><p>当主节点与从节点断开重连后，一般都会进行全量的数据复制，从 2.8 版本开始，redis 可以支持部分数据复制的命令与 master 同步，也就是断点续传。</p><p>主节点会在内存中维护一个复制数据用的缓存队列，这个队列保存这<strong>最近一段时间的数据</strong>，master 和 slave 都会维护复制数据的下标 offset，和 master 的进程 id。因此当网络重连后，slave 会请求 master 继续未完成的复制，从所记录的下标位置开始，如果 master 的进程 id 变了，或者在 master 中的缓存队列中找不到这个下标，（意味着从节点的下标 offset 太旧了） 那么将会进行一次全量的数据复制。</p><p>流程图如下：<br><img src=../../images/2023-03-23-08-32-25.png alt></p><h3 id=主从复制风暴>主从复制风暴</h3><p>如果有很多个从节点，多个从节点同时从主节点复制数据，导致主节点压力过大，可以做如下阶梯式架构，让部分从节点从其他从节点复制数据：</p><p><img src=../../images/2023-03-23-08-33-58.png alt></p><h2 id=redis-哨兵高可用架构>Redis 哨兵高可用架构</h2><p><img src=../../images/2023-03-25-18-16-13.png alt></p><p>sentinel 哨兵是特殊的 redis 服务，不提供读写服务，主要用来监控 redis 节点。</p><p>哨兵架构下的 client 端第一次从哨兵中找出主节点，后续就直接访问 redis 的主节点，不会每次都通过哨兵代理访问主节点，当 redis 的主节点发生变化时，哨兵会第一时间感知到，并将新的 redis 主节点通知给客户端，这里的 redis 客户端一般都实现了订阅功能，订阅哨兵发布的节点变动信息。</p><h3 id=哨兵架构搭建步骤>哨兵架构搭建步骤</h3><ol><li>复制一份 sentinel.conf 文件<br><code>cp sentinel.conf sentinel-26379.conf</code></li><li>修改相关配置</li></ol><pre tabindex=0><code class=language-conf data-lang=conf>port 26379
+</code></pre><h4 id="2-启动从节点">2. 启动从节点</h4>
+<p><code>redis-server redis.conf</code></p>
+<h4 id="3-连接从节点">3. 连接从节点</h4>
+<p><code>redis-cli -p 6380</code></p>
+<h4 id="4-测试">4. 测试</h4>
+<p>在主节点 6379 上写如数据，然后在 6380 上看看是否能读取到</p>
+<h4 id="5-同理再添加一个-6381-节点">5. 同理，再添加一个 6381 节点</h4>
+<h3 id="redis-主从工作原理">Redis 主从工作原理</h3>
+<ol>
+<li>如果为一个 master 配置一个 slave ，不管这个 slave 是否第一次连接上 Master， 它都会发送一个 PSYNC 命令给 master， 请求复制数据。</li>
+<li>master 接收到 PSYNC 命令后，会在后台通过 bgsave 命令，生成最新的 rdb 快照文件，在持久化期间，master 会继续接收客户端请求，<strong>把可能修改数据的请求记录在内存中</strong>，master 会把 rdb 文件发给 slave，salve 接收到 rdb 文件后，保存在本地，然后加载到内存中。 之后，master 会把刚刚记录在内存中的修改数据的命令再发给 slave， slave 再依次执行这些命令。达到数据一致。</li>
+<li>当 master 与 slave 之间因为网络问题而断开时， slave 能够自动连接到 master。 如果 master 收到多个 slave 的连接请求，它只会进行一次持久化动作，而不是每个连接一次，然后再把这持久化文件发送给各个 slave。</li>
+</ol>
+<h3 id="主从全量复制的流程">主从全量复制的流程</h3>
+<p><img src="../../images/2023-03-23-08-23-27.png" alt=""></p>
+<h3 id="数据的部分复制">数据的部分复制</h3>
+<p>当主节点与从节点断开重连后，一般都会进行全量的数据复制，从 2.8 版本开始，redis 可以支持部分数据复制的命令与 master 同步，也就是断点续传。</p>
+<p>主节点会在内存中维护一个复制数据用的缓存队列，这个队列保存这<strong>最近一段时间的数据</strong>，master 和 slave 都会维护复制数据的下标 offset，和 master 的进程 id。因此当网络重连后，slave 会请求 master 继续未完成的复制，从所记录的下标位置开始，如果 master 的进程 id 变了，或者在 master 中的缓存队列中找不到这个下标，（意味着从节点的下标 offset 太旧了） 那么将会进行一次全量的数据复制。</p>
+<p>流程图如下：<br>
+<img src="../../images/2023-03-23-08-32-25.png" alt=""></p>
+<h3 id="主从复制风暴">主从复制风暴</h3>
+<p>如果有很多个从节点，多个从节点同时从主节点复制数据，导致主节点压力过大，可以做如下阶梯式架构，让部分从节点从其他从节点复制数据：</p>
+<p><img src="../../images/2023-03-23-08-33-58.png" alt=""></p>
+<h2 id="redis-哨兵高可用架构">Redis 哨兵高可用架构</h2>
+<p><img src="../../images/2023-03-25-18-16-13.png" alt=""></p>
+<p>sentinel 哨兵是特殊的 redis 服务，不提供读写服务，主要用来监控 redis 节点。</p>
+<p>哨兵架构下的 client 端第一次从哨兵中找出主节点，后续就直接访问 redis 的主节点，不会每次都通过哨兵代理访问主节点，当 redis 的主节点发生变化时，哨兵会第一时间感知到，并将新的 redis 主节点通知给客户端，这里的 redis 客户端一般都实现了订阅功能，订阅哨兵发布的节点变动信息。</p>
+<h3 id="哨兵架构搭建步骤">哨兵架构搭建步骤</h3>
+<ol>
+<li>复制一份 sentinel.conf 文件<br>
+<code>cp sentinel.conf sentinel-26379.conf</code></li>
+<li>修改相关配置</li>
+</ol>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">port 26379
 daemonize yes
 pidfile &#34;/var/run/redis-sentinel-26379.pid&#34;
 logfile &#34;26379.log&#34;
@@ -33,109 +172,453 @@ dir &#34;/usr/local/redis-5.0.3/data&#34;
 # sentinel monitor &lt;master-redis-name&gt; &lt;master-redis-ip&gt; &lt;master-redis-port&gt; &lt;quorum&gt;
 # quorum 是一个数字，指明当有多少个 sentinel 认为一个 master 失效时（值一般为：sentinel 总数/2 + 1)，master 才算真正失效
 sentinel monitor mymaster 192.168.1.32 6379 2   # mymaster 这个名字随便取，客户端访问时会用到
-</code></pre><ol start=3><li>启动哨兵实例</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>src/redis-sentinel sentinel-26379.conf
-</span></span></code></pre></div><ol start=4><li>连接 redis 客户端执行 info 命令查看哨兵信息</li><li>再配置另外两个 sentinel, 端口为 26380， 26381</li></ol><p>哨兵集群启动完毕后，会将哨兵集群的元信息写入所有的 sentinel 的配置文件中，例如：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-txt data-lang=txt><span style=display:flex><span>sentinel known-replica mymaster 192.168.0.60 6380 #代表 redis 主节点的从节点信息
-</span></span><span style=display:flex><span>sentinel known-replica mymaster 192.168.0.60 6381 #代表 redis 主节点的从节点信息
-</span></span><span style=display:flex><span>sentinel known-sentinel mymaster 192.168.0.60 26380 52d0a5d70c1f90475b4fc03b6ce7c3c56935760f  #代表感知到的其它哨兵节点
-</span></span><span style=display:flex><span>sentinel known-sentinel mymaster 192.168.0.60 26381 e9f530d3882f8043f76ebb8e1686438ba8bd5ca6  #代表感知到的其它哨兵节点
-</span></span></code></pre></div><p>如果主节点（6379）宕机，哨兵集群会重新选举新的主节点，同时修改所有 sentinel 节点配置文件的集群元信息， 同时还会修改 sentinel 配置文件中的 mymaster 对应的 6379 端口，改为 6380:</p><pre tabindex=0><code class=language-conf data-lang=conf>sentinel monitor mymaster 192.168.0.60 6380 2
-</code></pre><p>当 6379 节点再次启动时，哨兵集群根据集群元信息就可以将 6379 作为从节点加入集群中。</p><h2 id=redis-集群>Redis 集群</h2><p>TODO:</p><h2 id=java-使用-jedis-连接集群>java 使用 Jedis 连接集群</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>JedisSentinelTest</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#8be9fd;font-style:italic>throws</span> IOException <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        JedisPoolConfig config <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> JedisPoolConfig<span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        config<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setMaxTotal</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>20</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        config<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setMaxIdle</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>10</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        config<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setMinIdle</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>5</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        String masterName <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;mymaster&#34;</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        Set<span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>&gt;</span> sentinels <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> HashSet<span style=color:#ff79c6>&lt;</span>String<span style=color:#ff79c6>&gt;();</span>
-</span></span><span style=display:flex><span>        sentinels<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> HostAndPort<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;192.168.1.32&#34;</span><span style=color:#ff79c6>,</span><span style=color:#bd93f9>26379</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>toString</span><span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>        sentinels<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> HostAndPort<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;192.168.1.32&#34;</span><span style=color:#ff79c6>,</span><span style=color:#bd93f9>26380</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>toString</span><span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>        sentinels<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>new</span> HostAndPort<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;192.168.1.32&#34;</span><span style=color:#ff79c6>,</span><span style=color:#bd93f9>26381</span><span style=color:#ff79c6>).</span><span style=color:#50fa7b>toString</span><span style=color:#ff79c6>());</span>
-</span></span><span style=display:flex><span>        <span style=color:#6272a4>//JedisSentinelPool 其实本质跟 JedisPool 类似，都是与 redis 主节点建立的连接池
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#6272a4>//JedisSentinelPool 并不是说与 sentinel 建立的连接池，而是通过 sentinel 发现 redis 主节点并与其建立连接
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        JedisSentinelPool jedisSentinelPool <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> JedisSentinelPool<span style=color:#ff79c6>(</span>masterName<span style=color:#ff79c6>,</span> sentinels<span style=color:#ff79c6>,</span> config<span style=color:#ff79c6>,</span> <span style=color:#bd93f9>3000</span><span style=color:#ff79c6>,</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>        Jedis jedis <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            jedis <span style=color:#ff79c6>=</span> jedisSentinelPool<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getResource</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>            System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>jedis<span style=color:#ff79c6>.</span><span style=color:#50fa7b>set</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;sentinel&#34;</span><span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#34;dc&#34;</span><span style=color:#ff79c6>));</span>
-</span></span><span style=display:flex><span>            System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span>jedis<span style=color:#ff79c6>.</span><span style=color:#50fa7b>get</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;sentinel&#34;</span><span style=color:#ff79c6>));</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>Exception e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>finally</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>            <span style=color:#6272a4>//注意这里不是关闭连接，在 JedisPool 模式下，Jedis 会被归还给资源池。
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>jedis <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>                jedis<span style=color:#ff79c6>.</span><span style=color:#50fa7b>close</span><span style=color:#ff79c6>();</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h2 id=spting-boot-连接集群>spting-boot 连接集群</h2><ol><li>引入依赖</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span>dependency&gt;
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>&lt;groupId&gt;</span>org.springframework.boot<span style=color:#ff79c6>&lt;/groupId&gt;</span>
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span style=color:#ff79c6>&lt;/artifactId&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>&lt;/dependency&gt;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>&lt;dependency&gt;</span>
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>&lt;groupId&gt;</span>org.apache.commons<span style=color:#ff79c6>&lt;/groupId&gt;</span>
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>&lt;artifactId&gt;</span>commons-pool2<span style=color:#ff79c6>&lt;/artifactId&gt;</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>&lt;/dependency&gt;</span>
-</span></span></code></pre></div><ol start=2><li>配置信息</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-xml data-lang=xml><span style=display:flex><span>server:
-</span></span><span style=display:flex><span>  port: 8080
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>spring:
-</span></span><span style=display:flex><span>  redis:
-</span></span><span style=display:flex><span>    database: 0
-</span></span><span style=display:flex><span>    timeout: 3000
-</span></span><span style=display:flex><span>    sentinel:    #哨兵模式
-</span></span><span style=display:flex><span>      master: mymaster #主服务器所在集群名称
-</span></span><span style=display:flex><span>     nodes: 192.168.1.32:26379,192.168.1.32:26380,192.168.1.32:26381
-</span></span><span style=display:flex><span>   lettuce:
-</span></span><span style=display:flex><span>      pool:
-</span></span><span style=display:flex><span>        max-idle: 50
-</span></span><span style=display:flex><span>        min-idle: 10
-</span></span><span style=display:flex><span>        max-active: 100
-</span></span><span style=display:flex><span>        max-wait: 1000
-</span></span></code></pre></div><ol start=3><li>访问代码</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>@RestController
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>IndexController</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd;font-style:italic>final</span> Logger logger <span style=color:#ff79c6>=</span> LoggerFactory<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getLogger</span><span style=color:#ff79c6>(</span>IndexController<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    @Autowired
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>private</span> StringRedisTemplate stringRedisTemplate<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#6272a4>/**
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 测试节点挂了哨兵重新选举新的 master 节点，客户端是否能动态感知到
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 新的 master 选举出来后，哨兵会把消息发布出去，客户端实际上是实现了一个消息监听机制，
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * 当哨兵把新 master 的消息发布出去，客户端会立马感知到新 master 的信息，从而动态切换访问的 masterip
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     *
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     * @throws InterruptedException
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>     */</span>
-</span></span><span style=display:flex><span>    @RequestMapping<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;/test_sentinel&#34;</span><span style=color:#ff79c6>)</span>
-</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>testSentinel</span><span style=color:#ff79c6>()</span> <span style=color:#8be9fd;font-style:italic>throws</span> InterruptedException <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>        <span style=color:#8be9fd>int</span> i <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>1</span><span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>while</span> <span style=color:#ff79c6>(</span><span style=color:#ff79c6>true</span><span style=color:#ff79c6>){</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
-</span></span><span style=display:flex><span>                stringRedisTemplate<span style=color:#ff79c6>.</span><span style=color:#50fa7b>opsForValue</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>set</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;zhuge&#34;</span><span style=color:#ff79c6>+</span>i<span style=color:#ff79c6>,</span> i<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                System<span style=color:#ff79c6>.</span><span style=color:#50fa7b>out</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>println</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;设置 key：&#34;</span><span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;zhuge&#34;</span> <span style=color:#ff79c6>+</span> i<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>                i<span style=color:#ff79c6>++;</span>
-</span></span><span style=display:flex><span>                Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>sleep</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>1000</span><span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span><span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>Exception e<span style=color:#ff79c6>){</span>
-</span></span><span style=display:flex><span>                logger<span style=color:#ff79c6>.</span><span style=color:#50fa7b>error</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;错误：&#34;</span><span style=color:#ff79c6>,</span> e<span style=color:#ff79c6>);</span>
-</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
-</span></span></code></pre></div><h2 id=stringredistemplate-与-redistemplate-详解>StringRedisTemplate 与 RedisTemplate 详解</h2><p>spring 封装了 RedisTemplate 对象来进行对 redis 的各种操作，它支持所有的 redis 原生的 api。在 RedisTemplate 中提供了几个常用的接口方法的使用，分别是：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> ValueOperations<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span> V<span style=color:#ff79c6>&gt;</span> valueOps<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> HashOperations<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span> V<span style=color:#ff79c6>&gt;</span> hashOps<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> ListOperations<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span> V<span style=color:#ff79c6>&gt;</span> listOps<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> SetOperations<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span> V<span style=color:#ff79c6>&gt;</span> setOps<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>private</span> ZSetOperations<span style=color:#ff79c6>&lt;</span>K<span style=color:#ff79c6>,</span> V<span style=color:#ff79c6>&gt;</span> zSetOps<span style=color:#ff79c6>;</span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>// RedisTemplate 中定义了对 5 种数据结构操作
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>redisTemplate<span style=color:#ff79c6>.</span><span style=color:#50fa7b>opsForValue</span><span style=color:#ff79c6>();</span><span style=color:#6272a4>//操作字符串
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>redisTemplate<span style=color:#ff79c6>.</span><span style=color:#50fa7b>opsForHash</span><span style=color:#ff79c6>();</span><span style=color:#6272a4>//操作 hash
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>redisTemplate<span style=color:#ff79c6>.</span><span style=color:#50fa7b>opsForList</span><span style=color:#ff79c6>();</span><span style=color:#6272a4>//操作 list
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>redisTemplate<span style=color:#ff79c6>.</span><span style=color:#50fa7b>opsForSet</span><span style=color:#ff79c6>();</span><span style=color:#6272a4>//操作 set
-</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>redisTemplate<span style=color:#ff79c6>.</span><span style=color:#50fa7b>opsForZSet</span><span style=color:#ff79c6>();</span><span style=color:#6272a4>//操作有序 set
-</span></span></span></code></pre></div><p>StringRedisTemplate 继承自 RedisTemplate，也一样拥有上面这些操作。<br>StringRedisTemplate 默认采用的是 String 的序列化策略，保存的 key 和 value 都是采用此策略序列化保存的。<br>RedisTemplate 默认采用的是 JDK 的序列化策略，保存的 key 和 value 都是采用此策略序列化保存的。</p><p>Redis 客户端命令对应的 RedisTemplate 中的方法列表：</p><table><thead><tr><th><strong>String 类型结构</strong></th><th></th></tr></thead><tbody><tr><td>Redis</td><td>RedisTemplate rt</td></tr><tr><td>set key value</td><td>rt.opsForValue().set(&ldquo;key&rdquo;,&ldquo;value&rdquo;)</td></tr><tr><td>get key</td><td>rt.opsForValue().get(&ldquo;key&rdquo;)</td></tr><tr><td>del key</td><td>rt.delete(&ldquo;key&rdquo;)</td></tr><tr><td>strlen key</td><td>rt.opsForValue().size(&ldquo;key&rdquo;)</td></tr><tr><td>getset key value</td><td>rt.opsForValue().getAndSet(&ldquo;key&rdquo;,&ldquo;value&rdquo;)</td></tr><tr><td>getrange key start end</td><td>rt.opsForValue().get(&ldquo;key&rdquo;,start,end)</td></tr><tr><td>append key value</td><td>rt.opsForValue().append(&ldquo;key&rdquo;,&ldquo;value&rdquo;)</td></tr><tr><td></td><td></td></tr><tr><td><strong>Hash 结构</strong></td><td></td></tr><tr><td>hmset key field1 value1 field2 value2&mldr;</td><td>rt.opsForHash().putAll(&ldquo;key&rdquo;,map) //map 是一个集合对象</td></tr><tr><td>hset key field value</td><td>rt.opsForHash().put(&ldquo;key&rdquo;,&ldquo;field&rdquo;,&ldquo;value&rdquo;)</td></tr><tr><td>hexists key field</td><td>rt.opsForHash().hasKey(&ldquo;key&rdquo;,&ldquo;field&rdquo;)</td></tr><tr><td>hgetall key</td><td>rt.opsForHash().entries(&ldquo;key&rdquo;) //返回 Map 对象</td></tr><tr><td>hvals key</td><td>rt.opsForHash().values(&ldquo;key&rdquo;) //返回 List 对象</td></tr><tr><td>hkeys key</td><td>rt.opsForHash().keys(&ldquo;key&rdquo;) //返回 List 对象</td></tr><tr><td>hmget key field1 field2&mldr;</td><td>rt.opsForHash().multiGet(&ldquo;key&rdquo;,keyList)</td></tr><tr><td>hsetnx key field value</td><td>rt.opsForHash().putIfAbsent(&ldquo;key&rdquo;,&ldquo;field&rdquo;,&ldquo;value&rdquo;</td></tr><tr><td>hdel key field1 field2</td><td>rt.opsForHash().delete(&ldquo;key&rdquo;,&ldquo;field1&rdquo;,&ldquo;field2&rdquo;)</td></tr><tr><td>hget key field</td><td>rt.opsForHash().get(&ldquo;key&rdquo;,&ldquo;field&rdquo;)</td></tr><tr><td></td><td></td></tr><tr><td><strong>List 结构</strong></td><td></td></tr><tr><td>lpush list node1 node2 node3&mldr;</td><td>rt.opsForList().leftPush(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td></tr><tr><td>rt.opsForList().leftPushAll(&ldquo;list&rdquo;,list) //list 是集合对象</td><td></td></tr><tr><td>rpush list node1 node2 node3&mldr;</td><td>rt.opsForList().rightPush(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td></tr><tr><td>rt.opsForList().rightPushAll(&ldquo;list&rdquo;,list) //list 是集合对象</td><td></td></tr><tr><td>lindex key index</td><td>rt.opsForList().index(&ldquo;list&rdquo;, index)</td></tr><tr><td>llen key</td><td>rt.opsForList().size(&ldquo;key&rdquo;)</td></tr><tr><td>lpop key</td><td>rt.opsForList().leftPop(&ldquo;key&rdquo;)</td></tr><tr><td>rpop key</td><td>rt.opsForList().rightPop(&ldquo;key&rdquo;)</td></tr><tr><td>lpushx list node</td><td>rt.opsForList().leftPushIfPresent(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td></tr><tr><td>rpushx list node</td><td>rt.opsForList().rightPushIfPresent(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td></tr><tr><td>lrange list start end</td><td>rt.opsForList().range(&ldquo;list&rdquo;,start,end)</td></tr><tr><td>lrem list count value</td><td>rt.opsForList().remove(&ldquo;list&rdquo;,count,&ldquo;value&rdquo;)</td></tr><tr><td>lset key index value</td><td>rt.opsForList().set(&ldquo;list&rdquo;,index,&ldquo;value&rdquo;)</td></tr><tr><td></td><td></td></tr><tr><td><strong>Set 结构</strong></td><td></td></tr><tr><td>sadd key member1 member2&mldr;</td><td>rt.boundSetOps(&ldquo;key&rdquo;).add(&ldquo;member1&rdquo;,&ldquo;member2&rdquo;,&mldr;)</td></tr><tr><td>rt.opsForSet().add(&ldquo;key&rdquo;, set) //set 是一个集合对象</td><td></td></tr><tr><td>scard key</td><td>rt.opsForSet().size(&ldquo;key&rdquo;)</td></tr><tr><td>sidff key1 key2</td><td>rt.opsForSet().difference(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;) //返回一个集合对象</td></tr><tr><td>sinter key1 key2</td><td>rt.opsForSet().intersect(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;)//同上</td></tr><tr><td>sunion key1 key2</td><td>rt.opsForSet().union(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;)//同上</td></tr><tr><td>sdiffstore des key1 key2</td><td>rt.opsForSet().differenceAndStore(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;,&ldquo;des&rdquo;)</td></tr><tr><td>sinter des key1 key2</td><td>rt.opsForSet().intersectAndStore(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;,&ldquo;des&rdquo;)</td></tr><tr><td>sunionstore des key1 key2</td><td>rt.opsForSet().unionAndStore(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;,&ldquo;des&rdquo;)</td></tr><tr><td>sismember key member</td><td>rt.opsForSet().isMember(&ldquo;key&rdquo;,&ldquo;member&rdquo;)</td></tr><tr><td>smembers key</td><td>rt.opsForSet().members(&ldquo;key&rdquo;)</td></tr><tr><td>spop key</td><td>rt.opsForSet().pop(&ldquo;key&rdquo;)</td></tr><tr><td>srandmember key count</td><td>rt.opsForSet().randomMember(&ldquo;key&rdquo;,count)</td></tr><tr><td>srem key member1 member2&mldr;</td><td>rt.opsForSet().remove(&ldquo;key&rdquo;,&ldquo;member1&rdquo;,&ldquo;member2&rdquo;,&mldr;)</td></tr></tbody></table></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/redis>redis</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/redis%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%92%8C%E7%A9%BF%E9%80%8F%E4%BB%A5%E5%8F%8A%E9%9B%AA%E5%B4%A9/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
-Redis缓存击穿和穿透以及雪崩</div></a><a href=../../posts/redis%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8C%81%E4%B9%85%E5%8C%96/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>redis基础配置和持久化&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
-<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
+</code></pre><ol start="3">
+<li>启动哨兵实例</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>src/redis-sentinel sentinel-26379.conf
+</span></span></code></pre></div><ol start="4">
+<li>连接 redis 客户端执行 info 命令查看哨兵信息</li>
+<li>再配置另外两个 sentinel, 端口为 26380， 26381</li>
+</ol>
+<p>哨兵集群启动完毕后，会将哨兵集群的元信息写入所有的 sentinel 的配置文件中，例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>sentinel known-replica mymaster 192.168.0.60 6380 #代表 redis 主节点的从节点信息
+</span></span><span style="display:flex;"><span>sentinel known-replica mymaster 192.168.0.60 6381 #代表 redis 主节点的从节点信息
+</span></span><span style="display:flex;"><span>sentinel known-sentinel mymaster 192.168.0.60 26380 52d0a5d70c1f90475b4fc03b6ce7c3c56935760f  #代表感知到的其它哨兵节点
+</span></span><span style="display:flex;"><span>sentinel known-sentinel mymaster 192.168.0.60 26381 e9f530d3882f8043f76ebb8e1686438ba8bd5ca6  #代表感知到的其它哨兵节点
+</span></span></code></pre></div><p>如果主节点（6379）宕机，哨兵集群会重新选举新的主节点，同时修改所有 sentinel 节点配置文件的集群元信息， 同时还会修改 sentinel 配置文件中的 mymaster 对应的 6379 端口，改为 6380:</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">sentinel monitor mymaster 192.168.0.60 6380 2
+</code></pre><p>当 6379 节点再次启动时，哨兵集群根据集群元信息就可以将 6379 作为从节点加入集群中。</p>
+<h2 id="redis-集群">Redis 集群</h2>
+<p>TODO:</p>
+<h2 id="java-使用-jedis-连接集群">java 使用 Jedis 连接集群</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JedisSentinelTest</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        JedisPoolConfig config <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JedisPoolConfig<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setMaxTotal</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">20</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setMaxIdle</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">10</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setMinIdle</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">5</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        String masterName <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;mymaster&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        Set<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> sentinels <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashSet<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;();</span>
+</span></span><span style="display:flex;"><span>        sentinels<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> HostAndPort<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.1.32&#34;</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">26379</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        sentinels<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> HostAndPort<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.1.32&#34;</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">26380</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        sentinels<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> HostAndPort<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.1.32&#34;</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">26381</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//JedisSentinelPool 其实本质跟 JedisPool 类似，都是与 redis 主节点建立的连接池
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">//JedisSentinelPool 并不是说与 sentinel 建立的连接池，而是通过 sentinel 发现 redis 主节点并与其建立连接
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        JedisSentinelPool jedisSentinelPool <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JedisSentinelPool<span style="color:#ff79c6">(</span>masterName<span style="color:#ff79c6">,</span> sentinels<span style="color:#ff79c6">,</span> config<span style="color:#ff79c6">,</span> <span style="color:#bd93f9">3000</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        Jedis jedis <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            jedis <span style="color:#ff79c6">=</span> jedisSentinelPool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getResource</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>jedis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">set</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;sentinel&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;dc&#34;</span><span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>jedis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;sentinel&#34;</span><span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">finally</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//注意这里不是关闭连接，在 JedisPool 模式下，Jedis 会被归还给资源池。
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>jedis <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>                jedis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">close</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h2 id="spting-boot-连接集群">spting-boot 连接集群</h2>
+<ol>
+<li>引入依赖</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>dependency&gt;
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">&lt;groupId&gt;</span>org.apache.commons<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">&lt;artifactId&gt;</span>commons-pool2<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><ol start="2">
+<li>配置信息</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>server:
+</span></span><span style="display:flex;"><span>  port: 8080
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>spring:
+</span></span><span style="display:flex;"><span>  redis:
+</span></span><span style="display:flex;"><span>    database: 0
+</span></span><span style="display:flex;"><span>    timeout: 3000
+</span></span><span style="display:flex;"><span>    sentinel:    #哨兵模式
+</span></span><span style="display:flex;"><span>      master: mymaster #主服务器所在集群名称
+</span></span><span style="display:flex;"><span>     nodes: 192.168.1.32:26379,192.168.1.32:26380,192.168.1.32:26381
+</span></span><span style="display:flex;"><span>   lettuce:
+</span></span><span style="display:flex;"><span>      pool:
+</span></span><span style="display:flex;"><span>        max-idle: 50
+</span></span><span style="display:flex;"><span>        min-idle: 10
+</span></span><span style="display:flex;"><span>        max-active: 100
+</span></span><span style="display:flex;"><span>        max-wait: 1000
+</span></span></code></pre></div><ol start="3">
+<li>访问代码</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@RestController
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">IndexController</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> Logger logger <span style="color:#ff79c6">=</span> LoggerFactory<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getLogger</span><span style="color:#ff79c6">(</span>IndexController<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Autowired
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> StringRedisTemplate stringRedisTemplate<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 测试节点挂了哨兵重新选举新的 master 节点，客户端是否能动态感知到
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 新的 master 选举出来后，哨兵会把消息发布出去，客户端实际上是实现了一个消息监听机制，
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 当哨兵把新 master 的消息发布出去，客户端会立马感知到新 master 的信息，从而动态切换访问的 masterip
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @throws InterruptedException
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @RequestMapping<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;/test_sentinel&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">testSentinel</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">){</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                stringRedisTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">opsForValue</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">set</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhuge&#34;</span><span style="color:#ff79c6">+</span>i<span style="color:#ff79c6">,</span> i<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;设置 key：&#34;</span><span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;zhuge&#34;</span> <span style="color:#ff79c6">+</span> i<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>                i<span style="color:#ff79c6">++;</span>
+</span></span><span style="display:flex;"><span>                Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">1000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span><span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">){</span>
+</span></span><span style="display:flex;"><span>                logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">error</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;错误：&#34;</span><span style="color:#ff79c6">,</span> e<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h2 id="stringredistemplate-与-redistemplate-详解">StringRedisTemplate 与 RedisTemplate 详解</h2>
+<p>spring 封装了 RedisTemplate 对象来进行对 redis 的各种操作，它支持所有的 redis 原生的 api。在 RedisTemplate 中提供了几个常用的接口方法的使用，分别是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> ValueOperations<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span> V<span style="color:#ff79c6">&gt;</span> valueOps<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> HashOperations<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span> V<span style="color:#ff79c6">&gt;</span> hashOps<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> ListOperations<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span> V<span style="color:#ff79c6">&gt;</span> listOps<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> SetOperations<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span> V<span style="color:#ff79c6">&gt;</span> setOps<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> ZSetOperations<span style="color:#ff79c6">&lt;</span>K<span style="color:#ff79c6">,</span> V<span style="color:#ff79c6">&gt;</span> zSetOps<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// RedisTemplate 中定义了对 5 种数据结构操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>redisTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">opsForValue</span><span style="color:#ff79c6">();</span><span style="color:#6272a4">//操作字符串
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>redisTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">opsForHash</span><span style="color:#ff79c6">();</span><span style="color:#6272a4">//操作 hash
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>redisTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">opsForList</span><span style="color:#ff79c6">();</span><span style="color:#6272a4">//操作 list
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>redisTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">opsForSet</span><span style="color:#ff79c6">();</span><span style="color:#6272a4">//操作 set
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>redisTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">opsForZSet</span><span style="color:#ff79c6">();</span><span style="color:#6272a4">//操作有序 set
+</span></span></span></code></pre></div><p>StringRedisTemplate 继承自 RedisTemplate，也一样拥有上面这些操作。<br>
+StringRedisTemplate 默认采用的是 String 的序列化策略，保存的 key 和 value 都是采用此策略序列化保存的。<br>
+RedisTemplate 默认采用的是 JDK 的序列化策略，保存的 key 和 value 都是采用此策略序列化保存的。</p>
+<p>Redis 客户端命令对应的 RedisTemplate 中的方法列表：</p>
+<table>
+<thead>
+<tr>
+<th><strong>String 类型结构</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Redis</td>
+<td>RedisTemplate rt</td>
+</tr>
+<tr>
+<td>set key value</td>
+<td>rt.opsForValue().set(&ldquo;key&rdquo;,&ldquo;value&rdquo;)</td>
+</tr>
+<tr>
+<td>get key</td>
+<td>rt.opsForValue().get(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>del key</td>
+<td>rt.delete(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>strlen key</td>
+<td>rt.opsForValue().size(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>getset key value</td>
+<td>rt.opsForValue().getAndSet(&ldquo;key&rdquo;,&ldquo;value&rdquo;)</td>
+</tr>
+<tr>
+<td>getrange key start end</td>
+<td>rt.opsForValue().get(&ldquo;key&rdquo;,start,end)</td>
+</tr>
+<tr>
+<td>append key value</td>
+<td>rt.opsForValue().append(&ldquo;key&rdquo;,&ldquo;value&rdquo;)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Hash 结构</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>hmset key field1 value1 field2 value2&hellip;</td>
+<td>rt.opsForHash().putAll(&ldquo;key&rdquo;,map) //map 是一个集合对象</td>
+</tr>
+<tr>
+<td>hset key field value</td>
+<td>rt.opsForHash().put(&ldquo;key&rdquo;,&ldquo;field&rdquo;,&ldquo;value&rdquo;)</td>
+</tr>
+<tr>
+<td>hexists key field</td>
+<td>rt.opsForHash().hasKey(&ldquo;key&rdquo;,&ldquo;field&rdquo;)</td>
+</tr>
+<tr>
+<td>hgetall key</td>
+<td>rt.opsForHash().entries(&ldquo;key&rdquo;) //返回 Map 对象</td>
+</tr>
+<tr>
+<td>hvals key</td>
+<td>rt.opsForHash().values(&ldquo;key&rdquo;) //返回 List 对象</td>
+</tr>
+<tr>
+<td>hkeys key</td>
+<td>rt.opsForHash().keys(&ldquo;key&rdquo;) //返回 List 对象</td>
+</tr>
+<tr>
+<td>hmget key field1 field2&hellip;</td>
+<td>rt.opsForHash().multiGet(&ldquo;key&rdquo;,keyList)</td>
+</tr>
+<tr>
+<td>hsetnx key field value</td>
+<td>rt.opsForHash().putIfAbsent(&ldquo;key&rdquo;,&ldquo;field&rdquo;,&ldquo;value&rdquo;</td>
+</tr>
+<tr>
+<td>hdel key field1 field2</td>
+<td>rt.opsForHash().delete(&ldquo;key&rdquo;,&ldquo;field1&rdquo;,&ldquo;field2&rdquo;)</td>
+</tr>
+<tr>
+<td>hget key field</td>
+<td>rt.opsForHash().get(&ldquo;key&rdquo;,&ldquo;field&rdquo;)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>List 结构</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>lpush list node1 node2 node3&hellip;</td>
+<td>rt.opsForList().leftPush(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td>
+</tr>
+<tr>
+<td>rt.opsForList().leftPushAll(&ldquo;list&rdquo;,list) //list 是集合对象</td>
+<td></td>
+</tr>
+<tr>
+<td>rpush list node1 node2 node3&hellip;</td>
+<td>rt.opsForList().rightPush(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td>
+</tr>
+<tr>
+<td>rt.opsForList().rightPushAll(&ldquo;list&rdquo;,list) //list 是集合对象</td>
+<td></td>
+</tr>
+<tr>
+<td>lindex key index</td>
+<td>rt.opsForList().index(&ldquo;list&rdquo;, index)</td>
+</tr>
+<tr>
+<td>llen key</td>
+<td>rt.opsForList().size(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>lpop key</td>
+<td>rt.opsForList().leftPop(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>rpop key</td>
+<td>rt.opsForList().rightPop(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>lpushx list node</td>
+<td>rt.opsForList().leftPushIfPresent(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td>
+</tr>
+<tr>
+<td>rpushx list node</td>
+<td>rt.opsForList().rightPushIfPresent(&ldquo;list&rdquo;,&ldquo;node&rdquo;)</td>
+</tr>
+<tr>
+<td>lrange list start end</td>
+<td>rt.opsForList().range(&ldquo;list&rdquo;,start,end)</td>
+</tr>
+<tr>
+<td>lrem list count value</td>
+<td>rt.opsForList().remove(&ldquo;list&rdquo;,count,&ldquo;value&rdquo;)</td>
+</tr>
+<tr>
+<td>lset key index value</td>
+<td>rt.opsForList().set(&ldquo;list&rdquo;,index,&ldquo;value&rdquo;)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Set 结构</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>sadd key member1 member2&hellip;</td>
+<td>rt.boundSetOps(&ldquo;key&rdquo;).add(&ldquo;member1&rdquo;,&ldquo;member2&rdquo;,&hellip;)</td>
+</tr>
+<tr>
+<td>rt.opsForSet().add(&ldquo;key&rdquo;, set) //set 是一个集合对象</td>
+<td></td>
+</tr>
+<tr>
+<td>scard key</td>
+<td>rt.opsForSet().size(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>sidff key1 key2</td>
+<td>rt.opsForSet().difference(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;) //返回一个集合对象</td>
+</tr>
+<tr>
+<td>sinter key1 key2</td>
+<td>rt.opsForSet().intersect(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;)//同上</td>
+</tr>
+<tr>
+<td>sunion key1 key2</td>
+<td>rt.opsForSet().union(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;)//同上</td>
+</tr>
+<tr>
+<td>sdiffstore des key1 key2</td>
+<td>rt.opsForSet().differenceAndStore(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;,&ldquo;des&rdquo;)</td>
+</tr>
+<tr>
+<td>sinter des key1 key2</td>
+<td>rt.opsForSet().intersectAndStore(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;,&ldquo;des&rdquo;)</td>
+</tr>
+<tr>
+<td>sunionstore des key1 key2</td>
+<td>rt.opsForSet().unionAndStore(&ldquo;key1&rdquo;,&ldquo;key2&rdquo;,&ldquo;des&rdquo;)</td>
+</tr>
+<tr>
+<td>sismember key member</td>
+<td>rt.opsForSet().isMember(&ldquo;key&rdquo;,&ldquo;member&rdquo;)</td>
+</tr>
+<tr>
+<td>smembers key</td>
+<td>rt.opsForSet().members(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>spop key</td>
+<td>rt.opsForSet().pop(&ldquo;key&rdquo;)</td>
+</tr>
+<tr>
+<td>srandmember key count</td>
+<td>rt.opsForSet().randomMember(&ldquo;key&rdquo;,count)</td>
+</tr>
+<tr>
+<td>srem key member1 member2&hellip;</td>
+<td>rt.opsForSet().remove(&ldquo;key&rdquo;,&ldquo;member1&rdquo;,&ldquo;member2&rdquo;,&hellip;)</td>
+</tr>
+</tbody>
+</table>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/redis">redis
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    <a href="../../posts/redis%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E5%92%8C%E7%A9%BF%E9%80%8F%E4%BB%A5%E5%8F%8A%E9%9B%AA%E5%B4%A9/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            Redis缓存击穿和穿透以及雪崩
+        </div>
+    </a>
+    
+    
+    <a href="../../posts/redis%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8C%81%E4%B9%85%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">redis基础配置和持久化&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>
