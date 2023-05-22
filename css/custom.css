@@ -149,14 +149,12 @@ p {
   margin-block-end: 14px;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
-  font-family: 'Source Code Pro';
 }
 
 .article-title {
   font-size: 30px;
   font-weight: 500;
   line-height: 1em;
-  font-family: cursive;
 }
 
 .article-entry h1,
@@ -184,8 +182,4 @@ p {
   border: 1px solid #aaa;
   display: inline-block;
   border-radius: 13px;
-}
-
-#header-inner {
-  font-family: fangsong;
 }

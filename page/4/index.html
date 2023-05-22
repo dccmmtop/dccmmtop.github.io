@@ -20,17 +20,19 @@
 <link href="https://dccmmtop.github.io/index.xml" rel="alternate" type="application/rss+xml" title="超的博客" />
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    
+    
 
     <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
     <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
@@ -94,279 +96,6 @@
 </header>
 
     <section id="main" class="outer">
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/">G1垃圾收集器</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" class="article-date">
-                        <time datetime='2022-09-10T08:58:04.000&#43;00:00' itemprop="datePublished">2022-09-10</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    G1 (Garbage-First) 是一款面向服务器的垃圾收集器，主要针对多颗处理器及大容量内存的机器，具备极短的 GC 停顿时间和高吞吐量的特征. G1 堆内存划分 G1 不像 CMS 那样，老年代和年轻代不再有明显的区分。而是将内存分为很多和区域（Reg
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/cms%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E4%B8%8E%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95/">CMS垃圾回收器与三色标记算法</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/cms%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E4%B8%8E%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95/" class="article-date">
-                        <time datetime='2022-09-02T15:37:30.000&#43;00:00' itemprop="datePublished">2022-09-02</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    垃圾收集算法 整体可以分为以下几种算法： 标记复制算法 标记整理算法 标记清除算法 分代收集理论 目前的虚拟机的垃圾回收器都是采用分代收集算法，一般根据对象存活周期的不同，将内存分为几块，一般将java堆分为新生
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%9F%A5%E7%9C%8Bes%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF/">查看ES集群信息</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E6%9F%A5%E7%9C%8Bes%E9%9B%86%E7%BE%A4%E4%BF%A1%E6%81%AF/" class="article-date">
-                        <time datetime='2022-08-31T16:25:06.000&#43;00:00' itemprop="datePublished">2022-08-31</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    健康信息 命令 curl-X GET&#34;localhost:9200/_cluster/health&#34; 结果
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/es">ES
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/">jvm对象的内存分配与回收</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="article-date">
-                        <time datetime='2022-08-28T22:27:11.000&#43;00:00' itemprop="datePublished">2022-08-28</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    对象分配过程简略流程图 对象栈上分配 我们都知道对象分配在堆上，当对象没有被引用时就会当成垃圾回收，如果对象数量比较多，会给GC带来较大的压力，影响性能，为了减少临时对象在堆内的分配次数，JVM 通过逃逸分
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/">jvm中对象的创建过程</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/jvm%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/" class="article-date">
-                        <time datetime='2022-08-28T09:34:49.000&#43;00:00' itemprop="datePublished">2022-08-28</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    1. 类加载检查 虚拟机遇到一条 new 指令时，首先检查这个指令的参数能否在常量池中找到一个类符号引用，并且检查这个符号引用代表的类是否已经被加载，解析，初始化过。如果没有必须先执行类的加载初始化过程。 2. 分配内存
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">jvm内存分配</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/jvm%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/" class="article-date">
-                        <time datetime='2022-08-24T07:30:17.000&#43;00:00' itemprop="datePublished">2022-08-24</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">jvm内存模型</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" class="article-date">
-                        <time datetime='2022-08-22T07:58:28.000&#43;00:00' itemprop="datePublished">2022-08-22</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    线程共享 每个线程开启的时候都会划分几块内存空间，线程栈，程序计数器，本地方法栈。这几个内存空间是依附于线程的，线程结束后，这些空间也会释放 所有线程共享 除此之外还有堆，方法区，类加载子系统，字节码执行引
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -685,6 +414,294 @@
             </div>
         </article>
         
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/explain%E8%AF%A6%E8%A7%A3/">Explain详解</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/explain%E8%AF%A6%E8%A7%A3/" class="article-date">
+                        <time datetime='2022-08-01T10:05:55.000&#43;00:00' itemprop="datePublished">2022-08-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    在 select 语句之前增加 explain 关键字，MySQL 会在查询上设置一个标记，执行查询会返回执行计划的信息，而不是 执行这条SQL 注意：如果 from 中包含子查询，仍会执行该子查询，将结果放入临时表中 explain 两个变种 explain extended
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%AC%E8%B4%A8/">索引的本质</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%AC%E8%B4%A8/" class="article-date">
+                        <time datetime='2022-07-31T23:48:52.000&#43;00:00' itemprop="datePublished">2022-07-31</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    索引是什么 索引是帮助MySQL高效获取数据的排好序的数据结构 最重要的点是有序的，我们用索引就是为了快速的查找数据，如果一堆数据是无序的，程序只能挨个遍历每个元素，对比值，才能找到某个元素，最坏的情况要
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E7%B4%A2%E5%BC%95">索引
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/github_action%E4%BD%BF%E7%94%A8/">github_Action使用</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/github_action%E4%BD%BF%E7%94%A8/" class="article-date">
+                        <time datetime='2022-07-30T23:01:00.000&#43;00:00' itemprop="datePublished">2022-07-30</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    需求 最近想实现一个自动部署惊天博客的功能，我有一个静态博客项目,是使用hugo进行编译和部署的，之前自己写了一个脚本将变动的博客自动编译部署到github page 上，也不是很麻烦。但是需要在本机执行一次命令
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/git">git
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/linux%E4%B8%8B%E7%9A%84%E5%BE%AA%E7%8E%AF/">Linux下的循环</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/linux%E4%B8%8B%E7%9A%84%E5%BE%AA%E7%8E%AF/" class="article-date">
+                        <time datetime='2022-07-28T18:26:36.000&#43;00:00' itemprop="datePublished">2022-07-28</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    数字性循环 #!/bin/bash for((i=1;i&lt;=10;i++)); do echo $(expr $i \* 3 + 1); done #!/bin/bash for i in $(seq 1 10) do echo $(expr $i \* 3 + 1); done #!/bin/bash for i in {1..10} do echo $(expr $i \* 3 + 1); done #!/bin/bash awk &#39;BEGIN{for(i=1; i&lt;=10; i++) print i}&#39; 字符性循环 #!/bin/bash for i in `ls`; do echo $i is file name\! ; done #!/bin/bash for i in $* ; do echo $i is input chart\! ; done #!/bin/bash for i in f1 f2 f3 ; do echo $i is appoint ; done
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6/">Go逐行读取文件</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6/" class="article-date">
+                        <time datetime='2022-07-28T09:03:18.000&#43;00:00' itemprop="datePublished">2022-07-28</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    package main import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io&#34; &#34;os&#34; ) func main() { filename := &#34;./1.txt&#34; f, err := os.Open(filename) if err != nil { fmt.Printf(&#34;read %s fail, err: %v\n&#34;, filename, err) } defer f.Close() reader := bufio.NewReader(f) for { line, _, err := reader.ReadLine() if err == io.EOF { fmt.Println(&#34;done!&#34;) break } fmt.Println(line) // TODO } }
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/zap%E5%8C%85%E4%BD%BF%E7%94%A8/">zap包使用</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/zap%E5%8C%85%E4%BD%BF%E7%94%A8/" class="article-date">
+                        <time datetime='2022-07-27T09:17:52.000&#43;00:00' itemprop="datePublished">2022-07-27</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    package model import ( &#34;os&#34; &#34;go.uber.org/zap&#34; &#34;go.uber.org/zap/zapcore&#34; ) func InitLogger(level string) *zap.SugaredLogger { encoder := getEncoder() // 同时输出到文件和控制台 core := zapcore.NewTee( zapcore.NewCore(encoder, stdWriter(), getLogLevel(level)), zapcore.NewCore(encoder, fileWriter(), getLogLevel(level)), ) return zap.New(core, zap.AddCaller()).Sugar() } func getLogLevel(level string) zapcore.LevelEnabler { switch level { case &#34;DEBUG&#34;: return zapcore.DebugLevel case &#34;INFO&#34;: return zapcore.InfoLevel case &#34;WARN&#34;: return zapcore.WarnLevel case &#34;ERROR&#34;: return zapcore.ErrorLevel default: return zapcore.InfoLevel } } func getEncoder() zapcore.Encoder { encoderConfig := zap.NewProductionEncoderConfig() encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder return zapcore.NewConsoleEncoder(encoderConfig) } func stdWriter() zapcore.WriteSyncer { return zapcore.AddSync(os.Stdout) } func fileWriter() zapcore.WriteSyncer { file, _
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/zap">zap
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/log">log
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/rabbitmq%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E8%8A%82%E7%82%B9%E4%B8%8E%E7%A3%81%E7%9B%98%E8%8A%82%E7%82%B9/">RabbitMQ中的内存节点与磁盘节点</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/rabbitmq%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E8%8A%82%E7%82%B9%E4%B8%8E%E7%A3%81%E7%9B%98%E8%8A%82%E7%82%B9/" class="article-date">
+                        <time datetime='2022-07-07T23:08:21.000&#43;00:00' itemprop="datePublished">2022-07-07</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    每个RabbitMQ 节点只有两种类型，要么是内存节点，要么是磁盘节点 内存节点 内存节点将所有的队列、交换器、绑定、用户、权限和vhost的元数据定义都仅存储在内存中. 显而易见，内存节点拥有更出色的性能 磁
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
 
         
 
@@ -743,10 +760,6 @@
     
     
     <a href="../../page/13/">13</a>
-    
-    
-    
-    <a href="../../page/14/">14</a>
     
     
 

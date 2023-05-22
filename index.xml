@@ -9,61 +9,7 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Sun, 21 May 2023 17:50:48 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>VirtualBox 虚拟机设置静态 IP</title>
-      <link>https://dccmmtop.github.io/posts/virtualbox%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AE%BE%E7%BD%AE%E9%9D%99%E6%80%81ip/</link>
-      <pubDate>Sun, 21 May 2023 17:50:48 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/virtualbox%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AE%BE%E7%BD%AE%E9%9D%99%E6%80%81ip/</guid>
-      <description>虚拟机中常用网络连接类型 网络地址转换 (NAT): 连接这个网络可以访问外部网络，但是外部网络不可访问虚拟机 桥接网卡： 这个网络完全可以共享主机网络，主机网络发生变化时，也跟随变化，ip 也随之变动 仅主机 (Host-Only) 网络： 这个网</description>
-    </item>
-    
-    <item>
-      <title>centos防火墙</title>
-      <link>https://dccmmtop.github.io/posts/centos%E9%98%B2%E7%81%AB%E5%A2%99/</link>
-      <pubDate>Sat, 20 May 2023 16:02:13 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/centos%E9%98%B2%E7%81%AB%E5%A2%99/</guid>
-      <description>在 CentOS 操作系统中，Firewall 和 iptables 都可以用于网络安全。 Firewall 在 CentOS 7 及其之后版本中已成为默认的防火墙解决方案。它基于 Netfilter 框架，并使用 firewalld 作为前端管理工具。Firewall 可以通过命令行工具 firewall-cmd 进行配置和管理，也</description>
-    </item>
-    
-    <item>
-      <title>RocketMQ 的介绍和基本使用</title>
-      <link>https://dccmmtop.github.io/posts/rocketmq%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</link>
-      <pubDate>Tue, 16 May 2023 07:48:18 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/rocketmq%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</guid>
-      <description>介绍 快速安装 下载包 配置环境变量 启动 NameServer 启动 Borker 验证 部署后台管理页面 基本使用 RocketMQ 的编程模型 生产者的步骤 消费者步骤 RocketMQ 的消息样例 基本样例 同步发送 异步发送 单向发送消息 消费者消费消息 推模式 拉模式 顺序消息 分区顺序消息 Shareding</description>
-    </item>
-    
-    <item>
-      <title>小爱同学接入chatGPT</title>
-      <link>https://dccmmtop.github.io/posts/%E5%B0%8F%E7%88%B1%E5%90%8C%E5%AD%A6%E6%8E%A5%E5%85%A5chatgpt/</link>
-      <pubDate>Sun, 14 May 2023 19:44:30 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E5%B0%8F%E7%88%B1%E5%90%8C%E5%AD%A6%E6%8E%A5%E5%85%A5chatgpt/</guid>
-      <description>大致流程 最近入手了一款小爱音响，想着把小爱音响接入 chatGPT, 在 github 上找了一个非常优秀的开源项目，整个过程还是比较简单的，一次就完成了。 其中最难的技术点是？如何获取与小爱的对话记录？如何让小爱播放文本？ 让我自己想</description>
-    </item>
-    
-    <item>
-      <title>java中包的扫描</title>
-      <link>https://dccmmtop.github.io/posts/java%E4%B8%AD%E5%8C%85%E7%9A%84%E6%89%AB%E6%8F%8F/</link>
-      <pubDate>Sun, 23 Apr 2023 21:16:48 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/java%E4%B8%AD%E5%8C%85%E7%9A%84%E6%89%AB%E6%8F%8F/</guid>
-      <description>用过spring框架后知道包扫描是一个非常好用的功能，只需要在某个包下写自己的类，框架就能自动帮我们加载到容器中，从而在各处使用，今天自己来实现一下包扫描。 原理其实很简单，就是找到某个目录下的所有cl</description>
-    </item>
-    
-    <item>
-      <title>常用软件清单</title>
-      <link>https://dccmmtop.github.io/posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/</link>
-      <pubDate>Sat, 15 Apr 2023 10:32:37 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/</guid>
-      <description>谷歌浏览器 clash https://github.com/Dreamacro/clash/releases terminal 应用商店 draw.io 应用商店 powershell https://github.com/PowerShell/PowerShell wsl2 ubuntu 子系统 choco oh-my-posh choco install neovim choco install lsd choco install hugo Hach Nerd 字体 链接: https://pan.baidu.com/s/1Cts0PCJeeB8Nb3gO7laeRA 提取码: t49r windows docker desktop https://www.docker.com/products/docker-desktop/ vscode java ruby go localsend 局域网文件传输，最好用，没有之一 https://localsend.org/#/download cpu 内存等监控 qq 音乐 洛雪音乐 https://github.com/lyswhut/lx-music-desktop Bandzip 压缩软件 https://www.bandisoft.com/bandizip/ BCUninstall 卸载工具 https://github.com/Klocman/Bulk-Crap-Uninstaller</description>
-    </item>
-    
+    <lastBuildDate>Wed, 12 Apr 2023 11:33:58 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SpringBoot 与 RabbitMQ 集成和高级用法</title>
       <link>https://dccmmtop.github.io/posts/springboot%E4%B8%8Erabbitmq%E9%9B%86%E6%88%90%E5%92%8C%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</link>
@@ -143,15 +89,6 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/scan/</guid>
       <description>为什么需要渐进式遍历key 有时候需要从 Redis 实例成千上万的 key 中找出特定前缀的 key 列表来手动处理数据，可能是修改它的值，也可能是删除 key。这里就有一个问题，如何从海量的 key 中找出满足特定前缀的 key 列表来？ Redis 提供</description>
-    </item>
-    
-    <item>
-      <title>2023</title>
-      <link>https://dccmmtop.github.io/posts/2023/</link>
-      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/2023/</guid>
-      <description>我的 2023 代办 五月 开始看 B 站教学视频 视频看完，示例代码敲完 五月底完成 当前进度：【22 / 53】 RabbitMQ 技能，输出至少 3 篇博客 RocketMQ 技能， 输出至少 2 篇博客， 五月底完成, 当前进度: 【1/2】 五分月跳绳次数 15 次，每次至少 30</description>
     </item>
     
     <item>
@@ -1740,24 +1677,6 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/</guid>
       <description>生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</description>
-    </item>
-    
-    <item>
-      <title>要温柔</title>
-      <link>https://dccmmtop.github.io/posts/%E8%A6%81%E6%B8%A9%E6%9F%94/</link>
-      <pubDate>Wed, 21 May 1023 19:19:10 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E8%A6%81%E6%B8%A9%E6%9F%94/</guid>
-      <description>人生海海，山山而川，不过尔尔。 自卑溢出来就变成了安静与温柔。 没有销声匿迹，只是在好好生活。 永远会因为温柔而心动。 一束花的仪式感永远不会过时。 最高级的浪漫，就是柴米油盐。 我口袋只剩玫瑰一片，可此行山高路</description>
-    </item>
-    
-    <item>
-      <title>奇葩</title>
-      <link>https://dccmmtop.github.io/posts/%E5%A5%87%E8%91%A9/</link>
-      <pubDate>Tue, 15 Apr 1023 14:07:16 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E5%A5%87%E8%91%A9/</guid>
-      <description>管好自己 但行好事 不渡他人 不谈内心秩序 只讲爱与和平 我们一路奋战，不是为了能改变世界，而是为了不让世界改变我们 人类的本能是胆怯，人类的本质是不甘心 我不想终极一生只满足了他人期待的样子 我不怕千万人阻挡，我只</description>
     </item>
     
     <item>
