@@ -102,6 +102,50 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/springioc%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E7%AE%80%E8%A6%81%E4%BB%8B%E7%BB%8D/">spring IOC 加载过程简要介绍</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/springioc%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E7%AE%80%E8%A6%81%E4%BB%8B%E7%BB%8D/" class="article-date">
+                        <time datetime='2022-11-08T14:48:39.000&#43;00:00' itemprop="datePublished">2022-11-08</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    本文从源码层面简要介绍一下 Spring IoC 加载过程，以及这个过程遇到的重点方法，重点类。 new AnnotationConfigApplicationContext() 一切的根源都要从 new AnnotationConfigApplicationContext() 方法开始，这是 Spring 启动的入口，先准备如下代码： public class ContextDemo { public static void main(String[] args) { AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class); context.getBean(&#34;car&#34;,Car.class); } } @Configuration @ComponentScan(basePackageClasses = {Car.class}) class Config{ @Bean public User1 user(){
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/ioc%E6%80%9D%E6%83%B3%E8%AE%B2%E8%A7%A3%E5%92%8C%E5%AE%9E%E7%8E%B0/">IoC 思想和实现</a></h1>
                 </header>
                 
@@ -648,45 +692,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/">并发编程之Atomic和Unsafe魔法类</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/" class="article-date">
-                        <time datetime='2022-10-11T11:03:04.000&#43;00:00' itemprop="datePublished">2022-10-11</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    原子操作 原子（atom）本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” 。在多处理器上实现原子操作就变得有点复杂 处理器会保证基本内
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -745,6 +750,10 @@
     
     
     <a href="../../page/13/">13</a>
+    
+    
+    
+    <a href="../../page/14/">14</a>
     
     
 
