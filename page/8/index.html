@@ -20,19 +20,17 @@
 <link href="https://dccmmtop.github.io/index.xml" rel="alternate" type="application/rss+xml" title="超的博客" />
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    
-    
 
     <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
     <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
@@ -45,6 +43,8 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
@@ -96,6 +96,229 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E8%AF%BB%E5%86%99csv/">Go读写CSV</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E8%AF%BB%E5%86%99csv/" class="article-date">
+                        <time datetime='2021-11-09T22:47:15.000&#43;00:00' itemprop="datePublished">2021-11-09</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    对Go语言来说，CSV文件可以通过encoding/csv包进行操作，下面通过这个包来读写CSV文件。 由于程序在接下来的代码中立即就要对写入的posts.csv文件进行读取，而刚刚写入的数据有可能还滞
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/">幂等设计</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%B9%82%E7%AD%89%E8%AE%BE%E8%AE%A1/" class="article-date">
+                        <time datetime='2021-11-09T21:52:29.000&#43;00:00' itemprop="datePublished">2021-11-09</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    概念 幂等这个概念，是一个数学上的概念，即：f……(f(f(x))) = f(x)。用在计算机领域，指的是系统里的接口或方法对外的一种承诺，使用相同参数对同一资源重复调用某个接口或方法的结果与调用一次的结果
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E6%9E%B6%E6%9E%84">架构
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2logrotate%E5%8E%9F%E7%90%86%E5%92%8C%E9%85%8D%E7%BD%AE/">日志切割logrotate原理和配置</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E6%97%A5%E5%BF%97%E5%88%87%E5%89%B2logrotate%E5%8E%9F%E7%90%86%E5%92%8C%E9%85%8D%E7%BD%AE/" class="article-date">
+                        <time datetime='2021-11-08T22:25:00.000&#43;00:00' itemprop="datePublished">2021-11-08</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    logrotate 在很多 Linux 发行版上都是默认安装的。系统会定时运行 logrotate，一般是每天一次。系统是这么实现按天执行的。crontab 会每天定时执行 /etc/cron.daily 目录下的脚本，而这个目录下有个文件叫 logrotate。在 centos
+                    </p>
+                    
+                </div>
+
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E6%A8%A1%E6%9D%BF%E4%B9%8B%E4%B8%8A%E4%B8%8B%E6%84%9F%E7%9F%A5/">Go模板之上下文感知</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E6%A8%A1%E6%9D%BF%E4%B9%8B%E4%B8%8A%E4%B8%8B%E6%84%9F%E7%9F%A5/" class="article-date">
+                        <time datetime='2021-11-08T21:32:35.000&#43;00:00' itemprop="datePublished">2021-11-08</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    上下文感知 Go语言的模板引擎可以根据内容所处的上下文改变其显示. 上下文感知的一个显而易见的用途就是对被显示的内容实施正确的转义（escape）：这意味着，如果模板显示的是HTML格式的内容，那么模板将
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E6%A8%A1%E6%9D%BF%E4%B9%8B%E5%8A%A8%E4%BD%9C/">Go模板之动作</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E6%A8%A1%E6%9D%BF%E4%B9%8B%E5%8A%A8%E4%BD%9C/" class="article-date">
+                        <time datetime='2021-11-02T22:44:33.000&#43;00:00' itemprop="datePublished">2021-11-02</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Go的模板动作就是嵌入模板的命令 条件动作 {{ if arg }} some content {{ else }} other content {{ end }} 迭代动作 迭代动作可以对数组，切片，映射，或者通道进行迭代, 在迭代循环内部， 点(.) 会被设置正在当前迭代内容 设置动作 设置动作允许为指定
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/">Go的模板引擎</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E/" class="article-date">
+                        <time datetime='2021-11-01T22:51:35.000&#43;00:00' itemprop="datePublished">2021-11-01</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Go的模板都是文本文档（其中Web应用的模板通常都是HTML），它们都嵌入了一些称为动作（action）的指令。从模板引擎的角度来说，模板就是嵌入了动作的文本（这些文本通常包含在模板文件里面），而模板
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -427,207 +650,6 @@
                     
                 </div>
 
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/elasticsearch%E8%AE%A4%E7%9F%A5/">ElasticSearch认知</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/elasticsearch%E8%AE%A4%E7%9F%A5/" class="article-date">
-                        <time datetime='2021-10-18T23:23:43.000&#43;00:00' itemprop="datePublished">2021-10-18</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    概览 为了理解Elasticsearch中数据是如何组织的，从以下两个角度来观察 逻辑设计 搜索应用所要注意的。用于索引和搜索的基本单位是文档，可以将其认为 文档以类型来分组，类型包含若干文档， 类似表格包含若
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/https%E8%87%AA%E7%AD%BE%E8%AF%81%E4%B9%A6/">HTTPS自签证书</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/https%E8%87%AA%E7%AD%BE%E8%AF%81%E4%B9%A6/" class="article-date">
-                        <time datetime='2021-10-17T09:59:49.000&#43;00:00' itemprop="datePublished">2021-10-17</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%88%9B%E5%BB%BA%E6%96%87%E6%A1%A3/">Mongo创建文档</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%88%9B%E5%BB%BA%E6%96%87%E6%A1%A3/" class="article-date">
-                        <time datetime='2021-09-05T17:46:38.000&#43;00:00' itemprop="datePublished">2021-09-05</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    插入并保存文档 db.foo.insert({&#34;bar&#34;: &#34;baz&#34;}) 这个操作会给文档自动增加一个&quot;_id&quot;键（要是原来没有的话），然后将其保存到MongoDB中。 批量插入 如果要向集合中插入多个文档，使用批量插入会快一些。使用批量插
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mongodb">mongoDB
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mongo_shell%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/">Mongo_Shell基础操作</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mongo_shell%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/" class="article-date">
-                        <time datetime='2021-09-05T17:36:12.000&#43;00:00' itemprop="datePublished">2021-09-05</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    运行shell MongoDB自带JavaScript shell，可在shell中使用命令行与MongoDB实例交互。 shell是一个功能完备的JavaScript解释器，可运行任意JavaScript
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mongodb%E5%9F%BA%E7%A1%80/">MongoDB基础</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mongodb%E5%9F%BA%E7%A1%80/" class="article-date">
-                        <time datetime='2021-09-05T16:47:25.000&#43;00:00' itemprop="datePublished">2021-09-05</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    文档是MongoDB中数据的基本单元，非常类似于关系型数据库管理系统中的行，但更具表现力。 类似地，集合（collection）可以看作是一个拥有动态模式（dynamic schema）的表。 MongoD
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mongodb">mongoDB
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/go_mod%E7%9A%84%E4%BD%BF%E7%94%A8/">go_mod的使用</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/go_mod%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
-                        <time datetime='2021-08-18T16:23:14.000&#43;00:00' itemprop="datePublished">2021-08-18</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    Go 的包管理方式是逐渐演进的， 最初是 monorepo 模式，所有的包都放在 GOPATH 里面，使用类似命名空间的包路径区分包，不过这种包管理显然是有问题，由于包依赖可能会引入破坏性更新，生产环境和测试环境会出现运行不一致的问题。 从
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
                 
             </div>
         </article>

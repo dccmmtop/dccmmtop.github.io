@@ -20,19 +20,17 @@
 <link href="https://dccmmtop.github.io/index.xml" rel="alternate" type="application/rss+xml" title="超的博客" />
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    
-    
 
     <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
     <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
@@ -45,6 +43,8 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
@@ -96,6 +96,240 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">MySQL隔离级别</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/mysql%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" class="article-date">
+                        <time datetime='2021-08-10T18:17:48.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    MySQL隔离级别 隔离级别是针对数据库 ACID 中的I(隔离性)来说的 原子性 一致性 隔离性 持久性 隔离性 通常来说，一个事务所做的修改，在最终提交以前，对其他事务是不可见的，为什么是 “通常来说”，因为这种特性和隔离
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/">mysql慢日志</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" class="article-date">
+                        <time datetime='2021-08-10T18:16:04.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    开启慢日志 在 MySQL 中，慢查询日志默认为OFF状态，通过如下命令进行查看： show variables like &quot;slow_query_log&quot;; 通过如下命令进行设置为 ON 状态： set global slow_query_log = &quot;ON&quot;; 日志存储位置 其中slow_query_log_file属性，表示慢查询日志存储位置，
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">mysql
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ubuntu%E5%AE%89%E8%A3%85mysql%E5%8F%8A%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/">Ubuntu 安装 mysql 及配置远程访问</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ubuntu%E5%AE%89%E8%A3%85mysql%E5%8F%8A%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE/" class="article-date">
+                        <time datetime='2021-08-10T18:12:14.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    安装 sudo apt-get install mysql-server mysql-client 配置远程可连接 你想myuser使用mypassword（密码）从任何主机连接到mysql服务器的话。 mysql&gt;GRANT ALL PRIVILEGES ON *.* TO &#39;用户名&#39;@&#39;%&#39;IDENTIFIED BY &
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%88%86%E6%9E%90nginx%E6%97%A5%E5%BF%97/">分析nginx日志</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%88%86%E6%9E%90nginx%E6%97%A5%E5%BF%97/" class="article-date">
+                        <time datetime='2021-08-10T18:10:24.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    GoAccess的多种展示方式 goaccess有多种数据可视化的方式,分别为: 命令行输出格式化数据 利用access.log生成静态的可视化数据 生成实时可视化数据 注意，如果是编译安装且选择了 –enabl
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/nginx">nginx
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/arch%E6%B7%BB%E5%8A%A0rc.local%E5%AE%9E%E7%8E%B0%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF/">arch添加rc.local 实现开机自启</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/arch%E6%B7%BB%E5%8A%A0rc.local%E5%AE%9E%E7%8E%B0%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF/" class="article-date">
+                        <time datetime='2021-08-10T17:55:56.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    现在有需求，想要开机就运行一些东西，方法有两个，一个是桌面级的启动，一个是系统级的启动 桌面级别，就是进入桌面后，自动打开一些软件 系统级别就是再没有进入桌面就运行一些东西。 先谈桌面级的，比如 gnome，
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%90%8C%E6%97%B6%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E5%92%8C%E5%A4%96%E7%BD%91/">同时连接内网和外网</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%90%8C%E6%97%B6%E8%BF%9E%E6%8E%A5%E5%86%85%E7%BD%91%E5%92%8C%E5%A4%96%E7%BD%91/" class="article-date">
+                        <time datetime='2021-08-10T17:50:41.000&#43;00:00' itemprop="datePublished">2021-08-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    笔记本可以同时连接无线和有线，如果可以指定哪些ip使用无线，哪些ip地址可以使用有线， 假设无线连接的是内网， 有线连接的是外网，可以设置静态路由，使访问不同的地址使用不同的网络 首先确定 本机 无线和有线 的网
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -389,196 +623,6 @@
                     
                 </div>
 
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%8F%98%E9%87%8F/">变量</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%8F%98%E9%87%8F/" class="article-date">
-                        <time datetime='2021-08-01T11:36:29.000&#43;00:00' itemprop="datePublished">2021-08-01</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    var 方式 var name type = expiression var name string = &#34;zhangsan&#34; var name = &#34;zhangsan&#34; var name string // 默认值是 &#34;&#34; 变量列表声明 var 方式通常用户和初始化类型不一致的局部变量，或则初始化值不重要的情况 短变量声明 多变量声明 i,j := 0,1 重点 := 代表声明 = 标识赋值 交换值 i,j = j,i 第二次
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%95%B0%E7%BB%84%E4%B8%8E%E5%88%87%E7%89%87/">数组与切片</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E6%95%B0%E7%BB%84%E4%B8%8E%E5%88%87%E7%89%87/" class="article-date">
-                        <time datetime='2021-07-29T23:11:14.000&#43;00:00' itemprop="datePublished">2021-07-29</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    数组 初始化 指定长度 a := [2]int{1,2} // 指定长度和字面量 不指定长度 a := [...]int{1,2} //不指定长度，有后面的列表来确定其长度 指定总长度，通过索引初始化, 没有初始化的位置使用默认值 a := [3]int{1:1, 2:3} 不指定总长度，通过索引初始化, 最后一个索
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/iota-%E7%94%A8%E6%B3%95/">iota 用法</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/iota-%E7%94%A8%E6%B3%95/" class="article-date">
-                        <time datetime='2021-07-29T22:49:53.000&#43;00:00' itemprop="datePublished">2021-07-29</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    用在常量声明中，初始值为0，一组常量同时声明时，其值逐行增加 类似枚举 const ( c0 = iota //c0 == 0 c1 = iota //c1 == 1 c2 = iota //c2 == 2 ) 简写模式 const ( c0 = iota // c0 == 0 c1 // c1 == 1 c2 // c2 == 2 ) 分开的const 分开的const语句， iota 的
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">交叉编译</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="article-date">
-                        <time datetime='2021-07-25T10:24:03.000&#43;00:00' itemprop="datePublished">2021-07-25</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    1.Mac下编译Linux, Windows Linux CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build filename.go Windows CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build filename.go 如: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o helloworld-windows helloworld.go 2.Linux下编译Mac, Windows Mac CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build filename.go Windows CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build filename.go 3.Windows下编译Mac, Linux Mac SET CGO_ENABLED=0 SET GOOS=darwin SET GOARCH=amd64 go build filename.go Linux SET CGO_ENABLED=0 SET GOOS=linux
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%A4%9A%E8%A1%8C%E5%8F%98%E5%8D%95%E8%A1%8C/">多行变单行</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%A4%9A%E8%A1%8C%E5%8F%98%E5%8D%95%E8%A1%8C/" class="article-date">
-                        <time datetime='2021-07-10T16:58:13.000&#43;00:00' itemprop="datePublished">2021-07-10</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    ps -ef | grep nginx | awk -F ' ' '{print $2}'| xargs
-                    </p>
-                    
-                </div>
-
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E6%89%A9%E5%B1%95git%E5%8A%9F%E8%83%BD%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E5%BC%8F/">扩展git功能的一种方式</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E6%89%A9%E5%B1%95git%E5%8A%9F%E8%83%BD%E7%9A%84%E4%B8%80%E7%A7%8D%E6%96%B9%E5%BC%8F/" class="article-date">
-                        <time datetime='2021-06-10T17:17:09.000&#43;00:00' itemprop="datePublished">2021-06-10</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    有时需要根据自己的工作场合去扩展 git 命令,比如 推送到仓库后自动打开浏览器跳转到发起合并求页面 分支命名比较长其相似度比较大时，自动补全不那么有效率，给每个分支编号，输入指定编号即可切换对应的分支 我最推荐的
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/git">git
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
                 
             </div>
         </article>
