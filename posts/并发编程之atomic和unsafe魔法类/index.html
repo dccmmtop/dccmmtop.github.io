@@ -1,383 +1,66 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>并发编程之Atomic和Unsafe魔法类 // 超的博客</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    
-    
-    
-
-        <meta property="og:title" content="并发编程之Atomic和Unsafe魔法类" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/" />
-    
-
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
-
-    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
-    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
-    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
-    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-
-    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
-    
-
-    <meta name="generator" content="Hugo 0.111.3">
-</head>
-
-<body>
-    <div id="container">
-        <header id="header">
-    <div id="header-outer" class="outer">
-        <div id="header-inner" class="inner">
-            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
-            <nav id="main-nav">
-                
-                <a class="main-nav-link" href="../../posts/">文章</a>
-                
-                <a class="main-nav-link" href="../../tags/">标签</a>
-                
-                <a class="main-nav-link" href="../../about/">我</a>
-                
-                <a class="main-nav-link" id="search" >
-                  <input id="inputSearch" placeholder="search">
-                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
-            </nav>
-            <nav id="sub-nav">
-                <div id="search-form-wrap">
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body searchResults">
-          </div>
-        </div>
-      </div>
-    </div>
-</header>
-
-        <section id="main" class="outer">
-            <article class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        <header class="article-header">
-            <h1 class="article-title" itemprop="name">并发编程之Atomic和Unsafe魔法类</h1>
-        </header>
-        
-        <div class="article-meta">
-            <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/" class="article-date">
-                <time datetime='2022-10-11T11:03:04.000&#43;00:00' itemprop="datePublished">2022-10-11</time>
-            </a>
-            
-            
-            
-        </div>
-        <div class="article-entry" itemprop="articleBody">
-            <h2 id="原子操作">原子操作</h2>
-<p>原子（atom）本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” 。在多处理器上实现原子操作就变得有点复杂</p>
-<h3 id="处理器会保证基本内存操作的原子性">处理器会保证基本内存操作的原子性</h3>
-<p>处理器保证从系统内存当中读取或者写入一个字节是原子的，意思是<strong>当一个处理器读取一个字节时，其他处理器不能访问这个字节的内存地址</strong>。奔腾 6 和最新的处理器能自动保证单处理器对同一个缓存行里进行 16/32/64 位的操作是原子的，但是<strong>复杂的内存操作处理器不能自动保证其原子性</strong>，比如跨总线宽度，跨多个缓存行，跨页表的访问。但是处理器提供<strong>总线锁定和缓存锁</strong>定两个机制来保证复杂内存操作的原子性。</p>
-<h3 id="java-中如何实现原子操作">Java 中如何实现原子操作</h3>
-<p>java 中可以通过<strong>锁和循环 CAS</strong>的方式实现原子操作</p>
-<p>CAS 操作就是利用上文说的处理器提供的 CMPXCHG 指令实现的，是硬件原语。自旋 CAS 就是以一直进行 CAS 操作直到 CAS 成功为止。 java 提供了 atomic 包进行一系列的原子操作。</p>
-<h2 id="atomic">Atomic</h2>
-<p>在 atomic 包中一共 you 有 12 个类，4 中原子更新方式，分别是：</p>
-<ol>
-<li>原子更新基本类型</li>
-<li>原子更新数组</li>
-<li>原子更新引用</li>
-<li>原子更新字段</li>
-</ol>
-<h3 id="原子更新基本类型类">原子更新基本类型类</h3>
-<ul>
-<li><code>AtomicBoolean</code> ：原子更新布尔类型。</li>
-<li><code>AtomicInteger</code> ：原子更新整型。</li>
-<li><code>AtomicLong</code> ：原子更新长整型。</li>
-</ul>
-<h4 id="atomicinteger">AtomicInteger</h4>
-<p>AtomicInteger 的常用方法如下：</p>
-<ul>
-<li><code>int addAndGet(int delta)</code> ：以原子方式将输入的数值与实例中的值（AtomicInteger 里的 value）相加，并返回结果</li>
-<li><code>boolean compareAndSet(int expect, int update)</code> ：如果输入的数值等于预期值，则以原子方式将该值设置为输入的值。</li>
-<li><code>int getAndIncrement()</code> ：以原子方式将当前值加 1，注意：这里返回的是自增前的值。</li>
-<li><code>void lazySet(int newValue)</code> ：最终会设置成 newValue，使用 lazySet 设置值后，可能导致其他线程在之后的<strong>一小段时间内还是可以读到旧的值</strong>。</li>
-<li><code>int getAndSet(int newValue)</code> ：以原子方式设置为 newValue 的值，并返回旧值。</li>
-</ul>
-<blockquote>
-<p>Atomic 包提供了三种基本类型的原子更新，但是 Java 的基本类型里还有 char，float 和 double 等。那么问题来了，如何原子的更新其他的基本类型呢？Atomic 包里的类基本都是使用 Unsafe 实现的，Unsafe 只提供了三种 CAS 方法，compareAndSwapObject，compareAndSwapInt 和 compareAndSwapLong，再看 AtomicBoolean 源码，发现其是先把 Boolean 转换成整型，再使用 compareAndSwapInt 进行 CAS，所以原子更新 double 也可以用类似的思路来实现。</p>
-</blockquote>
-<h3 id="原子更新数组类">原子更新数组类</h3>
-<p>以原子的方式更新数组某个元素，提供一下 3 个类</p>
-<ul>
-<li><code>AtomicIntegerArray</code> ：原子更新整型数组里的元素。</li>
-<li><code>AtomicLongArray</code> ：原子更新长整型数组里的元素。</li>
-<li><code>AtomicReferenceArray</code> ：原子更新引用类型数组里的元素。</li>
-</ul>
-<p><code>AtomicIntegerArray</code> 类主要是提供原子的方式更新数组里的整型，其常用方法如下</p>
-<ul>
-<li><code>int addAndGet(int i, int delta)</code> ：以原子方式将输入值与数组中索引  i 的元素相加。</li>
-<li><code>boolean compareAndSet(int i, int expect, int update)</code> ：如果当前值等于预期值，则以原子方式将数组位置 i 的元素设置成 update 值。</li>
-</ul>
-<h3 id="原子更新字段类">原子更新字段类</h3>
-<p>如果我们只需要某个类里的某个字段，那么就需要使用原子更新字段类，Atomic 包提供了以下三个类：</p>
-<ul>
-<li><code>AtomicIntegerFieldUpdater</code> ：原子更新整型的字段的更新器。</li>
-<li><code>AtomicLongFieldUpdater</code> ：原子更新长整型字段的更新器。</li>
-<li><code>AtomicStampedReference</code> ：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于原子的更数据和数据的版本号，<strong>可以解决使用 CAS 进行原子更新时，可能出现的 ABA 问题。</strong></li>
-</ul>
-<p>原子更新字段类都是抽象类，每次使用都时候必须使用静态方法 newUpdater 创建一个更新器。<strong>原子更新类的字段的必须使用 public volatile 修饰符。</strong></p>
-<h2 id="unsafe">Unsafe</h2>
-<p>正如其名，Unsafe 提供一些不安全的操作方法，如直接访问系统内存资源，自主管理系统内存资源，这些方法在提高 java 运行效率，增强 java 底层资源的操作能力发挥了很大作用。但由于 Unsafe 类使 Java 语言拥有了类似 C 语言指针一样操作内存空间的能力，这无疑也增加了程序发生相关指针问题的风险。在程序中过度、不正确使用 Unsafe 类会使得程序出错的概率变大，使得 Java 这种安全的语言变得不再“安全”，因此对 Unsafe 的使用一定要慎重。</p>
-<h3 id="如何使用-unsafe-类">如何使用 Unsafe 类</h3>
-<p>Unsafe 类为一单例实现，提供静态方法 getUnsafe 获取 Unsafe 实例，<strong>当且仅当调用 getUnsafe 方法的类为引导类加载器所加载时才合法</strong>，否则抛出 SecurityException 异常</p>
-<p>我们自己写的应用程序无法直接使用 Unsafe 类，可以通过反射方式使用：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">UnsafeInstance</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Unsafe <span style="color:#50fa7b">reflectGetUnsafe</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>            Field field <span style="color:#ff79c6">=</span> Unsafe<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDeclaredField</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;theUnsafe&#34;</span><span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>            field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setAccessible</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">(</span>Unsafe<span style="color:#ff79c6">)</span> field<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>  
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>  
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>  
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><h3 id="unsafe-功能介绍">Unsafe 功能介绍</h3>
-<p>Unsafe 提供的 API 大致可分为内存操作、CAS、Class 相关、对象操作、线程调度、系统信息获取、内存屏障、数组操作等几类，下面进行简单介绍：<br>
-<img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221011141133.png" alt=""></p>
-<h3 id="内存操作">内存操作</h3>
-<ul>
-<li>
-<p>分配内存, 相当于 C++的 malloc 函数<br>
-<code>public native long allocateMemory(long bytes);</code></p>
-</li>
-<li>
-<p>扩充内存<br>
-<code>public native long reallocateMemory(long address, long bytes);</code></p>
-</li>
-<li>
-<p>释放内存<br>
-<code>public native void freeMemory(long address);</code></p>
-</li>
-<li>
-<p>在给定的内存块中设置值<br>
-<code>public native void setMemory(Object o, long offset, long bytes, byte value);</code></p>
-</li>
-<li>
-<p>内存拷贝<br>
-<code>public native void copyMemory(Object srcBase, long srcOffset, Object destBase, long destOffset, long bytes);</code></p>
-</li>
-<li>
-<p>获取给定地址值，忽略修饰限定符的访问限制。与此类似操作还有: getInt，getDouble，getLong，getChar 等<br>
-<code>public native Object getObject(Object o, long offset);</code></p>
-</li>
-<li>
-<p>为给定地址设置值，忽略修饰限定符的访问限制，与此类似操作还有: putInt,putDouble，putLong，putChar 等<br>
-<code>public native void putObject(Object o, long offset, Object x);</code><br>
-<code>public native byte getByte(long address);</code></p>
-</li>
-<li>
-<p>为给定地址设置 byte 类型的值（当且仅当该内存地址为 allocateMemory 分配时，此方法结果才是确定的）<br>
-<code>public native void putByte(long address, byte x);</code></p>
-</li>
-</ul>
-<h4 id="为什么会用到堆外内存">为什么会用到堆外内存</h4>
-<p>通常我们使用 new 关键词构造的对象占用的都是 jvm 堆内的空间，由 jvm 统一管理。与之相对的就是堆外内存，jvm 无法管理，回收。使用 Unsafe 提供的方法可以对堆外的内存进行管理。那么我们什么场景下会使用堆外内存呢？</p>
-<h5 id="改善垃圾回收性能">改善垃圾回收性能</h5>
-<p>由于堆外内存是由操作系统管理，而不是 jvm，当我们使用堆外内存时，可以保持降低堆内内存的使用，减少垃圾回收停顿堆应用的影响，比如在上传大文件时，可以把文件对象分配到堆外内存。</p>
-<h5 id="提升程序-io-操作的性能">提升程序 I/O 操作的性能</h5>
-<p>通常在 IO 通信过程中，存在堆内内存到堆外内存的数据拷贝过程，-   对于需要频繁进行内存间数据拷贝且生命周期较短的暂存数据，都建议存储到堆外内存。</p>
-<h3 id="cas-相关">CAS 相关</h3>
-<p>如下源代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">*</span> CAS
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">*</span> @param o 包含要修改field的对象
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">*</span> @param offset 对象中某field的偏移量
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">*</span> @param expected 期望值
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">*</span> @param update 更新值
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">*</span> @return <span style="color:#ff79c6">true</span> <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">false</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">*/</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">compareAndSwapObject</span><span style="color:#ff79c6">(</span>Object var1<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> var2<span style="color:#ff79c6">,</span> Object var4<span style="color:#ff79c6">,</span> Object var5<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">compareAndSwapInt</span><span style="color:#ff79c6">(</span>Object var1<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> var2<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> var4<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> var5<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">compareAndSwapLong</span><span style="color:#ff79c6">(</span>Object var1<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> var2<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> var4<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> var6<span style="color:#ff79c6">);</span>
-</span></span></code></pre></div><h4 id="应用场景">应用场景</h4>
-<p>atomic 包中各类原子操作，都是对 CAS 的应用</p>
-<h3 id="线程调度">线程调度</h3>
-<p>包括线程挂起、恢复、锁机制等方法。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">//取消阻塞线程
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">unpark</span><span style="color:#ff79c6">(</span>Object thread<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//阻塞线程
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">park</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">boolean</span> isAbsolute<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">long</span> time<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//获得对象锁（可重入锁）
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@Deprecated
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">monitorEnter</span><span style="color:#ff79c6">(</span>Object o<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//释放对象锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@Deprecated
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">monitorExit</span><span style="color:#ff79c6">(</span>Object o<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//尝试获取对象锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@Deprecated
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">native</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">tryMonitorEnter</span><span style="color:#ff79c6">(</span>Object o<span style="color:#ff79c6">);</span>
-</span></span></code></pre></div><p>方法 park、unpark 即可实现线程的挂起与恢复，将一个线程进行挂起是通过 park 方法实现的，调用 park 方法后，线程将一直阻塞直到超时或者中断等条件出现；unpark 可以终止一个挂起的线程，使其恢复正常。</p>
-<h4 id="应用场景-1">应用场景</h4>
-<p>Java 锁和同步器框架的核心类 <code>AbstractQueuedSynchronizer</code>，就是通过调用 <code>LockSupport.park()</code> 和 <code>LockSupport.unpark()</code> 实现线程的阻塞和唤醒的，而 LockSupport 的 park、unpark 方法实际是调用 Unsafe 的 park、unpark 方式来实现。</p>
-<h3 id="内存屏障">内存屏障</h3>
-<p>在 Java 8 中引入，用于定义内存屏障（也称内存栅栏，内存栅障，屏障指令等，是一类同步屏障指令，是 CPU 或编译器在对内存随机访问的操作中的一个同步点，使得此点之前的所有读写操作都执行后才可以开始执行此点之后的操作），避免代码重排序</p>
-
-        </div>
-
-        
-
-        
-
-
-        
-        <footer class="article-footer">
-            <ul class="article-tag-list">
-                
-                <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
-                    </a>
-                </li>
-                
-            </ul>
-        </footer>
-        
-    </div>
-    
-<nav id="article-nav">
-    
-    <a href="../../posts/hashmap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
-        <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            HashMap底层原理
-        </div>
-    </a>
-    
-    
-    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">并发编程之Semaphore和CountDownLatch的用法&nbsp;<span>&gt;</span></div>
-    </a>
-    
-</nav>
-
-
-</article>
-            
-        </section>
-
-        <div>
-            
-
-            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
-                label="Comment" theme="github-light" crossorigin="anonymous" async>
-                </script>
-            
-
-        </div>
-
-        <footer id="footer">
-    <div class="outer">
-        <div id="footer-info" class="inner">
-            &copy; 2023 dc
-            <br />
-            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
-                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
-
-
-        </div>
-    </div>
-    
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
-        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
-        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    <script>
-        document.getElementById('main-nav-toggle').addEventListener('click', function () {
-            var header = document.getElementById('header');
-            if (header.classList.contains('mobile-on')) {
-                header.classList.remove('mobile-on');
-            } else {
-                header.classList.add('mobile-on');
-            }
-        });
-    </script>
-    <style>
-        #footer-info {
-            line-height: 1.4em;
-            font-size: 10px;
-        }
-
-        .custom-blog-info {
-            font-family: 'Long Cang', cursive;
-            border-top: 1px dashed #333;
-            font-size: 16px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.4em;
-        }
-    </style>
-</footer>
-
-    </div>
-</body>
-
-</html>
+<!doctype html><html><head><title>并发编程之Atomic和Unsafe魔法类 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="并发编程之Atomic和Unsafe魔法类"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/"><link rel=icon type=image/x-icon href=../../favicon.ico><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script>
+<script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>我</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>并发编程之Atomic和Unsafe魔法类</h1></header><div class=article-meta><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Batomic%E5%92%8Cunsafe%E9%AD%94%E6%B3%95%E7%B1%BB/ class=article-date><time datetime=2022-10-11T11:03:04.000+00:00 itemprop=datePublished>2022-10-11</time></a></div><div class=article-entry itemprop=articleBody><h2 id=原子操作>原子操作</h2><p>原子（atom）本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” 。在多处理器上实现原子操作就变得有点复杂</p><h3 id=处理器会保证基本内存操作的原子性>处理器会保证基本内存操作的原子性</h3><p>处理器保证从系统内存当中读取或者写入一个字节是原子的，意思是<strong>当一个处理器读取一个字节时，其他处理器不能访问这个字节的内存地址</strong>。奔腾 6 和最新的处理器能自动保证单处理器对同一个缓存行里进行 16/32/64 位的操作是原子的，但是<strong>复杂的内存操作处理器不能自动保证其原子性</strong>，比如跨总线宽度，跨多个缓存行，跨页表的访问。但是处理器提供<strong>总线锁定和缓存锁</strong>定两个机制来保证复杂内存操作的原子性。</p><h3 id=java-中如何实现原子操作>Java 中如何实现原子操作</h3><p>java 中可以通过<strong>锁和循环 CAS</strong>的方式实现原子操作</p><p>CAS 操作就是利用上文说的处理器提供的 CMPXCHG 指令实现的，是硬件原语。自旋 CAS 就是以一直进行 CAS 操作直到 CAS 成功为止。 java 提供了 atomic 包进行一系列的原子操作。</p><h2 id=atomic>Atomic</h2><p>在 atomic 包中一共 you 有 12 个类，4 中原子更新方式，分别是：</p><ol><li>原子更新基本类型</li><li>原子更新数组</li><li>原子更新引用</li><li>原子更新字段</li></ol><h3 id=原子更新基本类型类>原子更新基本类型类</h3><ul><li><code>AtomicBoolean</code> ：原子更新布尔类型。</li><li><code>AtomicInteger</code> ：原子更新整型。</li><li><code>AtomicLong</code> ：原子更新长整型。</li></ul><h4 id=atomicinteger>AtomicInteger</h4><p>AtomicInteger 的常用方法如下：</p><ul><li><code>int addAndGet(int delta)</code> ：以原子方式将输入的数值与实例中的值（AtomicInteger 里的 value）相加，并返回结果</li><li><code>boolean compareAndSet(int expect, int update)</code> ：如果输入的数值等于预期值，则以原子方式将该值设置为输入的值。</li><li><code>int getAndIncrement()</code> ：以原子方式将当前值加 1，注意：这里返回的是自增前的值。</li><li><code>void lazySet(int newValue)</code> ：最终会设置成 newValue，使用 lazySet 设置值后，可能导致其他线程在之后的<strong>一小段时间内还是可以读到旧的值</strong>。</li><li><code>int getAndSet(int newValue)</code> ：以原子方式设置为 newValue 的值，并返回旧值。</li></ul><blockquote><p>Atomic 包提供了三种基本类型的原子更新，但是 Java 的基本类型里还有 char，float 和 double 等。那么问题来了，如何原子的更新其他的基本类型呢？Atomic 包里的类基本都是使用 Unsafe 实现的，Unsafe 只提供了三种 CAS 方法，compareAndSwapObject，compareAndSwapInt 和 compareAndSwapLong，再看 AtomicBoolean 源码，发现其是先把 Boolean 转换成整型，再使用 compareAndSwapInt 进行 CAS，所以原子更新 double 也可以用类似的思路来实现。</p></blockquote><h3 id=原子更新数组类>原子更新数组类</h3><p>以原子的方式更新数组某个元素，提供一下 3 个类</p><ul><li><code>AtomicIntegerArray</code> ：原子更新整型数组里的元素。</li><li><code>AtomicLongArray</code> ：原子更新长整型数组里的元素。</li><li><code>AtomicReferenceArray</code> ：原子更新引用类型数组里的元素。</li></ul><p><code>AtomicIntegerArray</code> 类主要是提供原子的方式更新数组里的整型，其常用方法如下</p><ul><li><code>int addAndGet(int i, int delta)</code> ：以原子方式将输入值与数组中索引 i 的元素相加。</li><li><code>boolean compareAndSet(int i, int expect, int update)</code> ：如果当前值等于预期值，则以原子方式将数组位置 i 的元素设置成 update 值。</li></ul><h3 id=原子更新字段类>原子更新字段类</h3><p>如果我们只需要某个类里的某个字段，那么就需要使用原子更新字段类，Atomic 包提供了以下三个类：</p><ul><li><code>AtomicIntegerFieldUpdater</code> ：原子更新整型的字段的更新器。</li><li><code>AtomicLongFieldUpdater</code> ：原子更新长整型字段的更新器。</li><li><code>AtomicStampedReference</code> ：原子更新带有版本号的引用类型。该类将整数值与引用关联起来，可用于原子的更数据和数据的版本号，<strong>可以解决使用 CAS 进行原子更新时，可能出现的 ABA 问题。</strong></li></ul><p>原子更新字段类都是抽象类，每次使用都时候必须使用静态方法 newUpdater 创建一个更新器。<strong>原子更新类的字段的必须使用 public volatile 修饰符。</strong></p><h2 id=unsafe>Unsafe</h2><p>正如其名，Unsafe 提供一些不安全的操作方法，如直接访问系统内存资源，自主管理系统内存资源，这些方法在提高 java 运行效率，增强 java 底层资源的操作能力发挥了很大作用。但由于 Unsafe 类使 Java 语言拥有了类似 C 语言指针一样操作内存空间的能力，这无疑也增加了程序发生相关指针问题的风险。在程序中过度、不正确使用 Unsafe 类会使得程序出错的概率变大，使得 Java 这种安全的语言变得不再“安全”，因此对 Unsafe 的使用一定要慎重。</p><h3 id=如何使用-unsafe-类>如何使用 Unsafe 类</h3><p>Unsafe 类为一单例实现，提供静态方法 getUnsafe 获取 Unsafe 实例，<strong>当且仅当调用 getUnsafe 方法的类为引导类加载器所加载时才合法</strong>，否则抛出 SecurityException 异常</p><p>我们自己写的应用程序无法直接使用 Unsafe 类，可以通过反射方式使用：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>UnsafeInstance</span> <span style=color:#ff79c6>{</span>  
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> Unsafe <span style=color:#50fa7b>reflectGetUnsafe</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>  
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>  
+</span></span><span style=display:flex><span>            Field field <span style=color:#ff79c6>=</span> Unsafe<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>getDeclaredField</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;theUnsafe&#34;</span><span style=color:#ff79c6>);</span>  
+</span></span><span style=display:flex><span>            field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>setAccessible</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>true</span><span style=color:#ff79c6>);</span>  
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>(</span>Unsafe<span style=color:#ff79c6>)</span> field<span style=color:#ff79c6>.</span><span style=color:#50fa7b>get</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>null</span><span style=color:#ff79c6>);</span>  
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>Exception e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>  
+</span></span><span style=display:flex><span>            e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>printStackTrace</span><span style=color:#ff79c6>();</span>  
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>  
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>return</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>  
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>  
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h3 id=unsafe-功能介绍>Unsafe 功能介绍</h3><p>Unsafe 提供的 API 大致可分为内存操作、CAS、Class 相关、对象操作、线程调度、系统信息获取、内存屏障、数组操作等几类，下面进行简单介绍：<br><img src=https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221011141133.png alt></p><h3 id=内存操作>内存操作</h3><ul><li><p>分配内存, 相当于 C++的 malloc 函数<br><code>public native long allocateMemory(long bytes);</code></p></li><li><p>扩充内存<br><code>public native long reallocateMemory(long address, long bytes);</code></p></li><li><p>释放内存<br><code>public native void freeMemory(long address);</code></p></li><li><p>在给定的内存块中设置值<br><code>public native void setMemory(Object o, long offset, long bytes, byte value);</code></p></li><li><p>内存拷贝<br><code>public native void copyMemory(Object srcBase, long srcOffset, Object destBase, long destOffset, long bytes);</code></p></li><li><p>获取给定地址值，忽略修饰限定符的访问限制。与此类似操作还有: getInt，getDouble，getLong，getChar 等<br><code>public native Object getObject(Object o, long offset);</code></p></li><li><p>为给定地址设置值，忽略修饰限定符的访问限制，与此类似操作还有: putInt,putDouble，putLong，putChar 等<br><code>public native void putObject(Object o, long offset, Object x);</code><br><code>public native byte getByte(long address);</code></p></li><li><p>为给定地址设置 byte 类型的值（当且仅当该内存地址为 allocateMemory 分配时，此方法结果才是确定的）<br><code>public native void putByte(long address, byte x);</code></p></li></ul><h4 id=为什么会用到堆外内存>为什么会用到堆外内存</h4><p>通常我们使用 new 关键词构造的对象占用的都是 jvm 堆内的空间，由 jvm 统一管理。与之相对的就是堆外内存，jvm 无法管理，回收。使用 Unsafe 提供的方法可以对堆外的内存进行管理。那么我们什么场景下会使用堆外内存呢？</p><h5 id=改善垃圾回收性能>改善垃圾回收性能</h5><p>由于堆外内存是由操作系统管理，而不是 jvm，当我们使用堆外内存时，可以保持降低堆内内存的使用，减少垃圾回收停顿堆应用的影响，比如在上传大文件时，可以把文件对象分配到堆外内存。</p><h5 id=提升程序-io-操作的性能>提升程序 I/O 操作的性能</h5><p>通常在 IO 通信过程中，存在堆内内存到堆外内存的数据拷贝过程，- 对于需要频繁进行内存间数据拷贝且生命周期较短的暂存数据，都建议存储到堆外内存。</p><h3 id=cas-相关>CAS 相关</h3><p>如下源代码：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#ff79c6>*</span> CAS
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>*</span> @param o 包含要修改field的对象
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>*</span> @param offset 对象中某field的偏移量
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>*</span> @param expected 期望值
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>*</span> @param update 更新值
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>*</span> @return <span style=color:#ff79c6>true</span> <span style=color:#ff79c6>|</span> <span style=color:#ff79c6>false</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>*/</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>compareAndSwapObject</span><span style=color:#ff79c6>(</span>Object var1<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>long</span> var2<span style=color:#ff79c6>,</span> Object var4<span style=color:#ff79c6>,</span> Object var5<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>compareAndSwapInt</span><span style=color:#ff79c6>(</span>Object var1<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>long</span> var2<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>int</span> var4<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>int</span> var5<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>final</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>compareAndSwapLong</span><span style=color:#ff79c6>(</span>Object var1<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>long</span> var2<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>long</span> var4<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>long</span> var6<span style=color:#ff79c6>);</span>
+</span></span></code></pre></div><h4 id=应用场景>应用场景</h4><p>atomic 包中各类原子操作，都是对 CAS 的应用</p><h3 id=线程调度>线程调度</h3><p>包括线程挂起、恢复、锁机制等方法。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>//取消阻塞线程
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>unpark</span><span style=color:#ff79c6>(</span>Object thread<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>//阻塞线程
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>park</span><span style=color:#ff79c6>(</span><span style=color:#8be9fd>boolean</span> isAbsolute<span style=color:#ff79c6>,</span> <span style=color:#8be9fd>long</span> time<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>//获得对象锁（可重入锁）
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>@Deprecated
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>monitorEnter</span><span style=color:#ff79c6>(</span>Object o<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>//释放对象锁
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>@Deprecated
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>monitorExit</span><span style=color:#ff79c6>(</span>Object o<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>//尝试获取对象锁
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>@Deprecated
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>native</span> <span style=color:#8be9fd>boolean</span> <span style=color:#50fa7b>tryMonitorEnter</span><span style=color:#ff79c6>(</span>Object o<span style=color:#ff79c6>);</span>
+</span></span></code></pre></div><p>方法 park、unpark 即可实现线程的挂起与恢复，将一个线程进行挂起是通过 park 方法实现的，调用 park 方法后，线程将一直阻塞直到超时或者中断等条件出现；unpark 可以终止一个挂起的线程，使其恢复正常。</p><h4 id=应用场景-1>应用场景</h4><p>Java 锁和同步器框架的核心类 <code>AbstractQueuedSynchronizer</code>，就是通过调用 <code>LockSupport.park()</code> 和 <code>LockSupport.unpark()</code> 实现线程的阻塞和唤醒的，而 LockSupport 的 park、unpark 方法实际是调用 Unsafe 的 park、unpark 方式来实现。</p><h3 id=内存屏障>内存屏障</h3><p>在 Java 8 中引入，用于定义内存屏障（也称内存栅栏，内存栅障，屏障指令等，是一类同步屏障指令，是 CPU 或编译器在对内存随机访问的操作中的一个同步点，使得此点之前的所有读写操作都执行后才可以开始执行此点之后的操作），避免代码重排序</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/hashmap%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+HashMap底层原理</div></a><a href=../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>并发编程之Semaphore和CountDownLatch的用法&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>

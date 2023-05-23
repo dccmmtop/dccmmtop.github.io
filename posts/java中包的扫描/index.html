@@ -1,355 +1,128 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>java中包的扫描 // 超的博客</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    
-    
-    
-
-        <meta property="og:title" content="java中包的扫描" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/java%E4%B8%AD%E5%8C%85%E7%9A%84%E6%89%AB%E6%8F%8F/" />
-    
-
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
-
-    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
-    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
-    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
-    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-
-    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
-    
-
-    <meta name="generator" content="Hugo 0.111.3">
-</head>
-
-<body>
-    <div id="container">
-        <header id="header">
-    <div id="header-outer" class="outer">
-        <div id="header-inner" class="inner">
-            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
-            <nav id="main-nav">
-                
-                <a class="main-nav-link" href="../../posts/">文章</a>
-                
-                <a class="main-nav-link" href="../../tags/">标签</a>
-                
-                <a class="main-nav-link" href="../../about/">我</a>
-                
-                <a class="main-nav-link" id="search" >
-                  <input id="inputSearch" placeholder="search">
-                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
-            </nav>
-            <nav id="sub-nav">
-                <div id="search-form-wrap">
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body searchResults">
-          </div>
-        </div>
-      </div>
-    </div>
-</header>
-
-        <section id="main" class="outer">
-            <article class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        <header class="article-header">
-            <h1 class="article-title" itemprop="name">java中包的扫描</h1>
-        </header>
-        
-        <div class="article-meta">
-            <a href="../../posts/java%E4%B8%AD%E5%8C%85%E7%9A%84%E6%89%AB%E6%8F%8F/" class="article-date">
-                <time datetime='2023-04-23T21:16:48.000&#43;00:00' itemprop="datePublished">2023-04-23</time>
-            </a>
-            
-            
-            
-        </div>
-        <div class="article-entry" itemprop="articleBody">
-            <p>用过spring框架后知道包扫描是一个非常好用的功能，只需要在某个包下写自己的类，框架就能自动帮我们加载到容器中，从而在各处使用，今天自己来实现一下包扫描。</p>
-<p>原理其实很简单，就是找到某个目录下的所有class文件，然后使用类加载器加载到jvm中，再使用反射生成一个该类的对象即可。</p>
-<h3 id="需求">需求</h3>
-<p>实现一个文件监控的服务，当文件或者目录发生变化时，根据不同的文件做不同的处理。要监控的目录要支持从配置文件中读取</p>
-<h3 id="思路">思路</h3>
-<p>首先想到的是</p>
-<ol>
-<li>监控目录，得知文件的变动信息</li>
-<li>根据文件名字判断需要做什么处理</li>
-</ol>
-<p>很容易写出面的伪代码:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 当文件发生变化时
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">dealOnChange</span><span style="color:#ff79c6">(</span>String filePath<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>filePath<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equal</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;aa&#34;</span><span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// todo
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>filepath<span style="color:#ff79c6">.</span><span style="color:#50fa7b">equal</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;bb&#34;</span><span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// todo
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><p>上面代码确实很容易实现，但是扩展能力不强。当某天需要新增一个监控文件，就需要<strong>修改 <code>dealOnChange</code></strong> 方法，增加一个分支判断，当修改了代码就有可能引入bug，不满足 OCP 原则。</p>
-<blockquote>
-<p>OCP要求软件实体应该是可扩展的，但不应该修改。这意味着，如果需要更改行为，应该使用继承或组合来实现，而不是修改现有代码。它还要求代码应该是可重用的，而不是重新编写。这样，你就可以利用现有的代码，而不是重写它。</p>
-</blockquote>
-<p>可以定义一个文件变动处理器接口，不同的文件变动时，使用不同处理器的实现类,伪代码如下:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">FileChangeListener</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deal</span><span style="color:#ff79c6">(</span>String filePath<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">select</span><span style="color:#ff79c6">(</span>String filePath<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 当文件发生变化时
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Main</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>FileChangeListener<span style="color:#ff79c6">&gt;</span> fileChangeListenerList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">dealOnChange</span><span style="color:#ff79c6">(</span>String filePath<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>       FileChangeListener  listener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>       <span style="color:#ff79c6">for</span><span style="color:#ff79c6">(</span> FileChangeListener f <span style="color:#ff79c6">:</span> fileChangeListenerList<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>f<span style="color:#ff79c6">.</span><span style="color:#50fa7b">select</span><span style="color:#ff79c6">(</span>filePath<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    listener <span style="color:#ff79c6">=</span> f<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">break</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>       <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>       <span style="color:#6272a4">// if listener  is null ,do other...
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>       listener<span style="color:#ff79c6">.</span><span style="color:#50fa7b">deal</span><span style="color:#ff79c6">(</span>filePath<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// todo: 把所有实现了 FileChangeListener 接口的类都的对象都添加到 fileChangeListenerList 集合中
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// fileChangeListenerList = loadAllListenerClass()
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">while</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 假设getChange 可以获取到变化的文件路径
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            String filePath <span style="color:#ff79c6">=</span> getChange<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            dealOnChange<span style="color:#ff79c6">(</span>filePath<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><p>上面的伪代码可以实现这样的功能： 当需要增加一个监控文件时，只需新写一个类，然后实现 FileChangeListener 接口，在这个类中处理文件变化时需要做的动作。这样与第一版的区别是：<strong>增加功能时，不修改旧代码，而是新增代码</strong></p>
-<p>现在关键的问题来了，怎么实现 <code>loadAllListenerClass()</code>:</p>
-<h3 id="加载指定目录下的class">加载指定目录下的class</h3>
-<p>因为一堆 class 文件可以打包成 jar包， 然后使用 <code>java -jar</code> 的方式运行。也可以不用打包，直接运行 <code>java Main</code>。 不同的运行方式导致从目录中找文件的方式也不一样。分别如下:</p>
-<h4 id="直接从目录中加载">直接从目录中加载</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span>  List<span style="color:#ff79c6">&lt;</span>Class<span style="color:#ff79c6">&lt;?&gt;&gt;</span> getClassListFromDir<span style="color:#ff79c6">(</span>String packagePath<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 先获取包的路径
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String localPath <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getClassLoader</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getResource</span><span style="color:#ff79c6">(</span>packagePath<span style="color:#ff79c6">.</span><span style="color:#50fa7b">replace</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;.&#34;</span><span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;/&#34;</span><span style="color:#ff79c6">)).</span><span style="color:#50fa7b">getPath</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    File classFile <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> File<span style="color:#ff79c6">(</span>localPath <span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Class<span style="color:#ff79c6">&lt;?&gt;&gt;</span> klassList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 遍历这个目录下的所有文件(假设都是class文件)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>File file <span style="color:#ff79c6">:</span> Objects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">requireNonNull</span><span style="color:#ff79c6">(</span>classFile<span style="color:#ff79c6">.</span><span style="color:#50fa7b">listFiles</span><span style="color:#ff79c6">()))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 拼接 class 文件的全限定名,并加载
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Class<span style="color:#ff79c6">&lt;?&gt;</span> klass <span style="color:#ff79c6">=</span> Class<span style="color:#ff79c6">.</span><span style="color:#50fa7b">forName</span><span style="color:#ff79c6">(</span>packagePath <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;.&#34;</span> <span style="color:#ff79c6">+</span> file<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">replace</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;.class&#34;</span><span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;加载配置处理器: &#34;</span> <span style="color:#ff79c6">+</span> klass<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 如果是接口，跳过
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>klass<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isInterface</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">continue</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 将类对象添加到集合中
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            klassList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>klass<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>ClassNotFoundException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;加载类失败: &#34;</span><span style="color:#ff79c6">+</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> klassList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><h4 id="从-jar-中加载">从 jar 中加载</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    * 扫描 jar包中的文件获取class
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    * 需要特殊的工具读取jar包中内容，不能向读取目录一样
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    * @param packagePath 要扫描的包路径
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    * @return 类对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">    */</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>Class<span style="color:#ff79c6">&lt;?&gt;&gt;</span> getClassListFromJarFile<span style="color:#ff79c6">(</span>String packagePath<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 得到 jar 包的位置
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String jarPath <span style="color:#ff79c6">=</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getProtectionDomain</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getCodeSource</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getLocation</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getPath</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Class<span style="color:#ff79c6">&lt;?&gt;&gt;</span> klassList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    JarFile jarFile <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        jarFile <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JarFile<span style="color:#ff79c6">(</span>jarPath<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>IOException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>JarEntry<span style="color:#ff79c6">&gt;</span> jarEntryList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;</span>JarEntry<span style="color:#ff79c6">&gt;();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Enumeration<span style="color:#ff79c6">&lt;</span>JarEntry<span style="color:#ff79c6">&gt;</span> ee <span style="color:#ff79c6">=</span> jarFile<span style="color:#ff79c6">.</span><span style="color:#50fa7b">entries</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    packagePath <span style="color:#ff79c6">=</span> packagePath<span style="color:#ff79c6">.</span><span style="color:#50fa7b">replace</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;.&#34;</span><span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;/&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span>ee<span style="color:#ff79c6">.</span><span style="color:#50fa7b">hasMoreElements</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        JarEntry entry <span style="color:#ff79c6">=</span> ee<span style="color:#ff79c6">.</span><span style="color:#50fa7b">nextElement</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 过滤我们出满足我们需求的东西
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>entry<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">startsWith</span><span style="color:#ff79c6">(</span>packagePath<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&amp;&amp;</span> entry<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">endsWith</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;.class&#34;</span><span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            jarEntryList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>entry<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>JarEntry entry <span style="color:#ff79c6">:</span> jarEntryList<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        String className <span style="color:#ff79c6">=</span> entry<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">replace</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;/&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#39;.&#39;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        className <span style="color:#ff79c6">=</span> className<span style="color:#ff79c6">.</span><span style="color:#50fa7b">substring</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> className<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">6</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 也可以采用如下方式把类加载成一个输入流
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// InputStream in = jarFile.getInputStream(entry);
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;加载配置处理器: &#34;</span> <span style="color:#ff79c6">+</span> className<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            Class<span style="color:#ff79c6">&lt;?&gt;</span> klass <span style="color:#ff79c6">=</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getContextClassLoader</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">loadClass</span><span style="color:#ff79c6">(</span>className<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>klass<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isInterface</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">continue</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            klassList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>klass<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>ClassNotFoundException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;加载类失败: &#34;</span> <span style="color:#ff79c6">+</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> klassList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><p>到此关键的代码已经完成。拿到类对象后，就可以使用反射 <code>klass.newInstance()</code> 生成实例了。</p>
-<p>本文中的示例的完整可运行代码已开源: <a href="https://github.com/dccmmtop/SyncConfig">欢迎star</a></p>
-
-        </div>
-
-        
-
-        
-
-
-        
-        <footer class="article-footer">
-            <ul class="article-tag-list">
-                
-                <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
-                    </a>
-                </li>
-                
-            </ul>
-        </footer>
-        
-    </div>
-    
-<nav id="article-nav">
-    
-    <a href="../../posts/%E5%B0%8F%E7%88%B1%E5%90%8C%E5%AD%A6%E6%8E%A5%E5%85%A5chatgpt/" id="article-nav-newer" class="article-nav-link-wrap">
-        <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            小爱同学接入chatGPT
-        </div>
-    </a>
-    
-    
-    <a href="../../posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">常用软件清单&nbsp;<span>&gt;</span></div>
-    </a>
-    
-</nav>
-
-
-</article>
-            
-        </section>
-
-        <div>
-            
-
-            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
-                label="Comment" theme="github-light" crossorigin="anonymous" async>
-                </script>
-            
-
-        </div>
-
-        <footer id="footer">
-    <div class="outer">
-        <div id="footer-info" class="inner">
-            &copy; 2023 dc
-            <br />
-            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
-                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
-
-
-        </div>
-    </div>
-    
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
-        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
-        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    <script>
-        document.getElementById('main-nav-toggle').addEventListener('click', function () {
-            var header = document.getElementById('header');
-            if (header.classList.contains('mobile-on')) {
-                header.classList.remove('mobile-on');
-            } else {
-                header.classList.add('mobile-on');
-            }
-        });
-    </script>
-    <style>
-        #footer-info {
-            line-height: 1.4em;
-            font-size: 10px;
-        }
-
-        .custom-blog-info {
-            font-family: 'Long Cang', cursive;
-            border-top: 1px dashed #333;
-            font-size: 16px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.4em;
-        }
-    </style>
-</footer>
-
-    </div>
-</body>
-
-</html>
+<!doctype html><html><head><title>java中包的扫描 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="java中包的扫描"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/java%E4%B8%AD%E5%8C%85%E7%9A%84%E6%89%AB%E6%8F%8F/"><link rel=icon type=image/x-icon href=../../favicon.ico><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script>
+<script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>我</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>java中包的扫描</h1></header><div class=article-meta><a href=../../posts/java%E4%B8%AD%E5%8C%85%E7%9A%84%E6%89%AB%E6%8F%8F/ class=article-date><time datetime=2023-04-23T21:16:48.000+00:00 itemprop=datePublished>2023-04-23</time></a></div><div class=article-entry itemprop=articleBody><p>用过spring框架后知道包扫描是一个非常好用的功能，只需要在某个包下写自己的类，框架就能自动帮我们加载到容器中，从而在各处使用，今天自己来实现一下包扫描。</p><p>原理其实很简单，就是找到某个目录下的所有class文件，然后使用类加载器加载到jvm中，再使用反射生成一个该类的对象即可。</p><h3 id=需求>需求</h3><p>实现一个文件监控的服务，当文件或者目录发生变化时，根据不同的文件做不同的处理。要监控的目录要支持从配置文件中读取</p><h3 id=思路>思路</h3><p>首先想到的是</p><ol><li>监控目录，得知文件的变动信息</li><li>根据文件名字判断需要做什么处理</li></ol><p>很容易写出面的伪代码:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#6272a4>// 当文件发生变化时
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>dealOnChange</span><span style=color:#ff79c6>(</span>String filePath<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>filePath<span style=color:#ff79c6>.</span><span style=color:#50fa7b>equal</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;aa&#34;</span><span style=color:#ff79c6>)){</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// todo
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>}</span><span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>filepath<span style=color:#ff79c6>.</span><span style=color:#50fa7b>equal</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;bb&#34;</span><span style=color:#ff79c6>)){</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// todo
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><p>上面代码确实很容易实现，但是扩展能力不强。当某天需要新增一个监控文件，就需要<strong>修改 <code>dealOnChange</code></strong> 方法，增加一个分支判断，当修改了代码就有可能引入bug，不满足 OCP 原则。</p><blockquote><p>OCP要求软件实体应该是可扩展的，但不应该修改。这意味着，如果需要更改行为，应该使用继承或组合来实现，而不是修改现有代码。它还要求代码应该是可重用的，而不是重新编写。这样，你就可以利用现有的代码，而不是重写它。</p></blockquote><p>可以定义一个文件变动处理器接口，不同的文件变动时，使用不同处理器的实现类,伪代码如下:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>interface</span> <span style=color:#50fa7b>FileChangeListener</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>deal</span><span style=color:#ff79c6>(</span>String filePath<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>select</span><span style=color:#ff79c6>(</span>String filePath<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>// 当文件发生变化时
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>class</span> <span style=color:#50fa7b>Main</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    List<span style=color:#ff79c6>&lt;</span>FileChangeListener<span style=color:#ff79c6>&gt;</span> fileChangeListenerList<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#50fa7b>dealOnChange</span><span style=color:#ff79c6>(</span>String filePath<span style=color:#ff79c6>){</span>
+</span></span><span style=display:flex><span>       FileChangeListener  listener<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>       <span style=color:#ff79c6>for</span><span style=color:#ff79c6>(</span> FileChangeListener f <span style=color:#ff79c6>:</span> fileChangeListenerList<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>f<span style=color:#ff79c6>.</span><span style=color:#50fa7b>select</span><span style=color:#ff79c6>(</span>filePath<span style=color:#ff79c6>))</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>                    listener <span style=color:#ff79c6>=</span> f<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>                    <span style=color:#ff79c6>break</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>       <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>       <span style=color:#6272a4>// if listener  is null ,do other...
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>       listener<span style=color:#ff79c6>.</span><span style=color:#50fa7b>deal</span><span style=color:#ff79c6>(</span>filePath<span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>main</span><span style=color:#ff79c6>(</span>String<span style=color:#ff79c6>[]</span> args<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// todo: 把所有实现了 FileChangeListener 接口的类都的对象都添加到 fileChangeListenerList 集合中
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#6272a4>// fileChangeListenerList = loadAllListenerClass()
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>while</span><span style=color:#ff79c6>(</span><span style=color:#ff79c6>true</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 假设getChange 可以获取到变化的文件路径
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            String filePath <span style=color:#ff79c6>=</span> getChange<span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>            dealOnChange<span style=color:#ff79c6>(</span>filePath<span style=color:#ff79c6>)</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><p>上面的伪代码可以实现这样的功能： 当需要增加一个监控文件时，只需新写一个类，然后实现 FileChangeListener 接口，在这个类中处理文件变化时需要做的动作。这样与第一版的区别是：<strong>增加功能时，不修改旧代码，而是新增代码</strong></p><p>现在关键的问题来了，怎么实现 <code>loadAllListenerClass()</code>:</p><h3 id=加载指定目录下的class>加载指定目录下的class</h3><p>因为一堆 class 文件可以打包成 jar包， 然后使用 <code>java -jar</code> 的方式运行。也可以不用打包，直接运行 <code>java Main</code>。 不同的运行方式导致从目录中找文件的方式也不一样。分别如下:</p><h4 id=直接从目录中加载>直接从目录中加载</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span>  List<span style=color:#ff79c6>&lt;</span>Class<span style=color:#ff79c6>&lt;?&gt;&gt;</span> getClassListFromDir<span style=color:#ff79c6>(</span>String packagePath<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 先获取包的路径
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String localPath <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>this</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>getClass</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getClassLoader</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getResource</span><span style=color:#ff79c6>(</span>packagePath<span style=color:#ff79c6>.</span><span style=color:#50fa7b>replace</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;.&#34;</span><span style=color:#ff79c6>,</span><span style=color:#f1fa8c>&#34;/&#34;</span><span style=color:#ff79c6>)).</span><span style=color:#50fa7b>getPath</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>    File classFile <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> File<span style=color:#ff79c6>(</span>localPath <span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    List<span style=color:#ff79c6>&lt;</span>Class<span style=color:#ff79c6>&lt;?&gt;&gt;</span> klassList <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> ArrayList<span style=color:#ff79c6>&lt;&gt;();</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 遍历这个目录下的所有文件(假设都是class文件)
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>File file <span style=color:#ff79c6>:</span> Objects<span style=color:#ff79c6>.</span><span style=color:#50fa7b>requireNonNull</span><span style=color:#ff79c6>(</span>classFile<span style=color:#ff79c6>.</span><span style=color:#50fa7b>listFiles</span><span style=color:#ff79c6>()))</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 拼接 class 文件的全限定名,并加载
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            Class<span style=color:#ff79c6>&lt;?&gt;</span> klass <span style=color:#ff79c6>=</span> Class<span style=color:#ff79c6>.</span><span style=color:#50fa7b>forName</span><span style=color:#ff79c6>(</span>packagePath <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34;.&#34;</span> <span style=color:#ff79c6>+</span> file<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>replace</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;.class&#34;</span><span style=color:#ff79c6>,</span><span style=color:#f1fa8c>&#34;&#34;</span><span style=color:#ff79c6>)</span> <span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>            Logger<span style=color:#ff79c6>.</span><span style=color:#50fa7b>info</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;加载配置处理器: &#34;</span> <span style=color:#ff79c6>+</span> klass<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 如果是接口，跳过
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>klass<span style=color:#ff79c6>.</span><span style=color:#50fa7b>isInterface</span><span style=color:#ff79c6>()){</span>
+</span></span><span style=display:flex><span>                <span style=color:#ff79c6>continue</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>            <span style=color:#6272a4>// 将类对象添加到集合中
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>            klassList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span>klass<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>ClassNotFoundException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            Logger<span style=color:#ff79c6>.</span><span style=color:#50fa7b>info</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;加载类失败: &#34;</span><span style=color:#ff79c6>+</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getMessage</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> klassList<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><h4 id=从-jar-中加载>从 jar 中加载</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-java data-lang=java><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#6272a4>/**
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    * 扫描 jar包中的文件获取class
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    * 需要特殊的工具读取jar包中内容，不能向读取目录一样
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    * @param packagePath 要扫描的包路径
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    * @return 类对象
+</span></span></span><span style=display:flex><span><span style=color:#6272a4>    */</span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>public</span> <span style=color:#8be9fd;font-style:italic>static</span> List<span style=color:#ff79c6>&lt;</span>Class<span style=color:#ff79c6>&lt;?&gt;&gt;</span> getClassListFromJarFile<span style=color:#ff79c6>(</span>String packagePath<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 得到 jar 包的位置
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    String jarPath <span style=color:#ff79c6>=</span> Config<span style=color:#ff79c6>.</span><span style=color:#50fa7b>class</span><span style=color:#ff79c6>.</span><span style=color:#50fa7b>getProtectionDomain</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getCodeSource</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getLocation</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getPath</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>    List<span style=color:#ff79c6>&lt;</span>Class<span style=color:#ff79c6>&lt;?&gt;&gt;</span> klassList <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> ArrayList<span style=color:#ff79c6>&lt;&gt;();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    JarFile jarFile <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>null</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        jarFile <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> JarFile<span style=color:#ff79c6>(</span>jarPath<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>IOException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        Logger<span style=color:#ff79c6>.</span><span style=color:#50fa7b>info</span><span style=color:#ff79c6>(</span>e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getMessage</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    List<span style=color:#ff79c6>&lt;</span>JarEntry<span style=color:#ff79c6>&gt;</span> jarEntryList <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>new</span> ArrayList<span style=color:#ff79c6>&lt;</span>JarEntry<span style=color:#ff79c6>&gt;();</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    Enumeration<span style=color:#ff79c6>&lt;</span>JarEntry<span style=color:#ff79c6>&gt;</span> ee <span style=color:#ff79c6>=</span> jarFile<span style=color:#ff79c6>.</span><span style=color:#50fa7b>entries</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>    packagePath <span style=color:#ff79c6>=</span> packagePath<span style=color:#ff79c6>.</span><span style=color:#50fa7b>replace</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;.&#34;</span><span style=color:#ff79c6>,</span><span style=color:#f1fa8c>&#34;/&#34;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>while</span> <span style=color:#ff79c6>(</span>ee<span style=color:#ff79c6>.</span><span style=color:#50fa7b>hasMoreElements</span><span style=color:#ff79c6>())</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        JarEntry entry <span style=color:#ff79c6>=</span> ee<span style=color:#ff79c6>.</span><span style=color:#50fa7b>nextElement</span><span style=color:#ff79c6>();</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 过滤我们出满足我们需求的东西
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>(</span>entry<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>startsWith</span><span style=color:#ff79c6>(</span>packagePath<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>&amp;&amp;</span> entry<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>endsWith</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;.class&#34;</span><span style=color:#ff79c6>))</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            jarEntryList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span>entry<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>for</span> <span style=color:#ff79c6>(</span>JarEntry entry <span style=color:#ff79c6>:</span> jarEntryList<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>        String className <span style=color:#ff79c6>=</span> entry<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getName</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>replace</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#39;/&#39;</span><span style=color:#ff79c6>,</span> <span style=color:#f1fa8c>&#39;.&#39;</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        className <span style=color:#ff79c6>=</span> className<span style=color:#ff79c6>.</span><span style=color:#50fa7b>substring</span><span style=color:#ff79c6>(</span><span style=color:#bd93f9>0</span><span style=color:#ff79c6>,</span> className<span style=color:#ff79c6>.</span><span style=color:#50fa7b>length</span><span style=color:#ff79c6>()</span> <span style=color:#ff79c6>-</span> <span style=color:#bd93f9>6</span><span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#6272a4>// 也可以采用如下方式把类加载成一个输入流
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#6272a4>// InputStream in = jarFile.getInputStream(entry);
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>        <span style=color:#ff79c6>try</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            Logger<span style=color:#ff79c6>.</span><span style=color:#50fa7b>info</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;加载配置处理器: &#34;</span> <span style=color:#ff79c6>+</span> className<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>            Class<span style=color:#ff79c6>&lt;?&gt;</span> klass <span style=color:#ff79c6>=</span> Thread<span style=color:#ff79c6>.</span><span style=color:#50fa7b>currentThread</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>getContextClassLoader</span><span style=color:#ff79c6>().</span><span style=color:#50fa7b>loadClass</span><span style=color:#ff79c6>(</span>className<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>if</span><span style=color:#ff79c6>(</span>klass<span style=color:#ff79c6>.</span><span style=color:#50fa7b>isInterface</span><span style=color:#ff79c6>()){</span>
+</span></span><span style=display:flex><span>                <span style=color:#ff79c6>continue</span><span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>            klassList<span style=color:#ff79c6>.</span><span style=color:#50fa7b>add</span><span style=color:#ff79c6>(</span>klass<span style=color:#ff79c6>);</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span> <span style=color:#ff79c6>catch</span> <span style=color:#ff79c6>(</span>ClassNotFoundException e<span style=color:#ff79c6>)</span> <span style=color:#ff79c6>{</span>
+</span></span><span style=display:flex><span>            Logger<span style=color:#ff79c6>.</span><span style=color:#50fa7b>info</span><span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;加载类失败: &#34;</span> <span style=color:#ff79c6>+</span> e<span style=color:#ff79c6>.</span><span style=color:#50fa7b>getMessage</span><span style=color:#ff79c6>());</span>
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>return</span> klassList<span style=color:#ff79c6>;</span>
+</span></span><span style=display:flex><span><span style=color:#ff79c6>}</span>
+</span></span></code></pre></div><p>到此关键的代码已经完成。拿到类对象后，就可以使用反射 <code>klass.newInstance()</code> 生成实例了。</p><p>本文中的示例的完整可运行代码已开源: <a href=https://github.com/dccmmtop/SyncConfig>欢迎star</a></p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/java>java</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/%E5%B0%8F%E7%88%B1%E5%90%8C%E5%AD%A6%E6%8E%A5%E5%85%A5chatgpt/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+小爱同学接入chatGPT</div></a><a href=../../posts/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E6%B8%85%E5%8D%95/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>常用软件清单&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>

@@ -1,323 +1,111 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>select用法示例 // 超的博客</title>
-
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    
-    
-    
-
-        <meta property="og:title" content="select用法示例" />
-    <meta property="og:description" content="" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="zh" />
-    <meta property="og:url" content="https://dccmmtop.github.io/posts/select%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/" />
-    
-
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-
-    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
-    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
-    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
-
-    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
-    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
-    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
-    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-
-    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
-    
-
-    <meta name="generator" content="Hugo 0.111.3">
-</head>
-
-<body>
-    <div id="container">
-        <header id="header">
-    <div id="header-outer" class="outer">
-        <div id="header-inner" class="inner">
-            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
-            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
-            <nav id="main-nav">
-                
-                <a class="main-nav-link" href="../../posts/">文章</a>
-                
-                <a class="main-nav-link" href="../../tags/">标签</a>
-                
-                <a class="main-nav-link" href="../../about/">我</a>
-                
-                <a class="main-nav-link" id="search" >
-                  <input id="inputSearch" placeholder="search">
-                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
-            </nav>
-            <nav id="sub-nav">
-                <div id="search-form-wrap">
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body searchResults">
-          </div>
-        </div>
-      </div>
-    </div>
-</header>
-
-        <section id="main" class="outer">
-            <article class="article article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
-        
-        <header class="article-header">
-            <h1 class="article-title" itemprop="name">select用法示例</h1>
-        </header>
-        
-        <div class="article-meta">
-            <a href="../../posts/select%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/" class="article-date">
-                <time datetime='2022-02-21T19:06:18.000&#43;00:00' itemprop="datePublished">2022-02-21</time>
-            </a>
-            
-            
-            
-        </div>
-        <div class="article-entry" itemprop="articleBody">
-            <p>Go中的select和channel配合使用，通过select可以监听多个channel的I/O读写事件，当 IO操作发生时，触发相应的动作。</p>
-<h3 id="基本使用">基本使用</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// 常规示例
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">example</span>() {
-</span></span><span style="display:flex;"><span>	done <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd;font-style:italic">interface</span>{})
-</span></span><span style="display:flex;"><span>	<span style="color:#6272a4">// 一段时间后发送关闭信号
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">go</span> <span style="color:#8be9fd;font-style:italic">func</span>() {
-</span></span><span style="display:flex;"><span>		time.<span style="color:#50fa7b">Sleep</span>(<span style="color:#bd93f9">5</span> <span style="color:#ff79c6">*</span> time.Second)
-</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd;font-style:italic">close</span>(done)
-</span></span><span style="display:flex;"><span>	}()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	workCounter <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>
-</span></span><span style="display:flex;"><span>	breakLoop <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">false</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">select</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">case</span> <span style="color:#ff79c6">&lt;-</span>done:
-</span></span><span style="display:flex;"><span>			breakLoop = <span style="color:#ff79c6">true</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">default</span>:
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> breakLoop {
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">break</span>
-</span></span><span style="display:flex;"><span>		}
-</span></span><span style="display:flex;"><span>		workCounter<span style="color:#ff79c6">++</span>
-</span></span><span style="display:flex;"><span>		time.<span style="color:#50fa7b">Sleep</span>(<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">*</span> time.Second)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>	fmt.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;收到结束信号，任务执行了 %d 次&#34;</span>, workCounter)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="超时机制">超时机制</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;time&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
-</span></span><span style="display:flex;"><span>    ch <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">int</span>)
-</span></span><span style="display:flex;"><span>    quit <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">bool</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//新开一个协程
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">go</span> <span style="color:#8be9fd;font-style:italic">func</span>() {
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">select</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">case</span> num <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">&lt;-</span>ch:
-</span></span><span style="display:flex;"><span>                fmt.<span style="color:#50fa7b">Println</span>(<span style="color:#f1fa8c">&#34;num = &#34;</span>, num)
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">case</span> <span style="color:#ff79c6">&lt;-</span>time.<span style="color:#50fa7b">After</span>(<span style="color:#bd93f9">3</span> <span style="color:#ff79c6">*</span> time.Second):
-</span></span><span style="display:flex;"><span>                fmt.<span style="color:#50fa7b">Println</span>(<span style="color:#f1fa8c">&#34;超时&#34;</span>)
-</span></span><span style="display:flex;"><span>                quit <span style="color:#ff79c6">&lt;-</span> <span style="color:#ff79c6">true</span>
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }()
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>; i &lt; <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span> {
-</span></span><span style="display:flex;"><span>        ch <span style="color:#ff79c6">&lt;-</span> i
-</span></span><span style="display:flex;"><span>        time.<span style="color:#50fa7b">Sleep</span>(time.Second)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 收到超时信号，停止阻塞
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">&lt;-</span>quit
-</span></span><span style="display:flex;"><span>    fmt.<span style="color:#50fa7b">Println</span>(<span style="color:#f1fa8c">&#34;程序结束&#34;</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="最快返回">最快返回</h3>
-<p>多个 goroutine 做同一件工作，取最快的返回结果</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
-</span></span><span style="display:flex;"><span> 
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;github.com/kirinlabs/HttpRequest&#34;</span>
-</span></span><span style="display:flex;"><span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
-</span></span><span style="display:flex;"><span>    ch1 <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">int</span>)
-</span></span><span style="display:flex;"><span>    ch2 <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">int</span>)
-</span></span><span style="display:flex;"><span>    ch3 <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">int</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">go</span> <span style="color:#50fa7b">Getdata</span>(<span style="color:#f1fa8c">&#34;https://www.baidu.com&#34;</span>,ch1)
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">go</span> <span style="color:#50fa7b">Getdata</span>(<span style="color:#f1fa8c">&#34;https://www.baidu.com&#34;</span>,ch2)
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">go</span> <span style="color:#50fa7b">Getdata</span>(<span style="color:#f1fa8c">&#34;https://www.baidu.com&#34;</span>,ch3)
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">select</span>{
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> v<span style="color:#ff79c6">:=&lt;-</span> ch1:
-</span></span><span style="display:flex;"><span>            fmt.<span style="color:#50fa7b">Println</span>(v)
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> v<span style="color:#ff79c6">:=&lt;-</span> ch2:
-</span></span><span style="display:flex;"><span>            fmt.<span style="color:#50fa7b">Println</span>(v)
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> v<span style="color:#ff79c6">:=&lt;-</span> ch3:
-</span></span><span style="display:flex;"><span>            fmt.<span style="color:#50fa7b">Println</span>(v)
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Getdata</span>(url <span style="color:#8be9fd">string</span>,ch <span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">int</span>){
-</span></span><span style="display:flex;"><span>    req,err <span style="color:#ff79c6">:=</span> HttpRequest.<span style="color:#50fa7b">Get</span>(url)
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span>{
-</span></span><span style="display:flex;"><span>    }<span style="color:#ff79c6">else</span>{
-</span></span><span style="display:flex;"><span>        ch <span style="color:#ff79c6">&lt;-</span> req.<span style="color:#50fa7b">StatusCode</span>()
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="死锁与默认情况">死锁与默认情况</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
-</span></span><span style="display:flex;"><span>    ch <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#8be9fd">string</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">select</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">case</span> <span style="color:#ff79c6">&lt;-</span>ch:
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>在第 4 行创建了一个信道 ch。我们在 select 内部（第 6 行），试图读取信道 ch。由于没有 Go 协程向该信道写入数据，因此 select 语句会一直阻塞，导致死锁。该程序会触发运行时 panic</p>
-<h3 id="空select">空select</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">select</span> {}
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>除非有 case 执行，select 语句就会一直阻塞着。在这里，select 语句没有任何 case，因此它会一直阻塞，导致死锁。该程序会触发 panic</p>
-
-        </div>
-
-        
-
-        
-
-
-        
-        <footer class="article-footer">
-            <ul class="article-tag-list">
-                
-                <li class="article-tag-list-item">
-                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/go">go
-                    </a>
-                </li>
-                
-            </ul>
-        </footer>
-        
-    </div>
-    
-<nav id="article-nav">
-    
-    <a href="../../posts/%E9%98%B2%E6%AD%A2goroutine%E6%B3%84%E9%9C%B2%E7%9A%84%E4%B8%80%E8%88%AC%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
-        <div class="article-nav-title"><span>&lt;</span>&nbsp;
-            防止goroutine泄露的一般机制
-        </div>
-    </a>
-    
-    
-    <a href="../../posts/linux%E6%90%AD%E5%BB%BAsamba%E6%9C%8D%E5%8A%A1/" id="article-nav-older" class="article-nav-link-wrap">
-        <div class="article-nav-title">Linux搭建samba服务&nbsp;<span>&gt;</span></div>
-    </a>
-    
-</nav>
-
-
-</article>
-            
-        </section>
-
-        <div>
-            
-
-            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
-                label="Comment" theme="github-light" crossorigin="anonymous" async>
-                </script>
-            
-
-        </div>
-
-        <footer id="footer">
-    <div class="outer">
-        <div id="footer-info" class="inner">
-            &copy; 2023 dc
-            <br />
-            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
-                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
-
-
-        </div>
-    </div>
-    
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
-        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
-        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    <script>
-        document.getElementById('main-nav-toggle').addEventListener('click', function () {
-            var header = document.getElementById('header');
-            if (header.classList.contains('mobile-on')) {
-                header.classList.remove('mobile-on');
-            } else {
-                header.classList.add('mobile-on');
-            }
-        });
-    </script>
-    <style>
-        #footer-info {
-            line-height: 1.4em;
-            font-size: 10px;
-        }
-
-        .custom-blog-info {
-            font-family: 'Long Cang', cursive;
-            border-top: 1px dashed #333;
-            font-size: 16px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.4em;
-        }
-    </style>
-</footer>
-
-    </div>
-</body>
-
-</html>
+<!doctype html><html><head><title>select用法示例 // 超的博客</title><meta charset=utf-8><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta property="og:title" content="select用法示例"><meta property="og:description" content><meta property="og:type" content="website"><meta property="og:locale" content="zh"><meta property="og:url" content="https://dccmmtop.github.io/posts/select%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/"><link rel=icon type=image/x-icon href=../../favicon.ico><script src=https://code.jquery.com/jquery-3.3.1.slim.min.js integrity=sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo crossorigin=anonymous></script>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js integrity=sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1 crossorigin=anonymous></script>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css integrity=sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js integrity=sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM crossorigin=anonymous></script>
+<link href=https://dccmmtop.github.io/webfonts/ptserif/main.css rel=stylesheet type=text/css><link href=https://dccmmtop.github.io/webfonts/source-code-pro/main.css rel=stylesheet type=text/css><link rel=stylesheet href=https://dccmmtop.github.io/css/style.css><link rel=stylesheet href=https://dccmmtop.github.io/css/custom.css><link rel=stylesheet href=https://dccmmtop.github.io/css/copy-to-clipboard.css><script src=https://dccmmtop.github.io/js/fastsearch.js></script>
+<script src=https://dccmmtop.github.io/js/fuse.js></script>
+<script src=https://dccmmtop.github.io/js/custom.js></script>
+<script src=https://dccmmtop.github.io/js/copy-to-clipboard.js></script>
+<script>var _hmt=_hmt||[];(function(){var e,t=document.createElement("script");t.src="https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d",e=document.getElementsByTagName("script")[0],e.parentNode.insertBefore(t,e)})()</script><meta name=google-site-verification content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac"><meta name=generator content="Hugo 0.111.3"></head><body><div id=container><header id=header><div id=header-outer class=outer><div id=header-inner class=inner><a id=main-nav-toggle class=nav-icon href=javascript:;></a>
+<a id=logo class=logo-text href=https://dccmmtop.github.io/>超的博客</a><nav id=main-nav><a class=main-nav-link href=../../posts/>文章</a>
+<a class=main-nav-link href=../../tags/>标签</a>
+<a class=main-nav-link href=../../about/>我</a>
+<a class=main-nav-link id=search><input id=inputSearch placeholder=search><svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752 806.784 716.288A448 448 0 100 448a448 448 0 00716.288 358.784l198.4 198.4a64 64 0 1090.624-90.432zM448 767.936A320 320 0 11448 128a320 320 0 010 640z" fill="#262626" p-id="2402"/></svg></a></nav><nav id=sub-nav><div id=search-form-wrap></div></nav></div></div><div class="modal fade" id=exampleModal tabindex=-1 role=dialog aria-labelledby=exampleModalLabel aria-hidden=true><div class=modal-dialog role=document><div class=modal-content><div class=modal-header><h5 class=modal-title id=exampleModalLabel>搜索结果</h5><button type=button class=close data-dismiss=modal aria-label=Close>
+<span aria-hidden=true>&#215;</span></button></div><div class="modal-body searchResults"></div></div></div></div></header><section id=main class=outer><article class="article article-type-post" itemscope itemprop=blogPost><div class=article-inner><header class=article-header><h1 class=article-title itemprop=name>select用法示例</h1></header><div class=article-meta><a href=../../posts/select%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/ class=article-date><time datetime=2022-02-21T19:06:18.000+00:00 itemprop=datePublished>2022-02-21</time></a></div><div class=article-entry itemprop=articleBody><p>Go中的select和channel配合使用，通过select可以监听多个channel的I/O读写事件，当 IO操作发生时，触发相应的动作。</p><h3 id=基本使用>基本使用</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#6272a4>// 常规示例
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>example</span>() {
+</span></span><span style=display:flex><span>	done <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd;font-style:italic>interface</span>{})
+</span></span><span style=display:flex><span>	<span style=color:#6272a4>// 一段时间后发送关闭信号
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>	<span style=color:#ff79c6>go</span> <span style=color:#8be9fd;font-style:italic>func</span>() {
+</span></span><span style=display:flex><span>		time.<span style=color:#50fa7b>Sleep</span>(<span style=color:#bd93f9>5</span> <span style=color:#ff79c6>*</span> time.Second)
+</span></span><span style=display:flex><span>		<span style=color:#8be9fd;font-style:italic>close</span>(done)
+</span></span><span style=display:flex><span>	}()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	workCounter <span style=color:#ff79c6>:=</span> <span style=color:#bd93f9>0</span>
+</span></span><span style=display:flex><span>	breakLoop <span style=color:#ff79c6>:=</span> <span style=color:#ff79c6>false</span>
+</span></span><span style=display:flex><span>	<span style=color:#ff79c6>for</span> {
+</span></span><span style=display:flex><span>		<span style=color:#ff79c6>select</span> {
+</span></span><span style=display:flex><span>		<span style=color:#ff79c6>case</span> <span style=color:#ff79c6>&lt;-</span>done:
+</span></span><span style=display:flex><span>			breakLoop = <span style=color:#ff79c6>true</span>
+</span></span><span style=display:flex><span>		<span style=color:#ff79c6>default</span>:
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		<span style=color:#ff79c6>if</span> breakLoop {
+</span></span><span style=display:flex><span>			<span style=color:#ff79c6>break</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		workCounter<span style=color:#ff79c6>++</span>
+</span></span><span style=display:flex><span>		time.<span style=color:#50fa7b>Sleep</span>(<span style=color:#bd93f9>1</span> <span style=color:#ff79c6>*</span> time.Second)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>	fmt.<span style=color:#50fa7b>Printf</span>(<span style=color:#f1fa8c>&#34;收到结束信号，任务执行了 %d 次&#34;</span>, workCounter)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=超时机制>超时机制</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#ff79c6>package</span> main
+</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#f1fa8c>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f1fa8c>&#34;time&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>main</span>() {
+</span></span><span style=display:flex><span>    ch <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>int</span>)
+</span></span><span style=display:flex><span>    quit <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>bool</span>)
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>//新开一个协程
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>go</span> <span style=color:#8be9fd;font-style:italic>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>for</span> {
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>select</span> {
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>case</span> num <span style=color:#ff79c6>:=</span> <span style=color:#ff79c6>&lt;-</span>ch:
+</span></span><span style=display:flex><span>                fmt.<span style=color:#50fa7b>Println</span>(<span style=color:#f1fa8c>&#34;num = &#34;</span>, num)
+</span></span><span style=display:flex><span>            <span style=color:#ff79c6>case</span> <span style=color:#ff79c6>&lt;-</span>time.<span style=color:#50fa7b>After</span>(<span style=color:#bd93f9>3</span> <span style=color:#ff79c6>*</span> time.Second):
+</span></span><span style=display:flex><span>                fmt.<span style=color:#50fa7b>Println</span>(<span style=color:#f1fa8c>&#34;超时&#34;</span>)
+</span></span><span style=display:flex><span>                quit <span style=color:#ff79c6>&lt;-</span> <span style=color:#ff79c6>true</span>
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    }()
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>for</span> i <span style=color:#ff79c6>:=</span> <span style=color:#bd93f9>0</span>; i &lt; <span style=color:#bd93f9>5</span>; i<span style=color:#ff79c6>++</span> {
+</span></span><span style=display:flex><span>        ch <span style=color:#ff79c6>&lt;-</span> i
+</span></span><span style=display:flex><span>        time.<span style=color:#50fa7b>Sleep</span>(time.Second)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>    <span style=color:#6272a4>// 收到超时信号，停止阻塞
+</span></span></span><span style=display:flex><span><span style=color:#6272a4></span>    <span style=color:#ff79c6>&lt;-</span>quit
+</span></span><span style=display:flex><span>    fmt.<span style=color:#50fa7b>Println</span>(<span style=color:#f1fa8c>&#34;程序结束&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=最快返回>最快返回</h3><p>多个 goroutine 做同一件工作，取最快的返回结果</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#ff79c6>package</span> main
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#ff79c6>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#f1fa8c>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#f1fa8c>&#34;github.com/kirinlabs/HttpRequest&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>main</span>() {
+</span></span><span style=display:flex><span>    ch1 <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>int</span>)
+</span></span><span style=display:flex><span>    ch2 <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>int</span>)
+</span></span><span style=display:flex><span>    ch3 <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>int</span>)
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>go</span> <span style=color:#50fa7b>Getdata</span>(<span style=color:#f1fa8c>&#34;https://www.baidu.com&#34;</span>,ch1)
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>go</span> <span style=color:#50fa7b>Getdata</span>(<span style=color:#f1fa8c>&#34;https://www.baidu.com&#34;</span>,ch2)
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>go</span> <span style=color:#50fa7b>Getdata</span>(<span style=color:#f1fa8c>&#34;https://www.baidu.com&#34;</span>,ch3)
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>select</span>{
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>case</span> v<span style=color:#ff79c6>:=&lt;-</span> ch1:
+</span></span><span style=display:flex><span>            fmt.<span style=color:#50fa7b>Println</span>(v)
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>case</span> v<span style=color:#ff79c6>:=&lt;-</span> ch2:
+</span></span><span style=display:flex><span>            fmt.<span style=color:#50fa7b>Println</span>(v)
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>case</span> v<span style=color:#ff79c6>:=&lt;-</span> ch3:
+</span></span><span style=display:flex><span>            fmt.<span style=color:#50fa7b>Println</span>(v)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>Getdata</span>(url <span style=color:#8be9fd>string</span>,ch <span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>int</span>){
+</span></span><span style=display:flex><span>    req,err <span style=color:#ff79c6>:=</span> HttpRequest.<span style=color:#50fa7b>Get</span>(url)
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>if</span> err <span style=color:#ff79c6>!=</span> <span style=color:#ff79c6>nil</span>{
+</span></span><span style=display:flex><span>    }<span style=color:#ff79c6>else</span>{
+</span></span><span style=display:flex><span>        ch <span style=color:#ff79c6>&lt;-</span> req.<span style=color:#50fa7b>StatusCode</span>()
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=死锁与默认情况>死锁与默认情况</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#ff79c6>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>main</span>() {
+</span></span><span style=display:flex><span>    ch <span style=color:#ff79c6>:=</span> <span style=color:#8be9fd;font-style:italic>make</span>(<span style=color:#8be9fd;font-style:italic>chan</span> <span style=color:#8be9fd>string</span>)
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>select</span> {
+</span></span><span style=display:flex><span>        <span style=color:#ff79c6>case</span> <span style=color:#ff79c6>&lt;-</span>ch:
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>在第 4 行创建了一个信道 ch。我们在 select 内部（第 6 行），试图读取信道 ch。由于没有 Go 协程向该信道写入数据，因此 select 语句会一直阻塞，导致死锁。该程序会触发运行时 panic</p><h3 id=空select>空select</h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#ff79c6>package</span> main
+</span></span><span style=display:flex><span><span style=color:#8be9fd;font-style:italic>func</span> <span style=color:#50fa7b>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#ff79c6>select</span> {}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>除非有 case 执行，select 语句就会一直阻塞着。在这里，select 语句没有任何 case，因此它会一直阻塞，导致死锁。该程序会触发 panic</p></div><footer class=article-footer><ul class=article-tag-list><li class=article-tag-list-item><a class=article-tag-list-link href=https://dccmmtop.github.io/%20tags/go>go</a></li></ul></footer></div><nav id=article-nav><a href=../../posts/%E9%98%B2%E6%AD%A2goroutine%E6%B3%84%E9%9C%B2%E7%9A%84%E4%B8%80%E8%88%AC%E6%9C%BA%E5%88%B6/ id=article-nav-newer class=article-nav-link-wrap><div class=article-nav-title><span>&lt;</span>&nbsp;
+防止goroutine泄露的一般机制</div></a><a href=../../posts/linux%E6%90%AD%E5%BB%BAsamba%E6%9C%8D%E5%8A%A1/ id=article-nav-older class=article-nav-link-wrap><div class=article-nav-title>Linux搭建samba服务&nbsp;<span>></span></div></a></nav></article></section><div><script src=https://utteranc.es/client.js repo=dccmmtop/dccmmtop.github.io issue-term=pathname label=Comment theme=github-light crossorigin=anonymous async></script></div><footer id=footer><div class=outer><div id=footer-info class=inner>&copy; 2023 dc<br>Powered by <a href=https://gohugo.io target=_blank>Hugo</a> with theme <a href=https://github.com/carsonip/hugo-theme-minos target=_blank>Minos</a></div></div><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin=anonymous><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin=anonymous></script>
+<script>hljs.initHighlightingOnLoad()</script><script>document.getElementById("main-nav-toggle").addEventListener("click",function(){var e=document.getElementById("header");e.classList.contains("mobile-on")?e.classList.remove("mobile-on"):e.classList.add("mobile-on")})</script><style>#footer-info{line-height:1.4em;font-size:10px}.custom-blog-info{font-family:long cang,cursive;border-top:1px dashed #333;font-size:16px;margin-top:10px;padding-top:10px;line-height:1.4em}</style></footer></div></body></html>
