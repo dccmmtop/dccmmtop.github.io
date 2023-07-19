@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AES加解密工具 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="AES加解密工具" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.115.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">AES加解密工具</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/" class="article-date">
+                <time datetime='2023-07-19T09:41:12.000&#43;00:00' itemprop="datePublished">2023-07-19</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="背景">背景</h2>
+<p>当我们想把某些文件上传到云上，方便备份和分享，但是还担心文件泄露，或者不想让提供云存储服务方的管理员看到,可以对文件加密再上传，就可以实现。比如我们的代码不想被审核或者公开，但还想上传到 github 或者 gitee 等开源平台管理。就可以对代码进行加密，再上传。</p>
+<p>我习惯将大部分的操作都在终端完成，这样更高效，自由组合程度更高。linux 平台下有 gpg 工具可以对文件加密，但是 win 下没有找到好用的命令行下的加密工具，于是自己用java实现了一个支持批量操作的 aes 加密工具。</p>
+<h2 id="特性">特性</h2>
+<h3 id="命令行操作">命令行操作</h3>
+<p>例：</p>
+<h4 id="加密">加密</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>java -jar .<span style="color:#f1fa8c">\A</span>esTool.jar -d ./ -f <span style="color:#f1fa8c">&#34;.*.java</span>$<span style="color:#f1fa8c">&#34;</span> -p Aa111111 -en
+</span></span></code></pre></div><p><code>-d</code> : 指定目录<br>
+<code>-f</code> : 加密哪些文件，支持正则表达式<br>
+<code>-p</code> : 密码，可以显示输入密码，也可隐式输入，当只有 <code>-p</code> 参数，后面没有密码时，按下回车键后，会提示输入密码，并不会显示到控制台中<br>
+<code>-en</code>: 代表要执行加密操作</p>
+<p>执行该命令后，会对当前目录下的java文件进行加密，并生成一个 <code>.java.gpg</code> 后缀的加密文件。</p>
+<h4 id="解密">解密</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>java -jar .<span style="color:#f1fa8c">\A</span>esTool.jar -d ./ -f <span style="color:#f1fa8c">&#34;.*.gpg</span>$<span style="color:#f1fa8c">&#34;</span> -p Aa111111 -de
+</span></span></code></pre></div><p>执行该命令后，会对当前目录下的<code>gpg</code>后缀文件解密，覆盖原文件: <code>Main.java.gpg</code> 解密后生成一个 <code>Main.java</code></p>
+<h2 id="关键代码实现">关键代码实现</h2>
+<h3 id="命令行工具">命令行工具</h3>
+<p>借助 <code>picocli</code> 实现命令行参数的解析，使用起来非常方便，示例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@CommandLine.Command<span style="color:#ff79c6">(</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Aes 加解密工具&#34;</span><span style="color:#ff79c6">,</span> mixinStandardHelpOptions <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span> version <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;1.0&#34;</span><span style="color:#ff79c6">,</span> description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Main</span>  <span style="color:#8be9fd;font-style:italic">implements</span>  Runnable<span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    @CommandLine.Option<span style="color:#ff79c6">(</span>names <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;-p&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;--password&#34;</span><span style="color:#ff79c6">},</span> description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;密码，小于等于16位&#34;</span><span style="color:#ff79c6">,</span> required <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span>interactive <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span> arity <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;0..1&#34;</span><span style="color:#ff79c6">,</span> hidden <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String password<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @CommandLine.Option<span style="color:#ff79c6">(</span>names <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;-en&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#ff79c6">,</span> description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;加密&#34;</span><span style="color:#ff79c6">,</span> required <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Boolean en <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @CommandLine.Option<span style="color:#ff79c6">(</span>names <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;-de&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#ff79c6">,</span> description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;解密&#34;</span><span style="color:#ff79c6">,</span> required <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Boolean de <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @CommandLine.Option<span style="color:#ff79c6">(</span>names <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;-d&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;--dir&#34;</span><span style="color:#ff79c6">},</span> description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;目录&#34;</span><span style="color:#ff79c6">,</span> required <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String dir<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    @CommandLine.Option<span style="color:#ff79c6">(</span>names <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;-f&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;--file&#34;</span><span style="color:#ff79c6">},</span> description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;文件名，支持正则表达式，例： java -jar .\\AesTool.jar -d ./ -f \&#34;.*.java$\&#34; -p Aa111111 -en&#34;</span><span style="color:#ff79c6">,</span> required <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        CommandLine<span style="color:#ff79c6">.</span><span style="color:#50fa7b">run</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Main<span style="color:#ff79c6">(),</span> args<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h3 id="加解密">加解密</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">aesEn</span><span style="color:#ff79c6">(</span>String key<span style="color:#ff79c6">,</span> String filename<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException<span style="color:#ff79c6">,</span> NoSuchPaddingException<span style="color:#ff79c6">,</span> NoSuchAlgorithmException<span style="color:#ff79c6">,</span> InvalidAlgorithmParameterException<span style="color:#ff79c6">,</span> InvalidKeyException<span style="color:#ff79c6">,</span> IllegalBlockSizeException<span style="color:#ff79c6">,</span> BadPaddingException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        String plaintext <span style="color:#ff79c6">=</span> readFile<span style="color:#ff79c6">(</span>filename<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        key <span style="color:#ff79c6">=</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">format</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%-16s&#34;</span><span style="color:#ff79c6">,</span> key<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> iv <span style="color:#ff79c6">=</span> IV<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>CHARSET<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Generate a new AES key
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> keyBytes <span style="color:#ff79c6">=</span> key<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>CHARSET<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        SecretKeySpec keySpec <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> SecretKeySpec<span style="color:#ff79c6">(</span>keyBytes<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;AES&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Initialize the cipher with the key and IV
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Cipher cipher <span style="color:#ff79c6">=</span> Cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getInstance</span><span style="color:#ff79c6">(</span>ALGORITHM<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">init</span><span style="color:#ff79c6">(</span>Cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">ENCRYPT_MODE</span><span style="color:#ff79c6">,</span> keySpec<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> IvParameterSpec<span style="color:#ff79c6">(</span>iv<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Encrypt the plaintext
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> ciphertext <span style="color:#ff79c6">=</span> cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFinal</span><span style="color:#ff79c6">(</span>plaintext<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>CHARSET<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Return the Base64-encoded ciphertext
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        plaintext <span style="color:#ff79c6">=</span> Base64<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getEncoder</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">encodeToString</span><span style="color:#ff79c6">(</span>ciphertext<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        writeFile<span style="color:#ff79c6">(</span>filename <span style="color:#ff79c6">+</span> EN_FILE_FLAG<span style="color:#ff79c6">,</span> plaintext<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">aesDe</span><span style="color:#ff79c6">(</span>String key<span style="color:#ff79c6">,</span> String filename<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(!</span>filename<span style="color:#ff79c6">.</span><span style="color:#50fa7b">endsWith</span><span style="color:#ff79c6">(</span>EN_FILE_FLAG<span style="color:#ff79c6">)){</span>
+</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;不是加密文件，跳过&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        String encrypted <span style="color:#ff79c6">=</span> readFile<span style="color:#ff79c6">(</span>filename<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        key <span style="color:#ff79c6">=</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">format</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%-16s&#34;</span><span style="color:#ff79c6">,</span> key<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> iv <span style="color:#ff79c6">=</span> IV<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>CHARSET<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Generate the AES key from the key bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> keyBytes <span style="color:#ff79c6">=</span> key<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>CHARSET<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        SecretKeySpec keySpec <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> SecretKeySpec<span style="color:#ff79c6">(</span>keyBytes<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;AES&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Initialize the cipher with the key and IV
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Cipher cipher <span style="color:#ff79c6">=</span> Cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getInstance</span><span style="color:#ff79c6">(</span>ALGORITHM<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">init</span><span style="color:#ff79c6">(</span>Cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">DECRYPT_MODE</span><span style="color:#ff79c6">,</span> keySpec<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> IvParameterSpec<span style="color:#ff79c6">(</span>iv<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Decrypt the ciphertext
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> ciphertext <span style="color:#ff79c6">=</span> Base64<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDecoder</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">decode</span><span style="color:#ff79c6">(</span>encrypted<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> plaintext <span style="color:#ff79c6">=</span> cipher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFinal</span><span style="color:#ff79c6">(</span>ciphertext<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        writeFile<span style="color:#ff79c6">(</span>filename<span style="color:#ff79c6">.</span><span style="color:#50fa7b">replace</span><span style="color:#ff79c6">(</span>EN_FILE_FLAG<span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">),</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">(</span>plaintext<span style="color:#ff79c6">,</span> CHARSET<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>完整项目已经开源: <a href="https://github.com/dccmmtop/aes_tool">https://github.com/dccmmtop/aes_tool</a></p>
+<blockquote>
+<p>联系方式: <a href="mailto:dccmmtop@foxmail.com">dccmmtop@foxmail.com</a></p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/java">java
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    
+    <a href="../../posts/work/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">work&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>
