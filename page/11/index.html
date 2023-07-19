@@ -102,45 +102,6 @@
                 
                 
                 <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/git%E8%AE%BE%E7%BD%AE%E5%92%8C%E5%8F%96%E6%B6%88%E4%BB%A3%E7%90%86/">git 设置和取消代理</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/git%E8%AE%BE%E7%BD%AE%E5%92%8C%E5%8F%96%E6%B6%88%E4%BB%A3%E7%90%86/" class="article-date">
-                        <time datetime='2021-08-08T17:18:35.000&#43;00:00' itemprop="datePublished">2021-08-08</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    设置ss git config --global http.proxy &#39;socks5://127.0.0.1:1080&#39; git config --global https.proxy &#39;socks5://127.0.0.1:1080&#39; 设置代理 git config --global https.proxy http://127.0.0.1:1080 git config --global https.proxy https://127.0.0.1:1080 取消代理 git config --global --unset http.proxy git config --global --unset https.proxy
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/git">git
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%8D%95%E5%90%91%E9%80%9A%E9%81%93/">单向通道</a></h1>
                 </header>
                 
@@ -645,6 +606,45 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E8%A7%A6%E5%8F%91%E5%99%A8">触发器
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/rails5%E4%B8%AD%E7%9A%84autoload%E5%92%8Ceager_load/">Rails5中的autoload和eager_load</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/rails5%E4%B8%AD%E7%9A%84autoload%E5%92%8Ceager_load/" class="article-date">
+                        <time datetime='2019-01-19T10:21:48.000&#43;00:00' itemprop="datePublished">2019-01-19</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    翻译并整理： https://collectiveidea.com/blog/archives/2016/07/22/solutions-to-potential-upgrade-problems-in-rails-5 https://blog.bigbinary.com/2016/08/29/rails-5-disables-autoloading-after-booting-the-app-in-production.html autoload和eager_load autoload: 在常量使用之前不会加载，只有当使用一个当前不存在常量时，会在 autoload_paths 寻找，然后加载它，当在给定的目录中找不到这个常量时，就会触发错误。并且 autoload 是非线程安
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
                             </a>
                         </li>
                         

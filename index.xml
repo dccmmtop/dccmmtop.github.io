@@ -20,15 +20,6 @@
     </item>
     
     <item>
-      <title>work</title>
-      <link>https://dccmmtop.github.io/posts/work/</link>
-      <pubDate>Mon, 12 Jun 2023 10:10:56 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/work/</guid>
-      <description>需求 用户导入慢 【已完成】 机构导入，部门调整时关系错乱 【已完成】 机构导入过慢问题 【已完成】 资源突然没有权限问题 【进行中,搁置，暂时没有找到原因】 添加人员为空的部门禁用 【进行中】 部门禁用 禁用部门以及联动 1.</description>
-    </item>
-    
-    <item>
       <title>VirtualBox 虚拟机设置静态 IP</title>
       <link>https://dccmmtop.github.io/posts/virtualbox%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AE%BE%E7%BD%AE%E9%9D%99%E6%80%81ip/</link>
       <pubDate>Sun, 21 May 2023 17:50:48 +0000</pubDate>
