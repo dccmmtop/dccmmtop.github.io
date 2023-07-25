@@ -43,12 +43,10 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 <body>
 <div id="container">
@@ -96,45 +94,6 @@
 </header>
 
     <section id="main" class="outer">
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="./posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/">AES加解密工具</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="./posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/" class="article-date">
-                        <time datetime='2023-07-19T09:41:12.000&#43;00:00' itemprop="datePublished">2023-07-19</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    背景 当我们想把某些文件上传到云上，方便备份和分享，但是还担心文件泄露，或者不想让提供云存储服务方的管理员看到,可以对文件加密再上传，就可以实现。比如我们的代码不想被审核或者公开，但还想上传到 github 或者 gitee 等
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -663,6 +622,45 @@
                     <p>
                         
                     redis 的单线程和和高性能 redis 是单线程的吗 Redis 的单线程主要是指网络 IO 和键值对读写是由一个线程完成的，这也是 Redis 对外提供键值存储服务的主要流程。但 Redis 的其他功能，比如：持久化，异步删除，集群数据同步等，其实是由额外的
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/redis">redis
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="./posts/scan/">Redis中渐进式遍历key</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="./posts/scan/" class="article-date">
+                        <time datetime='2023-03-22T07:30:03.000&#43;00:00' itemprop="datePublished">2023-03-22</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    为什么需要渐进式遍历key 有时候需要从 Redis 实例成千上万的 key 中找出特定前缀的 key 列表来手动处理数据，可能是修改它的值，也可能是删除 key。这里就有一个问题，如何从海量的 key 中找出满足特定前缀的 key 列表来？ Redis 提供
                     </p>
                     
                 </div>

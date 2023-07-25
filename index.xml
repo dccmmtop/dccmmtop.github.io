@@ -9,16 +9,7 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Wed, 19 Jul 2023 09:41:12 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>AES加解密工具</title>
-      <link>https://dccmmtop.github.io/posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/</link>
-      <pubDate>Wed, 19 Jul 2023 09:41:12 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/</guid>
-      <description>背景 当我们想把某些文件上传到云上，方便备份和分享，但是还担心文件泄露，或者不想让提供云存储服务方的管理员看到,可以对文件加密再上传，就可以实现。比如我们的代码不想被审核或者公开，但还想上传到 github 或者 gitee 等</description>
-    </item>
-    
+    <lastBuildDate>Sun, 21 May 2023 17:50:48 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>VirtualBox 虚拟机设置静态 IP</title>
       <link>https://dccmmtop.github.io/posts/virtualbox%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%AE%BE%E7%BD%AE%E9%9D%99%E6%80%81ip/</link>
@@ -160,7 +151,7 @@
       <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/2023/</guid>
-      <description>我的 2023 代办 五月 flutter 技能 开始看 B 站教学视频 视频看完，示例代码敲完 五月底完成 当前进度：【22 / 53】 java 技能 RabbitMQ 技能，输出至少 3 篇博客 RocketMQ 技能， 输出至少 2 篇博客， 五月底完成, 当前进度: 【1/2】 运动 五分月跳绳次数</description>
+      <description>我的 2023 代办 五月 开始看 B 站教学视频 视频看完，示例代码敲完 五月底完成 当前进度：【22 / 53】 RabbitMQ 技能，输出至少 3 篇博客 RocketMQ 技能， 输出至少 2 篇博客， 五月底完成, 当前进度: 【1/2】 五分月跳绳次数 15 次，每次至少 30</description>
     </item>
     
     <item>
@@ -1749,6 +1740,15 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/</guid>
       <description>生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</description>
+    </item>
+    
+    <item>
+      <title>要温柔</title>
+      <link>https://dccmmtop.github.io/posts/%E8%A6%81%E6%B8%A9%E6%9F%94/</link>
+      <pubDate>Wed, 21 May 1023 19:19:10 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E8%A6%81%E6%B8%A9%E6%9F%94/</guid>
+      <description>人生海海，山山而川，不过尔尔。 自卑溢出来就变成了安静与温柔。 没有销声匿迹，只是在好好生活。 永远会因为温柔而心动。 一束花的仪式感永远不会过时。 最高级的浪漫，就是柴米油盐。 我口袋只剩玫瑰一片，可此行山高路</description>
     </item>
     
     <item>
