@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Tue, 25 Jul 2023 22:05:40 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 29 Jul 2023 19:05:55 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>个人微信打造成得力助手</title>
+      <link>https://dccmmtop.github.io/posts/%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1%E6%89%93%E9%80%A0%E6%88%90%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/</link>
+      <pubDate>Sat, 29 Jul 2023 19:05:55 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1%E6%89%93%E9%80%A0%E6%88%90%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/</guid>
+      <description>本文提供一个通过java编程将微信打造成得力助手的方案, 先看效果： 查看支持的功能与对该功能开放的用户 接入人工智能 下载BiliBili 视频 原理 这个方案最难的地方就是如何把个人账号安全的接入微信，不会被封</description>
+    </item>
+    
     <item>
       <title>RocketMQ高级原理</title>
       <link>https://dccmmtop.github.io/posts/rocketmq%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</link>
