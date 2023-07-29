@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Wed, 19 Jul 2023 09:41:12 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 25 Jul 2023 22:05:40 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RocketMQ高级原理</title>
+      <link>https://dccmmtop.github.io/posts/rocketmq%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Tue, 25 Jul 2023 22:05:40 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/rocketmq%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</guid>
+      <description>联系方式: dccmmtop@foxmail.com</description>
+    </item>
+    
     <item>
       <title>AES加解密工具</title>
       <link>https://dccmmtop.github.io/posts/aes%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%B7%A5%E5%85%B7/</link>
@@ -35,6 +44,15 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/centos%E9%98%B2%E7%81%AB%E5%A2%99/</guid>
       <description>在 CentOS 操作系统中，Firewall 和 iptables 都可以用于网络安全。 Firewall 在 CentOS 7 及其之后版本中已成为默认的防火墙解决方案。它基于 Netfilter 框架，并使用 firewalld 作为前端管理工具。Firewall 可以通过命令行工具 firewall-cmd 进行配置和管理，也</description>
+    </item>
+    
+    <item>
+      <title>SpringBoot整合RocketMQ</title>
+      <link>https://dccmmtop.github.io/posts/springboot%E6%95%B4%E5%90%88rocketmq/</link>
+      <pubDate>Tue, 16 May 2023 07:53:08 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/springboot%E6%95%B4%E5%90%88rocketmq/</guid>
+      <description>SpringBoot整合RocketMQ使用非常简单，下面是一个简单的例子，作为备忘： 完整项目代码： https://github.com/dccmmtop/springBootRocketMQ 项目目录结构 依赖 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.rocketmq&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;rocketmq-spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.1&amp;lt;/version&amp;gt; &amp;lt;exclusions&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-webmvc&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;/exclusions&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependencies&amp;gt; 配置类 ExtRocketMQTemplate package com.roy.rocketmq.config; import org.apache.rocketmq.spring.annotation.ExtRocketMQTemplateConfiguration; import org.apache.rocketmq.spring.core.RocketMQTemplate;</description>
     </item>
     
     <item>
