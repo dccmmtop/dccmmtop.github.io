@@ -43,10 +43,12 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.115.3">
 </head>
 <body>
 <div id="container">
@@ -94,84 +96,6 @@
 </header>
 
     <section id="main" class="outer">
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/maven%E5%AE%8C%E5%85%A8%E4%BE%9D%E8%B5%96%E6%9C%AC%E5%9C%B0%E5%BA%93/">maven完全依赖本地库</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/maven%E5%AE%8C%E5%85%A8%E4%BE%9D%E8%B5%96%E6%9C%AC%E5%9C%B0%E5%BA%93/" class="article-date">
-                        <time datetime='2022-10-31T12:18:31.000&#43;00:00' itemprop="datePublished">2022-10-31</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    1.从可上网的外部电脑下载需要的jar包，自行传到内部电脑maven仓库对应文件夹，比如 com.alibaba.easyExcel，【注意有些包会有其他的依赖jar包，需要一同下载】 2.IDEA中添加
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/maven">maven
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/">Callable与Future的应用</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
-                        <time datetime='2022-10-29T17:15:31.000&#43;00:00' itemprop="datePublished">2022-10-29</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    为什么需要 Callable 无论是继承 Thread 类，还是实现 Runnale 接口，或者使用线程池的 execute 方法去执行一个异步任务，都无法将这个任务的返回值带出来，以 Runnale 接口为例： /** * @since JDK1.0 */ @FunctionalInterface public interface Runnable { public abstract void run(); } 可以看到 run() 方法没有参数，没有返回值，没
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -676,6 +600,84 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/win">win
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/gc%E6%97%A5%E5%BF%97%E8%AF%A6%E8%A7%A3/">GC日志详解</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/gc%E6%97%A5%E5%BF%97%E8%AF%A6%E8%A7%A3/" class="article-date">
+                        <time datetime='2022-09-17T09:58:27.000&#43;00:00' itemprop="datePublished">2022-09-17</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    对于 java 应用我们可以通过一些配置把程序运行过程中的 gc 日志全部打印出来，然后分析 gc 日志得到关键性指标，分析 GC 原因，调优 JVM 参数： 开启 GC 日志相关参数 java -jar ‐Xloggc:./gc‐%t.log ‐XX:+Prin
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/">java常量池</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="article-date">
+                        <time datetime='2022-09-15T10:05:51.000&#43;00:00' itemprop="datePublished">2022-09-15</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Class常量池 Class常量池可以理解为class文件中的资源仓库，class 文件中除了包含类信息，方法，字段，接口信息之外还有常量池信息，用于存放编译期生成的各种字面量和符号引用。 如下: 常量池主要
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
                             </a>
                         </li>
                         

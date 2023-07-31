@@ -43,10 +43,12 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.115.3">
 </head>
 <body>
 <div id="container">
@@ -94,84 +96,6 @@
 </header>
 
     <section id="main" class="outer">
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL数据类型的使用</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/" class="article-date">
-                        <time datetime='2022-08-06T11:14:09.000&#43;00:00' itemprop="datePublished">2022-08-06</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    在MySQL中，选择正确的数据类型，对于性能至关重要。一般应该遵循下面两步： （1）确定合适的大类型：数字、字符串、时间、二进制； （2）确定具体的类型：有无符号、取值范围、变长定长等。 在MySQL数据类
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/">MySQL事务和锁详解</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/" class="article-date">
-                        <time datetime='2022-08-03T23:16:55.000&#43;00:00' itemprop="datePublished">2022-08-03</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    数据库一般都会并发执行多个事务，多个事务可能会并发的对相同的一批数据进行增删改查操作，可能就会导致我们说的脏写、脏读、不可重复读、幻读这些问题。 这些问题的本质都是数据库的多事务并发问题，为了解决多事务
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -691,6 +615,84 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/powershell%E9%85%8D%E7%BD%AE/">powershell配置</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/powershell%E9%85%8D%E7%BD%AE/" class="article-date">
+                        <time datetime='2022-05-13T17:28:48.000&#43;00:00' itemprop="datePublished">2022-05-13</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    安装powershell 下载地址 安装scoop 打开powershell 执行 修改策略 set-executionpolicy remotesigned -s cu 安装scoop iex (new-object net.webclient).downloadstring('https://get.scoop.sh') 自动补全 PSReadLine 在 V5 或以上版本中自带 命令 $profile 可见看见配置文件的路径，如果没有此文件，新建即可 打配置
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/powershell">powershell
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/awk%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/">awk分组统计</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/awk%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" class="article-date">
+                        <time datetime='2022-05-10T15:51:00.000&#43;00:00' itemprop="datePublished">2022-05-10</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Shell学习笔记：awk实现group by分组统计功能 日常部分数据以 txt 的文件格式提供，为避免入库之后再进行统计的麻烦，故学习 shell 进行处理，减少工作量。 1.样例数据 test.txt YD5Gxxx|6618151|68
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/awk">awk
                             </a>
                         </li>
                         

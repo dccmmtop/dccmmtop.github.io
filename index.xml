@@ -9,23 +9,14 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Sat, 29 Jul 2023 19:05:55 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 31 Jul 2023 08:51:14 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>个人微信打造成得力助手</title>
-      <link>https://dccmmtop.github.io/posts/%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1%E6%89%93%E9%80%A0%E6%88%90%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/</link>
-      <pubDate>Sat, 29 Jul 2023 19:05:55 +0000</pubDate>
+      <title>适应于Linux的子系统已终止</title>
+      <link>https://dccmmtop.github.io/posts/%E9%80%82%E5%BA%94%E4%BA%8Elinux%E7%9A%84%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%B7%B2%E7%BB%88%E6%AD%A2/</link>
+      <pubDate>Mon, 31 Jul 2023 08:51:14 +0000</pubDate>
       <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1%E6%89%93%E9%80%A0%E6%88%90%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/</guid>
-      <description>本文提供一个通过java编程将微信打造成得力助手的方案, 先看效果： 查看支持的功能与对该功能开放的用户 接入人工智能 下载BiliBili 视频 原理 这个方案最难的地方就是如何把个人账号安全的接入微信，不会被封</description>
-    </item>
-    
-    <item>
-      <title>RocketMQ高级原理</title>
-      <link>https://dccmmtop.github.io/posts/rocketmq%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</link>
-      <pubDate>Tue, 25 Jul 2023 22:05:40 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/rocketmq%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</guid>
-      <description>联系方式: dccmmtop@foxmail.com</description>
+      <guid>https://dccmmtop.github.io/posts/%E9%80%82%E5%BA%94%E4%BA%8Elinux%E7%9A%84%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%B7%B2%E7%BB%88%E6%AD%A2/</guid>
+      <description>管理员模式打开终端，输入 #停止LxssManager服务 net stop LxssManager #启动LxssManager服务 net start LxssManager 联系方式: dccmmtop@foxmail.com</description>
     </item>
     
     <item>
@@ -53,15 +44,6 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/centos%E9%98%B2%E7%81%AB%E5%A2%99/</guid>
       <description>在 CentOS 操作系统中，Firewall 和 iptables 都可以用于网络安全。 Firewall 在 CentOS 7 及其之后版本中已成为默认的防火墙解决方案。它基于 Netfilter 框架，并使用 firewalld 作为前端管理工具。Firewall 可以通过命令行工具 firewall-cmd 进行配置和管理，也</description>
-    </item>
-    
-    <item>
-      <title>SpringBoot整合RocketMQ</title>
-      <link>https://dccmmtop.github.io/posts/springboot%E6%95%B4%E5%90%88rocketmq/</link>
-      <pubDate>Tue, 16 May 2023 07:53:08 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/springboot%E6%95%B4%E5%90%88rocketmq/</guid>
-      <description>SpringBoot整合RocketMQ使用非常简单，下面是一个简单的例子，作为备忘： 完整项目代码： https://github.com/dccmmtop/springBootRocketMQ 项目目录结构 依赖 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.rocketmq&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;rocketmq-spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.1&amp;lt;/version&amp;gt; &amp;lt;exclusions&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-webmvc&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;/exclusions&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependencies&amp;gt; 配置类 ExtRocketMQTemplate package com.roy.rocketmq.config; import org.apache.rocketmq.spring.annotation.ExtRocketMQTemplateConfiguration; import org.apache.rocketmq.spring.core.RocketMQTemplate;</description>
     </item>
     
     <item>
@@ -187,7 +169,7 @@
       <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/2023/</guid>
-      <description>我的 2023 代办 五月 开始看 B 站教学视频 视频看完，示例代码敲完 五月底完成 当前进度：【22 / 53】 RabbitMQ 技能，输出至少 3 篇博客 RocketMQ 技能， 输出至少 2 篇博客， 五月底完成, 当前进度: 【1/2】 五分月跳绳次数 15 次，每次至少 30</description>
+      <description>我的 2023 代办 五月 flutter 技能 开始看 B 站教学视频 视频看完，示例代码敲完 五月底完成 当前进度：【22 / 53】 java 技能 RabbitMQ 技能，输出至少 3 篇博客 RocketMQ 技能， 输出至少 2 篇博客， 五月底完成, 当前进度: 【1/2】 运动 五分月跳绳次数</description>
     </item>
     
     <item>
@@ -1776,15 +1758,6 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/ssh%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95/</guid>
       <description>生成 key 在本地执行ssh-keygen 将本地的公钥拷贝到远程服务器 ssh-copy-id -i ~/.ssh/id_rsa.pub -p 22222 username@ip</description>
-    </item>
-    
-    <item>
-      <title>要温柔</title>
-      <link>https://dccmmtop.github.io/posts/%E8%A6%81%E6%B8%A9%E6%9F%94/</link>
-      <pubDate>Wed, 21 May 1023 19:19:10 +0000</pubDate>
-      <author>dccmmtop@foxmail.com (dc)</author>
-      <guid>https://dccmmtop.github.io/posts/%E8%A6%81%E6%B8%A9%E6%9F%94/</guid>
-      <description>人生海海，山山而川，不过尔尔。 自卑溢出来就变成了安静与温柔。 没有销声匿迹，只是在好好生活。 永远会因为温柔而心动。 一束花的仪式感永远不会过时。 最高级的浪漫，就是柴米油盐。 我口袋只剩玫瑰一片，可此行山高路</description>
     </item>
     
     <item>
