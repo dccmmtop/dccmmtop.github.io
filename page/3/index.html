@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/">Callable与Future的应用</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
+                        <time datetime='2022-10-29T17:15:31.000&#43;00:00' itemprop="datePublished">2022-10-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    为什么需要 Callable 无论是继承 Thread 类，还是实现 Runnale 接口，或者使用线程池的 execute 方法去执行一个异步任务，都无法将这个任务的返回值带出来，以 Runnale 接口为例： /** * @since JDK1.0 */ @FunctionalInterface public interface Runnable { public abstract void run(); } 可以看到 run() 方法没有参数，没有返回值，没
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bforkjoin%E6%A1%86%E6%9E%B6/">并发编程之 ForkJoin 框架</a></h1>
                 </header>
                 
@@ -629,45 +668,6 @@
                     <p>
                         
                     对于 java 应用我们可以通过一些配置把程序运行过程中的 gc 日志全部打印出来，然后分析 gc 日志得到关键性指标，分析 GC 原因，调优 JVM 参数： 开启 GC 日志相关参数 java -jar ‐Xloggc:./gc‐%t.log ‐XX:+Prin
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/">java常量池</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="article-date">
-                        <time datetime='2022-09-15T10:05:51.000&#43;00:00' itemprop="datePublished">2022-09-15</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    Class常量池 Class常量池可以理解为class文件中的资源仓库，class 文件中除了包含类信息，方法，字段，接口信息之外还有常量池信息，用于存放编译期生成的各种字面量和符号引用。 如下: 常量池主要
                     </p>
                     
                 </div>

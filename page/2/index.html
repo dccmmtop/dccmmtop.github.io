@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/redis%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%92%8C%E5%93%A8%E5%85%B5%E4%BB%A5%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/">Redis 的主从和哨兵以及集群架构</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/redis%E7%9A%84%E4%B8%BB%E4%BB%8E%E5%92%8C%E5%93%A8%E5%85%B5%E4%BB%A5%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84/" class="article-date">
+                        <time datetime='2023-03-23T08:01:20.000&#43;00:00' itemprop="datePublished">2023-03-23</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    Redis 的主从架构 主从架构搭建步骤 1. 添加从节点 复制一份 redis.conf 文件，将相关配置修改如下： # 如果在不同机器上部署，端口可以不用修改 port 6380 # 把 pid 进程号写入 pidfile 配置的文件 pidfile /var/run/redis_6380.pid logfile &#34;6380.log&#34; # 指定数据存放目录 dir /usr/local/redis-5.0.3/data/6380 # 需要注释掉 bind # bind 12
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/redis">redis
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/redis%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8C%81%E4%B9%85%E5%8C%96/">redis基础配置和持久化</a></h1>
                 </header>
                 
@@ -644,45 +683,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/maven">maven
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/">Callable与Future的应用</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
-                        <time datetime='2022-10-29T17:15:31.000&#43;00:00' itemprop="datePublished">2022-10-29</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    为什么需要 Callable 无论是继承 Thread 类，还是实现 Runnale 接口，或者使用线程池的 execute 方法去执行一个异步任务，都无法将这个任务的返回值带出来，以 Runnale 接口为例： /** * @since JDK1.0 */ @FunctionalInterface public interface Runnable { public abstract void run(); } 可以看到 run() 方法没有参数，没有返回值，没
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
                             </a>
                         </li>
                         
