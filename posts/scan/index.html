@@ -43,12 +43,10 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
-    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
-
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 
 <body>
@@ -321,10 +319,10 @@
 <p>为了防止把问题带到生产环境，我们可以通过配置文件重命名一些危险命令，</p>
 <p>例如 keys 等一些高危命令。操作非常简单，</p>
 <p>只需要在 conf 配置文件增加如下所示配置即可：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">rename-command</span> <span style="color:#8be9fd;font-style:italic">flushdb</span> <span style="color:#8be9fd;font-style:italic">flushddbb</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">rename-command</span> <span style="color:#8be9fd;font-style:italic">flushall</span> <span style="color:#8be9fd;font-style:italic">flushallall</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">rename-command</span> <span style="color:#8be9fd;font-style:italic">keys</span> <span style="color:#8be9fd;font-style:italic">keysys</span>
-</span></span></code></pre></div>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">rename-command flushdb flushddbb
+rename-command flushall flushallall
+rename-command keys keysys
+</code></pre>
         </div>
 
         
