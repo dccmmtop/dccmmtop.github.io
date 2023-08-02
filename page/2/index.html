@@ -43,6 +43,8 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
@@ -94,6 +96,84 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/redis%E4%BD%BF%E7%94%A8%E8%A7%84%E8%8C%83%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">redis 使用规范与性能优化</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/redis%E4%BD%BF%E7%94%A8%E8%A7%84%E8%8C%83%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" class="article-date">
+                        <time datetime='2023-03-27T23:11:51.000&#43;00:00' itemprop="datePublished">2023-03-27</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    目录 键的设计 value 设计 拒绝 bigkey （强制） bigkey 的危害： bigKey 的产生 如何优化 bigkey 选择合适的数据类型 控制 key 的生命周期，redis 不是垃圾桶 命令的使用 关注元素数量 禁用危险命令 批量操作提升效率 不建议使用自带事务 客户端的使用 避免
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/redis">redis
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E4%B8%8E%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E4%BA%92%E9%80%9A/">nvim与操作系统剪贴板互通</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E4%B8%8E%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%89%AA%E8%B4%B4%E6%9D%BF%E4%BA%92%E9%80%9A/" class="article-date">
+                        <time datetime='2023-03-27T22:29:41.000&#43;00:00' itemprop="datePublished">2023-03-27</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    为了能够在 Windows 上使用系统剪贴板，您需要安装win32yank应用程序。您可以从这里下载。之后，您需要将剪贴板设置 vim 脚本 set clipboard+=unnamedplus lua 脚本 vim.opt.clipboard = &#34;unnamedplus&#34;
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/vim">vim
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -603,84 +683,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/">动态代理与静态代理</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86/" class="article-date">
-                        <time datetime='2022-11-02T16:57:07.000&#43;00:00' itemprop="datePublished">2022-11-02</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    代理是基本的设计模式之一，使用代理对象代替真实对象的方法调用，可以扩展真实对象某些方法的功能。 在 java 中又分为静态代理和动态代理, 先看静态代理: 静态代理 public class DynamicDemo { public static void main(String[] args) { /** * 静态代理示例 */ System.
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/bean%E8%A3%85%E9%85%8D%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3/">Bean装配相关注解</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/bean%E8%A3%85%E9%85%8D%E7%9B%B8%E5%85%B3%E6%B3%A8%E8%A7%A3/" class="article-date">
-                        <time datetime='2022-11-01T16:05:53.000&#43;00:00' itemprop="datePublished">2022-11-01</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    @ComponentScan 启用组件扫描 默认扫描与配置类相同的包以及子包 如何扫描指定的包 @ComponentScan(&ldquo;包名&rdquo;) 扫描一组包： @ComponentScan(basePackages={&quot;xxx&quot;,&quot;xxx&quot;}) 这种两种方式都是传入字符串，无法方便的重构。因为我们的编辑器
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
                             </a>
                         </li>
                         

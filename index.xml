@@ -9,7 +9,16 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Sat, 29 Jul 2023 19:05:55 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 31 Jul 2023 08:51:14 +0000</lastBuildDate><atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>适应于Linux的子系统已终止</title>
+      <link>https://dccmmtop.github.io/posts/%E9%80%82%E5%BA%94%E4%BA%8Elinux%E7%9A%84%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%B7%B2%E7%BB%88%E6%AD%A2/</link>
+      <pubDate>Mon, 31 Jul 2023 08:51:14 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E9%80%82%E5%BA%94%E4%BA%8Elinux%E7%9A%84%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%B7%B2%E7%BB%88%E6%AD%A2/</guid>
+      <description>管理员模式打开终端，输入 #停止LxssManager服务 net stop LxssManager #启动LxssManager服务 net start LxssManager 联系方式: dccmmtop@foxmail.com</description>
+    </item>
+    
     <item>
       <title>个人微信打造成得力助手</title>
       <link>https://dccmmtop.github.io/posts/%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1%E6%89%93%E9%80%A0%E6%88%90%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/</link>
@@ -17,6 +26,15 @@
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/%E4%B8%AA%E4%BA%BA%E5%BE%AE%E4%BF%A1%E6%89%93%E9%80%A0%E6%88%90%E5%BE%97%E5%8A%9B%E5%8A%A9%E6%89%8B/</guid>
       <description>本文提供一个通过java编程将微信打造成得力助手的方案, 先看效果： 查看支持的功能与对该功能开放的用户 接入人工智能 下载BiliBili 视频 原理 这个方案最难的地方就是如何把个人账号安全的接入微信，不会被封</description>
+    </item>
+    
+    <item>
+      <title>RocketMQ 基本概念和高级原理</title>
+      <link>https://dccmmtop.github.io/posts/rocketmq%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</link>
+      <pubDate>Tue, 25 Jul 2023 22:05:40 +0000</pubDate>
+      <author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/rocketmq%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E9%AB%98%E7%BA%A7%E5%8E%9F%E7%90%86/</guid>
+      <description>基础概念 消息模型 RocketMQ 主要由 Producer、Broker、Consumer 三部分组成，其中 Producer 负责生产消息，Consumer 负责消费消息，Broker 负责存储消息。Broker 在实际部署过程中对应一台服务</description>
     </item>
     
     <item>
@@ -61,7 +79,7 @@
       <pubDate>Tue, 16 May 2023 07:53:08 +0000</pubDate>
       <author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/springboot%E6%95%B4%E5%90%88rocketmq/</guid>
-      <description>SpringBoot整合RocketMQ使用非常简单，下面是一个简单的例子，作为备忘： 完整项目代码： https://github.com/dccmmtop/springBootRocketMQ 项目目录结构 依赖 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.rocketmq&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;rocketmq-spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.1&amp;lt;/version&amp;gt; &amp;lt;exclusions&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-webmvc&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;/exclusions&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependencies&amp;gt; 配置类 ExtRocketMQTemplate package com.roy.rocketmq.config; import org.apache.rocketmq.spring.annotation.ExtRocketMQTemplateConfiguration; import org.apache.rocketmq.spring.core.RocketMQTemplate;</description>
+      <description>SpringBoot整合RocketMQ使用非常简单，下面是一个简单的例子，作为备忘： 完整项目代码： https://github.com/dccmmtop/springBootRocketMQ 项目目录结构 依赖 &amp;laquo;&amp;laquo;&amp;laquo;&amp;lt; HEAD ======= 259748c5d94d9dc096c2c8ea1a2f98cc9cf7c13a &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.apache.rocketmq&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;rocketmq-spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.1&amp;lt;/version&amp;gt; &amp;lt;exclusions&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-core&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;exclusion&amp;gt; &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-webmvc&amp;lt;/artifactId&amp;gt; &amp;lt;/exclusion&amp;gt; &amp;lt;/exclusions&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-test&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;2.1.6.RELEASE&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependencies&amp;gt; 配置类 ExtRocketMQTemplate package com.roy.rocketmq.config;</description>
     </item>
     
     <item>

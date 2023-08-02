@@ -43,6 +43,8 @@
     <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
     <script src=" https://dccmmtop.github.io/js/custom.js"></script>
     <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
@@ -94,6 +96,84 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/rabbitmq%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/">RabbitMQ集群部署</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/rabbitmq%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" class="article-date">
+                        <time datetime='2022-07-04T22:27:10.000&#43;00:00' itemprop="datePublished">2022-07-04</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    本文采用docker-compose 的方式部署 rabbitMQ集群 docker-compose.yml version: &#34;3&#34; services: rabbitmq: restart: always container_name: rabbitMQ image: rabbitmq:3.7.7-management # 注意 hostname（本地域名）, rabbitMQ集群之间的通信就是靠此寻址的。物理机部署时也可以使用固定IP
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/">RabbitMQ应答队列</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/" class="article-date">
+                        <time datetime='2022-06-27T22:57:24.000&#43;00:00' itemprop="datePublished">2022-06-27</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    生产者在某个队列上等待消费者返回的消息， 这个队列被称为应答队列,RabbitMQ 天生支持应答队列的机制。 什么时候需要应答队列 当一条消息被消费者处理后，需要告知生产者一些信息时，消费者就需要在应答队列上
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -583,84 +663,6 @@
                     <p>
                         
                     当查询命中缓存时，立即返回结果。跳过了解析 优化和执行阶段 鸡肋 查询缓存在大部分时候都很鸡肋， 在 5.8 版本已经将查询缓存去掉了 下面几个特性是它鸡肋的证据: 什么时候不会被缓存 查询涉及的相关表数据发生变化时 查询缓
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/">基准测试</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/" class="article-date">
-                        <time datetime='2022-04-14T00:00:02.000&#43;00:00' itemprop="datePublished">2022-04-14</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    基准测试 http_load 可以通过一个输入文件提供多个 URL，Hpttp_load 在这些 URL 中随机选择进行测试。 也可以定制 axtp_1oad，使其按照时间比率进行测试，而不仅仅是测试最大请求处理 下面通过一个简单的例子来
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86/">mysql中的字符集</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mysql%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E9%9B%86/" class="article-date">
-                        <time datetime='2022-04-13T00:22:41.000&#43;00:00' itemprop="datePublished">2022-04-13</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    什么是字符集，什么是排序规则 字符集是只从二进制编码到某类字符符号的映射，该字符集的排序规则简称校对， 如 ASCII码，一个字节就可以表示一个英文字母，参照ASCII码表 为什么需要字符集 因为人类无法直接理
                     </p>
                     
                 </div>
