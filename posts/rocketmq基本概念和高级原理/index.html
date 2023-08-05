@@ -186,6 +186,12 @@ fileReservedTime = 48
 <p>存储消息在 CommitLog 的索引，一个 MessageQueue 文件，记录当前 MessageQueue 被哪些消费者组消费到了哪一条 CommitLog</p>
 <h3 id="indexfile">IndexFile</h3>
 <p>提供了一种可以通过 key，和时间区间查询消息的方法，这种查找方法不影响消息的发送和消费</p>
+<h3 id="cnfig">cnfig</h3>
+<p>运行期间一些配置信息</p>
+<h3 id="abort">abort</h3>
+<p>如果存在改文件寿命 Broker: 非正常关闭</p>
+<h3 id="checkpoint">checkpoint:</h3>
+<p>文件检查点，存储 CommitLog 文件最后一次刷盘时间戳、consumerquueue 最后一次刷盘时间，index 索引文件最后一次刷盘时间戳。</p>
 <p><img src="../../images/2023-08-05-16-10-37.png" alt=""></p>
 <h2 id="刷盘机制">刷盘机制</h2>
 <p>RocketMQ 需要将消息存储到磁盘上，这样才能保证断电后消息不会丢失。同时这样才可以让存储的消息量可以超出内存的限制。RocketMQ 为了提高性能，会尽量保证磁盘的顺序写。消息在写入磁盘时，有两种写磁盘的方式，同步刷盘和异步刷盘</p>
