@@ -140,7 +140,10 @@
 <p>表示一类消息的集合，每个主题包含若干条消息，每条消息只能属于一个主题，是 RocketMQ 进行消息订阅的基本单位。<br>
 同一个 Topic 下的数据，会分片保存到不同的 Broker 上，而每一个分片单位，就叫做 MessageQueue。<strong>MessageQueue 是生产者发送消息与消费者消费消息的最小单位。</strong> MessageQueue 是真实存在的物理文件，而 Topic 只是人为的将消息进行分类的名称</p>
 <h3 id="名字服务name-server">名字服务（Name Server）</h3>
-<p>名称服务充当路由消息的提供者。Broker Server会在启动时向所有的Name Server注册自己的服务信息，并且后续通过心跳请求的方式保证这个服务信息的实时性。生产者或消费者能够通过名字服务查找各主题相应的Broker IP列表。多个Namesrv实例组成集群，但相互独立，没有信息交换。</p>
+<p>名称服务充当路由消息的提供者。Broker Server 会在启动时向所有的 Name Server 注册自己的服务信息，并且后续通过心跳请求的方式保证这个服务信息的实时性。生产者或消费者能够通过名字服务查找各主题相应的 Broker IP 列表。多个 Namesrv 实例组成集群，但相互独立，没有信息交换。</p>
+<h3 id="消息">消息</h3>
+<p>消息系统所传输信息的物理载体，生产和消费数据的最小单位，每条消息<strong>必须</strong>属于一个主题 Topic。RocketMQ 中每个消息拥有唯一的 Message ID，且可以携带具有业务标识的 Key。系统提供了通过 Message ID 和 Key 查询消息的功能。</p>
+<p>并且 Message 上有一个为消息设置的标志，Tag 标签。用于<strong>同一主题下区分不同类型</strong>的消息。来自同一业务单元的消息，可以根据不同业务目的在同一主题下设置不同标签。标签能够有效地保持代码的清晰度和连贯性，<strong>并优化 RocketMQ 提供的查询系统</strong>。消费者可以根据 Tag 实现对不同子主题的不同消费逻辑，实现更好的扩展性。</p>
 <h2 id="消息存储">消息存储</h2>
 <h3 id="何时存储消息">何时存储消息</h3>
 <p>分布式队列有高可用的要求，所以数据要持久化存储。存储过程简述如下：</p>
@@ -175,6 +178,172 @@ fileReservedTime = 48
 <p>RocketMQ 采用 mmap 的方式。可以省区向用户态的复制，提高速度，这种机制在 java 中是通过 NIO 包中的 MappedByteBuffer 实现的。 RocketMQ 充分利用了上述的特性，也就是所谓的零拷贝技术，提高消息存储和网路发送的速度。</p>
 <p>大需要注意的是：采用 MappedByteBuffer 这种内存映射的方式有几个限制，其中之一是一次只能映射 1.5G~2G 的文件只用户态的虚拟内存，这也是为何 RocketMQ 默认设置单个 CommotLog 的大小是 1G 的原因了。</p>
 <p>关于零拷贝，JAVA 的 NIO 中提供了两种实现方式， mmap 和 sendfile, 其中 mmap 适合比较小的文件，而 sendfile 适合传递比较大的文件。</p>
+<h2 id="消息存储结构">消息存储结构</h2>
+<p>RocketMQ 消息存储分为 3 个部分：</p>
+<h3 id="commitlog">CommitLog</h3>
+<p>存储消息的元数据，所有消息都会<strong>顺序</strong>写入到 CommitLog 中，CommitLog 由多个文件组成，每个文件固定大小 1G，以第一条消息的偏移量命名</p>
+<h3 id="consumerqueue">ConsumerQueue</h3>
+<p>存储消息在 CommitLog 的索引，一个 MessageQueue 文件，记录当前 MessageQueue 被哪些消费者组消费到了哪一条 CommitLog</p>
+<h3 id="indexfile">IndexFile</h3>
+<p>提供了一种可以通过 key，和时间区间查询消息的方法，这种查找方法不影响消息的发送和消费</p>
+<p><img src="../../images/2023-08-05-16-10-37.png" alt=""></p>
+<h2 id="刷盘机制">刷盘机制</h2>
+<p>RocketMQ 需要将消息存储到磁盘上，这样才能保证断电后消息不会丢失。同时这样才可以让存储的消息量可以超出内存的限制。RocketMQ 为了提高性能，会尽量保证磁盘的顺序写。消息在写入磁盘时，有两种写磁盘的方式，同步刷盘和异步刷盘</p>
+<p><img src="../../images/2023-08-05-16-11-38.png" alt=""></p>
+<h3 id="同步刷盘">同步刷盘</h3>
+<p>在返回写成功状态时，消息已经被写入了磁盘，流程是：消息写入内存的 PAGECACHE 立刻通知刷盘线程进行刷盘，等待刷盘完成，刷盘线程完成后唤醒等待的线程，返回消息写入成功的状态</p>
+<h3 id="异步刷盘">异步刷盘</h3>
+<p>在返回写成功状态时，消息可能只是被写入了内存的 PAGECACHE，写操作的返回快，吞吐量大；<strong>当内存里的消息量积累到一定程度时，统一触发写磁盘动作，快速写入。</strong></p>
+<h3 id="配置方式">配置方式</h3>
+<p>刷盘方式是通过 Broker 配置文件里的 <code>flushDiskType</code> 参数设置的，这个参数被配置成 <code>SYNC_FLUSH</code>、<code>ASYNC_FLUSH</code> 中的 一个。</p>
+<h2 id="消息的主从复制">消息的主从复制</h2>
+<p>如果 Broker 以一个集群的方式部署，会有一个 master 节点和多个 slave 节点，消息需要从 Master 复制到 Slave 上。而消息复制的方式分为同步复制和异步复制。</p>
+<h3 id="同步复制">同步复制</h3>
+<p>同步复制是等 Master 和 Slave 都写入消息成功后才反馈给客户端写入成功的状态。</p>
+<p><strong>优点</strong><br>
+在同步复制下，如果 Master 节点故障，Slave 上有全部的数据备份，这样容易恢复数据。</p>
+<p><strong>缺点</strong><br>
+但是同步复制会增大数据写入的延迟，降低系统的吞吐量。</p>
+<h3 id="异步复制">异步复制</h3>
+<p>异步复制是只要 master 写入消息成功，就反馈给客户端写入成功的状态。然后再异步的将消息复制给 Slave 节点。</p>
+<p><strong>优点</strong><br>
+在异步复制下，系统拥有较低的延迟和较高的吞吐量。</p>
+<p><strong>缺点</strong><br>
+但是如果 master 节点故障，而有些数据没有完成复制，就会造成数据丢失。</p>
+<h3 id="配置方式-1">配置方式</h3>
+<p>消息复制方式是通过 Broker 配置文件里的 <code>brokerRole</code> 参数进行设置的，这个参数可以被设置成<code>ASYNC_MASTER</code>、 <code>SYNC_MASTER</code>、<code>SLAVE</code> 三个值中的一个。</p>
+<h2 id="负载均衡">负载均衡</h2>
+<h3 id="producer-的负载均衡">Producer 的负载均衡</h3>
+<p>Producer 发送消息时，默认轮训 Topic 下的所有 MessageQueue, 已达到让消息平均落在不同 queue 上的目的，由于 MessageQueue 分布在不同的 Broker 上，所以消息也会发送到不同的 Broker 上</p>
+<h4 id="有序消息">有序消息</h4>
+<p>发送消息的时候可以指定一个 MessageQueueSelector, 通过这个对象可以让消息发送到自己指定的队列上，这样可以保证消息局部有序</p>
+<h3 id="消费者的负载均衡">消费者的负载均衡</h3>
+<p>Consumer 也是以 MessageQueue 为单位进行负载均衡的，分为集群模式和广播模式</p>
+<h4 id="集群模式">集群模式</h4>
+<p>在集群模式下，每条消息只需投递到订阅这个 topic 的 Consumer Group 下的一个实例即可，RocketMQ 采用主动拉取的方式消费消息，在拉取的时候，需要明确指定拉取哪一条 MessageQueue</p>
+<p>而每当消费组下的消费数量发生变更的时候，都会触发一次所有实例的负载均衡，这时候会按照 queue 的数量和实例数量，让每个消费者平均分配 Queue</p>
+<p>每次分配的时候，都会将 MessageQueue 和消费者 ID 进行排序后，再用不同的算法进行分配。内置分配算法有 6 种，分别对应 <code>AllocateMessageStrategy</code> 下的六种实现类，可以在 consumer 中通过 set 方法设置</p>
+<p><strong>分配策略简介</strong></p>
+<ul>
+<li>
+<p>AllocateMachineRoomeNearby: 将同机房的 Producer、 Consumer 分配到一起<br>
+这个策略可以通过一个 machineRoomResolver 对象来定制 Consumer 和 Broker 的机房解析规则。然后还需要引入另外一个分配策略来对同机房的 Broker 和 Consumer 进行分配。一般也就用简单的平均分配策略或者轮询分配策略。</p>
+</li>
+<li>
+<p>AllocateMessageQueueAveragely：平均分配。将所有 MessageQueue 平均分给每一个消费者</p>
+</li>
+<li>
+<p>AllocateMessageQueueAveragelyByCircle： 轮询分配。轮流的给一个消费者分配一个 MessageQueue。</p>
+</li>
+<li>
+<p>AllocateMessageQueueByConfig： 不分配，直接指定一个 messageQueue 列表。类似于广播模式，直接指定所有队列。</p>
+</li>
+<li>
+<p>AllocateMessageQueueByMachineRoom：按逻辑机房的概念进行分配。又是对 BrokerName 和 ConsumerIdc 有定制化的配置。</p>
+</li>
+<li>
+<p>AllocateMessageQueueConsistentHash。源码中有测试代码 AllocateMessageQueueConsitentHashTest。这个一致性哈希策略只需要指定一个虚拟节点数，是用的一个哈希环的算法，虚拟节点是为了让 Hash 数据在换上分布更为均匀。</p>
+</li>
+</ul>
+<h3 id="广播模式">广播模式</h3>
+<p>就像收音机与广播站的模型一样，所有的消费者都要接收每一条消息，不存在消息分配说法</p>
+<h2 id="消息重试">消息重试</h2>
+<p>首先广播模式下是不存在消息重试机制的，即消息消费失败后，不必进行重发，而是继续监听新的消息，</p>
+<p>而对于普通的消息，当消费者消费消息失败后，可以设置返回状态达到消息重试的结果</p>
+<h4 id="让消息重试的几种方法">让消息重试的几种方法</h4>
+<p>集群消费方式下，消息消费失败后期望消息重试，需要在消息监听器接口的实现中明确进行配置。可以有三种配置方式：</p>
+<ul>
+<li>返回 Action.ReconsumeLater-推荐</li>
+<li>返回 null</li>
+<li>抛出异常</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageListenerImpl</span> <span style="color:#8be9fd;font-style:italic">implements</span> MessageListener <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Action <span style="color:#50fa7b">consume</span><span style="color:#ff79c6">(</span>Message message<span style="color:#ff79c6">,</span> ConsumeContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//处理消息
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        doConsumeMessage<span style="color:#ff79c6">(</span>message<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//方式 1：返回 Action.ReconsumeLater，消息将重试
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> Action<span style="color:#ff79c6">.</span><span style="color:#50fa7b">ReconsumeLater</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//方式 2：返回 null，消息将重试
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//方式 3：直接抛出异常， 消息将重试
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Consumer Message exceotion&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>如果希望消费失败后不重试，可以直接返回 Action.CommitMessage。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageListenerImpl</span> <span style="color:#8be9fd;font-style:italic">implements</span> MessageListener <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Action <span style="color:#50fa7b">consume</span><span style="color:#ff79c6">(</span>Message message<span style="color:#ff79c6">,</span> ConsumeContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            doConsumeMessage<span style="color:#ff79c6">(</span>message<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Throwable e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//捕获消费逻辑中的所有异常，并返回 Action.CommitMessage;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">return</span> Action<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CommitMessage</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//消息处理正常，直接返回 Action.CommitMessage;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> Action<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CommitMessage</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><h4 id="如何处理重试的消息">如何处理重试的消息</h4>
+<p>重试的消息会进入一个 <code>&quot;%RETRY%&quot;+ConsumeGroup</code> 的队列中。如图所示：</p>
+<p><img src="../../images/2023-08-05-16-53-55.png" alt=""></p>
+<p>然后 RocketMQ 默认允许每条消息最多重试 16 次，每次重试的间隔时间如下：</p>
+<p><img src="../../images/2023-08-05-16-54-14.png" alt=""></p>
+<blockquote>
+<p>这个重试时间跟延迟消息的延迟级别是对应的。不过取的是延迟级别的后 16 级别。<br>
+messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h<br>
+这个重试时间可以将源码中的 org.apache.rocketmq.example.quickstart.Consumer 里的消息监听器返回状态改为 RECONSUME_LATER 测试一下。</p>
+</blockquote>
+<h4 id="重试次数">重试次数</h4>
+<p>如果消息重试 16 次后仍然失败，消息将不再投递。转为进入死信队列。</p>
+<p>另外一条消息无论重试多少次，这些重试消息的 MessageId 始终都是一样的。</p>
+<p>然后关于这个重试次数，RocketMQ 可以进行定制。例如通过 <code>consumer.setMaxReconsumeTimes(20);</code> 将重试次数设定为 20 次。当定制的重试次数超过 16 次后，消息的重试时间间隔均为 2 小时。</p>
+<h4 id="关于-messageid">关于 MessageId：</h4>
+<p>在老版本的 RocketMQ 中，一条消息无论重试多少次，这些重试消息的 MessageId 始终都是一样的。</p>
+<p>但是在 4.7.1 版本中，每次重试 MessageId 都会重建。</p>
+<h4 id="配置覆盖">配置覆盖：</h4>
+<p>消息最大重试次数的设置对相同 GroupID 下的所有 Consumer 实例有效。并且最后启动的 Consumer 会覆盖之前启动的 Consumer 的配置。</p>
+<h2 id="死信队列">死信队列</h2>
+<p>当一条消息消费失败，RocketMQ 就会自动进行消息重试。而如果消息超过最大重试次数，RocketMQ 就会认为这个消息有问题。但是此时，RocketMQ 不会立刻将这个有问题的消息丢弃，而会将其发送到这个消费者组对应的一种特殊队列：<strong>死信队列</strong>。</p>
+<p>死信队列的名称是<code>%DLQ%+ConsumGroup</code></p>
+<p><img src="../../images/2023-08-05-17-01-07.png" alt=""></p>
+<p>死信队列的特征：</p>
+<ul>
+<li>一个死信队列对应一个 ConsumGroup，而不是对应某个消费者实例。</li>
+<li>如果一个 ConsumeGroup 没有产生死信队列，RocketMQ 就不会为其创建相应的死信队列。</li>
+<li>一个死信队列包含了这个 ConsumeGroup 里的所有死信消息，而不区分该消息属于哪个 Topic。</li>
+<li>死信队列中的消息不会再被消费者<strong>正常消费</strong>。</li>
+<li>死信队列的有效期跟正常消息相同。默认 3 天，对应 broker.conf 中的<code>fileReservedTime</code>属性。超过这个最长时间的消息都会被删除，而不管消息是否消费过。</li>
+</ul>
+<p>通常，一条消息进入了死信队列，意味着消息在消费处理的过程中出现了比较严重的错误，并且无法自行恢复。此时，一般需要人工去查看死信队列中的消息，对错误原因进行排查。然后对死信消息进行处理，比如转发到正常的 Topic 重新进行消费，或者丢弃。</p>
+<blockquote>
+<p>注：默认创建出来的死信队列，他里面的消息是无法读取的，在控制台和消费者中都无法读取。这是因为这些默认的死信队列，他们的权限 perm 被设置成了** 2: 禁读**（这个权限有三种 2: 禁读，4: 禁写，6: 可读可写）。<strong>需要手动将死信队列的权限配置成 6</strong>，才能被消费（可以通过** mqadmin <strong>指定或者</strong> web **控制台）。</p>
+</blockquote>
+<h2 id="消息幂等">消息幂等</h2>
+<h3 id="幂等的概念">幂等的概念</h3>
+<p>在 MQ 系统中，对于消息幂等有三种实现语义：</p>
+<ul>
+<li>at most once 最多一次：每条消息最多只会被消费一次</li>
+<li>at least once 至少一次：每条消息至少会被消费一次</li>
+<li>exactly once 刚刚好一次：每条消息都只会确定的消费一次</li>
+</ul>
+<p>这三种语义都有他适用的业务场景。</p>
+<p>其中，at most once 是最好保证的。RocketMQ 中可以直接用异步发送、sendOneWay 等方式就可以保证。<br>
+而 at least once 这个语义，RocketMQ 也有同步发送、事务消息等很多方式能够保证。<br>
+而这个 exactly once 是 MQ 中最理想也是最难保证的一种语义，需要有非常精细的设计才行。</p>
+<p>RocketMQ 只能保证 at least once，保证不了 exactly once。所以，使用 RocketMQ 时，需要由业务系统自行保证消息的幂等性。</p>
+<h3 id="消息幂等的必要性">消息幂等的必要性</h3>
+<p>在互联网应用中，尤其在网络不稳定的情况下，消息队列 RocketMQ 的消息有可能会出现重复，这个重复简单可以概括为以下情况：</p>
+<h4 id="发送时消息重复">发送时消息重复</h4>
+<p>当一条消息已被成功发送到服务端并完成持久化，此时出现了网络闪断或者客户端宕机，导致服务端对客户端应答失败。 如果此时生产者意识到消息发送失败并尝试再次发送消息，消费者后续会收到两条内容相同并且 Message ID 也相同的消息。</p>
+<h4 id="投递时消息重复">投递时消息重复</h4>
+<p>消息消费的场景下，消息已投递到消费者并完成业务处理，当客户端给服务端反馈应答的时候网络闪断。 为了保证消息至少被消费一次，消息队列 RocketMQ 的服务端将在网络恢复后再次尝试投递之前已被处理过的消息，消费者后续会收到两条内容相同并且 Message ID 也相同的消息。</p>
+<h4 id="负载均衡时消息重复包括但不限于网络抖动broker-重启以及订阅方应用重启">负载均衡时消息重复（包括但不限于网络抖动、Broker 重启以及订阅方应用重启）</h4>
+<p>当消息队列 RocketMQ 的 Broker 或客户端重启、扩容或缩容时，会触发 Rebalance，此时消费者可能会收到重复消息。</p>
+<h3 id="处理方式">处理方式</h3>
+<p>从上面的分析中，我们知道，在 RocketMQ 中，是无法保证每个消息只被投递一次的，所以要在业务上自行来保证消息消费的幂等性。</p>
+<p>而要处理这个问题，RocketMQ 的每条消息都有一个唯一的 MessageId，这个参数在多次投递的过程中是不会改变的，所以业务上可以用这个 MessageId 来作为判断幂等的关键依据。</p>
+<p><strong>但是，这个 MessageId 是无法保证全局唯一的</strong>，也会有冲突的情况。所以在一些对幂等性要求严格的场景，<strong>最好是使用业务上唯一的一个标识比较靠谱</strong>。例如订单 ID。而这个业务标识可以使用 Message 的 Key 来进行传递。</p>
 <blockquote>
 <p>联系方式：dccmmtop@foxmail.com</p>
 </blockquote>
