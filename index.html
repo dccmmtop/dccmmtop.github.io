@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.115.3">
 </head>
 <body>
 <div id="container">
@@ -96,6 +96,45 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="./posts/nginx%E4%B8%ADlocation%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/">nginx中location匹配规则</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="./posts/nginx%E4%B8%ADlocation%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/" class="article-date">
+                        <time datetime='2023-08-16T16:13:39.000&#43;00:00' itemprop="datePublished">2023-08-16</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    精确匹配 / ，主机名后面不能带任何字符串 location = / { add_header Content-Type text/plain; return 200 &#39;A&#39;; } 或 location = /login { add_header Content-Type text/plain; return 200 &#39;B&#39;; } 匹配任何以 /static/ 开头的地址，匹配以后，不再继续往下检索正则，立即采用这一条。 location ^~ /static/ { add_header Content-Type text/plain; return 200 &#39;C&#39;; } 匹配所有以 txt 结尾的请求
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/nginx">nginx
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -643,45 +682,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="./posts/redis%E5%86%85%E5%AD%98%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5/">Redis 内存清理策略</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="./posts/redis%E5%86%85%E5%AD%98%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5/" class="article-date">
-                        <time datetime='2023-03-30T08:14:20.000&#43;00:00' itemprop="datePublished">2023-03-30</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    三种清触策略 针对设置了过期时间的 key 针对所有的 key 不处理 LRU 算法（Least Recently Used，最近最少使用） LFU 算法（Least Frequently Used，最不经常使用） 实际应用 三种清触策略 被动清除 当读写一个已经过期的 key 时，会触发
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/redis">redis
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -742,6 +742,10 @@
     
     
     <a href="./page/14/">14</a>
+    
+    
+    
+    <a href="./page/15/">15</a>
     
     
 

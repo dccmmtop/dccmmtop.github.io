@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.115.3">
 </head>
 <body>
 <div id="container">
@@ -96,6 +96,50 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%8A%8A%E6%9F%90%E4%BA%9B%E5%8F%82%E6%95%B0%E6%94%BE%E5%9C%A8%E8%AF%B7%E6%B1%82%E5%A4%B4%E4%B8%AD/">为什么把某些参数放在请求头中</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E4%B8%BA%E4%BB%80%E4%B9%88%E6%8A%8A%E6%9F%90%E4%BA%9B%E5%8F%82%E6%95%B0%E6%94%BE%E5%9C%A8%E8%AF%B7%E6%B1%82%E5%A4%B4%E4%B8%AD/" class="article-date">
+                        <time datetime='2021-10-27T22:12:48.000&#43;00:00' itemprop="datePublished">2021-10-27</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    在HTTP协议中，首部和请求体是分开传输的，将一些认证信息参数放在请求头中，服务端先解析请求头，如果认证不通过，可以直接返回认证失败，不用再传输请求体，从而提高服务器的性能。 下面做实验验证,实验思路：
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/htttp">HTTTP
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -588,45 +632,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%BC%80%E5%90%AF%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97/">开启查询日志</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%BC%80%E5%90%AF%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97/" class="article-date">
-                        <time datetime='2021-08-12T23:13:15.000&#43;00:00' itemprop="datePublished">2021-08-12</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    开启查询日志 方法一：执行MongoDB命令 这个命令只能设置单个组件的日志等级，如果想要一次性设置多个组件的日志等级，可以使用下面的方法： 新建 start_log.js， 内容如下 db.adminCommand( { setParameter: 1, logComponentVerbosity: { verbosity: 1, query: { verbosity: 2 },
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mongodb">mongoDB
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -689,6 +694,10 @@
     
     
     <a href="../../page/14/">14</a>
+    
+    
+    
+    <a href="../../page/15/">15</a>
     
     
 

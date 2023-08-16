@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.115.3">
 </head>
 
 <body>
@@ -153,11 +153,11 @@
 <li>MQ 要定期的删除一些消息，这样才能保证服务一直可用</li>
 </ol>
 <p>删除消息的配置：</p>
-<pre tabindex="0"><code class="language-conf" data-lang="conf"># 删除文件的时间点，默认是凌晨 4 点
-deleteWhen = 04
-# 文件保留时间，默认是 48 小时
-fileReservedTime = 48
-</code></pre><h3 id="消息存储介质">消息存储介质</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#6272a4"># 删除文件的时间点，默认是凌晨 4 点
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">deleteWhen</span> <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">04</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 文件保留时间，默认是 48 小时
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">fileReservedTime</span> <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">48</span>
+</span></span></code></pre></div><h3 id="消息存储介质">消息存储介质</h3>
 <p>RocketMQ 采用的是类似 kafka 的文件存储机制，即直接用磁盘文件保存信息，而不需借助 MySQL 这一类的索引工具。</p>
 <h4 id="磁盘存储能保证速度吗">磁盘存储能保证速度吗？</h4>
 <p>磁盘如果使用得当，完全可以匹配上网络传输速度。目前高性能的磁盘，顺序读写速度可以达到 600M/S , 超过了一般的网卡传输速度，但是磁盘的随机读写速度大概只有 100KB/S, 和顺序读写的性能相差 6000 倍！因为有如此巨大的速度差别，好的消息队列会比普通的消息队列速度快多个数量级。RocketMQ 的消息顺序写，保证了消息存储的速度。</p>

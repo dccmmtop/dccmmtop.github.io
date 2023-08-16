@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.115.3">
 </head>
 
 <body>
@@ -117,23 +117,23 @@
 <h3 id="主从架构搭建步骤">主从架构搭建步骤</h3>
 <h4 id="1-添加从节点">1. 添加从节点</h4>
 <p>复制一份 redis.conf 文件，将相关配置修改如下：</p>
-<pre tabindex="0"><code class="language-conf" data-lang="conf"># 如果在不同机器上部署，端口可以不用修改
-port 6380
-# 把 pid 进程号写入 pidfile 配置的文件
-pidfile /var/run/redis_6380.pid  
-logfile &#34;6380.log&#34;
-# 指定数据存放目录
-dir /usr/local/redis-5.0.3/data/6380  
-
-# 需要注释掉 bind
-# bind 127.0.0.1（bind 绑定的是自己机器网卡的 ip，如果有多块网卡可以配多个 ip，代表允许客户端通过机器的哪些网卡 ip 去访问，内网一般可以不配置 bind，注释掉即可）
-
-# 配置主从复制
-# 从 192.168.2.10 6379 的 redis 实例复制数据，Redis 5.0 之前使用 slaveof
-replicaof 192.168.2.10 6379   
-# 配置从节点只读
-replica-read-only yes  
-</code></pre><h4 id="2-启动从节点">2. 启动从节点</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#6272a4"># 如果在不同机器上部署，端口可以不用修改
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">port</span> <span style="color:#8be9fd;font-style:italic">6380</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 把 pid 进程号写入 pidfile 配置的文件
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">pidfile</span> /<span style="color:#8be9fd;font-style:italic">var</span>/<span style="color:#8be9fd;font-style:italic">run</span>/<span style="color:#8be9fd;font-style:italic">redis_6380.pid</span>  
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">logfile</span> <span style="color:#f1fa8c">&#34;6380.log&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 指定数据存放目录
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">dir</span> /<span style="color:#8be9fd;font-style:italic">usr</span>/<span style="color:#8be9fd;font-style:italic">local</span>/<span style="color:#8be9fd;font-style:italic">redis-5.0.3</span>/<span style="color:#8be9fd;font-style:italic">data</span>/<span style="color:#8be9fd;font-style:italic">6380</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 需要注释掉 bind
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"># bind 127.0.0.1（bind 绑定的是自己机器网卡的 ip，如果有多块网卡可以配多个 ip，代表允许客户端通过机器的哪些网卡 ip 去访问，内网一般可以不配置 bind，注释掉即可）
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 配置主从复制
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"># 从 192.168.2.10 6379 的 redis 实例复制数据，Redis 5.0 之前使用 slaveof
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">replicaof</span> <span style="color:#bd93f9">192.168.2.10</span> <span style="color:#8be9fd;font-style:italic">6379</span>   
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 配置从节点只读
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">replica-read-only</span> <span style="color:#8be9fd;font-style:italic">yes</span>  
+</span></span></code></pre></div><h4 id="2-启动从节点">2. 启动从节点</h4>
 <p><code>redis-server redis.conf</code></p>
 <h4 id="3-连接从节点">3. 连接从节点</h4>
 <p><code>redis-cli -p 6380</code></p>
@@ -166,15 +166,15 @@ replica-read-only yes
 <code>cp sentinel.conf sentinel-26379.conf</code></li>
 <li>修改相关配置</li>
 </ol>
-<pre tabindex="0"><code class="language-conf" data-lang="conf">port 26379
-daemonize yes
-pidfile &#34;/var/run/redis-sentinel-26379.pid&#34;
-logfile &#34;26379.log&#34;
-dir &#34;/usr/local/redis-5.0.3/data&#34;
-# sentinel monitor &lt;master-redis-name&gt; &lt;master-redis-ip&gt; &lt;master-redis-port&gt; &lt;quorum&gt;
-# quorum 是一个数字，指明当有多少个 sentinel 认为一个 master 失效时（值一般为：sentinel 总数/2 + 1)，master 才算真正失效
-sentinel monitor mymaster 192.168.1.32 6379 2   # mymaster 这个名字随便取，客户端访问时会用到
-</code></pre><ol start="3">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">port</span> <span style="color:#8be9fd;font-style:italic">26379</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">daemonize</span> <span style="color:#8be9fd;font-style:italic">yes</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">pidfile</span> <span style="color:#f1fa8c">&#34;/var/run/redis-sentinel-26379.pid&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">logfile</span> <span style="color:#f1fa8c">&#34;26379.log&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">dir</span> <span style="color:#f1fa8c">&#34;/usr/local/redis-5.0.3/data&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># sentinel monitor &lt;master-redis-name&gt; &lt;master-redis-ip&gt; &lt;master-redis-port&gt; &lt;quorum&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"># quorum 是一个数字，指明当有多少个 sentinel 认为一个 master 失效时（值一般为：sentinel 总数/2 + 1)，master 才算真正失效
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">sentinel</span> <span style="color:#8be9fd;font-style:italic">monitor</span> <span style="color:#8be9fd;font-style:italic">mymaster</span> <span style="color:#bd93f9">192.168.1.32</span> <span style="color:#8be9fd;font-style:italic">6379</span> <span style="color:#8be9fd;font-style:italic">2</span>   <span style="color:#6272a4"># mymaster 这个名字随便取，客户端访问时会用到
+</span></span></span></code></pre></div><ol start="3">
 <li>启动哨兵实例</li>
 </ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>src/redis-sentinel sentinel-26379.conf
@@ -188,8 +188,8 @@ sentinel monitor mymaster 192.168.1.32 6379 2   # mymaster 这个名字随便取
 </span></span><span style="display:flex;"><span>sentinel known-sentinel mymaster 192.168.0.60 26380 52d0a5d70c1f90475b4fc03b6ce7c3c56935760f  #代表感知到的其它哨兵节点
 </span></span><span style="display:flex;"><span>sentinel known-sentinel mymaster 192.168.0.60 26381 e9f530d3882f8043f76ebb8e1686438ba8bd5ca6  #代表感知到的其它哨兵节点
 </span></span></code></pre></div><p>如果主节点（6379）宕机，哨兵集群会重新选举新的主节点，同时修改所有 sentinel 节点配置文件的集群元信息， 同时还会修改 sentinel 配置文件中的 mymaster 对应的 6379 端口，改为 6380:</p>
-<pre tabindex="0"><code class="language-conf" data-lang="conf">sentinel monitor mymaster 192.168.0.60 6380 2
-</code></pre><p>当 6379 节点再次启动时，哨兵集群根据集群元信息就可以将 6379 作为从节点加入集群中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">sentinel</span> <span style="color:#8be9fd;font-style:italic">monitor</span> <span style="color:#8be9fd;font-style:italic">mymaster</span> <span style="color:#bd93f9">192.168.0.60</span> <span style="color:#8be9fd;font-style:italic">6380</span> <span style="color:#8be9fd;font-style:italic">2</span>
+</span></span></code></pre></div><p>当 6379 节点再次启动时，哨兵集群根据集群元信息就可以将 6379 作为从节点加入集群中。</p>
 <h2 id="redis-集群">Redis 集群</h2>
 <p>TODO:</p>
 <h2 id="java-使用-jedis-连接集群">java 使用 Jedis 连接集群</h2>
