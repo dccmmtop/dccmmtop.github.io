@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 <body>
 <div id="container">
@@ -96,6 +96,45 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="./posts/maven%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86%E9%80%9F%E8%AE%B0/">maven 常用知识速记</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="./posts/maven%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86%E9%80%9F%E8%AE%B0/" class="article-date">
+                        <time datetime='2023-10-17T07:39:15.000&#43;00:00' itemprop="datePublished">2023-10-17</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    创建项目 maven archetype:generate 依赖范围 有如下依赖示例： &lt;dependency&gt; &lt;groupId&gt;junit&lt;/groupId&gt; &lt;artifactId&gt;junit&lt;/artifactId&gt; &lt;version&gt;4.7&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; 其中有一个scope标签来声明该依赖的作用范围 首先需要知道，Maven 在编译项目主代码的时候需要使用一套 classpath。在上例中，假如编译项目主代码
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/maven">maven
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -624,45 +663,6 @@
                     <p>
                         
                     简单示例 项目结构 依赖 配置 生产者 消费者 消息的可靠投递示例 confirm return 消费者确认机制 消费端限流 TTL 单条消息 整个队列设置 TTL 死信队列 死信队列的实现步骤 延迟队列 消息幂等设计 简单示例 项目结构 依赖 &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt;
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="./posts/mq%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/">MQ 的基本概念和五种模式使用示例</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="./posts/mq%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B/" class="article-date">
-                        <time datetime='2023-04-07T23:27:52.000&#43;00:00' itemprop="datePublished">2023-04-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    概念 MQ 全称 Message Queue（消息队列），是在消息的传输过程中保存消息的容器。多用于分布式系统之间进行通信。 无 MQ 有 MQ 优势 应用解耦 系统的耦合性越高，容错性就越低，可维护性就越低 异步提速 如图所示，在没有 MQ 的情况
                     </p>
                     
                 </div>

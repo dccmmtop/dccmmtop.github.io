@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 
 <body>
@@ -124,8 +124,8 @@
 <img src="../../images/2023-03-22-08-29-42.png" alt=""></p>
 <h4 id="redis-支持的最大连接数">redis 支持的最大连接数</h4>
 <p>在配置文件中 <code>redis.conf</code> :</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">maxlients</span> <span style="color:#8be9fd;font-style:italic">6000</span>
-</span></span></code></pre></div><p>也可以在 redis-cli 中查看：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">maxlients 6000
+</code></pre><p>也可以在 redis-cli 中查看：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>127.0.0.1:6379&gt; CONFIG GET maxclients
 </span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;maxclients&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;6000&#34;</span>

@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 <body>
 <div id="container">
@@ -96,6 +96,45 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ioc%E6%80%9D%E6%83%B3%E8%AE%B2%E8%A7%A3%E5%92%8C%E5%AE%9E%E7%8E%B0/">IoC 思想和实现</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ioc%E6%80%9D%E6%83%B3%E8%AE%B2%E8%A7%A3%E5%92%8C%E5%AE%9E%E7%8E%B0/" class="article-date">
+                        <time datetime='2022-11-04T15:49:47.000&#43;00:00' itemprop="datePublished">2022-11-04</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    我们先不粘贴官方的晦涩定义，通过一个例子来一步一步的引出 IoC 思想，真正的体会到 IoC 思想对我们编程带来的益处。 车，引擎，轮胎 一个汽车需要引擎和轮胎，有下面模型： /** * 东风汽车 */ class NissanCar{ private Engine engine; private Tyre tyre; public NissanCar() { this.engine = new EngineV1(); this.tyre
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -629,45 +668,6 @@
                     <p>
                         
                     原子操作 原子（atom）本意是“不能被进一步分割的最小粒子”，而原子操作（atomic operation）意为”不可被中断的一个或一系列操作” 。在多处理器上实现原子操作就变得有点复杂 处理器会保证基本内
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/">并发编程之Semaphore和CountDownLatch的用法</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bsemaphore%E5%92%8Ccountdownlatch%E7%9A%84%E7%94%A8%E6%B3%95/" class="article-date">
-                        <time datetime='2022-10-10T10:40:28.000&#43;00:00' itemprop="datePublished">2022-10-10</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    Semaphore Semaphore 是信号量的意思，它的作用是控制访问特定资源的线程数目，底层依赖 AQS 的状态 State，是在生产当中比较常用的一个工具类。 可以理解为许可证，或者令牌。线程想要访问某部分资源时，必须先获取一个许可证，才能
                     </p>
                     
                 </div>

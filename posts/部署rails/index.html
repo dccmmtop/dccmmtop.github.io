@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 
 <body>
@@ -251,9 +251,9 @@
 <li>
 <p>passenger 的配置</p>
 <p>nginx 安装以后，打开<code>/etc/nginx/passenger.conf</code>会看到</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">passenger_root</span> /<span style="color:#8be9fd;font-style:italic">usr</span>/<span style="color:#8be9fd;font-style:italic">lib</span>/<span style="color:#8be9fd;font-style:italic">ruby</span>/<span style="color:#8be9fd;font-style:italic">vendor_ruby</span>/<span style="color:#8be9fd;font-style:italic">phusion_passenger</span>/<span style="color:#8be9fd;font-style:italic">locations.ini</span>;
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">passenger_ruby</span> /<span style="color:#8be9fd;font-style:italic">home</span>/<span style="color:#8be9fd;font-style:italic">deploy</span>/<span style="color:#8be9fd;font-style:italic">.rbenv</span>/<span style="color:#8be9fd;font-style:italic">shims</span>/<span style="color:#8be9fd;font-style:italic">ruby</span>; //这里需要修改<span style="color:#8be9fd;font-style:italic">ruby</span>的安装路径
-</span></span></code></pre></div><p><code>which ruby</code> 可以查看 ruby 的路径</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">passenger_root /usr/lib/ruby/vendor_ruby/phusion_passenger/locations.ini;
+passenger_ruby /home/deploy/.rbenv/shims/ruby; //这里需要修改ruby的安装路径
+</code></pre><p><code>which ruby</code> 可以查看 ruby 的路径</p>
 </li>
 </ul>
 <h3 id="capistrano-配置原文教程httpsruby-chinaorgtopics18616">Capistrano 配置<a href="https://ruby-china.org/topics/18616">原文教程</a></h3>

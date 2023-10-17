@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 <body>
 <div id="container">
@@ -96,6 +96,45 @@
 </header>
 
     <section id="main" class="outer">
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E8%A7%A3%E6%9E%90%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93/">解析请求头和请求体</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E8%A7%A3%E6%9E%90%E8%AF%B7%E6%B1%82%E5%A4%B4%E5%92%8C%E8%AF%B7%E6%B1%82%E4%BD%93/" class="article-date">
+                        <time datetime='2021-10-28T00:19:44.000&#43;00:00' itemprop="datePublished">2021-10-28</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    解析请求头 // 解析请求头 func headers(w http.ResponseWriter, request *http.Request) { // 获取所欲请求头，Header 是个 map, key 是字符串，value 是字符串切片 headers := request.Header fmt.Printf(&#34;所有请求头headers: %v\n&#34;, headers) // 获取单个请求头,返回的是字
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
         
         <article class="article article-type-post" itemscope itemprop="blogPost">
             <div class="article-inner">
@@ -584,45 +623,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E7%B4%A2%E5%BC%95/">索引</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E7%B4%A2%E5%BC%95/" class="article-date">
-                        <time datetime='2021-08-12T23:13:39.000&#43;00:00' itemprop="datePublished">2021-08-12</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    唯一索引 唯一索引是索引具有的一种属性，让索引具备唯一性，确保这张表中，该条索引数据不会重复出现。在每一次insert和update操作时，都会进行索引的唯一性校验，保证该索引的字段组合在表中唯一。 db.containers.createIndex({name: 1},{unique:true,
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mongo">mongo
                             </a>
                         </li>
                         

@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 
 <body>
@@ -126,23 +126,23 @@
 <h3 id="先建立一个-rc-localservice">先建立一个 rc-local.service，</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo vim /usr/lib/systemd/system/rc-local.service
 </span></span></code></pre></div><p>然后，我们模仿其他的 service ，来写一下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span>[<span style="color:#8be9fd;font-style:italic">Unit</span>]
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Description</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/etc/rc.local Compatibility&#34;</span> 
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">#Wants=sshdgenkeys.service
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">#After=sshdgenkeys.service
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">#After=network.target
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span>[<span style="color:#8be9fd;font-style:italic">Service</span>]
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Type</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">forking</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">ExecStart</span><span style="color:#ff79c6">=</span>/<span style="color:#8be9fd;font-style:italic">etc</span>/<span style="color:#8be9fd;font-style:italic">rc.local</span> <span style="color:#8be9fd;font-style:italic">start</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">TimeoutSec</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">0</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">StandardInput</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">tty</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">RemainAfterExit</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">yes</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">SysVStartPriority</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">99</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>[<span style="color:#8be9fd;font-style:italic">Install</span>]
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">WantedBy</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">multi-user.target</span>
-</span></span></code></pre></div><h3 id="然后我们创建-etcrclocal-文件">然后，我们创建 /etc/rc.local 文件：</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Unit]
+Description=&#34;/etc/rc.local Compatibility&#34; 
+#Wants=sshdgenkeys.service
+#After=sshdgenkeys.service
+#After=network.target
+
+[Service]
+Type=forking
+ExecStart=/etc/rc.local start
+TimeoutSec=0
+StandardInput=tty
+RemainAfterExit=yes
+SysVStartPriority=99
+
+[Install]
+WantedBy=multi-user.target
+</code></pre><h3 id="然后我们创建-etcrclocal-文件">然后，我们创建 /etc/rc.local 文件：</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>sudo touch /etc/rc.local
 </span></span><span style="display:flex;"><span>sudo chmod +x /etc/rc.local
 </span></span></code></pre></div><h3 id="设置-rclocal-开机自启">设置 rc.local 开机自启</h3>

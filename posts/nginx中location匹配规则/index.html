@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.115.3">
+    <meta name="generator" content="Hugo 0.111.3">
 </head>
 
 <body>
@@ -113,37 +113,37 @@
         </div>
         <div class="article-entry" itemprop="articleBody">
             <p>精确匹配 / ，主机名后面不能带任何字符串</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">location</span> <span style="color:#ff79c6">=</span> / {
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">add_header</span> <span style="color:#8be9fd;font-style:italic">Content-Type</span> <span style="color:#8be9fd;font-style:italic">text</span>/<span style="color:#8be9fd;font-style:italic">plain</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">return</span> <span style="color:#8be9fd;font-style:italic">200</span> &#39;<span style="color:#8be9fd;font-style:italic">A</span>&#39;;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>或</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">location</span> <span style="color:#ff79c6">=</span> /<span style="color:#8be9fd;font-style:italic">login</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">add_header</span> <span style="color:#8be9fd;font-style:italic">Content-Type</span> <span style="color:#8be9fd;font-style:italic">text</span>/<span style="color:#8be9fd;font-style:italic">plain</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">return</span> <span style="color:#8be9fd;font-style:italic">200</span> &#39;<span style="color:#8be9fd;font-style:italic">B</span>&#39;;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>匹配任何以 /static/ 开头的地址，匹配以后，不再继续往下检索正则，立即采用这一条。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">location</span> ^~ /<span style="color:#ff79c6">static</span>/ {
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">add_header</span> <span style="color:#8be9fd;font-style:italic">Content-Type</span> <span style="color:#8be9fd;font-style:italic">text</span>/<span style="color:#8be9fd;font-style:italic">plain</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">return</span> <span style="color:#8be9fd;font-style:italic">200</span> &#39;<span style="color:#8be9fd;font-style:italic">C</span>&#39;;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>匹配所有以 txt 结尾的请求 然而，所有请求 /static/ 下的txt会被 规则 C 处理，因为 ^~ 到达不了这一条正则。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">location</span> ~* \<span style="color:#8be9fd;font-style:italic">.txt</span>$ {
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">add_header</span> <span style="color:#8be9fd;font-style:italic">Content-Type</span> <span style="color:#8be9fd;font-style:italic">text</span>/<span style="color:#8be9fd;font-style:italic">plain</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">return</span> <span style="color:#8be9fd;font-style:italic">200</span> &#39;<span style="color:#8be9fd;font-style:italic">F</span>&#39;;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>匹配任何以 /image/ 开头的地址，匹配符合以后，<strong>还要继续往下搜索</strong>, 注意与 ^~ /image/ 做区分<br>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">location = / {
+    add_header Content-Type text/plain;
+    return 200 &#39;A&#39;;
+}
+</code></pre><p>或</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">location = /login {
+    add_header Content-Type text/plain;
+    return 200 &#39;B&#39;;
+}
+</code></pre><p>匹配任何以 /static/ 开头的地址，匹配以后，不再继续往下检索正则，立即采用这一条。</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">location ^~ /static/ {
+    add_header Content-Type text/plain;
+    return 200 &#39;C&#39;;
+}
+</code></pre><p>匹配所有以 txt 结尾的请求 然而，所有请求 /static/ 下的txt会被 规则 C 处理，因为 ^~ 到达不了这一条正则。</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">location ~* \.txt$ {
+    add_header Content-Type text/plain;
+    return 200 &#39;F&#39;;
+}
+</code></pre><p>匹配任何以 /image/ 开头的地址，匹配符合以后，<strong>还要继续往下搜索</strong>, 注意与 ^~ /image/ 做区分<br>
 只有后面的正则表达式没有匹配到时，这一条才会采用这一条。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">location</span> /<span style="color:#8be9fd;font-style:italic">image</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">add_header</span> <span style="color:#8be9fd;font-style:italic">Content-Type</span> <span style="color:#8be9fd;font-style:italic">text</span>/<span style="color:#8be9fd;font-style:italic">plain</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">return</span> <span style="color:#8be9fd;font-style:italic">200</span> &#39;<span style="color:#8be9fd;font-style:italic">G</span>&#39;;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>因为所有的地址都以 / 开头，所以这条规则将匹配到所有请求。 但是正则和最长字符串会优先匹配。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-conf" data-lang="conf"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">location</span> / {
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">add_header</span> <span style="color:#8be9fd;font-style:italic">Content-Type</span> <span style="color:#8be9fd;font-style:italic">text</span>/<span style="color:#8be9fd;font-style:italic">plain</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">return</span> <span style="color:#8be9fd;font-style:italic">200</span> &#39;<span style="color:#8be9fd;font-style:italic">H</span>&#39;;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><blockquote>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">location /image {
+    add_header Content-Type text/plain;
+    return 200 &#39;G&#39;;
+}
+</code></pre><p>因为所有的地址都以 / 开头，所以这条规则将匹配到所有请求。 但是正则和最长字符串会优先匹配。</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">location / {
+    add_header Content-Type text/plain;
+    return 200 &#39;H&#39;;
+}
+</code></pre><blockquote>
 <p>联系方式: <a href="mailto:dccmmtop@foxmail.com">dccmmtop@foxmail.com</a></p>
 </blockquote>
 
@@ -169,6 +169,12 @@
     </div>
     
 <nav id="article-nav">
+    
+    <a href="../../posts/maven%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86%E9%80%9F%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+        <div class="article-nav-title"><span>&lt;</span>&nbsp;
+            maven 常用知识速记
+        </div>
+    </a>
     
     
     <a href="../../posts/%E9%80%82%E5%BA%94%E4%BA%8Elinux%E7%9A%84%E5%AD%90%E7%B3%BB%E7%BB%9F%E5%B7%B2%E7%BB%88%E6%AD%A2/" id="article-nav-older" class="article-nav-link-wrap">
