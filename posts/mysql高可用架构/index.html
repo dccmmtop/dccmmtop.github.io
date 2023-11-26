@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MySQL 高可用架构 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="MySQL 高可用架构" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.111.3">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">MySQL 高可用架构</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84/" class="article-date">
+                <time datetime='2023-11-23T21:47:30.000&#43;00:00' itemprop="datePublished">2023-11-23</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <p>MySQL 是实际生产中最常用的数据库，生产环境数据量极为庞大，对性能和安全要求很高，单机的 MySQL 是远远达不到的，所以必须搭建一个主从复制架构，同时可以基于一些工具实现高可用架构，在此基础上，基于一些中间件实现读写分离架构，如果数据量非常庞大，还要考虑分库分表。</p>
+<p>本文不讲解 MySQL 数据库的安装，和高可用架构搭建的具体细节，只为探索生产环境常用的高可用方案，和各个方案的优劣。</p>
+<h2 id="主从集群">主从集群</h2>
+<p>主从集群可以缓解 MySQL 的数据存储以及访问的压力，具备一下几个优点</p>
+<h3 id="1-数据安全">1. 数据安全</h3>
+<p>为了给主服务增加一个数据备份，可以搭建主从架构，基于此架构也可以搭建互主架构</p>
+<h3 id="2--读写分离">2.  读写分离</h3>
+<p>对于大部分系统来说，都是读多写少的，当主库的访问压力较大时，可以将数据的读请求交给从库承担，主库只负责数据的写入。 可以大大缓解主库的压力。</p>
+<p><strong>【注意】</strong><br>
+MySQL 的主从架构只是实现读写分离的基础。要实现读写分离还需要一些中间件来实现，如 ShardingSphere</p>
+<h3 id="3-故障转移-高可用">3. 故障转移-高可用</h3>
+<p>当 MySQL 主服务宕机后，可以由一台从服务切换成主服务。</p>
+<p>对于高可用架构，主从架构也只是实现故障转移的基础，要实现自动主从切换，还需要一些其他中间件实现，如： MMM, MHA， MGR</p>
+<p><strong>【重要】</strong></p>
+<p>在一般项目中，如果数据库的访问压力没有那么大，不一定必须要做读写分离，但是<strong>主从架构，高可用架构是一定要搭建的</strong></p>
+<h2 id="主从同步的原理">主从同步的原理</h2>
+<p>MySQL 主从同步架构一般是通过 binlog 日志文件来进行的。<br>
+简要步骤如下：</p>
+<ol>
+<li>在主服务上打开 binlog 记录每一步的数据操作。</li>
+<li>从服务会有一个 IO 线程，负责和主服务建立 TCP 连接，请求主服务将 binlog 日志传送过来</li>
+<li>这时主库上会有一个 IO dump 线程，负责通过这个 TCP 连接把 binlog 日志传输给从库</li>
+<li>从服务的 IO 线程会把接收到的 binlog 日志数据写入自己的 <strong>relay</strong> 日志文件中，进行操作重演。达到还原数据的目的</li>
+</ol>
+<p><img src="../../images/2023-11-24-08-27-55.png" alt=""></p>
+<blockquote>
+<p>MySQL 的 binlog 日志不仅仅可以用于主从同步，还可以用于缓存数据同步的场景，如 Canal, 它可以模拟一个 slave 节点，向 MySQL 发起 binlog 同步，然后将数据落地到 redis，等其它组件中，实现数据的实时流转</p>
+</blockquote>
+<p><strong>【注意】</strong><br>
+搭建主从同步有两个必要的要求：</p>
+<ol>
+<li>双方的 MySQL 版本必须一致。 至少要求主服务版本低于从服务</li>
+<li>两节点的时间需要同步</li>
+</ol>
+<h2 id="搭建主从集群">搭建主从集群</h2>
+<h3 id="1-配置-master-主服务器">1. 配置 master 主服务器</h3>
+<p>修改 /etc/my.cnf, 主要是有两点</p>
+<ul>
+<li>打开 binlog 日志</li>
+<li>指定 serverId</li>
+</ul>
+<p>示例配置如下：</p>
+<pre tabindex="0"><code class="language-cnf" data-lang="cnf">[mysqld]
+server-id=47
+#开启 binlog
+log_bin=master-bin
+log_bin-index=master-bin.index
+skip-name-resolve
+# 设置连接端口
+port=3306
+# 设置 mysql 的安装目录
+basedir=/usr/local/mysql
+# 设置 mysql 数据库的数据的存放目录
+datadir=/usr/local/mysql/mysql-files
+# 允许最大连接数
+max_connections=200
+# 允许连接失败的次数。
+max_connect_errors=10
+# 服务端使用的字符集默认为 UTF8
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+# 默认使用“mysql_native_password”插件认证
+#mysql_native_password
+default_authentication_plugin=mysql_native_password
+</code></pre><p><strong>配置说明：</strong></p>
+<ul>
+<li>server-id：服务节点的唯一标识。需要给集群中的每个服务分配一个单独的 ID。</li>
+<li>log_bin：打开 Binlog 日志记录，并指定文件名。</li>
+<li>log_bin-index：Binlog 日志文件</li>
+</ul>
+<h3 id="2-重启服务">2. 重启服务</h3>
+<p><code>service mysqld restart</code></p>
+<h3 id="3-分配-replication-slave-权限">3. 分配 replication slave 权限</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#6272a4">#登录主数据库</span>
+</span></span><span style="display:flex;"><span>mysql -u root -p
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 分配权限</span>
+</span></span><span style="display:flex;"><span>GRANT REPLICATION SLAVE ON *.* TO <span style="color:#f1fa8c">&#39;root&#39;</span>@<span style="color:#f1fa8c">&#39;%&#39;</span>;
+</span></span><span style="display:flex;"><span>flush privileges;
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#查看主节点同步状态：</span>
+</span></span><span style="display:flex;"><span>show master status;
+</span></span></code></pre></div><blockquote>
+<p>这个权限赋予从服务器与主服务器建立复制连接和接收主服务器上的数据更新的能力。具有&quot;REPLICATION SLAVE&quot;权限的从服务器可以连接到主服务器，并从主服务器接收数据更改事件（如插入、更新和删除操作）。这使得从服务器能够保持与主服务器上数据的实时同步。</p>
+</blockquote>
+<p>**注意：**在实际生产中，一般不会直接使用 root 用户，而是会创建一个拥有全部权限的用户来负责主从同步</p>
+<p><img src="../../images/2023-11-26-22-18-37.png" alt=""></p>
+<p>这个指令结果中的</p>
+<ul>
+<li>File 是当前日志的 binlog 文件</li>
+<li>Position 是文件中的索引</li>
+<li>Binlog_DO_DB 标识 binlog 要记录的库，也就特殊指定哪些库中的更改需要在 binlog 中记录下来</li>
+<li>Binglog_Ignore_DB 表示不要把某个库的更改记录到 binlog 文件中。主从同步时，自然也不会同步这个库</li>
+</ul>
+<blockquote>
+<p>开启 binlog 后，数据库中的所有操作都会被记录到 datadir 当中，以一组 轮询文件的方式循环记录。而指令查到的 File 和 Position 就是当前日志的 文件和位置。而在后面配置从服务时，就需要通过这个 File 和 Position 通知从服务从哪个地方开始记录 binLog。</p>
+</blockquote>
+<p><img src="../../images/2023-11-26-22-23-16.png" alt=""></p>
+<h3 id="4-配置从服务">4. 配置从服务</h3>
+<p>也是有几个关键的配置：</p>
+<ul>
+<li>server-id: 服务节点的唯一标识</li>
+<li>relay-log： 打开从服务的 bin-log 日志记录</li>
+<li>log-bin: 打开从服务的 binlog 日志记录</li>
+</ul>
+<p>示例配置如下：</p>
+<pre tabindex="0"><code class="language-cnf" data-lang="cnf">[mysqld]
+#主库和从库需要不一致
+server-id=48
+#打开 MySQL 中继日志
+relay-log-index=slave-relay-bin.index
+relay-log=slave-relay-bin
+#打开从服务二进制日志
+log-bin=mysql-bin
+#使得更新的数据写进二进制日志中
+log-slave-updates=1
+# 设置 3306 端口
+port=3306
+# 设置 mysql 的安装目录
+basedir=/usr/local/mysql
+# 设置 mysql 数据库的数据的存放目录
+datadir=/usr/local/mysql/mysql-files
+# 允许最大连接数
+max_connections=200
+# 允许连接失败的次数。
+max_connect_errors=10
+# 服务端使用的字符集默认为 UTF8
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+# 默认使用“mysql_native_password”插件认证
+#mysql_native_password
+default_authentication_plugin=mysql_native_password
+</code></pre><h3 id="5-重启从服务设置与主节点的同步状态">5. 重启从服务，设置与主节点的同步状态</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#6272a4">#登录从服务</span>
+</span></span><span style="display:flex;"><span>mysql -u root -p;
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#设置同步主节点：</span>
+</span></span><span style="display:flex;"><span>CHANGE MASTER TO
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">MASTER_HOST</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;192.168.232.128&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">MASTER_PORT</span><span style="color:#ff79c6">=</span>3306,
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">MASTER_USER</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;root&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">MASTER_PASSWORD</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;root&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">MASTER_LOG_FILE</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;master-bin.000004&#39;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">MASTER_LOG_POS</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">156</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">GET_MASTER_PUBLIC_KEY</span><span style="color:#ff79c6">=</span>1;
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#开启 slave</span>
+</span></span><span style="display:flex;"><span>start slave;
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#查看主从同步状态</span>
+</span></span><span style="display:flex;"><span>show slave status;
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 或者用 show slave status \G; 这样查看比较简洁</span>
+</span></span></code></pre></div><p><strong>注意：</strong> ，CHANGE MASTER 指令中需要指定的 MASTER_LOG_FILE 和 MASTER_LOG_POS 必须与主服务中查到的保持一致。并且后续如果要检查主从架构是否成功，也可以通过检查主服务与从服务之间的 File 和 Position 这两个属性是否一致来确定。</p>
+<p><img src="../../images/2023-11-26-22-29-01.png" alt=""></p>
+<p>重点关注其中红色方框的两个属性，与主节点保持一致，就表示这个主从同步搭建是成功的。</p>
+<p>从这个指令的结果能够看到，有很多Replicate_开头的属性，这些属性指定了两个服务之间要同步哪些数据库、哪些表的配置。只是在我们这个示例中全都没有进行配置，就标识是全库进行同步。后面补充如何配置需要同步的库和表。</p>
+<h3 id="6-主从集群测试">6. 主从集群测试</h3>
+<ol>
+<li>在主新建表，在从查看是否存在</li>
+<li>在主新增表，在从查看是否存在</li>
+<li>在主新增数据，在从查看是否存在</li>
+</ol>
+<h3 id="7-主从同步失败的检查与恢复">7. 主从同步失败的检查与恢复</h3>
+<p>主从同步是有可能失败的，可以在从上执行命令： <code>show slave status \G</code>, 如果发现 Slave_SQL_Running=no 就表示同步失败了，这有可能是</p>
+<ul>
+<li>在从库上进行了写操作，与不同过来的SQL冲突了，</li>
+<li>也可能是从服务重启后，有事务回滚了。</li>
+</ul>
+<p>如果是因为从服务事务回滚的原因，可以按照一下方式重启同步：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; stop slave ;
+</span></span><span style="display:flex;"><span>mysql&gt; <span style="color:#8be9fd;font-style:italic">set</span> GLOBAL <span style="color:#8be9fd;font-style:italic">SQL_SLAVE_SKIP_COUNTER</span><span style="color:#ff79c6">=</span>1;
+</span></span><span style="display:flex;"><span>mysql&gt; start slave ;
+</span></span></code></pre></div><p>另一种解决方法： 重新记录主节点的 binlog文件消息</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; stop slave ;
+</span></span><span style="display:flex;"><span>mysql&gt; change master to .... <span style="color:#6272a4"># 省略，与前面开启同步方法一样</span>
+</span></span><span style="display:flex;"><span>mysql&gt; start slave ;
+</span></span></code></pre></div><p>这种方案需要注意 binlog 文件和位置， 如果修改后和之前同步的接不上，就会丢失部分数据，不太常用</p>
+<h2 id="集群搭建扩展">集群搭建扩展</h2>
+<p>未完待续&hellip;</p>
+<blockquote>
+<p>联系方式：dccmmtop@foxmail.com</p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/mysql">mysql
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    
+    <a href="../../posts/maven%E5%B8%B8%E7%94%A8%E7%9F%A5%E8%AF%86%E9%80%9F%E8%AE%B0/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">maven 常用知识速记&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

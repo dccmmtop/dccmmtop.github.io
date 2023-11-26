@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/">ruby_heredoc的用法</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/ruby_heredoc%E7%9A%84%E7%94%A8%E6%B3%95/" class="article-date">
+                        <time datetime='2018-11-22T09:23:36.000&#43;00:00' itemprop="datePublished">2018-11-22</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    整理自ruby-china 基础的用法 def print_heredoc puts &lt;&lt;EOF this is the first line this is the second line EOF end print_heredoc 输出： this is the first line this is the second line 如果你觉得代码太难看（这根本不符合 Ruby 的风格），你可能会这样写： def print_heredoc puts &lt;&lt;EOF this is the first line this is the second line EOF end print_heredoc 你会发现
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/ruby">ruby
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/rails_%E5%A4%9A%E6%80%81%E5%85%B3%E8%81%94/">rails_多态关联</a></h1>
                 </header>
                 
@@ -624,45 +663,6 @@
                     <p>
                         
                     用 app 来调用 routes，比如 app.posts_path, app.topic_path(1) irb &gt; app.topics_path =&gt; &#34;/topics&#34; irb &gt; app.get(app.root_path) ...... =&gt; 200 用 helper 来调用 Helper 方法，比如: irb &gt; helper.link_to(&#34;Ruby China&#34;, &#34;http://ruby-china.org&#34;) =&gt; &#34;&lt;a href=\&#34;http://ruby-china.org\&#34;&gt;Ruby China&lt;/a&gt;&#34; irb &gt; helper.truncate(&#34;Here is Ruby China.&#34;, length: 15) =&gt; &#34;Here is Ruby...&#34; 使用 source_location 方法查看方法在那里定义的, 比如: irb &gt;Topic.instance_method(:destroy).source_location =&gt; [&#34;/Users/jason/.rvm/gems/ruby-1.9.3-p0/gems/mongoid-2.4.8/lib/mongoid/persistence.rb&#34;, 30] irb &gt;Topic.method(:destroy_all).source_location =&gt; [&#34;/Users/jason/.rvm/gems/ruby-1.9.3-p0/gems/mongoid-2.4.8/lib/mongoid/persistence.rb&#34;, 239]
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rails">rails
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/">ActiveRecord_Store用法示例</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/activerecord_store%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B/" class="article-date">
-                        <time datetime='2018-08-07T22:53:19.000&#43;00:00' itemprop="datePublished">2018-08-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    转载 http://api.rubyonrails.org/classes/ActiveRecord/Store.html 阅读 http://api.rubyonrails.org 相关的笔记 使用 Model 里面的一个字段作为一个序列化的封装，用来存储一个 key/value 文档里面提到，对应的存储字段的类型最好是 text， 以便确保有足够的存储空间 Make sure that you declare the database column used for the serialized store as a text, so there&#39;s plenty of room. 假设 Model
                     </p>
                     
                 </div>
