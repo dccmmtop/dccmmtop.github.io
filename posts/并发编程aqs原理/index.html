@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -121,104 +121,104 @@
 <p>ReentrantLock 使用简单，我们就以这个类为切入口，学习一下如何利用 AQS 实现加锁释放锁的功能，以及公平和非公平锁实现的差别.</p>
 <h3 id="加锁">加锁</h3>
 <p>查看 ReentrantLock 的构造方法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 无参构造器默认构造一个非公平锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReentrantLock</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>    sync <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> NonfairSync<span style="color:#ff79c6">();</span>  
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>  
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 无参构造器默认构造一个非公平锁</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReentrantLock</span>() {  
+</span></span><span style="display:flex;"><span>    sync <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> NonfairSync();  
+</span></span><span style="display:flex;"><span>}  
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 可以指定使用公平锁还是非公平锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReentrantLock</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">boolean</span> fair<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>    sync <span style="color:#ff79c6">=</span> fair <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">new</span> FairSync<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">:</span> <span style="color:#ff79c6">new</span> NonfairSync<span style="color:#ff79c6">();</span>  
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 可以指定使用公平锁还是非公平锁</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReentrantLock</span>(<span style="color:#8be9fd">boolean</span> fair) {  
+</span></span><span style="display:flex;"><span>    sync <span style="color:#ff79c6">=</span> fair <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">new</span> FairSync() : <span style="color:#ff79c6">new</span> NonfairSync();  
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>由此可知，ReentrantLock 的公平锁和非公平锁分别是由 <code>FairSync</code>  和 <code>NonfairSync</code>实现的，</p>
 <p>由下面的结构图可知，<code>FairSync </code> 和 <code>NonfairSync </code> 都是继承至 <code>Sync</code> ,而 <code>Sync</code> 又是继承 AQS<br>
 <img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221006160005.png" alt=""></p>
 <p>非公平锁加锁的代码:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 非公平锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">NonfairSync</span> <span style="color:#8be9fd;font-style:italic">extends</span> Sync <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">long</span> serialVersionUID <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">7316153563782823691L</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 获取锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">lock</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 假设t1 线程正在尝试获取锁。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// CAS算法，把 state 从0修改为1，state 表示当前被加锁的次数
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// 从0变成1，表示t1第一次尝试获取锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>compareAndSetState<span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">))</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 如果修改成功，就把t1设置成正在持有锁的线程
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      setExclusiveOwnerThread<span style="color:#ff79c6">(</span>Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">());</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 非公平锁</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">NonfairSync</span> <span style="color:#8be9fd;font-style:italic">extends</span> Sync {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">long</span> serialVersionUID <span style="color:#ff79c6">=</span> 7316153563782823691L;
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 获取锁</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">lock</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 假设t1 线程正在尝试获取锁。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// CAS算法，把 state 从0修改为1，state 表示当前被加锁的次数</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从0变成1，表示t1第一次尝试获取锁</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (compareAndSetState(0, 1))
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 如果修改成功，就把t1设置成正在持有锁的线程</span>
+</span></span><span style="display:flex;"><span>      setExclusiveOwnerThread(Thread.<span style="color:#50fa7b">currentThread</span>());
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 未获取到锁...
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      acquire<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 未获取到锁...</span>
+</span></span><span style="display:flex;"><span>      acquire(1);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>accquire(1) 实现:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">acquire</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> arg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// tryAcquire(arg)：尝试抢锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// addWaiter(Node.EXCLUSIVE)，将当前线程构造成一个队列节点，并入队
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// acquireQueued（...） 将线程挂起，维护线程节点的状态
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>tryAcquire<span style="color:#ff79c6">(</span>arg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&amp;&amp;</span>
-</span></span><span style="display:flex;"><span>      acquireQueued<span style="color:#ff79c6">(</span>addWaiter<span style="color:#ff79c6">(</span>Node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">EXCLUSIVE</span><span style="color:#ff79c6">),</span> arg<span style="color:#ff79c6">))</span>
-</span></span><span style="display:flex;"><span>    selfInterrupt<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">acquire</span>(<span style="color:#8be9fd">int</span> arg) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// tryAcquire(arg)：尝试抢锁</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// addWaiter(Node.EXCLUSIVE)，将当前线程构造成一个队列节点，并入队</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// acquireQueued（...） 将线程挂起，维护线程节点的状态</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>tryAcquire(arg) <span style="color:#ff79c6">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>      acquireQueued(addWaiter(Node.<span style="color:#50fa7b">EXCLUSIVE</span>), arg))
+</span></span><span style="display:flex;"><span>    selfInterrupt();
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>大致意思就是，线程再抢一次锁，如果失败了，就构造一个线程节点，然后把节点放入队列，将线程挂起，等待被唤醒</p>
 <p>再次抢锁代码: tryAcquire(arg):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 非公平锁尝试获取锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">nonfairTryAcquire</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> acquires<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> Thread current <span style="color:#ff79c6">=</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">();</span> 
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 获取已经加锁的次数
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#8be9fd">int</span> c <span style="color:#ff79c6">=</span> getState<span style="color:#ff79c6">();</span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 没有线程持有锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>c <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 直接抢锁。没有判断队列中是否有线程排队，插队，不公平
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>compareAndSetState<span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> acquires<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span> 
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 抢锁成功
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      setExclusiveOwnerThread<span style="color:#ff79c6">(</span>current<span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>            <span style="color:#ff79c6">}</span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 正在有线程持有锁，并且这个线程是自己(t1)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>current <span style="color:#ff79c6">==</span> getExclusiveOwnerThread<span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// t1 已经获取到锁，无需再次获取锁，只需把锁的次数增加即可
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> nextc <span style="color:#ff79c6">=</span> c <span style="color:#ff79c6">+</span> acquires<span style="color:#ff79c6">;</span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>nextc <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#6272a4">// overflow  
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> Error<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Maximum lock count exceeded&#34;</span><span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 设置锁的次数
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    setState<span style="color:#ff79c6">(</span>nextc<span style="color:#ff79c6">);</span>  
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>        
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>  
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 非公平锁尝试获取锁</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">nonfairTryAcquire</span>(<span style="color:#8be9fd">int</span> acquires) {  
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> Thread current <span style="color:#ff79c6">=</span> Thread.<span style="color:#50fa7b">currentThread</span>(); 
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 获取已经加锁的次数</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> c <span style="color:#ff79c6">=</span> getState();  
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 没有线程持有锁</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (c <span style="color:#ff79c6">==</span> 0) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 直接抢锁。没有判断队列中是否有线程排队，插队，不公平</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (compareAndSetState(0, acquires)) { 
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 抢锁成功</span>
+</span></span><span style="display:flex;"><span>      setExclusiveOwnerThread(current);  
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;            }  
+</span></span><span style="display:flex;"><span>  }  
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 正在有线程持有锁，并且这个线程是自己(t1)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (current <span style="color:#ff79c6">==</span> getExclusiveOwnerThread()) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// t1 已经获取到锁，无需再次获取锁，只需把锁的次数增加即可</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> nextc <span style="color:#ff79c6">=</span> c <span style="color:#ff79c6">+</span> acquires;  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (nextc <span style="color:#ff79c6">&lt;</span> 0) <span style="color:#6272a4">// overflow  </span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> Error(<span style="color:#f1fa8c">&#34;Maximum lock count exceeded&#34;</span>);  
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 设置锁的次数</span>
+</span></span><span style="display:flex;"><span>    setState(nextc);  
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;        
+</span></span><span style="display:flex;"><span>  }  
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;  
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="公平锁的实现">公平锁的实现</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">tryAcquire</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> acquires<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> Thread current <span style="color:#ff79c6">=</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> c <span style="color:#ff79c6">=</span> getState<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>c <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// hasQueuedPredecessors： 当线程尝试获取锁时，不是直接去抢，
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//    而是先判断是否存在队列，如果存在就不抢了，返回抢锁失败
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(!</span>hasQueuedPredecessors<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">&amp;&amp;</span>
-</span></span><span style="display:flex;"><span>        compareAndSetState<span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">,</span> acquires<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>      setExclusiveOwnerThread<span style="color:#ff79c6">(</span>current<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>current <span style="color:#ff79c6">==</span> getExclusiveOwnerThread<span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> nextc <span style="color:#ff79c6">=</span> c <span style="color:#ff79c6">+</span> acquires<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>nextc <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> Error<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Maximum lock count exceeded&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    setState<span style="color:#ff79c6">(</span>nextc<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 是否存在队列并且(下一个待唤醒的线程不是本线程(准备重入锁))
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">hasQueuedPredecessors</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// The correctness of this depends on head being initialized
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// before tail and on head.next being accurate if the current
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// thread is first in queue.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Node t <span style="color:#ff79c6">=</span> tail<span style="color:#ff79c6">;</span> <span style="color:#6272a4">// Read fields in reverse initialization order
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Node h <span style="color:#ff79c6">=</span> head<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  Node s<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">tryAcquire</span>(<span style="color:#8be9fd">int</span> acquires) {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> Thread current <span style="color:#ff79c6">=</span> Thread.<span style="color:#50fa7b">currentThread</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> c <span style="color:#ff79c6">=</span> getState();
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (c <span style="color:#ff79c6">==</span> 0) {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// hasQueuedPredecessors： 当线程尝试获取锁时，不是直接去抢，</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//    而是先判断是否存在队列，如果存在就不抢了，返回抢锁失败</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>hasQueuedPredecessors() <span style="color:#ff79c6">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>        compareAndSetState(0, acquires)) {
+</span></span><span style="display:flex;"><span>      setExclusiveOwnerThread(current);
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (current <span style="color:#ff79c6">==</span> getExclusiveOwnerThread()) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> nextc <span style="color:#ff79c6">=</span> c <span style="color:#ff79c6">+</span> acquires;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (nextc <span style="color:#ff79c6">&lt;</span> 0)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> Error(<span style="color:#f1fa8c">&#34;Maximum lock count exceeded&#34;</span>);
+</span></span><span style="display:flex;"><span>    setState(nextc);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 是否存在队列并且(下一个待唤醒的线程不是本线程(准备重入锁))</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">hasQueuedPredecessors</span>() {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// The correctness of this depends on head being initialized</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// before tail and on head.next being accurate if the current</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// thread is first in queue.</span>
+</span></span><span style="display:flex;"><span>  Node t <span style="color:#ff79c6">=</span> tail; <span style="color:#6272a4">// Read fields in reverse initialization order</span>
+</span></span><span style="display:flex;"><span>  Node h <span style="color:#ff79c6">=</span> head;
+</span></span><span style="display:flex;"><span>  Node s;
 </span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> h <span style="color:#ff79c6">!=</span> t <span style="color:#ff79c6">&amp;&amp;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">((</span>s <span style="color:#ff79c6">=</span> h<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">||</span> s<span style="color:#ff79c6">.</span><span style="color:#50fa7b">thread</span> <span style="color:#ff79c6">!=</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    ((s <span style="color:#ff79c6">=</span> h.<span style="color:#50fa7b">next</span>) <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">||</span> s.<span style="color:#50fa7b">thread</span> <span style="color:#ff79c6">!=</span> Thread.<span style="color:#50fa7b">currentThread</span>());
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>于非公平锁相比，只有<code>tryAcquire</code> 方法的区别，</p>
 <h4 id="为什么需要再次抢锁">为什么需要再次抢锁?</h4>
 <p>因为抢锁失败有两种原因，1是当前线程确实没有获取到锁。2是当前线程之前已经获取到锁了，还想再获取一次。</p>
@@ -227,169 +227,169 @@
 <h4 id="构造队列节点及入队">构造队列节点及入队</h4>
 <p>下面看一下构造线程节点的实现:</p>
 <p>addWaiter()</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> Node <span style="color:#50fa7b">addWaiter</span><span style="color:#ff79c6">(</span>Node mode<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 以当前线程为参数，构造一个新的 node，记作当前线程节点 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Node node <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Node<span style="color:#ff79c6">(</span>Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">(),</span> mode<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 在最开始，tail 和 pred 肯定都是null,
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Node pred <span style="color:#ff79c6">=</span> tail<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 最开始不会进入下面，只有队列不为空时，才会进入
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>pred <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> pred<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 将节点加入队尾
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>compareAndSetTail<span style="color:#ff79c6">(</span>pred<span style="color:#ff79c6">,</span> node<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>      pred<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> node<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 而是由 enq(node) 构造节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  enq<span style="color:#ff79c6">(</span>node<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> node<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> Node <span style="color:#50fa7b">enq</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> Node node<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 开始了循环
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(;;)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    Node t <span style="color:#ff79c6">=</span> tail<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 最开始队列是空的。只有第一次循环会进入
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>t <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span> <span style="color:#6272a4">// Must initialize
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">// 构造了一个空的node节点当作队列的头节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>compareAndSetHead<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Node<span style="color:#ff79c6">()))</span>
-</span></span><span style="display:flex;"><span>        tail <span style="color:#ff79c6">=</span> head<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 第二次及后面的循环会走到这里
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">// 先设置当前节点的前驱节点是 队尾节点。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> t<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 用CAS算法把当前节点 设置成队尾
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>compareAndSetTail<span style="color:#ff79c6">(</span>t<span style="color:#ff79c6">,</span> node<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 这样上一次的队尾t就不是队尾了，t 就有了后继节点node
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        t<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> t<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> Node <span style="color:#50fa7b">addWaiter</span>(Node mode) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 以当前线程为参数，构造一个新的 node，记作当前线程节点 </span>
+</span></span><span style="display:flex;"><span>  Node node <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Node(Thread.<span style="color:#50fa7b">currentThread</span>(), mode);
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 在最开始，tail 和 pred 肯定都是null,</span>
+</span></span><span style="display:flex;"><span>  Node pred <span style="color:#ff79c6">=</span> tail;
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 最开始不会进入下面，只有队列不为空时，才会进入</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (pred <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>    node.<span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> pred;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 将节点加入队尾</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (compareAndSetTail(pred, node)) {
+</span></span><span style="display:flex;"><span>      pred.<span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> node;
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> node;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 而是由 enq(node) 构造节点</span>
+</span></span><span style="display:flex;"><span>  enq(node);
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> node;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> Node <span style="color:#50fa7b">enq</span>(<span style="color:#8be9fd;font-style:italic">final</span> Node node) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 开始了循环</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">for</span> (;;) {
+</span></span><span style="display:flex;"><span>    Node t <span style="color:#ff79c6">=</span> tail;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 最开始队列是空的。只有第一次循环会进入</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (t <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) { <span style="color:#6272a4">// Must initialize</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 构造了一个空的node节点当作队列的头节点</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> (compareAndSetHead(<span style="color:#ff79c6">new</span> Node()))
+</span></span><span style="display:flex;"><span>        tail <span style="color:#ff79c6">=</span> head;
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 第二次及后面的循环会走到这里</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 先设置当前节点的前驱节点是 队尾节点。</span>
+</span></span><span style="display:flex;"><span>      node.<span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> t;
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 用CAS算法把当前节点 设置成队尾</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> (compareAndSetTail(t, node)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 这样上一次的队尾t就不是队尾了，t 就有了后继节点node</span>
+</span></span><span style="display:flex;"><span>        t.<span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> node;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> t;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>经过<code>addWaiter(Node node)</code> 方法后，队列中至少存在两个节点，第一个就是必须的空节点，不包含线程信息，第二个才是真正待执行的线程节点，作者为什么这么做呢？</p>
 <p>我认为，队列中存放的不仅是待唤醒的线程节点，而是所有等待运行和正在运行的线程节点，因为已经拿到锁的正在运行的线程不需要被唤醒，所以也就不需要存储线程信息了。并且这个正在运行的线程节点是队列中的头节点</p>
 <h4 id="线程挂起">线程挂起</h4>
 <p>下面就要看<code>acquireQueued</code> 方法了</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">acquireQueued</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> Node node<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> arg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">boolean</span> failed <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">boolean</span> interrupted <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 开始循环抢锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(;;)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 获取当前接节点的前驱节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">final</span> Node p <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">predecessor</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 如果前驱节点是头节点，并且抢锁成功
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>p <span style="color:#ff79c6">==</span> head <span style="color:#ff79c6">&amp;&amp;</span> tryAcquire<span style="color:#ff79c6">(</span>arg<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 把当前节点设置成头节点，setHead会清空node中的线程信息，和初始化时设置的空头节点一样
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        setHead<span style="color:#ff79c6">(</span>node<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 断开前驱节点，旧的 head 会被垃圾回收
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        p<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span> <span style="color:#6272a4">// help GC
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        failed <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> interrupted<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//走到这里说明不是头节点，或者抢锁失败
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">// shouldParkAfterFailedAcquire(p, node): 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">//    检查 node 是否是可唤醒的（waitStatus == -1）,如果是，返回true
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">//    如果node不是可唤醒的，并且node没有被取消掉，则将node设置设置为可唤醒，返回false,
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">//    下一次循环时就会返回false
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#6272a4">// parkAndCheckInterrupt(): 挂起线程
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>shouldParkAfterFailedAcquire<span style="color:#ff79c6">(</span>p<span style="color:#ff79c6">,</span> node<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">&amp;&amp;</span> parkAndCheckInterrupt<span style="color:#ff79c6">())</span>
-</span></span><span style="display:flex;"><span>        interrupted <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">finally</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 这个判断不会走，可以认为 failed 和 interrupted 标识这里无用。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// 程序能走到这里，说明 (p ==head &amp;&amp; tryQcquire(arg)) 为true，那么 failed 和 interupted 恒为false
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// 否则就会陷在循环中，无法到 finally 中。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>failed<span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>      cancelAcquire<span style="color:#ff79c6">(</span>node<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">acquireQueued</span>(<span style="color:#8be9fd;font-style:italic">final</span> Node node, <span style="color:#8be9fd">int</span> arg) {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">boolean</span> failed <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">boolean</span> interrupted <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 开始循环抢锁</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (;;) {
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 获取当前接节点的前驱节点</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">final</span> Node p <span style="color:#ff79c6">=</span> node.<span style="color:#50fa7b">predecessor</span>();
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 如果前驱节点是头节点，并且抢锁成功</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> (p <span style="color:#ff79c6">==</span> head <span style="color:#ff79c6">&amp;&amp;</span> tryAcquire(arg)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 把当前节点设置成头节点，setHead会清空node中的线程信息，和初始化时设置的空头节点一样</span>
+</span></span><span style="display:flex;"><span>        setHead(node);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 断开前驱节点，旧的 head 会被垃圾回收</span>
+</span></span><span style="display:flex;"><span>        p.<span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>; <span style="color:#6272a4">// help GC</span>
+</span></span><span style="display:flex;"><span>        failed <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> interrupted;
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//走到这里说明不是头节点，或者抢锁失败</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// shouldParkAfterFailedAcquire(p, node): </span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//    检查 node 是否是可唤醒的（waitStatus == -1）,如果是，返回true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//    如果node不是可唤醒的，并且node没有被取消掉，则将node设置设置为可唤醒，返回false,</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//    下一次循环时就会返回false</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// parkAndCheckInterrupt(): 挂起线程</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> (shouldParkAfterFailedAcquire(p, node) <span style="color:#ff79c6">&amp;&amp;</span> parkAndCheckInterrupt())
+</span></span><span style="display:flex;"><span>        interrupted <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  } <span style="color:#ff79c6">finally</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 这个判断不会走，可以认为 failed 和 interrupted 标识这里无用。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 程序能走到这里，说明 (p ==head &amp;&amp; tryQcquire(arg)) 为true，那么 failed 和 interupted 恒为false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 否则就会陷在循环中，无法到 finally 中。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (failed)
+</span></span><span style="display:flex;"><span>      cancelAcquire(node);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 把node设置为队列的头节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setHead</span><span style="color:#ff79c6">(</span>Node node<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  head <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 清空了线程信息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">thread</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 把node设置为队列的头节点</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setHead</span>(Node node) {
+</span></span><span style="display:flex;"><span>  head <span style="color:#ff79c6">=</span> node;
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 清空了线程信息</span>
+</span></span><span style="display:flex;"><span>  node.<span style="color:#50fa7b">thread</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>  node.<span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>shouldParkAfterFailedAcquire(Node pred, Node node)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 接受两个参数，一个是当前节点的前驱节点，一个是当前节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#6272a4">/**
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 接受两个参数，一个是当前节点的前驱节点，一个是当前节点</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">* 这里使用前驱节点中的waitStatus状态来判断当前节点是否可以被唤醒。
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">*/</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">shouldParkAfterFailedAcquire</span><span style="color:#ff79c6">(</span>Node pred<span style="color:#ff79c6">,</span> Node node<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 前驱节点的状态
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#8be9fd">int</span> ws <span style="color:#ff79c6">=</span> pred<span style="color:#ff79c6">.</span><span style="color:#50fa7b">waitStatus</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 如果是可唤醒的，直接返回true
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ws <span style="color:#ff79c6">==</span> Node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SIGNAL</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ws <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 标识前驱节点已经取消锁竞争，跳过这个前驱节点，继续向前查找
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">do</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 一直向前找
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> pred <span style="color:#ff79c6">=</span> pred<span style="color:#ff79c6">.</span><span style="color:#50fa7b">prev</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span>pred<span style="color:#ff79c6">.</span><span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">);</span> <span style="color:#6272a4">// 到不是已取消的节点为止
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// 设置有效的前驱节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    pred<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 将前驱节点的 ws 设置可唤醒的
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    compareAndSetWaitStatus<span style="color:#ff79c6">(</span>pred<span style="color:#ff79c6">,</span> ws<span style="color:#ff79c6">,</span> Node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SIGNAL</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">shouldParkAfterFailedAcquire</span>(Node pred, Node node) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 前驱节点的状态</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> ws <span style="color:#ff79c6">=</span> pred.<span style="color:#50fa7b">waitStatus</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 如果是可唤醒的，直接返回true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (ws <span style="color:#ff79c6">==</span> Node.<span style="color:#50fa7b">SIGNAL</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (ws <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 标识前驱节点已经取消锁竞争，跳过这个前驱节点，继续向前查找</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">do</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 一直向前找</span>
+</span></span><span style="display:flex;"><span>      node.<span style="color:#50fa7b">prev</span> <span style="color:#ff79c6">=</span> pred <span style="color:#ff79c6">=</span> pred.<span style="color:#50fa7b">prev</span>;
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">while</span> (pred.<span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">&gt;</span> 0); <span style="color:#6272a4">// 到不是已取消的节点为止</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 设置有效的前驱节点</span>
+</span></span><span style="display:flex;"><span>    pred.<span style="color:#50fa7b">next</span> <span style="color:#ff79c6">=</span> node;
+</span></span><span style="display:flex;"><span>  } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 将前驱节点的 ws 设置可唤醒的</span>
+</span></span><span style="display:flex;"><span>    compareAndSetWaitStatus(pred, ws, Node.<span style="color:#50fa7b">SIGNAL</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="释放锁">释放锁</h2>
 <p>释放锁的逻辑比较简单，</p>
 <ol>
 <li>减少加锁的次数(state)，如果state == 0, 代表当前线程可以释放锁，然后把持有锁的线程标记为空</li>
 <li>唤醒队列中第一个待运行的线程也就是第二个节点，因为第一个节点是当前已获取到锁正在运行线程</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">release</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> arg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 释放锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>tryRelease<span style="color:#ff79c6">(</span>arg<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    Node h <span style="color:#ff79c6">=</span> head<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 头节点不为空，且头节点的waitStatus不是默认状态
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>h <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> h<span style="color:#ff79c6">.</span><span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//传入的是头节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      unparkSuccessor<span style="color:#ff79c6">(</span>h<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">release</span>(<span style="color:#8be9fd">int</span> arg) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 释放锁</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (tryRelease(arg)) {
+</span></span><span style="display:flex;"><span>    Node h <span style="color:#ff79c6">=</span> head;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 头节点不为空，且头节点的waitStatus不是默认状态</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (h <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> h.<span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">!=</span> 0)
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//传入的是头节点</span>
+</span></span><span style="display:flex;"><span>      unparkSuccessor(h);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 释放锁
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">tryRelease</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> releases<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> c <span style="color:#ff79c6">=</span> getState<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-</span> releases<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">!=</span> getExclusiveOwnerThread<span style="color:#ff79c6">())</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> IllegalMonitorStateException<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">boolean</span> free <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>c <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    free <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    setExclusiveOwnerThread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  setState<span style="color:#ff79c6">(</span>c<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> free<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 释放锁</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">protected</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">tryRelease</span>(<span style="color:#8be9fd">int</span> releases) {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> c <span style="color:#ff79c6">=</span> getState() <span style="color:#ff79c6">-</span> releases;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (Thread.<span style="color:#50fa7b">currentThread</span>() <span style="color:#ff79c6">!=</span> getExclusiveOwnerThread())
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> IllegalMonitorStateException();
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">boolean</span> free <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (c <span style="color:#ff79c6">==</span> 0) {
+</span></span><span style="display:flex;"><span>    free <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>    setExclusiveOwnerThread(<span style="color:#ff79c6">null</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  setState(c);
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> free;
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">unparkSuccessor</span><span style="color:#ff79c6">(</span>Node node<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">unparkSuccessor</span>(Node node) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> ws <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">waitStatus</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ws <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 再次将ws 置为0，这里暂时不清楚为什么重置状态
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    compareAndSetWaitStatus<span style="color:#ff79c6">(</span>node<span style="color:#ff79c6">,</span> ws<span style="color:#ff79c6">,</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 获取传入节点的后继节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Node s <span style="color:#ff79c6">=</span> node<span style="color:#ff79c6">.</span><span style="color:#50fa7b">next</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>s <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">||</span> s<span style="color:#ff79c6">.</span><span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    s <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Node t <span style="color:#ff79c6">=</span> tail<span style="color:#ff79c6">;</span> t <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> t <span style="color:#ff79c6">!=</span> node<span style="color:#ff79c6">;</span> t <span style="color:#ff79c6">=</span> t<span style="color:#ff79c6">.</span><span style="color:#50fa7b">prev</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>t<span style="color:#ff79c6">.</span><span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">&lt;=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>        s <span style="color:#ff79c6">=</span> t<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 唤醒后继节点
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>s <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>    LockSupport<span style="color:#ff79c6">.</span><span style="color:#50fa7b">unpark</span><span style="color:#ff79c6">(</span>s<span style="color:#ff79c6">.</span><span style="color:#50fa7b">thread</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">int</span> ws <span style="color:#ff79c6">=</span> node.<span style="color:#50fa7b">waitStatus</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (ws <span style="color:#ff79c6">&lt;</span> 0)
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 再次将ws 置为0，这里暂时不清楚为什么重置状态</span>
+</span></span><span style="display:flex;"><span>    compareAndSetWaitStatus(node, ws, 0);
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 获取传入节点的后继节点</span>
+</span></span><span style="display:flex;"><span>  Node s <span style="color:#ff79c6">=</span> node.<span style="color:#50fa7b">next</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (s <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">||</span> s.<span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>    s <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Node t <span style="color:#ff79c6">=</span> tail; t <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> t <span style="color:#ff79c6">!=</span> node; t <span style="color:#ff79c6">=</span> t.<span style="color:#50fa7b">prev</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> (t.<span style="color:#50fa7b">waitStatus</span> <span style="color:#ff79c6">&lt;=</span> 0)
+</span></span><span style="display:flex;"><span>        s <span style="color:#ff79c6">=</span> t;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 唤醒后继节点</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (s <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>)
+</span></span><span style="display:flex;"><span>    LockSupport.<span style="color:#50fa7b">unpark</span>(s.<span style="color:#50fa7b">thread</span>);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="获取锁的流程图">获取锁的流程图</h2>
 <p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020221007094312.png" alt=""></p>
 <h2 id="队列中节点状态">队列中节点状态</h2>

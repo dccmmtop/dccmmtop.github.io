@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -116,26 +116,26 @@
 <p>A 类中有一个属性 B ，也就是说 A 依赖 B，同时 B 类中有一个属性 A,  也就是说 B 依赖 A. 他们之间的依赖关系形成了环。就是我们说的循环依赖，如下图：</p>
 <p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/2022-11-19-18-20-44.png" alt=""></p>
 <h1 id="循环依赖示例">循环依赖示例</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CircularDependenciesDemo</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">new</span> A1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CircularDependenciesDemo</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">new</span> A1();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">A1</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> B1 b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">A1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">b1</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">A1</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> B1 b1;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">A1</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">b1</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">B1</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">B1</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> A1 a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">B1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">a1</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> A1 a1;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">B1</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">a1</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><strong>结果：</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>Exception in thread &#34;main&#34; java.lang.StackOverflowError
 </span></span><span style="display:flex;"><span>	at io.dc.B1.&lt;init&gt;(CircularDependenciesDemo.java:23)
@@ -143,69 +143,69 @@
 </span></span><span style="display:flex;"><span>	at io.dc.B1.&lt;init&gt;(CircularDependenciesDemo.java:24)
 </span></span></code></pre></div><p>如上所示，发生 栈溢出错误。下面我们试着解决这种循环依赖</p>
 <h1 id="解决循环依赖">解决循环依赖</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CircularDependenciesDemo</span> <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CircularDependenciesDemo</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 实例缓存池
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> existsObject <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 实例缓存池</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> existsObject <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">loadObject</span> <span style="color:#ff79c6">(</span>String objectName<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">loadObject</span> (String objectName) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(existsObject.<span style="color:#50fa7b">containsKey</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> existsObject.<span style="color:#50fa7b">get</span>(objectName);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先将空白的实例放入缓存 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">,</span>a1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后将对该空白实例进行属性赋值
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            a1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setB1</span><span style="color:#ff79c6">((</span>B1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>.<span style="color:#50fa7b">equals</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1();
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先将空白的实例放入缓存 </span>
+</span></span><span style="display:flex;"><span>            existsObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>,a1);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后将对该空白实例进行属性赋值</span>
+</span></span><span style="display:flex;"><span>            a1.<span style="color:#50fa7b">setB1</span>((B1)loadObject(<span style="color:#f1fa8c">&#34;B1&#34;</span>));
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> a1;
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">,</span>b1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            b1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setA1</span><span style="color:#ff79c6">((</span>A1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#f1fa8c">&#34;B1&#34;</span>.<span style="color:#50fa7b">equals</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1();
+</span></span><span style="display:flex;"><span>            existsObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;B1&#34;</span>,b1);
+</span></span><span style="display:flex;"><span>            b1.<span style="color:#50fa7b">setA1</span>((A1)loadObject(<span style="color:#f1fa8c">&#34;A1&#34;</span>));
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> b1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>A1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        a1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getB1</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) {
+</span></span><span style="display:flex;"><span>        A1 a1 <span style="color:#ff79c6">=</span> (A1)loadObject(<span style="color:#f1fa8c">&#34;A1&#34;</span>);
+</span></span><span style="display:flex;"><span>        a1.<span style="color:#50fa7b">getB1</span>().<span style="color:#50fa7b">sayHello</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">A1</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> B1 b1<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">A1</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> B1 b1;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> B1 <span style="color:#50fa7b">getB1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> B1 <span style="color:#50fa7b">getB1</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> b1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setB1</span><span style="color:#ff79c6">(</span>B1 b1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">b1</span> <span style="color:#ff79c6">=</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setB1</span>(B1 b1) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">b1</span> <span style="color:#ff79c6">=</span> b1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">B1</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">B1</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> A1 a1<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> A1 a1;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> A1 <span style="color:#50fa7b">getA1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> A1 <span style="color:#50fa7b">getA1</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> a1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setA1</span><span style="color:#ff79c6">(</span>A1 a1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">a1</span> <span style="color:#ff79c6">=</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setA1</span>(A1 a1) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">a1</span> <span style="color:#ff79c6">=</span> a1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">(){</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;我是 B1 , 你好&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span>(){
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;我是 B1 , 你好&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><strong>结果：</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>我是 B1 , 你好
 </span></span></code></pre></div><p>本来由构造方法来构造 A1 中的 B1. 现在分成两步：</p>
@@ -215,384 +215,384 @@
 </ol>
 <p>为了解决循环依赖，设置了一个实例缓存池，existsObject. 用来存放已经生成的实例。但是这个实例池会存放空白对象的状态。在多线程的情况下，会取到一个空白实例。也就是对象中的字段都是 null, 引发程序错误。我们可以再添加一层二级缓存，二级缓存中存放空白实例。一级缓存中只放完整实例。</p>
 <h2 id="纯净的缓存">纯净的缓存</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CircularDependenciesDemo</span> <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">CircularDependenciesDemo</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 一级缓存，只存放完整的对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> existsObject <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 一级缓存，只存放完整的对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> existsObject <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 二级缓存，包含空白的对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> blankObject <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 二级缓存，包含空白的对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> blankObject <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 加载对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">loadObject</span> <span style="color:#ff79c6">(</span>String objectName<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 先从一级缓存取
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 加载对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">loadObject</span> (String objectName) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 先从一级缓存取</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(existsObject.<span style="color:#50fa7b">containsKey</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> existsObject.<span style="color:#50fa7b">get</span>(objectName);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 再从二级缓存取
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 再从二级缓存取</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(blankObject.<span style="color:#50fa7b">containsKey</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> blankObject.<span style="color:#50fa7b">get</span>(objectName);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先将空白的实例放入二级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">,</span>a1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后将对该空白实例进行属性赋值
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            a1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setB1</span><span style="color:#ff79c6">((</span>B1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 再放入一级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">,</span>a1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>.<span style="color:#50fa7b">equals</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1();
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先将空白的实例放入二级缓存</span>
+</span></span><span style="display:flex;"><span>            blankObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>,a1);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后将对该空白实例进行属性赋值</span>
+</span></span><span style="display:flex;"><span>            a1.<span style="color:#50fa7b">setB1</span>((B1)loadObject(<span style="color:#f1fa8c">&#34;B1&#34;</span>));
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 再放入一级缓存</span>
+</span></span><span style="display:flex;"><span>            existsObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>,a1);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> a1;
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">,</span>b1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            b1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setA1</span><span style="color:#ff79c6">((</span>A1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">,</span>b1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#f1fa8c">&#34;B1&#34;</span>.<span style="color:#50fa7b">equals</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1();
+</span></span><span style="display:flex;"><span>            blankObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;B1&#34;</span>,b1);
+</span></span><span style="display:flex;"><span>            b1.<span style="color:#50fa7b">setA1</span>((A1)loadObject(<span style="color:#f1fa8c">&#34;A1&#34;</span>));
+</span></span><span style="display:flex;"><span>            existsObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;B1&#34;</span>,b1);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> b1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>A1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        a1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getB1</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        A1 a1 <span style="color:#ff79c6">=</span> (A1)loadObject(<span style="color:#f1fa8c">&#34;A1&#34;</span>);
+</span></span><span style="display:flex;"><span>        a1.<span style="color:#50fa7b">getB1</span>().<span style="color:#50fa7b">sayHello</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>B1<span style="color:#ff79c6">)</span> loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        b1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getA1</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        B1 b1 <span style="color:#ff79c6">=</span> (B1) loadObject(<span style="color:#f1fa8c">&#34;B1&#34;</span>);
+</span></span><span style="display:flex;"><span>        b1.<span style="color:#50fa7b">getA1</span>().<span style="color:#50fa7b">sayHello</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">A1</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> B1 b1<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">A1</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> B1 b1;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> B1 <span style="color:#50fa7b">getB1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> B1 <span style="color:#50fa7b">getB1</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> b1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setB1</span><span style="color:#ff79c6">(</span>B1 b1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">b1</span> <span style="color:#ff79c6">=</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setB1</span>(B1 b1) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">b1</span> <span style="color:#ff79c6">=</span> b1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">(){</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;我是 A1 , 你好&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span>(){
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;我是 A1 , 你好&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">B1</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">B1</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> A1 a1<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> A1 a1;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> A1 <span style="color:#50fa7b">getA1</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> A1 <span style="color:#50fa7b">getA1</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> a1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setA1</span><span style="color:#ff79c6">(</span>A1 a1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">a1</span> <span style="color:#ff79c6">=</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setA1</span>(A1 a1) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">a1</span> <span style="color:#ff79c6">=</span> a1;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span><span style="color:#ff79c6">(){</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;我是 B1 , 你好&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sayHello</span>(){
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;我是 B1 , 你好&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>通过添加二级缓存，把空白对象和完整对象剥离了。当从一级缓存中取实例时，要么拿到的是完整对象，要么拿到的是 null, 而不会获取到空白的对象，引发错误。</p>
 <p>但是上面的代码是有问题的，当实例未初始化完，并且在在多线程的情况下,仍然会取到不完整对象，如下:</p>
 <p><img src="https://raw.githubusercontent.com/dccmmtop/notebook/master/images/2022-11-24-15-45-07.png" alt=""></p>
 <p>那么单单只加二级缓存并不能解决这个并发问题，同时还要加锁：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">loadObject</span> <span style="color:#ff79c6">(</span>String objectName<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 先从一级缓存取,因为可以确保一级缓存中只有完整的对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">loadObject</span> (String objectName) {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 先从一级缓存取,因为可以确保一级缓存中只有完整的对象</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(existsObject.<span style="color:#50fa7b">containsKey</span>(objectName)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> existsObject.<span style="color:#50fa7b">get</span>(objectName);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">synchronized</span> <span style="color:#ff79c6">(</span>existsObject<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">synchronized</span> (existsObject) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 第二次判断一级缓存是否有,因为有可能在等待锁的时候，已经有其他线程把实例放入一级缓存中
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 第二次判断一级缓存是否有,因为有可能在等待锁的时候，已经有其他线程把实例放入一级缓存中</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(existsObject.<span style="color:#50fa7b">containsKey</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> existsObject.<span style="color:#50fa7b">get</span>(objectName);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 再从二级缓存取
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 再从二级缓存取</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(blankObject.<span style="color:#50fa7b">containsKey</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> blankObject.<span style="color:#50fa7b">get</span>(objectName);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先将空白的实例放入二级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">,</span>a1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后将对该空白实例进行属性赋值
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            a1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setB1</span><span style="color:#ff79c6">((</span>B1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 再放入一级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">,</span>a1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后移除二级缓存中的 A1
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">remove</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> a1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>.<span style="color:#50fa7b">equals</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            A1 a1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> A1();
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先将空白的实例放入二级缓存</span>
+</span></span><span style="display:flex;"><span>            blankObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>,a1);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后将对该空白实例进行属性赋值</span>
+</span></span><span style="display:flex;"><span>            a1.<span style="color:#50fa7b">setB1</span>((B1)loadObject(<span style="color:#f1fa8c">&#34;B1&#34;</span>));
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 再放入一级缓存</span>
+</span></span><span style="display:flex;"><span>            existsObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>,a1);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 然后移除二级缓存中的 A1</span>
+</span></span><span style="display:flex;"><span>            blankObject.<span style="color:#50fa7b">remove</span>(<span style="color:#f1fa8c">&#34;A1&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> a1;
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>objectName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">,</span>b1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            b1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setA1</span><span style="color:#ff79c6">((</span>A1<span style="color:#ff79c6">)</span>loadObject<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;A1&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            existsObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">,</span>b1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            blankObject<span style="color:#ff79c6">.</span><span style="color:#50fa7b">remove</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;B1&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> b1<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#f1fa8c">&#34;B1&#34;</span>.<span style="color:#50fa7b">equals</span>(objectName)) {
+</span></span><span style="display:flex;"><span>            B1 b1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> B1();
+</span></span><span style="display:flex;"><span>            blankObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;B1&#34;</span>,b1);
+</span></span><span style="display:flex;"><span>            b1.<span style="color:#50fa7b">setA1</span>((A1)loadObject(<span style="color:#f1fa8c">&#34;A1&#34;</span>));
+</span></span><span style="display:flex;"><span>            existsObject.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;B1&#34;</span>,b1);
+</span></span><span style="display:flex;"><span>            blankObject.<span style="color:#50fa7b">remove</span>(<span style="color:#f1fa8c">&#34;B1&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> b1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>到此我们才完整的解决了循环依赖，并且保证不会取到不完整的实例.</p>
 <p>其实 spring 也是这样来解决bean循环依赖的，不过 spring 还添加动态代理bean的功能，为了解耦，还添加了三级缓存，保证代码整洁，优雅。</p>
 <h1 id="spring-是如何解决循环依赖的">spring 是如何解决循环依赖的</h1>
 <p>由于 spring 在处理循环依赖时考虑很多其他功能，代码非常复杂，为了便于展示，这里只模仿核心功能：</p>
 <p>详细说明已在注释中</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 主类
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MainStart</span> <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// 主类</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MainStart</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 本应该使用 ConcurrentHashMap 类型，但是为了演示效果，确保先实例化A，使用了有序HashMap
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> BeanDefinition<span style="color:#ff79c6">&gt;</span> beanDefinitionMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> LinkedHashMap<span style="color:#ff79c6">&lt;&gt;(</span><span style="color:#bd93f9">256</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 本应该使用 ConcurrentHashMap 类型，但是为了演示效果，确保先实例化A，使用了有序HashMap</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String, BeanDefinition<span style="color:#ff79c6">&gt;</span> beanDefinitionMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> LinkedHashMap<span style="color:#ff79c6">&lt;&gt;</span>(256);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 读取bean定义，当然在spring中肯定是根据配置 动态扫描注册
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">loadBeanDefinitions</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        RootBeanDefinition aBeanDefinition<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> RootBeanDefinition<span style="color:#ff79c6">(</span>InstanceA<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        RootBeanDefinition bBeanDefinition<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> RootBeanDefinition<span style="color:#ff79c6">(</span>InstanceB<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        beanDefinitionMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;instanceA&#34;</span><span style="color:#ff79c6">,</span>aBeanDefinition<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        beanDefinitionMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;instanceB&#34;</span><span style="color:#ff79c6">,</span>bBeanDefinition<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">loadBeanDefinitions</span>() {
+</span></span><span style="display:flex;"><span>        RootBeanDefinition aBeanDefinition<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> RootBeanDefinition(InstanceA.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>        RootBeanDefinition bBeanDefinition<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> RootBeanDefinition(InstanceB.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>        beanDefinitionMap.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;instanceA&#34;</span>,aBeanDefinition);
+</span></span><span style="display:flex;"><span>        beanDefinitionMap.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;instanceB&#34;</span>,bBeanDefinition);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 加载了BeanDefinition
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        loadBeanDefinitions<span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 加载了BeanDefinition</span>
+</span></span><span style="display:flex;"><span>        loadBeanDefinitions();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 循环创建Bean
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String key <span style="color:#ff79c6">:</span> beanDefinitionMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">keySet</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先创建A
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            getBean<span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        IApi instanceA <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>IApi<span style="color:#ff79c6">)</span> getBean<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;instanceA&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        instanceA<span style="color:#ff79c6">.</span><span style="color:#50fa7b">say</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 循环创建Bean</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (String key : beanDefinitionMap.<span style="color:#50fa7b">keySet</span>()){
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 先创建A</span>
+</span></span><span style="display:flex;"><span>            getBean(key);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        IApi instanceA <span style="color:#ff79c6">=</span> (IApi) getBean(<span style="color:#f1fa8c">&#34;instanceA&#34;</span>);
+</span></span><span style="display:flex;"><span>        instanceA.<span style="color:#50fa7b">say</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 一级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span>Object<span style="color:#ff79c6">&gt;</span> singletonObjects<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> ConcurrentHashMap<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 二级缓存： 为了将 成熟Bean和纯净Bean分离，避免读取到不完整得Bean
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span>Object<span style="color:#ff79c6">&gt;</span> earlySingletonObjects<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> ConcurrentHashMap<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 三级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span>ObjectFactory<span style="color:#ff79c6">&gt;</span> singletonFactories<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> ConcurrentHashMap<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 循环依赖标识
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span>  Set<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> singletonsCurrennlyInCreation<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> HashSet<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 一级缓存</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String,Object<span style="color:#ff79c6">&gt;</span> singletonObjects<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> ConcurrentHashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 假设A 使用了Aop @PointCut(&#34;execution(* *..InstanceA.*(..))&#34;)   要给A创建动态代理
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// 获取Bean
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">getBean</span><span style="color:#ff79c6">(</span>String beanName<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Object singleton <span style="color:#ff79c6">=</span> getSingleton<span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>singleton<span style="color:#ff79c6">!=</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> singleton<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        Object instanceBean <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">synchronized</span> <span style="color:#ff79c6">(</span>singletonObjects<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 二级缓存： 为了将 成熟Bean和纯净Bean分离，避免读取到不完整得Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String,Object<span style="color:#ff79c6">&gt;</span> earlySingletonObjects<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> ConcurrentHashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 第二次判断
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>singletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> singletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 标记正在创建,而不是用二级缓存是否包含 beanName 来判断
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(!</span>singletonsCurrennlyInCreation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                singletonsCurrennlyInCreation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 三级缓存</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String,ObjectFactory<span style="color:#ff79c6">&gt;</span> singletonFactories<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> ConcurrentHashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 实例化
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            RootBeanDefinition beanDefinition <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>RootBeanDefinition<span style="color:#ff79c6">)</span> beanDefinitionMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 获取 class 对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Class<span style="color:#ff79c6">&lt;?&gt;</span> beanClass <span style="color:#ff79c6">=</span> beanDefinition<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBeanClass</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>             <span style="color:#6272a4">// 通过无参构造函数,构造一个空白对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            instanceBean <span style="color:#ff79c6">=</span> beanClass<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newInstance</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 创建动态代理
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#6272a4">// 只在循环依赖的情况下在实例化后创建proxy   判断当前是不是循环依赖
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Object finalInstanceBean <span style="color:#ff79c6">=</span> instanceBean<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 这是一个三级缓存，三级缓存放的不是 bean, 而是一个可以创建动态代理bean的函数。（lambda 表达式。关键词： 函数接口）
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#6272a4">// 为什么不直接创建一个代理对象放入二级缓存中，而是先把 lambda 表达式放入三级缓存，
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#6272a4">// 而后面再调用这个表达式去生成代理对象，然后放入二级缓存（getSingleton 方法）
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#6272a4">// 我认为是是为了逻辑上的统一，getSingleton方法负责创建或返回对象，而不是在这里。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span>            singletonFactories<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">new</span> JdkProxyBeanPostProcessor<span style="color:#ff79c6">().</span><span style="color:#50fa7b">getEarlyBeanReference</span><span style="color:#ff79c6">(</span>finalInstanceBean<span style="color:#ff79c6">,</span>beanName<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 属性赋值
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Field<span style="color:#ff79c6">[]</span> declaredFields <span style="color:#ff79c6">=</span> beanClass<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getDeclaredFields</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>Field declaredField <span style="color:#ff79c6">:</span> declaredFields<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                Autowired annotation <span style="color:#ff79c6">=</span> declaredField<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAnnotation</span><span style="color:#ff79c6">(</span>Autowired<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// 说明属性上面有Autowired
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>annotation<span style="color:#ff79c6">!=</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>                    declaredField<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setAccessible</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    String name <span style="color:#ff79c6">=</span> declaredField<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    Object fileObject<span style="color:#ff79c6">=</span> getBean<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    declaredField<span style="color:#ff79c6">.</span><span style="color:#50fa7b">set</span><span style="color:#ff79c6">(</span>instanceBean<span style="color:#ff79c6">,</span>fileObject<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 由于递归完后A 还是原实例，， 所以要从二级缓存中拿到proxy 。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>earlySingletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">containsKey</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                instanceBean<span style="color:#ff79c6">=</span>earlySingletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 添加到一级缓存   A
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            singletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">,</span>instanceBean<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// remove 二级缓存和三级缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            earlySingletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">remove</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            singletonFactories<span style="color:#ff79c6">.</span><span style="color:#50fa7b">remove</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instanceBean<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 循环依赖标识</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span>  Set<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> singletonsCurrennlyInCreation<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> HashSet<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">getSingleton</span><span style="color:#ff79c6">(</span>String beanName<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 先从一级缓存中拿
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Object bean <span style="color:#ff79c6">=</span> singletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">synchronized</span> <span style="color:#ff79c6">(</span>singletonObjects<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 假设A 使用了Aop @PointCut(&#34;execution(* *..InstanceA.*(..))&#34;)   要给A创建动态代理</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">getBean</span>(String beanName) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        Object singleton <span style="color:#ff79c6">=</span> getSingleton(beanName);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(singleton<span style="color:#ff79c6">!=</span><span style="color:#ff79c6">null</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> singleton;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        Object instanceBean <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">synchronized</span> (singletonObjects) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 说明是循环依赖
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>bean<span style="color:#ff79c6">==</span><span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> singletonsCurrennlyInCreation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                bean<span style="color:#ff79c6">=</span>earlySingletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// 如果二级缓存没有就从三级缓存中拿
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>bean<span style="color:#ff79c6">==</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 从三级缓存中拿
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    ObjectFactory factory <span style="color:#ff79c6">=</span> singletonFactories<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>factory <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 拿到动态代理
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#6272a4">// 为什么需要动态代理对象，而不是我们自己原来的bean.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#6272a4">// 因为原始bean的代理对象扩展了功能，同时还和原始 bean 有相同的类型。因为它们继承了同一个接口
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#6272a4">// 或者 代理对象继承了原始bean. (详情可以搜索 JDK动态代理,cglib 代理)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        bean<span style="color:#ff79c6">=</span>factory<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getObject</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 将代理对象放入二级缓存，这个代理对象仍然是空白对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#6272a4">// 所以这个方法如果不加锁仍然可能会返回一个空白对象
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        earlySingletonObjects<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>beanName<span style="color:#ff79c6">,</span> bean<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> bean<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 第二次判断</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(singletonObjects.<span style="color:#50fa7b">containsKey</span>(beanName)) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> singletonObjects.<span style="color:#50fa7b">get</span>(beanName);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 标记正在创建,而不是用二级缓存是否包含 beanName 来判断</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>singletonsCurrennlyInCreation.<span style="color:#50fa7b">contains</span>(beanName)){
+</span></span><span style="display:flex;"><span>                singletonsCurrennlyInCreation.<span style="color:#50fa7b">add</span>(beanName);
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 实例化</span>
+</span></span><span style="display:flex;"><span>            RootBeanDefinition beanDefinition <span style="color:#ff79c6">=</span> (RootBeanDefinition) beanDefinitionMap.<span style="color:#50fa7b">get</span>(beanName);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 获取 class 对象</span>
+</span></span><span style="display:flex;"><span>            Class<span style="color:#ff79c6">&lt;?&gt;</span> beanClass <span style="color:#ff79c6">=</span> beanDefinition.<span style="color:#50fa7b">getBeanClass</span>();
+</span></span><span style="display:flex;"><span>             <span style="color:#6272a4">// 通过无参构造函数,构造一个空白对象</span>
+</span></span><span style="display:flex;"><span>            instanceBean <span style="color:#ff79c6">=</span> beanClass.<span style="color:#50fa7b">newInstance</span>();
 </span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 创建动态代理</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 只在循环依赖的情况下在实例化后创建proxy   判断当前是不是循环依赖</span>
+</span></span><span style="display:flex;"><span>            Object finalInstanceBean <span style="color:#ff79c6">=</span> instanceBean;
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 这是一个三级缓存，三级缓存放的不是 bean, 而是一个可以创建动态代理bean的函数。（lambda 表达式。关键词： 函数接口）</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 为什么不直接创建一个代理对象放入二级缓存中，而是先把 lambda 表达式放入三级缓存，</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 而后面再调用这个表达式去生成代理对象，然后放入二级缓存（getSingleton 方法）</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 我认为是是为了逻辑上的统一，getSingleton方法负责创建或返回对象，而不是在这里。</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//  InstanceA 接口， 为了动态代理使用
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">IApi</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            singletonFactories.<span style="color:#50fa7b">put</span>(beanName, () <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">new</span> JdkProxyBeanPostProcessor().<span style="color:#50fa7b">getEarlyBeanReference</span>(finalInstanceBean,beanName));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">say</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 属性赋值</span>
+</span></span><span style="display:flex;"><span>            Field<span style="color:#ff79c6">[]</span> declaredFields <span style="color:#ff79c6">=</span> beanClass.<span style="color:#50fa7b">getDeclaredFields</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (Field declaredField : declaredFields) {
+</span></span><span style="display:flex;"><span>                Autowired annotation <span style="color:#ff79c6">=</span> declaredField.<span style="color:#50fa7b">getAnnotation</span>(Autowired.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// 说明属性上面有Autowired</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(annotation<span style="color:#ff79c6">!=</span><span style="color:#ff79c6">null</span>){
+</span></span><span style="display:flex;"><span>                    declaredField.<span style="color:#50fa7b">setAccessible</span>(<span style="color:#ff79c6">true</span>);
+</span></span><span style="display:flex;"><span>                    String name <span style="color:#ff79c6">=</span> declaredField.<span style="color:#50fa7b">getName</span>();
+</span></span><span style="display:flex;"><span>                    Object fileObject<span style="color:#ff79c6">=</span> getBean(name);
+</span></span><span style="display:flex;"><span>                    declaredField.<span style="color:#50fa7b">set</span>(instanceBean,fileObject);
+</span></span><span style="display:flex;"><span>                }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// InstanceA 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@Component
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">InstanceA</span> <span style="color:#8be9fd;font-style:italic">implements</span> IApi <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @Autowired
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> InstanceB instanceB<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 由于递归完后A 还是原实例，， 所以要从二级缓存中拿到proxy 。</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(earlySingletonObjects.<span style="color:#50fa7b">containsKey</span>(beanName)){
+</span></span><span style="display:flex;"><span>                instanceBean<span style="color:#ff79c6">=</span>earlySingletonObjects.<span style="color:#50fa7b">get</span>(beanName);
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> InstanceB <span style="color:#50fa7b">getInstanceB</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instanceB<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 添加到一级缓存   A</span>
+</span></span><span style="display:flex;"><span>            singletonObjects.<span style="color:#50fa7b">put</span>(beanName,instanceBean);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setInstanceB</span><span style="color:#ff79c6">(</span>InstanceB instanceB<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">instanceB</span> <span style="color:#ff79c6">=</span> instanceB<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// remove 二级缓存和三级缓存</span>
+</span></span><span style="display:flex;"><span>            earlySingletonObjects.<span style="color:#50fa7b">remove</span>(beanName);
+</span></span><span style="display:flex;"><span>            singletonFactories.<span style="color:#50fa7b">remove</span>(beanName);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceA</span><span style="color:#ff79c6">(</span>InstanceB instanceB<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">instanceB</span> <span style="color:#ff79c6">=</span> instanceB<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceA</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;InstanceA实例化&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">say</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;I&#39;m A&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instanceBean;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// InstanceB
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@Component
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">InstanceB</span>  <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span> Object <span style="color:#50fa7b">getSingleton</span>(String beanName){
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 先从一级缓存中拿</span>
+</span></span><span style="display:flex;"><span>        Object bean <span style="color:#ff79c6">=</span> singletonObjects.<span style="color:#50fa7b">get</span>(beanName);
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">synchronized</span> (singletonObjects) {
 </span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 说明是循环依赖</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(bean<span style="color:#ff79c6">==</span><span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> singletonsCurrennlyInCreation.<span style="color:#50fa7b">contains</span>(beanName)){
+</span></span><span style="display:flex;"><span>                bean<span style="color:#ff79c6">=</span>earlySingletonObjects.<span style="color:#50fa7b">get</span>(beanName);
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">// 如果二级缓存没有就从三级缓存中拿</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(bean<span style="color:#ff79c6">==</span><span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 从三级缓存中拿</span>
+</span></span><span style="display:flex;"><span>                    ObjectFactory factory <span style="color:#ff79c6">=</span> singletonFactories.<span style="color:#50fa7b">get</span>(beanName);
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> (factory <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 拿到动态代理</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 为什么需要动态代理对象，而不是我们自己原来的bean.</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 因为原始bean的代理对象扩展了功能，同时还和原始 bean 有相同的类型。因为它们继承了同一个接口</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 或者 代理对象继承了原始bean. (详情可以搜索 JDK动态代理,cglib 代理)</span>
+</span></span><span style="display:flex;"><span>                        bean<span style="color:#ff79c6">=</span>factory.<span style="color:#50fa7b">getObject</span>();
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 将代理对象放入二级缓存，这个代理对象仍然是空白对象</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 所以这个方法如果不加锁仍然可能会返回一个空白对象</span>
+</span></span><span style="display:flex;"><span>                        earlySingletonObjects.<span style="color:#50fa7b">put</span>(beanName, bean);
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> bean;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//  InstanceA 接口， 为了动态代理使用</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">IApi</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">say</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// InstanceA </span>
+</span></span><span style="display:flex;"><span>@Component
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">InstanceA</span> <span style="color:#8be9fd;font-style:italic">implements</span> IApi {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Autowired
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> InstanceA instanceA<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> InstanceB instanceB;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> InstanceB <span style="color:#50fa7b">getInstanceB</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instanceB;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setInstanceB</span>(InstanceB instanceB) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">instanceB</span> <span style="color:#ff79c6">=</span> instanceB;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceA</span>(InstanceB instanceB) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">instanceB</span> <span style="color:#ff79c6">=</span> instanceB;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> InstanceA <span style="color:#50fa7b">getInstanceA</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instanceA<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setInstanceA</span><span style="color:#ff79c6">(</span>InstanceA instanceA<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">instanceA</span> <span style="color:#ff79c6">=</span> instanceA<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceB</span><span style="color:#ff79c6">(</span>InstanceA instanceA<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">instanceA</span> <span style="color:#ff79c6">=</span> instanceA<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceB</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;InstanceB实例化&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//  JDK 动态代理使用
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JdkDynimcProxy</span> <span style="color:#8be9fd;font-style:italic">implements</span> InvocationHandler <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">private</span> Object target<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">JdkDynimcProxy</span><span style="color:#ff79c6">(</span>Object target<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">target</span> <span style="color:#ff79c6">=</span> target<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> T <span style="color:#50fa7b">getProxy</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">(</span>T<span style="color:#ff79c6">)</span> Proxy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newProxyInstance</span><span style="color:#ff79c6">(</span>target<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getClassLoader</span><span style="color:#ff79c6">(),</span> target<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getClass</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getInterfaces</span><span style="color:#ff79c6">(),</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceA</span>() {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;InstanceA实例化&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	@Override
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Object <span style="color:#50fa7b">invoke</span><span style="color:#ff79c6">(</span>Object proxy<span style="color:#ff79c6">,</span> Method method<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Throwable <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>		System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;测试&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> method<span style="color:#ff79c6">.</span><span style="color:#50fa7b">invoke</span><span style="color:#ff79c6">(</span>target<span style="color:#ff79c6">,</span>args<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">say</span>() {
+</span></span><span style="display:flex;"><span>		System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;I&#39;m A&#34;</span>);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@Component
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JdkProxyBeanPostProcessor</span> <span style="color:#8be9fd;font-style:italic">implements</span> SmartInstantiationAwareBeanPostProcessor <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// InstanceB</span>
+</span></span><span style="display:flex;"><span>@Component
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">InstanceB</span>  {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Object <span style="color:#50fa7b">getEarlyBeanReference</span><span style="color:#ff79c6">(</span>Object bean<span style="color:#ff79c6">,</span> String beanName<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> BeansException <span style="color:#ff79c6">{</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">// 假设:A 被切点命中 需要创建代理  @PointCut(&#34;execution(* *..InstanceA.*(..))&#34;)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>		<span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>bean <span style="color:#ff79c6">instanceof</span> InstanceA<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>			JdkDynimcProxy jdkDynimcProxy <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JdkDynimcProxy<span style="color:#ff79c6">(</span>bean<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span>  jdkDynimcProxy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getProxy</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> bean<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    @Autowired
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> InstanceA instanceA;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> InstanceA <span style="color:#50fa7b">getInstanceA</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> instanceA;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setInstanceA</span>(InstanceA instanceA) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">instanceA</span> <span style="color:#ff79c6">=</span> instanceA;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceB</span>(InstanceA instanceA) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">instanceA</span> <span style="color:#ff79c6">=</span> instanceA;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">InstanceB</span>() {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;InstanceB实例化&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//  JDK 动态代理使用</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JdkDynimcProxy</span> <span style="color:#8be9fd;font-style:italic">implements</span> InvocationHandler {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">private</span> Object target;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">JdkDynimcProxy</span>(Object target) {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">target</span> <span style="color:#ff79c6">=</span> target;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#ff79c6">&lt;</span>T<span style="color:#ff79c6">&gt;</span> T <span style="color:#50fa7b">getProxy</span>() {
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> (T) Proxy.<span style="color:#50fa7b">newProxyInstance</span>(target.<span style="color:#50fa7b">getClass</span>().<span style="color:#50fa7b">getClassLoader</span>(), target.<span style="color:#50fa7b">getClass</span>().<span style="color:#50fa7b">getInterfaces</span>(), <span style="color:#ff79c6">this</span>);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	@Override
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Object <span style="color:#50fa7b">invoke</span>(Object proxy, Method method, Object<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Throwable {
+</span></span><span style="display:flex;"><span>		System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;测试&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> method.<span style="color:#50fa7b">invoke</span>(target,args);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// </span>
+</span></span><span style="display:flex;"><span>@Component
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">JdkProxyBeanPostProcessor</span> <span style="color:#8be9fd;font-style:italic">implements</span> SmartInstantiationAwareBeanPostProcessor {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd;font-style:italic">public</span> Object <span style="color:#50fa7b">getEarlyBeanReference</span>(Object bean, String beanName) <span style="color:#8be9fd;font-style:italic">throws</span> BeansException {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4">// 假设:A 被切点命中 需要创建代理  @PointCut(&#34;execution(* *..InstanceA.*(..))&#34;)</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span>(bean <span style="color:#ff79c6">instanceof</span> InstanceA) {
+</span></span><span style="display:flex;"><span>			JdkDynimcProxy jdkDynimcProxy <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> JdkDynimcProxy(bean);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">return</span>  jdkDynimcProxy.<span style="color:#50fa7b">getProxy</span>();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> bean;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="为什么需要三级缓存而不是两级缓存">为什么需要三级缓存，而不是两级缓存</h2>
 <p>我认为两级缓存完全可以解决循环依赖，完全可以先创建 bean的动态代理放入二级缓存中，而不是在 getSingleton 方法中延迟调用三级缓存中的 lambda 表达式再去生成动态代理。</p>
 <p>我认为三级缓存作用之一是为了代码解耦，逻辑统一。</p>

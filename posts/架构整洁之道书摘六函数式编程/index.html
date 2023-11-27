@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -116,12 +116,12 @@
 <h3 id="什么是函数式编程">什么是函数式编程</h3>
 <p>举个例子：计算0-25范围内整数的平方</p>
 <p>Java版：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Squint</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String args<span style="color:#ff79c6">[]){</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i＜<span style="color:#bd93f9">25</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span>
-</span></span><span style="display:flex;"><span>    System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>i<span style="color:#ff79c6">*</span>i<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Squint</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String args<span style="color:#ff79c6">[]</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>0; i＜25; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(i<span style="color:#ff79c6">*</span>i);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>下面我们改用Clojure语言来写这个程序，Clojure是LISP语言的一种衍生体，属于函数式编程语言。其代码如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lisp" data-lang="lisp"><span style="display:flex;"><span>(<span style="color:#8be9fd;font-style:italic">println</span>(<span style="color:#8be9fd;font-style:italic">take</span> <span style="color:#bd93f9">25</span>(<span style="color:#50fa7b">map</span>(<span style="color:#8be9fd;font-style:italic">fn[x]</span>(<span style="color:#50fa7b">*</span> <span style="color:#8be9fd;font-style:italic">x</span> <span style="color:#8be9fd;font-style:italic">x</span>))(<span style="color:#8be9fd;font-style:italic">range</span>))))
 </span></span></code></pre></div><p>看不懂面的语言没有关系，我们讨论它的主要目标是要突显出Clojure和Java这两种语言之间的巨大区别。在Java程序中，我们使用的是可变量，即变量i，该变量的值会随着程序执行的过程而改变，故被称为循环控制变量。而Clojure程序中是不存在这种变量的，变量x一旦被初始化之后，就不会再被更改了。</p>

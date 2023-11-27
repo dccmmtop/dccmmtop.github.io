@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -130,94 +130,94 @@
 <p>这个是整个方案中最难的环节，但是，不用自己动手， github 已有现成的工具， 只需把它集成到我们自己的服务中即可： <a href="https://github.com/ljc545w/ComWeChatRobot">https://github.com/ljc545w/ComWeChatRobot</a></p>
 <p>java 中可以通过 JNI 方式调用 c++ 编写 dll 库，示例如下:</p>
 <p>在java中声明dll中的已有的方法</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">WxDll</span> <span style="color:#8be9fd;font-style:italic">extends</span> Library <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 打开微信
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">new_wechat</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 开始监听微信消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">start_listen</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> a<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> b<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 停止监听
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">stop_listen</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> a<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">WxDll</span> <span style="color:#8be9fd;font-style:italic">extends</span> Library {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 打开微信</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">new_wechat</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 开始监听微信消息</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">start_listen</span>(<span style="color:#8be9fd">int</span> a, <span style="color:#8be9fd">int</span> b);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 停止监听</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">stop_listen</span>(<span style="color:#8be9fd">int</span> a);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>初始化外界服务</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">init</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> port<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">init</span>(<span style="color:#8be9fd">int</span> port) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> pid <span style="color:#ff79c6">=</span> getPid<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;WeChat.exe&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>pid <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;微信没有运行&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">exit</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    String injectExe <span style="color:#ff79c6">=</span> getAbPath<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;driver/CWeChatRobot.exe&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 卸载
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    Runtime<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRuntime</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">exec</span><span style="color:#ff79c6">(</span>injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /unregserver&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 注入
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    Runtime<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRuntime</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">exec</span><span style="color:#ff79c6">(</span>injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /regserver&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> pid <span style="color:#ff79c6">=</span> getPid(<span style="color:#f1fa8c">&#34;WeChat.exe&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(pid <span style="color:#ff79c6">==</span> 0) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;微信没有运行&#34;</span>);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">exit</span>(0);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    String injectExe <span style="color:#ff79c6">=</span> getAbPath(<span style="color:#f1fa8c">&#34;driver/CWeChatRobot.exe&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 卸载</span>
+</span></span><span style="display:flex;"><span>    Runtime.<span style="color:#50fa7b">getRuntime</span>().<span style="color:#50fa7b">exec</span>(injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /unregserver&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 注入</span>
+</span></span><span style="display:flex;"><span>    Runtime.<span style="color:#50fa7b">getRuntime</span>().<span style="color:#50fa7b">exec</span>(injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /regserver&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    String dll64 <span style="color:#ff79c6">=</span> getAbPath<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;driver/wxDriver64.dll&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    String dll32  <span style="color:#ff79c6">=</span>  getAbPath<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;driver/wxDriver.dll&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 根据系统选择注入程序的版本
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    WxDll driver <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>WxDll<span style="color:#ff79c6">)</span> Native<span style="color:#ff79c6">.</span><span style="color:#50fa7b">load</span><span style="color:#ff79c6">(</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getProperty</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;os.arch&#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;amd64&#34;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">?</span> dll64 <span style="color:#ff79c6">:</span> dll32<span style="color:#ff79c6">,</span> WxDll<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 开启服务，接收HTTP请求
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    driver<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start_listen</span><span style="color:#ff79c6">(</span>pid<span style="color:#ff79c6">,</span> port<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    String dll64 <span style="color:#ff79c6">=</span> getAbPath(<span style="color:#f1fa8c">&#34;driver/wxDriver64.dll&#34;</span>);
+</span></span><span style="display:flex;"><span>    String dll32  <span style="color:#ff79c6">=</span>  getAbPath(<span style="color:#f1fa8c">&#34;driver/wxDriver.dll&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 根据系统选择注入程序的版本</span>
+</span></span><span style="display:flex;"><span>    WxDll driver <span style="color:#ff79c6">=</span> (WxDll) Native.<span style="color:#50fa7b">load</span>(System.<span style="color:#50fa7b">getProperty</span>(<span style="color:#f1fa8c">&#34;os.arch&#34;</span>).<span style="color:#50fa7b">equals</span>(<span style="color:#f1fa8c">&#34;amd64&#34;</span>) <span style="color:#ff79c6">?</span> dll64 : dll32, WxDll.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 开启服务，接收HTTP请求</span>
+</span></span><span style="display:flex;"><span>    driver.<span style="color:#50fa7b">start_listen</span>(pid, port);
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>监听微信消息</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 开放 socket,
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @param port 端口
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">openSocket</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> port<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> params <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>    params<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;port&#34;</span><span style="color:#ff79c6">,</span> port<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 发送HTTP请求，打开 socket 接口,可以用来接收消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    BaseResult result <span style="color:#ff79c6">=</span> WebTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">post</span><span style="color:#ff79c6">(</span>baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=9&#34;</span><span style="color:#ff79c6">,</span>params<span style="color:#ff79c6">,</span>BaseResult<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">assert</span> result <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(!</span>result<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isOk</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;打开socket失败&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">startListenMsg</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 创建一个线程池，异步处理接收到消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ThreadPoolExecutor threadPoolExecutor <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ThreadPoolExecutor<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">8</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#bd93f9">10L</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> LinkedBlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;());</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">openSocket</span> (<span style="color:#8be9fd">int</span> port) {
+</span></span><span style="display:flex;"><span>    Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> params <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    params.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;port&#34;</span>, port);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 发送HTTP请求，打开 socket 接口,可以用来接收消息</span>
+</span></span><span style="display:flex;"><span>    BaseResult result <span style="color:#ff79c6">=</span> WebTool.<span style="color:#50fa7b">post</span>(baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config.<span style="color:#50fa7b">instance</span>().<span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=9&#34;</span>,params,BaseResult.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">assert</span> result <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>result.<span style="color:#50fa7b">isOk</span>()){
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException(<span style="color:#f1fa8c">&#34;打开socket失败&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">startListenMsg</span>() <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 创建一个线程池，异步处理接收到消息</span>
+</span></span><span style="display:flex;"><span>    ThreadPoolExecutor threadPoolExecutor <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ThreadPoolExecutor(2, 8,
+</span></span><span style="display:flex;"><span>            10L, TimeUnit.<span style="color:#50fa7b">MILLISECONDS</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">new</span> LinkedBlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;</span>());
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    ServerSocket server <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ServerSocket<span style="color:#ff79c6">(</span>Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">SOCKET_PORT</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 循环监听
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Socket socket <span style="color:#ff79c6">=</span> server<span style="color:#ff79c6">.</span><span style="color:#50fa7b">accept</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//  ReceiveMsgContext 处理接收到的消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        threadPoolExecutor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">submit</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> ReceiveMsgContext<span style="color:#ff79c6">(</span>socket<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    ServerSocket server <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ServerSocket(Config.<span style="color:#50fa7b">instance</span>().<span style="color:#50fa7b">SOCKET_PORT</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">true</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 循环监听</span>
+</span></span><span style="display:flex;"><span>        Socket socket <span style="color:#ff79c6">=</span> server.<span style="color:#50fa7b">accept</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//  ReceiveMsgContext 处理接收到的消息</span>
+</span></span><span style="display:flex;"><span>        threadPoolExecutor.<span style="color:#50fa7b">submit</span>(<span style="color:#ff79c6">new</span> ReceiveMsgContext(socket));
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>以上就是该方案的核心了，剩下的处理消息的代码，用户完全可以自定义开发了。下面介绍我编写的一种实现方案:</p>
 <h2 id="项目结构">项目结构</h2>
 <p><img src="../../images/2023-07-29-23-26-01.png" alt=""></p>
 <h2 id="入口">入口</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Main</span><span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Main</span>{
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 初始化配置
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Config config <span style="color:#ff79c6">=</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">loadConfig</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 初始化外挂
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">init</span><span style="color:#ff79c6">(</span>config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">HTTP_PORT</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 开启消息监听, 即监听 socket port 端口
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">openSocket</span><span style="color:#ff79c6">(</span>config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SOCKET_PORT</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 允许从控制台输入文本，发送消息 这是根据我自己的需求，可以在控制台回复微信消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">receiveMsgFromConsole</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 初始化配置</span>
+</span></span><span style="display:flex;"><span>        Config config <span style="color:#ff79c6">=</span> Config.<span style="color:#50fa7b">loadConfig</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 初始化外挂</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">init</span>(config.<span style="color:#50fa7b">HTTP_PORT</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 开启消息监听, 即监听 socket port 端口</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">openSocket</span>(config.<span style="color:#50fa7b">SOCKET_PORT</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 允许从控制台输入文本，发送消息 这是根据我自己的需求，可以在控制台回复微信消息</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">receiveMsgFromConsole</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// TODO 自动扫描, 希望以后实现包的自动扫描功能，降低代码的耦合，完全实现 OCP原则, 现在先手动注入各种消息处理器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 注册消息处理器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 简单消息处理器，近记录某些好友的消息，并显示在控制台上
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">regist</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> SampleMsgHandler<span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 帮助文档处理器，可以查看各种处理器的功能，以及使用方法，和该功能开放的用户
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">regist</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> BotMsgHelperHandler<span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 人工智能， 大家各显神通吧，我刚开始有可用的 GPT Token, 现在无了，用其他方式曲线实现的，以后再说
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">regist</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> AiHandler<span style="color:#ff79c6">());</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// TODO 自动扫描, 希望以后实现包的自动扫描功能，降低代码的耦合，完全实现 OCP原则, 现在先手动注入各种消息处理器</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注册消息处理器</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 简单消息处理器，近记录某些好友的消息，并显示在控制台上</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">regist</span>(<span style="color:#ff79c6">new</span> SampleMsgHandler());
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 帮助文档处理器，可以查看各种处理器的功能，以及使用方法，和该功能开放的用户</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">regist</span>(<span style="color:#ff79c6">new</span> BotMsgHelperHandler());
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 人工智能， 大家各显神通吧，我刚开始有可用的 GPT Token, 现在无了，用其他方式曲线实现的，以后再说</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">regist</span>(<span style="color:#ff79c6">new</span> AiHandler());
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 开始监听微信消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">startListenMsg</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 开始监听微信消息</span>
+</span></span><span style="display:flex;"><span>        WxTool.<span style="color:#50fa7b">startListenMsg</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="配置文件定义与解析">配置文件定义与解析</h2>
 <p><strong>定义</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#6272a4"># HTTP 端口</span>
@@ -248,458 +248,458 @@
 </span></span><span style="display:flex;"><span>    - <span style="color:#f1fa8c">&#34;张三&#34;</span>
 </span></span><span style="display:flex;"><span>    - <span style="color:#f1fa8c">&#34;李四&#34;</span>
 </span></span></code></pre></div><p><strong>解析</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.util<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.util;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonProcessingException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.ObjectMapper<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.config.monit.FileListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.config.monit.FileMonitor<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Emo<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.yaml.snakeyaml.LoaderOptions<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.yaml.snakeyaml.Yaml<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.core.JsonProcessingException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.ObjectMapper;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.config.monit.FileListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.config.monit.FileMonitor;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Emo;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.yaml.snakeyaml.LoaderOptions;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.yaml.snakeyaml.Yaml;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.file.Files<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.file.Paths<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.*<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.file.Files;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.file.Paths;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.*;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Config</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Config</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 整个配置都会被加载到 configMap 中
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> HashMap configMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 整个配置都会被加载到 configMap 中</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> HashMap configMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 基础配置
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd">int</span> HTTP_PORT <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">8000</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd">int</span> SOCKET_PORT <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10808</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 基础配置</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd">int</span> HTTP_PORT <span style="color:#ff79c6">=</span> 8000;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd">int</span> SOCKET_PORT <span style="color:#ff79c6">=</span> 10808;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Config config<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Config config;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 配置应该是单例的
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">synchronized</span> Config <span style="color:#50fa7b">instance</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>config <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            config <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Config<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> config<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 配置应该是单例的</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">synchronized</span> Config <span style="color:#50fa7b">instance</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (config <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>            config <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Config();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> config;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 程序启动时，或者配置文件发生变化时，加载配置文件
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Config <span style="color:#50fa7b">reload</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span>  IOException<span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        config <span style="color:#ff79c6">=</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        LoaderOptions options <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> LoaderOptions<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        options<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setAllowDuplicateKeys</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        Yaml yaml <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Yaml<span style="color:#ff79c6">(</span>options<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 配置文件的绝对路径
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String yamlPath <span style="color:#ff79c6">=</span> WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAbPath</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;./config.yml&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        InputStream inputStream <span style="color:#ff79c6">=</span> Files<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newInputStream</span><span style="color:#ff79c6">(</span>Paths<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>yamlPath<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">configMap</span> <span style="color:#ff79c6">=</span> yaml<span style="color:#ff79c6">.</span><span style="color:#50fa7b">loadAs</span><span style="color:#ff79c6">(</span>inputStream<span style="color:#ff79c6">,</span> HashMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Config <span style="color:#50fa7b">reload</span>() <span style="color:#8be9fd;font-style:italic">throws</span>  IOException{
+</span></span><span style="display:flex;"><span>        config <span style="color:#ff79c6">=</span> Config.<span style="color:#50fa7b">instance</span>();
+</span></span><span style="display:flex;"><span>        LoaderOptions options <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> LoaderOptions();
+</span></span><span style="display:flex;"><span>        options.<span style="color:#50fa7b">setAllowDuplicateKeys</span>(<span style="color:#ff79c6">true</span>);
+</span></span><span style="display:flex;"><span>        Yaml yaml <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Yaml(options);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 配置文件的绝对路径</span>
+</span></span><span style="display:flex;"><span>        String yamlPath <span style="color:#ff79c6">=</span> WxTool.<span style="color:#50fa7b">getAbPath</span>(<span style="color:#f1fa8c">&#34;./config.yml&#34;</span>);
+</span></span><span style="display:flex;"><span>        InputStream inputStream <span style="color:#ff79c6">=</span> Files.<span style="color:#50fa7b">newInputStream</span>(Paths.<span style="color:#50fa7b">get</span>(yamlPath));
+</span></span><span style="display:flex;"><span>        config.<span style="color:#50fa7b">configMap</span> <span style="color:#ff79c6">=</span> yaml.<span style="color:#50fa7b">loadAs</span>(inputStream, HashMap.<span style="color:#50fa7b">class</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取基础配置
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">)</span>config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">configMap</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;HTTP_PORT&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SOCKET_PORT</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">)</span>config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">configMap</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;SOCKET_PORT&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取基础配置</span>
+</span></span><span style="display:flex;"><span>        config.<span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">=</span> (<span style="color:#8be9fd">int</span>)config.<span style="color:#50fa7b">configMap</span>.<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;HTTP_PORT&#34;</span>);
+</span></span><span style="display:flex;"><span>        config.<span style="color:#50fa7b">SOCKET_PORT</span> <span style="color:#ff79c6">=</span> (<span style="color:#8be9fd">int</span>)config.<span style="color:#50fa7b">configMap</span>.<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;SOCKET_PORT&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> config<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> config;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 程序启动时，加载配置
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span> Config <span style="color:#50fa7b">loadConfig</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Config config <span style="color:#ff79c6">=</span> reload<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 开始监听配置文件，实现热加载
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">monit</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> config<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span>  <span style="color:#8be9fd;font-style:italic">static</span> Config <span style="color:#50fa7b">loadConfig</span>() <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        Config config <span style="color:#ff79c6">=</span> reload();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 开始监听配置文件，实现热加载</span>
+</span></span><span style="display:flex;"><span>        config.<span style="color:#50fa7b">monit</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> config;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        ObjectMapper objectMapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ObjectMapper<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> objectMapper<span style="color:#ff79c6">.</span><span style="color:#50fa7b">writeValueAsString</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>JsonProcessingException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException<span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span>() {
+</span></span><span style="display:flex;"><span>        ObjectMapper objectMapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ObjectMapper();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> objectMapper.<span style="color:#50fa7b">writeValueAsString</span>(<span style="color:#ff79c6">this</span>);
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (JsonProcessingException e) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException(e);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">monit</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 监控配置文件是否修改
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">new</span> Thread<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Runnable<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">monit</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 监控配置文件是否修改</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">new</span> Thread(<span style="color:#ff79c6">new</span> Runnable() {
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                FileMonitor fileMonitor <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> FileMonitor<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1000</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    fileMonitor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">monitor</span><span style="color:#ff79c6">(</span>WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAbPath</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;config.yml&#34;</span><span style="color:#ff79c6">),</span> <span style="color:#ff79c6">new</span> FileListener<span style="color:#ff79c6">(</span>config<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>                    fileMonitor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">error</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;配置文件加载失败，请检查！ :{}&#34;</span><span style="color:#ff79c6">,</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}).</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span>() {
+</span></span><span style="display:flex;"><span>                FileMonitor fileMonitor <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> FileMonitor(1000);
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>                    fileMonitor.<span style="color:#50fa7b">monitor</span>(WxTool.<span style="color:#50fa7b">getAbPath</span>(<span style="color:#f1fa8c">&#34;config.yml&#34;</span>), <span style="color:#ff79c6">new</span> FileListener(config));
+</span></span><span style="display:flex;"><span>                    fileMonitor.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>                } <span style="color:#ff79c6">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>                    Logger.<span style="color:#50fa7b">error</span>(<span style="color:#f1fa8c">&#34;配置文件加载失败，请检查！ :{}&#34;</span>, e.<span style="color:#50fa7b">getMessage</span>());
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }).<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="消息处理器">消息处理器</h2>
 <h3 id="注册">注册</h3>
 <p>首先在 <code>WxTool</code> 工具类中，有存放消息处理器的容器，注册的动作就是把消息处理器添加到该容器中，并执行一些后续的动作</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">WxTool</span> <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">WxTool</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 消息处理器容器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>WxReceiveMsgHandler<span style="color:#ff79c6">&gt;</span> msgHandlerList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 省略
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 注册
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">regist</span><span style="color:#ff79c6">(</span>WxReceiveMsgHandler wxMsgHandler<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 先加载该消息处理器的配置信息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        wxMsgHandler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">loadConfig</span><span style="color:#ff79c6">(</span>Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 将处理器添加到集合中
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        msgHandlerList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>wxMsgHandler<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 消息处理器容器</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>WxReceiveMsgHandler<span style="color:#ff79c6">&gt;</span> msgHandlerList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 省略</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 注册</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">regist</span>(WxReceiveMsgHandler wxMsgHandler) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 先加载该消息处理器的配置信息</span>
+</span></span><span style="display:flex;"><span>        wxMsgHandler.<span style="color:#50fa7b">loadConfig</span>(Config.<span style="color:#50fa7b">instance</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 将处理器添加到集合中</span>
+</span></span><span style="display:flex;"><span>        msgHandlerList.<span style="color:#50fa7b">add</span>(wxMsgHandler);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="消息处理器的定义">消息处理器的定义</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.msg.receiver<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.msg.receiver;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Msg<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.Config<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Msg;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.Config;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">WxReceiveMsgHandler</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">WxReceiveMsgHandler</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 是否选中该处理器去处理消息
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">select</span><span style="color:#ff79c6">(</span>Msg msg<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">select</span>(Msg msg);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 处理消息
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deal</span><span style="color:#ff79c6">(</span>Msg msg<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deal</span>(Msg msg);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 处理器的帮助文档，当用户输入 help 时，会显示该文档
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    String <span style="color:#50fa7b">printHelper</span><span style="color:#ff79c6">(</span>Boolean isItMe<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    String <span style="color:#50fa7b">printHelper</span>(Boolean isItMe);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 配置
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * config.configMap.get(&#34;xxxxx&#34;)
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param config 总配置信息
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">loadConfig</span><span style="color:#ff79c6">(</span>Config config<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">loadConfig</span>(Config config);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 该消息处理器于容器中的位置
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">order</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 该消息处理器于容器中的位置</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">order</span>();
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="消息处理器的选择">消息处理器的选择</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.msg.receiver<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.msg.receiver;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.ObjectMapper<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Msg<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.WxTool<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.fasterxml.jackson.databind.ObjectMapper;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Msg;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.WxTool;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.BufferedReader<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.InputStreamReader<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.net.Socket<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.BufferedReader;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.InputStreamReader;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.net.Socket;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ReceiveMsgContext</span> <span style="color:#8be9fd;font-style:italic">implements</span> Runnable <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Socket socket<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ReceiveMsgContext</span> <span style="color:#8be9fd;font-style:italic">implements</span> Runnable {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Socket socket;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReceiveMsgContext</span><span style="color:#ff79c6">(</span>Socket socket<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">socket</span> <span style="color:#ff79c6">=</span> socket<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">ReceiveMsgContext</span>(Socket socket) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">socket</span> <span style="color:#ff79c6">=</span> socket;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        BufferedReader br <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            br <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> BufferedReader<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> InputStreamReader<span style="color:#ff79c6">(</span>socket<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getInputStream</span><span style="color:#ff79c6">(),</span> StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>            ObjectMapper objectMapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ObjectMapper<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            String line <span style="color:#ff79c6">=</span> br<span style="color:#ff79c6">.</span><span style="color:#50fa7b">readLine</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 将收到的文本消息转为 Msg 实体
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Msg msg <span style="color:#ff79c6">=</span> objectMapper<span style="color:#ff79c6">.</span><span style="color:#50fa7b">readValue</span><span style="color:#ff79c6">(</span>line<span style="color:#ff79c6">,</span> Msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 遍历所有的消息处理器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>WxReceiveMsgHandler wxMsgHandler <span style="color:#ff79c6">:</span> WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">msgHandlerList</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">//  找到可以处理当前消息的处理器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>wxMsgHandler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">select</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 开始处理消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    wxMsgHandler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">deal</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>IOException e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">error</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">,</span>e<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException<span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">run</span>() {
+</span></span><span style="display:flex;"><span>        BufferedReader br <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            br <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> BufferedReader(<span style="color:#ff79c6">new</span> InputStreamReader(socket.<span style="color:#50fa7b">getInputStream</span>(), StandardCharsets.<span style="color:#50fa7b">UTF_8</span>));
+</span></span><span style="display:flex;"><span>            ObjectMapper objectMapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ObjectMapper();
+</span></span><span style="display:flex;"><span>            String line <span style="color:#ff79c6">=</span> br.<span style="color:#50fa7b">readLine</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 将收到的文本消息转为 Msg 实体</span>
+</span></span><span style="display:flex;"><span>            Msg msg <span style="color:#ff79c6">=</span> objectMapper.<span style="color:#50fa7b">readValue</span>(line, Msg.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 遍历所有的消息处理器</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (WxReceiveMsgHandler wxMsgHandler : WxTool.<span style="color:#50fa7b">msgHandlerList</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">//  找到可以处理当前消息的处理器</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(wxMsgHandler.<span style="color:#50fa7b">select</span>(msg)){
+</span></span><span style="display:flex;"><span>                    <span style="color:#6272a4">// 开始处理消息</span>
+</span></span><span style="display:flex;"><span>                    wxMsgHandler.<span style="color:#50fa7b">deal</span>(msg);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (IOException e) {
+</span></span><span style="display:flex;"><span>            Logger.<span style="color:#50fa7b">error</span>(<span style="color:#f1fa8c">&#34;&#34;</span>,e);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException(e);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="处理器的实现">处理器的实现</h3>
 <p>所以自定义的消息处理器，只需实现该接口即可，以 简单消息记录 为例:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.msg.receiver<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.msg.receiver;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Msg<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.User<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.Color<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.Config<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.WxTool<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.Msg;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.User;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.Color;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.Config;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.util.WxTool;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Map<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Map;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SampleMsgHandler</span> <span style="color:#8be9fd;font-style:italic">implements</span> WxReceiveMsgHandler <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SampleMsgHandler</span> <span style="color:#8be9fd;font-style:italic">implements</span> WxReceiveMsgHandler {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> WHITE_USER <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">select</span><span style="color:#ff79c6">(</span>Msg msg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 自己发的消息不记录
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getIsSendMsg</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 根据用户ID 找到用户
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        User user <span style="color:#ff79c6">=</span> WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findUserById</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRoomOrWxId</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">boolean</span> next <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 只处理白名单用户
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String c_u <span style="color:#ff79c6">:</span> WHITE_USER<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>user <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>c_u<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                next <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">break</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> next<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> WHITE_USER <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deal</span><span style="color:#ff79c6">(</span>Msg msg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        User user <span style="color:#ff79c6">=</span> WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findUserById</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getWxid</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果是群聊
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isChatRoom</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            User roomUser <span style="color:#ff79c6">=</span> WxTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findUserById</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRoom</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;{}:{}: {}&#34;</span><span style="color:#ff79c6">,</span>Color<span style="color:#ff79c6">.</span><span style="color:#50fa7b">none</span><span style="color:#ff79c6">(</span>roomUser<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()),</span>Color<span style="color:#ff79c6">.</span><span style="color:#50fa7b">none</span><span style="color:#ff79c6">(</span>user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()),</span> Color<span style="color:#ff79c6">.</span><span style="color:#50fa7b">none</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">()));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span><span style="color:#ff79c6">else</span><span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 单聊
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Logger<span style="color:#ff79c6">.</span><span style="color:#50fa7b">info</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;{}: {}&#34;</span><span style="color:#ff79c6">,</span> Color<span style="color:#ff79c6">.</span><span style="color:#50fa7b">none</span><span style="color:#ff79c6">(</span>user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">()),</span> Color<span style="color:#ff79c6">.</span><span style="color:#50fa7b">none</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">()));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">boolean</span> <span style="color:#50fa7b">select</span>(Msg msg) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 自己发的消息不记录</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(msg.<span style="color:#50fa7b">getIsSendMsg</span>()){
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 根据用户ID 找到用户</span>
+</span></span><span style="display:flex;"><span>        User user <span style="color:#ff79c6">=</span> WxTool.<span style="color:#50fa7b">findUserById</span>(msg.<span style="color:#50fa7b">getRoomOrWxId</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">boolean</span> next <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 只处理白名单用户</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (String c_u : WHITE_USER) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(user <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> user.<span style="color:#50fa7b">getName</span>().<span style="color:#50fa7b">equals</span>(c_u)){
+</span></span><span style="display:flex;"><span>                next <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> next;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">printHelper</span><span style="color:#ff79c6">(</span>Boolean isItMe<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        StringBuilder whiteUserInfo <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> StringBuilder<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>isItMe<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>            whiteUserInfo<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;\n支持的用户: &#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String u <span style="color:#ff79c6">:</span> WHITE_USER<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                whiteUserInfo<span style="color:#ff79c6">.</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span>u<span style="color:#ff79c6">).</span><span style="color:#50fa7b">append</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">deal</span>(Msg msg) {
+</span></span><span style="display:flex;"><span>        User user <span style="color:#ff79c6">=</span> WxTool.<span style="color:#50fa7b">findUserById</span>(msg.<span style="color:#50fa7b">getWxid</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果是群聊</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(msg.<span style="color:#50fa7b">isChatRoom</span>()){
+</span></span><span style="display:flex;"><span>            User roomUser <span style="color:#ff79c6">=</span> WxTool.<span style="color:#50fa7b">findUserById</span>(msg.<span style="color:#50fa7b">getRoom</span>());
+</span></span><span style="display:flex;"><span>            Logger.<span style="color:#50fa7b">info</span>(<span style="color:#f1fa8c">&#34;{}:{}: {}&#34;</span>,Color.<span style="color:#50fa7b">none</span>(roomUser.<span style="color:#50fa7b">getName</span>()),Color.<span style="color:#50fa7b">none</span>(user.<span style="color:#50fa7b">getName</span>()), Color.<span style="color:#50fa7b">none</span>(msg.<span style="color:#50fa7b">getMessage</span>()));
+</span></span><span style="display:flex;"><span>        }<span style="color:#ff79c6">else</span>{
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 单聊</span>
+</span></span><span style="display:flex;"><span>            Logger.<span style="color:#50fa7b">info</span>(<span style="color:#f1fa8c">&#34;{}: {}&#34;</span>, Color.<span style="color:#50fa7b">none</span>(user.<span style="color:#50fa7b">getName</span>()), Color.<span style="color:#50fa7b">none</span>(msg.<span style="color:#50fa7b">getMessage</span>()));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;指令: 无\n功能: 记录收到的消息&#34;</span> <span style="color:#ff79c6">+</span> whiteUserInfo<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">printHelper</span>(Boolean isItMe) {
+</span></span><span style="display:flex;"><span>        StringBuilder whiteUserInfo <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> StringBuilder();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(isItMe){
+</span></span><span style="display:flex;"><span>            whiteUserInfo.<span style="color:#50fa7b">append</span>(<span style="color:#f1fa8c">&#34;\n支持的用户: &#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (String u : WHITE_USER) {
+</span></span><span style="display:flex;"><span>                whiteUserInfo.<span style="color:#50fa7b">append</span>(u).<span style="color:#50fa7b">append</span>(<span style="color:#f1fa8c">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;指令: 无\n功能: 记录收到的消息&#34;</span> <span style="color:#ff79c6">+</span> whiteUserInfo;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 获取输入本处理器的配置
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">loadConfig</span><span style="color:#ff79c6">(</span>Config config<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> botConf <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;)</span> config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">configMap</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;msgLogger&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>botConf <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 获取白名单
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            WHITE_USER <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;)</span> botConf<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;white_user&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">loadConfig</span>(Config config) {
+</span></span><span style="display:flex;"><span>        Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> botConf <span style="color:#ff79c6">=</span> (Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span>) config.<span style="color:#50fa7b">configMap</span>.<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;msgLogger&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(botConf <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 获取白名单</span>
+</span></span><span style="display:flex;"><span>            WHITE_USER <span style="color:#ff79c6">=</span> (List<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span>) botConf.<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;white_user&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">order</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">order</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> 1;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="微信sdk">微信SDK</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.util<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.util;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.sun.jna.Native<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.WxDll<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.exception.NotFoundUserException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.BaseResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.User<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.UserListResponse<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.msg.receiver.ReceiveMsgContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.msg.sender.SampleSendMsg<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.msg.receiver.WxReceiveMsgHandler<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.sun.jna.Native;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.WxDll;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.exception.NotFoundUserException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.BaseResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.User;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.model.UserListResponse;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.msg.receiver.ReceiveMsgContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.msg.sender.SampleSendMsg;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.msg.receiver.WxReceiveMsgHandler;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.tinylog.Logger;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.BufferedReader<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.File<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.InputStreamReader<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.net.ServerSocket<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.net.Socket<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.*<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.LinkedBlockingQueue<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.ThreadPoolExecutor<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.TimeUnit<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.BufferedReader;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.File;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.IOException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.InputStreamReader;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.net.ServerSocket;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.net.Socket;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.*;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.LinkedBlockingQueue;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.ThreadPoolExecutor;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.TimeUnit;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">WxTool</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">WxTool</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">static</span> String baseUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;http://127.0.0.1&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>WxReceiveMsgHandler<span style="color:#ff79c6">&gt;</span> msgHandlerList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 好友列表
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> friendList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">static</span> String baseUrl <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;http://127.0.0.1&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>WxReceiveMsgHandler<span style="color:#ff79c6">&gt;</span> msgHandlerList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 好友列表</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> friendList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 微信用户ID与用户对应关系,便于快速查找
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> User<span style="color:#ff79c6">&gt;</span> wxIdUserMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 微信用户ID与用户对应关系,便于快速查找</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> Map<span style="color:#ff79c6">&lt;</span>String, User<span style="color:#ff79c6">&gt;</span> wxIdUserMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 开放 socket,
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param port 端口
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">openSocket</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> port<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> params <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>        params<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;port&#34;</span><span style="color:#ff79c6">,</span> port<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        BaseResult result <span style="color:#ff79c6">=</span> WebTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">post</span><span style="color:#ff79c6">(</span>baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=9&#34;</span><span style="color:#ff79c6">,</span>params<span style="color:#ff79c6">,</span>BaseResult<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">assert</span> result <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(!</span>result<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isOk</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;打开socket失败&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">openSocket</span> (<span style="color:#8be9fd">int</span> port) {
+</span></span><span style="display:flex;"><span>        Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> params <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        params.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;port&#34;</span>, port);
+</span></span><span style="display:flex;"><span>        BaseResult result <span style="color:#ff79c6">=</span> WebTool.<span style="color:#50fa7b">post</span>(baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config.<span style="color:#50fa7b">instance</span>().<span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=9&#34;</span>,params,BaseResult.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">assert</span> result <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>result.<span style="color:#50fa7b">isOk</span>()){
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException(<span style="color:#f1fa8c">&#34;打开socket失败&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">startListenMsg</span><span style="color:#ff79c6">()</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        msgHandlerList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sort</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Comparator<span style="color:#ff79c6">&lt;</span>WxReceiveMsgHandler<span style="color:#ff79c6">&gt;()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">startListenMsg</span>() <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        msgHandlerList.<span style="color:#50fa7b">sort</span>(<span style="color:#ff79c6">new</span> Comparator<span style="color:#ff79c6">&lt;</span>WxReceiveMsgHandler<span style="color:#ff79c6">&gt;</span>() {
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">compare</span><span style="color:#ff79c6">(</span>WxReceiveMsgHandler o1<span style="color:#ff79c6">,</span> WxReceiveMsgHandler o2<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> o1<span style="color:#ff79c6">.</span><span style="color:#50fa7b">order</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">-</span> o2<span style="color:#ff79c6">.</span><span style="color:#50fa7b">order</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">compare</span>(WxReceiveMsgHandler o1, WxReceiveMsgHandler o2) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> o1.<span style="color:#50fa7b">order</span>() <span style="color:#ff79c6">-</span> o2.<span style="color:#50fa7b">order</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        ThreadPoolExecutor threadPoolExecutor <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ThreadPoolExecutor<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">8</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#bd93f9">10L</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">MILLISECONDS</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">new</span> LinkedBlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;());</span>
+</span></span><span style="display:flex;"><span>        ThreadPoolExecutor threadPoolExecutor <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ThreadPoolExecutor(2, 8,
+</span></span><span style="display:flex;"><span>                10L, TimeUnit.<span style="color:#50fa7b">MILLISECONDS</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">new</span> LinkedBlockingQueue<span style="color:#ff79c6">&lt;</span>Runnable<span style="color:#ff79c6">&gt;</span>());
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        ServerSocket server <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ServerSocket<span style="color:#ff79c6">(</span>Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">SOCKET_PORT</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Socket socket <span style="color:#ff79c6">=</span> server<span style="color:#ff79c6">.</span><span style="color:#50fa7b">accept</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            threadPoolExecutor<span style="color:#ff79c6">.</span><span style="color:#50fa7b">submit</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> ReceiveMsgContext<span style="color:#ff79c6">(</span>socket<span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">regist</span><span style="color:#ff79c6">(</span>WxReceiveMsgHandler wxMsgHandler<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        wxMsgHandler<span style="color:#ff79c6">.</span><span style="color:#50fa7b">loadConfig</span><span style="color:#ff79c6">(</span>Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        msgHandlerList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>wxMsgHandler<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        ServerSocket server <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ServerSocket(Config.<span style="color:#50fa7b">instance</span>().<span style="color:#50fa7b">SOCKET_PORT</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">true</span>) {
+</span></span><span style="display:flex;"><span>            Socket socket <span style="color:#ff79c6">=</span> server.<span style="color:#50fa7b">accept</span>();
+</span></span><span style="display:flex;"><span>            threadPoolExecutor.<span style="color:#50fa7b">submit</span>(<span style="color:#ff79c6">new</span> ReceiveMsgContext(socket));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取在资源的绝对路径
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> String <span style="color:#50fa7b">getAbPath</span><span style="color:#ff79c6">(</span>String path<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        File directory <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> File<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        String author <span style="color:#ff79c6">=</span>directory<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getAbsolutePath</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">join</span><span style="color:#ff79c6">(</span>File<span style="color:#ff79c6">.</span><span style="color:#50fa7b">separator</span><span style="color:#ff79c6">,</span> author<span style="color:#ff79c6">,</span> path<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">regist</span>(WxReceiveMsgHandler wxMsgHandler) {
+</span></span><span style="display:flex;"><span>        wxMsgHandler.<span style="color:#50fa7b">loadConfig</span>(Config.<span style="color:#50fa7b">instance</span>());
+</span></span><span style="display:flex;"><span>        msgHandlerList.<span style="color:#50fa7b">add</span>(wxMsgHandler);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取微信进程号
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getPid</span><span style="color:#ff79c6">(</span>String appName<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        String line<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> pid <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        Process p <span style="color:#ff79c6">=</span> Runtime<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRuntime</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">exec</span><span style="color:#ff79c6">(</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getenv</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;windir&#34;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;\\system32\\&#34;</span><span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;tasklist.exe&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取在资源的绝对路径</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> String <span style="color:#50fa7b">getAbPath</span>(String path) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        File directory <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> File(<span style="color:#f1fa8c">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>        String author <span style="color:#ff79c6">=</span>directory.<span style="color:#50fa7b">getAbsolutePath</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> String.<span style="color:#50fa7b">join</span>(File.<span style="color:#50fa7b">separator</span>, author, path);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取微信进程号</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getPid</span>(String appName) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
+</span></span><span style="display:flex;"><span>        String line;
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> pid <span style="color:#ff79c6">=</span> 0;
+</span></span><span style="display:flex;"><span>        Process p <span style="color:#ff79c6">=</span> Runtime.<span style="color:#50fa7b">getRuntime</span>().<span style="color:#50fa7b">exec</span>(System.<span style="color:#50fa7b">getenv</span>(<span style="color:#f1fa8c">&#34;windir&#34;</span>) <span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;\\system32\\&#34;</span><span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;tasklist.exe&#34;</span>);
 </span></span><span style="display:flex;"><span>        BufferedReader input <span style="color:#ff79c6">=</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">new</span> BufferedReader<span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> InputStreamReader<span style="color:#ff79c6">(</span>p<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getInputStream</span><span style="color:#ff79c6">()));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">((</span>line <span style="color:#ff79c6">=</span> input<span style="color:#ff79c6">.</span><span style="color:#50fa7b">readLine</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">new</span> BufferedReader(<span style="color:#ff79c6">new</span> InputStreamReader(p.<span style="color:#50fa7b">getInputStream</span>()));
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> ((line <span style="color:#ff79c6">=</span> input.<span style="color:#50fa7b">readLine</span>()) <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span>) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>line<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span>appName<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                pid <span style="color:#ff79c6">=</span> Integer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">parseInt</span><span style="color:#ff79c6">(</span>line<span style="color:#ff79c6">.</span><span style="color:#50fa7b">split</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;\\s+&#34;</span><span style="color:#ff79c6">)[</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">]);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">break</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        input<span style="color:#ff79c6">.</span><span style="color:#50fa7b">close</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> pid<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(line.<span style="color:#50fa7b">contains</span>(appName)) {
+</span></span><span style="display:flex;"><span>                pid <span style="color:#ff79c6">=</span> Integer.<span style="color:#50fa7b">parseInt</span>(line.<span style="color:#50fa7b">split</span>(<span style="color:#f1fa8c">&#34;\\s+&#34;</span>)<span style="color:#ff79c6">[</span>1<span style="color:#ff79c6">]</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        input.<span style="color:#50fa7b">close</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> pid;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">init</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> port<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">init</span>(<span style="color:#8be9fd">int</span> port) <span style="color:#8be9fd;font-style:italic">throws</span> IOException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> pid <span style="color:#ff79c6">=</span> getPid<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;WeChat.exe&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>pid <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;微信没有运行&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">exit</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        String injectExe <span style="color:#ff79c6">=</span> getAbPath<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;driver/CWeChatRobot.exe&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 卸载
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Runtime<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRuntime</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">exec</span><span style="color:#ff79c6">(</span>injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /unregserver&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注入
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Runtime<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRuntime</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">exec</span><span style="color:#ff79c6">(</span>injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /regserver&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> pid <span style="color:#ff79c6">=</span> getPid(<span style="color:#f1fa8c">&#34;WeChat.exe&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(pid <span style="color:#ff79c6">==</span> 0) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;微信没有运行&#34;</span>);
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">exit</span>(0);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        String injectExe <span style="color:#ff79c6">=</span> getAbPath(<span style="color:#f1fa8c">&#34;driver/CWeChatRobot.exe&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 卸载</span>
+</span></span><span style="display:flex;"><span>        Runtime.<span style="color:#50fa7b">getRuntime</span>().<span style="color:#50fa7b">exec</span>(injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /unregserver&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注入</span>
+</span></span><span style="display:flex;"><span>        Runtime.<span style="color:#50fa7b">getRuntime</span>().<span style="color:#50fa7b">exec</span>(injectExe <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; /regserver&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        String dll64 <span style="color:#ff79c6">=</span> getAbPath<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;driver/wxDriver64.dll&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        String dll32  <span style="color:#ff79c6">=</span>  getAbPath<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;driver/wxDriver.dll&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        WxDll driver <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>WxDll<span style="color:#ff79c6">)</span> Native<span style="color:#ff79c6">.</span><span style="color:#50fa7b">load</span><span style="color:#ff79c6">(</span>System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getProperty</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;os.arch&#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;amd64&#34;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">?</span> dll64 <span style="color:#ff79c6">:</span> dll32<span style="color:#ff79c6">,</span> WxDll<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        driver<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start_listen</span><span style="color:#ff79c6">(</span>pid<span style="color:#ff79c6">,</span> port<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取所有的微信好友
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">getFriends</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        UserListResponse result <span style="color:#ff79c6">=</span> WebTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">post</span><span style="color:#ff79c6">(</span>baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=15&#34;</span><span style="color:#ff79c6">,</span><span style="color:#ff79c6">null</span><span style="color:#ff79c6">,</span> UserListResponse<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> result<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getData</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">// 发消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> BaseResult <span style="color:#50fa7b">sendMsgByWxId</span><span style="color:#ff79c6">(</span>String wxId<span style="color:#ff79c6">,</span> String msg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Map<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span> Object<span style="color:#ff79c6">&gt;</span> params <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>        params<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;wxid&#34;</span><span style="color:#ff79c6">,</span>wxId<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        params<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;msg&#34;</span><span style="color:#ff79c6">,</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> WebTool<span style="color:#ff79c6">.</span><span style="color:#50fa7b">post</span><span style="color:#ff79c6">(</span>baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">instance</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=2&#34;</span><span style="color:#ff79c6">,</span>params<span style="color:#ff79c6">,</span> BaseResult<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> BaseResult <span style="color:#50fa7b">sendMsgByName</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">,</span> String msg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> sendMsgByWxId<span style="color:#ff79c6">(</span>findUserByName<span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getWxid</span><span style="color:#ff79c6">(),</span> msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> User <span style="color:#50fa7b">findUserByName</span><span style="color:#ff79c6">(</span>String name<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>friendList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isEmpty</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            friendList <span style="color:#ff79c6">=</span> getFriends<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>User user <span style="color:#ff79c6">:</span> friendList<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getWxRemark</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> user<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>User user <span style="color:#ff79c6">:</span> friendList<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getWxNickName</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> user<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>User user <span style="color:#ff79c6">:</span> friendList<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getWxid</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">equals</span><span style="color:#ff79c6">(</span>name<span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> user<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> NotFoundUserException<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        String dll64 <span style="color:#ff79c6">=</span> getAbPath(<span style="color:#f1fa8c">&#34;driver/wxDriver64.dll&#34;</span>);
+</span></span><span style="display:flex;"><span>        String dll32  <span style="color:#ff79c6">=</span>  getAbPath(<span style="color:#f1fa8c">&#34;driver/wxDriver.dll&#34;</span>);
+</span></span><span style="display:flex;"><span>        WxDll driver <span style="color:#ff79c6">=</span> (WxDll) Native.<span style="color:#50fa7b">load</span>(System.<span style="color:#50fa7b">getProperty</span>(<span style="color:#f1fa8c">&#34;os.arch&#34;</span>).<span style="color:#50fa7b">equals</span>(<span style="color:#f1fa8c">&#34;amd64&#34;</span>) <span style="color:#ff79c6">?</span> dll64 : dll32, WxDll.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>        driver.<span style="color:#50fa7b">start_listen</span>(pid, port);
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> User <span style="color:#50fa7b">findUserById</span><span style="color:#ff79c6">(</span>String wxid<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>wxIdUserMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isEmpty</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>friendList<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isEmpty</span><span style="color:#ff79c6">()){</span>
-</span></span><span style="display:flex;"><span>                friendList <span style="color:#ff79c6">=</span> getFriends<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 获取所有的微信好友</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">getFriends</span>() {
+</span></span><span style="display:flex;"><span>        UserListResponse result <span style="color:#ff79c6">=</span> WebTool.<span style="color:#50fa7b">post</span>(baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config.<span style="color:#50fa7b">instance</span>().<span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=15&#34;</span>,<span style="color:#ff79c6">null</span>, UserListResponse.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> result.<span style="color:#50fa7b">getData</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>User user <span style="color:#ff79c6">:</span> friendList<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                wxIdUserMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getWxid</span><span style="color:#ff79c6">(),</span> user<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span>  wxIdUserMap<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>wxid<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">// 发消息</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> BaseResult <span style="color:#50fa7b">sendMsgByWxId</span>(String wxId, String msg) {
+</span></span><span style="display:flex;"><span>        Map<span style="color:#ff79c6">&lt;</span>String, Object<span style="color:#ff79c6">&gt;</span> params <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HashMap<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        params.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;wxid&#34;</span>,wxId);
+</span></span><span style="display:flex;"><span>        params.<span style="color:#50fa7b">put</span>(<span style="color:#f1fa8c">&#34;msg&#34;</span>,msg);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> WebTool.<span style="color:#50fa7b">post</span>(baseUrl <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:&#34;</span> <span style="color:#ff79c6">+</span> Config.<span style="color:#50fa7b">instance</span>().<span style="color:#50fa7b">HTTP_PORT</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;/api/?type=2&#34;</span>,params, BaseResult.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> BaseResult <span style="color:#50fa7b">sendMsgByName</span>(String name, String msg) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> sendMsgByWxId(findUserByName(name).<span style="color:#50fa7b">getWxid</span>(), msg);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> User <span style="color:#50fa7b">findUserByName</span>(String name) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(friendList.<span style="color:#50fa7b">isEmpty</span>()){
+</span></span><span style="display:flex;"><span>            friendList <span style="color:#ff79c6">=</span> getFriends();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (User user : friendList) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(user.<span style="color:#50fa7b">getWxRemark</span>().<span style="color:#50fa7b">equals</span>(name)){
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> user;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (User user : friendList) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(user.<span style="color:#50fa7b">getWxNickName</span>().<span style="color:#50fa7b">equals</span>(name)){
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> user;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (User user : friendList) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(user.<span style="color:#50fa7b">getWxid</span>().<span style="color:#50fa7b">equals</span>(name)){
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> user;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> NotFoundUserException();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> User <span style="color:#50fa7b">findUserById</span>(String wxid) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(wxIdUserMap.<span style="color:#50fa7b">isEmpty</span>()){
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(friendList.<span style="color:#50fa7b">isEmpty</span>()){
+</span></span><span style="display:flex;"><span>                friendList <span style="color:#ff79c6">=</span> getFriends();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (User user : friendList) {
+</span></span><span style="display:flex;"><span>                wxIdUserMap.<span style="color:#50fa7b">put</span>(user.<span style="color:#50fa7b">getWxid</span>(), user);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span>  wxIdUserMap.<span style="color:#50fa7b">get</span>(wxid);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><code>WxTool</code> 指用到两个api， 获取微信好友和发送简单的文本消息。微信外接服务还提供了很多接口，需要开发者自己查询原始仓库的文档。以及代码用到的 <code>CWeChatRobot.exe</code> 、<code>wxDriver64.dll</code> 注入工具，需要开发者下载到项目 driver 目录下, 不再详述 <a href="https://github.com/ljc545w/ComWeChatRobot">https://github.com/ljc545w/ComWeChatRobot</a></p>
 <p>整体逻辑和项目核心结构就是上述这样，项目完整代码暂时还未开源，等我再完善一下 :)</p>
 <p>&laquo;&laquo;&laquo;&lt; HEAD</p>

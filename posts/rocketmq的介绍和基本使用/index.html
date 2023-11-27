@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -255,180 +255,180 @@
 <p>基本样例中演示 3 中生产者： 同步发送，异步发送，单向发送</p>
 <h4 id="同步发送">同步发送</h4>
 <p>代码样例： <code>org.apache.rocketmq.example.simple.Producer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Producer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Producer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String PRODUCER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ProducerGroupName&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TopicTest&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TAG <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TagA&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String PRODUCER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ProducerGroupName&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TopicTest&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TAG <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TagA&#34;</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException<span style="color:#ff79c6">,</span> InterruptedException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException, InterruptedException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span>PRODUCER_GROUP<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(PRODUCER_GROUP);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span>DEFAULT_NAMESRVADDR<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(DEFAULT_NAMESRVADDR);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">128</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> TAG<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;OrderID188&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;Hello world&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>                SendResult sendResult <span style="color:#ff79c6">=</span> producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%s%n&#34;</span><span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 128; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>                Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message(TOPIC, TAG, <span style="color:#f1fa8c">&#34;OrderID188&#34;</span>, <span style="color:#f1fa8c">&#34;Hello world&#34;</span>.<span style="color:#50fa7b">getBytes</span>(StandardCharsets.<span style="color:#50fa7b">UTF_8</span>));
+</span></span><span style="display:flex;"><span>                SendResult sendResult <span style="color:#ff79c6">=</span> producer.<span style="color:#50fa7b">send</span>(msg);
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%s%n&#34;</span>, sendResult);
+</span></span><span style="display:flex;"><span>            } <span style="color:#ff79c6">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>                e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>见名之意，拿到发送消息的返回结果后在记性下一步操作</p>
 <h4 id="异步发送">异步发送</h4>
 <p>代码样例： <code>org.apache.rocketmq.example.simple.AsyncProducer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.UnsupportedEncodingException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.CountDownLatch<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.TimeUnit<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendCallback<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.io.UnsupportedEncodingException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.CountDownLatch;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.concurrent.TimeUnit;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendCallback;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AsyncProducer</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>
-</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException<span style="color:#ff79c6">,</span> InterruptedException<span style="color:#ff79c6">,</span> UnsupportedEncodingException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AsyncProducer</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(
+</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException, InterruptedException, UnsupportedEncodingException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Jodie_Daily_test&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// suggest to on enableBackpressureForAsyncMode in heavy traffic, default is false
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setEnableBackpressureForAsyncMode</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setRetryTimesWhenSendAsyncFailed</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(<span style="color:#f1fa8c">&#34;Jodie_Daily_test&#34;</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// suggest to on enableBackpressureForAsyncMode in heavy traffic, default is false</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setEnableBackpressureForAsyncMode</span>(<span style="color:#ff79c6">true</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setRetryTimesWhenSendAsyncFailed</span>(0);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> messageCount <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">100</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注意学习 CountDownLatch 的使用，设置了 100 个信号量
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd;font-style:italic">final</span> CountDownLatch countDownLatch <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> CountDownLatch<span style="color:#ff79c6">(</span>messageCount<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> messageCount<span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Jodie_topic_1023&#34;</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;TagA&#34;</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;OrderID188&#34;</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;Hello world&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>RemotingHelper<span style="color:#ff79c6">.</span><span style="color:#50fa7b">DEFAULT_CHARSET</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>                producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> SendCallback<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> messageCount <span style="color:#ff79c6">=</span> 100;
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注意学习 CountDownLatch 的使用，设置了 100 个信号量</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">final</span> CountDownLatch countDownLatch <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> CountDownLatch(messageCount);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> messageCount; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> i;
+</span></span><span style="display:flex;"><span>                Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message(<span style="color:#f1fa8c">&#34;Jodie_topic_1023&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;TagA&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;OrderID188&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;Hello world&#34;</span>.<span style="color:#50fa7b">getBytes</span>(RemotingHelper.<span style="color:#50fa7b">DEFAULT_CHARSET</span>));
+</span></span><span style="display:flex;"><span>                producer.<span style="color:#50fa7b">send</span>(msg, <span style="color:#ff79c6">new</span> SendCallback() {
 </span></span><span style="display:flex;"><span>                    @Override
-</span></span><span style="display:flex;"><span>                    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span><span style="color:#ff79c6">(</span>SendResult sendResult<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 消息发送成功的回调，此时告知有一个线程已经成功运行完了
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        countDownLatch<span style="color:#ff79c6">.</span><span style="color:#50fa7b">countDown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%-10d OK %s %n&#34;</span><span style="color:#ff79c6">,</span> index<span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMsgId</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span>(SendResult sendResult) {
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 消息发送成功的回调，此时告知有一个线程已经成功运行完了</span>
+</span></span><span style="display:flex;"><span>                        countDownLatch.<span style="color:#50fa7b">countDown</span>();
+</span></span><span style="display:flex;"><span>                        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%-10d OK %s %n&#34;</span>, index, sendResult.<span style="color:#50fa7b">getMsgId</span>());
+</span></span><span style="display:flex;"><span>                    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>                    @Override
-</span></span><span style="display:flex;"><span>                    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span><span style="color:#ff79c6">(</span>Throwable e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 消息发送失败的回调，此时告知有一个线程已经运行完了
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        countDownLatch<span style="color:#ff79c6">.</span><span style="color:#50fa7b">countDown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%-10d Exception %s %n&#34;</span><span style="color:#ff79c6">,</span> index<span style="color:#ff79c6">,</span> e<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                        e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">});</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 这里会阻塞，等待所有的线程执行成功后，在继续向下走
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        countDownLatch<span style="color:#ff79c6">.</span><span style="color:#50fa7b">await</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">5</span><span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span>(Throwable e) {
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 消息发送失败的回调，此时告知有一个线程已经运行完了</span>
+</span></span><span style="display:flex;"><span>                        countDownLatch.<span style="color:#50fa7b">countDown</span>();
+</span></span><span style="display:flex;"><span>                        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%-10d Exception %s %n&#34;</span>, index, e);
+</span></span><span style="display:flex;"><span>                        e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                });
+</span></span><span style="display:flex;"><span>            } <span style="color:#ff79c6">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>                e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 这里会阻塞，等待所有的线程执行成功后，在继续向下走</span>
+</span></span><span style="display:flex;"><span>        countDownLatch.<span style="color:#50fa7b">await</span>(5, TimeUnit.<span style="color:#50fa7b">SECONDS</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>这个示例有个知识点，引入了一个 countDownLatch 来保证所有消息回调方法都执行 完了再关闭 Producer。 所以从这里可以看出，RocketMQ 的 Producer 也是一个服务端，在往 Broker 发送消息的时候也要作为服务端提供服务。</p>
 <h4 id="单向发送消息">单向发送消息</h4>
 <p>见名之意， 只管发送消息，没有返回值，也没有回调</p>
 <p>代码样例： <code>org/apache/rocketmq/example/simple/OnewayProducer.java</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">OnewayProducer</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//Instantiate with a producer group name.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Specify name server addresses.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//Launch the instance.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">100</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//Create a message instance, specifying topic, tag and message body.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;TopicTest&#34;</span> <span style="color:#6272a4">/* Topic */</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;TagA&#34;</span> <span style="color:#6272a4">/* Tag */</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Hello RocketMQ &#34;</span> <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>                            i<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">)</span> <span style="color:#6272a4">/* Message body */</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;发送第 &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;条消息&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//Call send message to deliver message to one of brokers.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendOneway</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//Wait for sending to complete
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">5000</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">OnewayProducer</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//Instantiate with a producer group name.</span>
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Specify name server addresses.</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//Launch the instance.</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 100; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//Create a message instance, specifying topic, tag and message body.</span>
+</span></span><span style="display:flex;"><span>            Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message(<span style="color:#f1fa8c">&#34;TopicTest&#34;</span> <span style="color:#6272a4">/* Topic */</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#f1fa8c">&#34;TagA&#34;</span> <span style="color:#6272a4">/* Tag */</span>,
+</span></span><span style="display:flex;"><span>                    (<span style="color:#f1fa8c">&#34;Hello RocketMQ &#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                            i).<span style="color:#50fa7b">getBytes</span>(StandardCharsets.<span style="color:#50fa7b">UTF_8</span>) <span style="color:#6272a4">/* Message body */</span>
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;发送第 &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;条消息&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//Call send message to deliver message to one of brokers.</span>
+</span></span><span style="display:flex;"><span>            producer.<span style="color:#50fa7b">sendOneway</span>(msg);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//Wait for sending to complete</span>
+</span></span><span style="display:flex;"><span>        Thread.<span style="color:#50fa7b">sleep</span>(5000);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="消费者消费消息">消费者消费消息</h4>
 <p>消费者消费消息有两种模式，一种是消费者主动去 Broker 上拉去消息的拉模式，另一种是消费者等待 Broker 把消息推过来的推模式</p>
 <h4 id="推模式">推模式</h4>
 <p>代码样例： <code>org.apache.rocketmq.example.simple.PushConsumer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.simple;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.consumer.ConsumeFromWhere<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">PushConsumer</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TopicTest&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String CONSUMER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;CID_JODIE_1&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String NAMESRV_ADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException<span style="color:#ff79c6">,</span> MQClientException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">PushConsumer</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TopicTest&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String CONSUMER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;CID_JODIE_1&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String NAMESRV_ADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.11:9876&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException, MQClientException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer<span style="color:#ff79c6">(</span>CONSUMER_GROUP<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer(CONSUMER_GROUP);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span>NAMESRV_ADDR<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setNamesrvAddr</span>(NAMESRV_ADDR);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">subscribe</span><span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;*&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setConsumeFromWhere</span><span style="color:#ff79c6">(</span>ConsumeFromWhere<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONSUME_FROM_FIRST_OFFSET</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//wrong time format 2017_0422_221800
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setConsumeTimestamp</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;20181109221800&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">registerMessageListener</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> MessageListenerConcurrently<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">subscribe</span>(TOPIC, <span style="color:#f1fa8c">&#34;*&#34;</span>);
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setConsumeFromWhere</span>(ConsumeFromWhere.<span style="color:#50fa7b">CONSUME_FROM_FIRST_OFFSET</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//wrong time format 2017_0422_221800</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setConsumeTimestamp</span>(<span style="color:#f1fa8c">&#34;20181109221800&#34;</span>);
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">registerMessageListener</span>(<span style="color:#ff79c6">new</span> MessageListenerConcurrently() {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeConcurrentlyStatus <span style="color:#50fa7b">consumeMessage</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs<span style="color:#ff79c6">,</span> ConsumeConcurrentlyContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%s Receive New Messages: %s %n&#34;</span><span style="color:#ff79c6">,</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">(),</span> msgs<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONSUME_SUCCESS</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeConcurrentlyStatus <span style="color:#50fa7b">consumeMessage</span>(List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs, ConsumeConcurrentlyContext context) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%s Receive New Messages: %s %n&#34;</span>, Thread.<span style="color:#50fa7b">currentThread</span>().<span style="color:#50fa7b">getName</span>(), msgs);
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus.<span style="color:#50fa7b">CONSUME_SUCCESS</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="拉模式">拉模式</h4>
 <p>代码样例： <code>org.apache.rocketmq.example.simple.PullConsumer</code></p>
 <p>通常情况下，用推模式比较简单。 实际上 RocketMQ 的推模式也是由拉模式封装出来的。</p>
@@ -464,117 +464,117 @@
 <p>Consumer 消费消息时，同一 Sharding Key 的消息使用单线程消费，保证消息消费顺序和存储顺序一致，最终实现消费顺序和发布顺序的一致。</p>
 <h4 id="代码样例">代码样例</h4>
 <p><strong>生产者</strong> <code>org.apache.rocketmq.example.order.Producer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.ordermessage<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.ordermessage;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.MessageQueueSelector<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageQueue<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.MessageQueueSelector;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageQueue;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Producer</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Producer</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">try</span> {
+</span></span><span style="display:flex;"><span>            DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span>);
+</span></span><span style="display:flex;"><span>            producer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>);
+</span></span><span style="display:flex;"><span>            producer.<span style="color:#50fa7b">start</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            String msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">30</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd">int</span> orderId <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">6</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>orderId <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给张三的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>orderId <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给李四的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>orderId <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给王二的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>orderId <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">3</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给李华的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>orderId <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">4</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给赵明的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>orderId <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">5</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给周三的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i <span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            String msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 30; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8be9fd">int</span> orderId <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">%</span> 6;
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(orderId <span style="color:#ff79c6">==</span> 0) {
+</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给张三的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i ;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(orderId <span style="color:#ff79c6">==</span> 1) {
+</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给李四的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i ;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(orderId <span style="color:#ff79c6">==</span> 2) {
+</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给王二的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i ;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(orderId <span style="color:#ff79c6">==</span> 3) {
+</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给李华的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i ;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(orderId <span style="color:#ff79c6">==</span> 4) {
+</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给赵明的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i ;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(orderId <span style="color:#ff79c6">==</span> 5) {
+</span></span><span style="display:flex;"><span>                    msgStr <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是发给周三的消息，id 是： &#34;</span> <span style="color:#ff79c6">+</span> i ;
+</span></span><span style="display:flex;"><span>                }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>                Message msg <span style="color:#ff79c6">=</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;TopicTest&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;tag_A&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;KEY&#34;</span> <span style="color:#ff79c6">+</span> i<span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">(</span>msgStr<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>RemotingHelper<span style="color:#ff79c6">.</span><span style="color:#50fa7b">DEFAULT_CHARSET</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>                SendResult sendResult <span style="color:#ff79c6">=</span> producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> MessageQueueSelector<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">new</span> Message(<span style="color:#f1fa8c">&#34;TopicTest&#34;</span>, <span style="color:#f1fa8c">&#34;tag_A&#34;</span>, <span style="color:#f1fa8c">&#34;KEY&#34;</span> <span style="color:#ff79c6">+</span> i,
+</span></span><span style="display:flex;"><span>                        (msgStr).<span style="color:#50fa7b">getBytes</span>(RemotingHelper.<span style="color:#50fa7b">DEFAULT_CHARSET</span>));
+</span></span><span style="display:flex;"><span>                SendResult sendResult <span style="color:#ff79c6">=</span> producer.<span style="color:#50fa7b">send</span>(msg, <span style="color:#ff79c6">new</span> MessageQueueSelector() {
 </span></span><span style="display:flex;"><span>                    @Override
-</span></span><span style="display:flex;"><span>                    <span style="color:#8be9fd;font-style:italic">public</span> MessageQueue <span style="color:#50fa7b">select</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>MessageQueue<span style="color:#ff79c6">&gt;</span> mqs<span style="color:#ff79c6">,</span> Message msg<span style="color:#ff79c6">,</span> Object arg<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 查看源码可知，arg 就是第三个参数： orderId 
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        Integer id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>Integer<span style="color:#ff79c6">)</span> arg<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// orderId 对 队列的个数取余，保证 orderId 相同的， index 肯定就是一样的
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                        <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> id <span style="color:#ff79c6">%</span> mqs<span style="color:#ff79c6">.</span><span style="color:#50fa7b">size</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">return</span> mqs<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>index<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">},</span> orderId<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#8be9fd;font-style:italic">public</span> MessageQueue <span style="color:#50fa7b">select</span>(List<span style="color:#ff79c6">&lt;</span>MessageQueue<span style="color:#ff79c6">&gt;</span> mqs, Message msg, Object arg) {
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// 查看源码可知，arg 就是第三个参数： orderId </span>
+</span></span><span style="display:flex;"><span>                        Integer id <span style="color:#ff79c6">=</span> (Integer) arg;
+</span></span><span style="display:flex;"><span>                        <span style="color:#6272a4">// orderId 对 队列的个数取余，保证 orderId 相同的， index 肯定就是一样的</span>
+</span></span><span style="display:flex;"><span>                        <span style="color:#8be9fd">int</span> index <span style="color:#ff79c6">=</span> id <span style="color:#ff79c6">%</span> mqs.<span style="color:#50fa7b">size</span>();
+</span></span><span style="display:flex;"><span>                        <span style="color:#ff79c6">return</span> mqs.<span style="color:#50fa7b">get</span>(index);
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }, orderId);
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">(</span>Exception e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> MQClientException<span style="color:#ff79c6">(</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMessage</span><span style="color:#ff79c6">(),</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>        } <span style="color:#ff79c6">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>            e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> MQClientException(e.<span style="color:#50fa7b">getMessage</span>(), <span style="color:#ff79c6">null</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>如何选择消息队列的关键代码解释如下图：</p>
 <p><img src="../../images/2023-05-21-13-02-43.png" alt=""></p>
 <p><strong>消费者</strong> <code>org.apache.rocketmq.example.order.Consumer</code></p>
 <p>消费者的实现还是比较简单的，只需要注册一个 <code>MessageListenerOrderly </code> 即可：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.ordermessage<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.ordermessage;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.consumer.ConsumeFromWhere<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Consumer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Consumer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name_3&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException {
+</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name_3&#34;</span>);
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setConsumeFromWhere</span><span style="color:#ff79c6">(</span>ConsumeFromWhere<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONSUME_FROM_FIRST_OFFSET</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setConsumeFromWhere</span>(ConsumeFromWhere.<span style="color:#50fa7b">CONSUME_FROM_FIRST_OFFSET</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">subscribe</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;TopicTest&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;*&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">subscribe</span>(<span style="color:#f1fa8c">&#34;TopicTest&#34;</span>, <span style="color:#f1fa8c">&#34;*&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 只需注册一个 MessageListenerOrderly 即可实现按照顺序消费消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 该类会把某个队列的消息取完再取下一个队列
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">registerMessageListener</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> MessageListenerOrderly<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 只需注册一个 MessageListenerOrderly 即可实现按照顺序消费消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 该类会把某个队列的消息取完再取下一个队列</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">registerMessageListener</span>(<span style="color:#ff79c6">new</span> MessageListenerOrderly() {
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeOrderlyStatus <span style="color:#50fa7b">consumeMessage</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs<span style="color:#ff79c6">,</span> ConsumeOrderlyContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                context<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setAutoCommit</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">true</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>MessageExt msg <span style="color:#ff79c6">:</span> msgs<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    String msgStr <span style="color:#ff79c6">=</span>  <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBody</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>                    System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;有消息：&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span><span style="color:#ff79c6">(</span>msgStr<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;张三&#34;</span><span style="color:#ff79c6">)){</span>
-</span></span><span style="display:flex;"><span>                        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;线程：%s 收到消息：%s \n&#34;</span><span style="color:#ff79c6">,</span> Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentThread</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">getName</span><span style="color:#ff79c6">(),</span>msgStr<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeOrderlyStatus <span style="color:#50fa7b">consumeMessage</span>(List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs, ConsumeOrderlyContext context) {
+</span></span><span style="display:flex;"><span>                context.<span style="color:#50fa7b">setAutoCommit</span>(<span style="color:#ff79c6">true</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> (MessageExt msg : msgs) {
+</span></span><span style="display:flex;"><span>                    String msgStr <span style="color:#ff79c6">=</span>  <span style="color:#ff79c6">new</span> String(msg.<span style="color:#50fa7b">getBody</span>());
+</span></span><span style="display:flex;"><span>                    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;有消息：&#34;</span>);
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span>(msgStr.<span style="color:#50fa7b">contains</span>(<span style="color:#f1fa8c">&#34;张三&#34;</span>)){
+</span></span><span style="display:flex;"><span>                        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;线程：%s 收到消息：%s \n&#34;</span>, Thread.<span style="color:#50fa7b">currentThread</span>().<span style="color:#50fa7b">getName</span>(),msgStr);
+</span></span><span style="display:flex;"><span>                    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeOrderlyStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SUCCESS</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeOrderlyStatus.<span style="color:#50fa7b">SUCCESS</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="全局顺序消息">全局顺序消息</h4>
 <p>对于指定的一个 Topic，所有消息按照严格的先入先出（FIFO）的顺序来发布和消费。</p>
 <p><strong>适用场景：</strong></p>
@@ -588,76 +588,76 @@
 <p>广播消息并没有特定的消息消费者样例，这是因为这涉及到消费者的集群消费模式。在集群状态 (MessageModel.CLUSTERING) 下，每一条消息只会被同一个消费者组中的一个实例消费到（这跟 kafka 和 rabbitMQ 的集群模式是一样的）。而广播模式则是把消息发给了所有订阅了对应主题的消 费者，而不管消费者是不是同一个消费者组。</p>
 <h3 id="延迟消息">延迟消息</h3>
 <p>生产者代码样例：<code>org.apache.rocketmq.example.schedule.ScheduledMessageProducer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.schedule<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.schedule;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ScheduledMessageProducer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ScheduledMessageProducer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String PRODUCER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ExampleProducerGroup&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopic&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String PRODUCER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ExampleProducerGroup&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopic&#34;</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Instantiate a producer to send scheduled messages
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span>PRODUCER_GROUP<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Instantiate a producer to send scheduled messages</span>
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(PRODUCER_GROUP);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span>DEFAULT_NAMESRVADDR<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(DEFAULT_NAMESRVADDR);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Launch producer
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        String msg <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我 10 秒后才会被消费， 现在的时间是：&#34;</span> <span style="color:#ff79c6">+</span> System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentTimeMillis</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        Message message <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// This message will be delivered to consumer 10 seconds later.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        message<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setDelayTimeLevel</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">3</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Send the message
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        SendResult result <span style="color:#ff79c6">=</span> producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>message<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>result<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;发送消息：&#34;</span> <span style="color:#ff79c6">+</span> msg<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Launch producer</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        String msg <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我 10 秒后才会被消费， 现在的时间是：&#34;</span> <span style="color:#ff79c6">+</span> System.<span style="color:#50fa7b">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>        Message message <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message(TOPIC, (msg).<span style="color:#50fa7b">getBytes</span>(StandardCharsets.<span style="color:#50fa7b">UTF_8</span>));
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// This message will be delivered to consumer 10 seconds later.</span>
+</span></span><span style="display:flex;"><span>        message.<span style="color:#50fa7b">setDelayTimeLevel</span>(3);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Send the message</span>
+</span></span><span style="display:flex;"><span>        SendResult result <span style="color:#ff79c6">=</span> producer.<span style="color:#50fa7b">send</span>(message);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(result);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;发送消息：&#34;</span> <span style="color:#ff79c6">+</span> msg);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Shutdown producer after use.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Shutdown producer after use.</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>消费者代码样例：<code>org.apache.rocketmq.example.schedule.ScheduledMessageConsumer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.schedule<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.schedule;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ScheduledMessageConsumer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ScheduledMessageConsumer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String CONSUMER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ExampleConsumer&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopic&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String CONSUMER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;ExampleConsumer&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopic&#34;</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Instantiate message consumer
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer<span style="color:#ff79c6">(</span>CONSUMER_GROUP<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Instantiate message consumer</span>
+</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer(CONSUMER_GROUP);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span>DEFAULT_NAMESRVADDR<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Uncomment the following line while debugging, namesrvAddr should be set to your local address</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setNamesrvAddr</span>(DEFAULT_NAMESRVADDR);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Subscribe topics
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">subscribe</span><span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;*&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Register message listener
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">registerMessageListener</span><span style="color:#ff79c6">((</span>MessageListenerConcurrently<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">(</span>messages<span style="color:#ff79c6">,</span> context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">-&gt;</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>MessageExt message <span style="color:#ff79c6">:</span> messages<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;收到消息 [&#34;</span><span style="color:#ff79c6">+</span> System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">currentTimeMillis</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;]：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">(</span>message<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBody</span><span style="color:#ff79c6">()));</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONSUME_SUCCESS</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Subscribe topics</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">subscribe</span>(TOPIC, <span style="color:#f1fa8c">&#34;*&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Register message listener</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">registerMessageListener</span>((MessageListenerConcurrently) (messages, context) <span style="color:#ff79c6">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (MessageExt message : messages) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;收到消息 [&#34;</span><span style="color:#ff79c6">+</span> System.<span style="color:#50fa7b">currentTimeMillis</span>() <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;]：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> String(message.<span style="color:#50fa7b">getBody</span>()));
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus.<span style="color:#50fa7b">CONSUME_SUCCESS</span>;
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>消费者控制台打印信息：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>收到消息 [1684659475529]：我 10 秒后才会被消费， 现在的时间是：1684659465229
 </span></span></code></pre></div><p>可以看到消息的发送时间和接收时间确实查了 10 秒。</p>
@@ -666,112 +666,112 @@
 <p>批量消息是指将多条消息合并成一个批量消息，一次发送出去。这样的好处是可以减少网络 IO，提升吞吐量。</p>
 <p>生产者样例代码： <code>org.apache.rocketmq.example.batch.SimpleBatchProducer</code></p>
 <p>代码中有一个关键的注释：如果批量消息大于 1MB 就不要用一个批次 发送，而要拆分成多个批次消息发送。也就是说，一个批次消息的大小不要超过 1MB 实际使用时，这个 1MB 的限制可以稍微扩大点，实际最大的限制是 4194304 字节，大概 4MB。 但是使用批量消息时，这个消息长度确实是必须考虑的一个问题。 如果超过了这个限制，要手动再次分批。 这些消息应该有相同的 Topic，相同的 waitStoreMsgOK。而且不能是延迟消息、事务消息等。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.batch<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.batch;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.nio.charset.StandardCharsets;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SimpleBatchProducer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SimpleBatchProducer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String PRODUCER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;BatchProducerGroupName&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;BatchTest&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TAG <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Tag&#34;</span><span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String PRODUCER_GROUP <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;BatchProducerGroupName&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String DEFAULT_NAMESRVADDR <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TOPIC <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;BatchTest&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> String TAG <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Tag&#34;</span>;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span>PRODUCER_GROUP<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span>DEFAULT_NAMESRVADDR<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(PRODUCER_GROUP);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(DEFAULT_NAMESRVADDR);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果只是一次发送不超过 1MiB 的消息，使用 batch 还是很容易的
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 同一批次的消息应该有：相同的 topic，相同的 waitStoreMsgOK，不支持 schedule
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> messages <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;();</span>
-</span></span><span style="display:flex;"><span>        messages<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> TAG<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;OrderID001&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;Hello world 0&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">)));</span>
-</span></span><span style="display:flex;"><span>        messages<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> TAG<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;OrderID002&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;Hello world 1&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">)));</span>
-</span></span><span style="display:flex;"><span>        messages<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span>TOPIC<span style="color:#ff79c6">,</span> TAG<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;OrderID003&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;Hello world 2&#34;</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>StandardCharsets<span style="color:#ff79c6">.</span><span style="color:#50fa7b">UTF_8</span><span style="color:#ff79c6">)));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果只是一次发送不超过 1MiB 的消息，使用 batch 还是很容易的</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 同一批次的消息应该有：相同的 topic，相同的 waitStoreMsgOK，不支持 schedule</span>
+</span></span><span style="display:flex;"><span>        List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> messages <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        messages.<span style="color:#50fa7b">add</span>(<span style="color:#ff79c6">new</span> Message(TOPIC, TAG, <span style="color:#f1fa8c">&#34;OrderID001&#34;</span>, <span style="color:#f1fa8c">&#34;Hello world 0&#34;</span>.<span style="color:#50fa7b">getBytes</span>(StandardCharsets.<span style="color:#50fa7b">UTF_8</span>)));
+</span></span><span style="display:flex;"><span>        messages.<span style="color:#50fa7b">add</span>(<span style="color:#ff79c6">new</span> Message(TOPIC, TAG, <span style="color:#f1fa8c">&#34;OrderID002&#34;</span>, <span style="color:#f1fa8c">&#34;Hello world 1&#34;</span>.<span style="color:#50fa7b">getBytes</span>(StandardCharsets.<span style="color:#50fa7b">UTF_8</span>)));
+</span></span><span style="display:flex;"><span>        messages.<span style="color:#50fa7b">add</span>(<span style="color:#ff79c6">new</span> Message(TOPIC, TAG, <span style="color:#f1fa8c">&#34;OrderID003&#34;</span>, <span style="color:#f1fa8c">&#34;Hello world 2&#34;</span>.<span style="color:#50fa7b">getBytes</span>(StandardCharsets.<span style="color:#50fa7b">UTF_8</span>)));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        SendResult sendResult <span style="color:#ff79c6">=</span> producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>messages<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%s&#34;</span><span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        SendResult sendResult <span style="color:#ff79c6">=</span> producer.<span style="color:#50fa7b">send</span>(messages);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%s&#34;</span>, sendResult);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="过滤消息">过滤消息</h3>
 <p>在大多数情况下，可以使用 Message 的 Tag 属性来简单快速的过滤信息。</p>
 <h4 id="标签过滤">标签过滤</h4>
 <p>主要是看消息消费者。<code>consumer.subscribe(&quot;TagFilterTest&quot;, &quot;TagA || TagC&quot;);</code> 只订阅 TagA 和 TagC 的消息。 TAG 是 RocketMQ 中特有的一个消息属性。RocketMQ 的最佳实践中就建议，使用 RocketMQ 时， <strong>一个应用可以就用一个 Topic，而应用中的不同业务就用 TAG 来区分。</strong></p>
 <p>使用 Tag 过滤消息的消息生产者案例见：<code>org.apache.rocketmq.example.filter.TagFilterProducer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">TagFilterProducer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">TagFilterProducer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> tags <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">[]</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;TagA&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TagB&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TagC&#34;</span><span style="color:#ff79c6">};</span>
+</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> tags <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">[]</span> {<span style="color:#f1fa8c">&#34;TagA&#34;</span>, <span style="color:#f1fa8c">&#34;TagB&#34;</span>, <span style="color:#f1fa8c">&#34;TagC&#34;</span>};
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">60</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            String tag <span style="color:#ff79c6">=</span> tags<span style="color:#ff79c6">[</span>i <span style="color:#ff79c6">%</span> tags<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">];</span>
-</span></span><span style="display:flex;"><span>            Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;TagFilterTest&#34;</span><span style="color:#ff79c6">,</span> tag <span style="color:#ff79c6">,</span> <span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;我是一条消息，我的标签是：&#34;</span> <span style="color:#ff79c6">+</span> tag<span style="color:#ff79c6">).</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>RemotingHelper<span style="color:#ff79c6">.</span><span style="color:#50fa7b">DEFAULT_CHARSET</span><span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 60; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            String tag <span style="color:#ff79c6">=</span> tags<span style="color:#ff79c6">[</span>i <span style="color:#ff79c6">%</span> tags.<span style="color:#50fa7b">length</span><span style="color:#ff79c6">]</span>;
+</span></span><span style="display:flex;"><span>            Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message(<span style="color:#f1fa8c">&#34;TagFilterTest&#34;</span>, tag , (<span style="color:#f1fa8c">&#34;我是一条消息，我的标签是：&#34;</span> <span style="color:#ff79c6">+</span> tag).<span style="color:#50fa7b">getBytes</span>(RemotingHelper.<span style="color:#50fa7b">DEFAULT_CHARSET</span>));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            SendResult sendResult <span style="color:#ff79c6">=</span> producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%s%n&#34;</span><span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            SendResult sendResult <span style="color:#ff79c6">=</span> producer.<span style="color:#50fa7b">send</span>(msg);
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%s%n&#34;</span>, sendResult);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>使用 Tag 过滤消息的消息消费者案例见：<code>org.apache.rocketmq.example.filter.TagFilterConsumer</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.exception.MQClientException;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">TagFilterConsumer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">TagFilterConsumer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> MQClientException {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span>);
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 使用标签过滤消息，效率更高
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">subscribe</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;TagFilterTest&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TagA || TagC&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 使用标签过滤消息，效率更高</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">subscribe</span>(<span style="color:#f1fa8c">&#34;TagFilterTest&#34;</span>, <span style="color:#f1fa8c">&#34;TagA || TagC&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">registerMessageListener</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> MessageListenerConcurrently<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">registerMessageListener</span>(<span style="color:#ff79c6">new</span> MessageListenerConcurrently() {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeConcurrentlyStatus <span style="color:#50fa7b">consumeMessage</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs<span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                ConsumeConcurrentlyContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>MessageExt msg <span style="color:#ff79c6">:</span> msgs<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeConcurrentlyStatus <span style="color:#50fa7b">consumeMessage</span>(List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs,
+</span></span><span style="display:flex;"><span>                ConsumeConcurrentlyContext context) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> (MessageExt msg : msgs) {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                    System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;收到了一条消息：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBody</span><span style="color:#ff79c6">()));</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONSUME_SUCCESS</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>                    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;收到了一条消息：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> String(msg.<span style="color:#50fa7b">getBody</span>()));
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus.<span style="color:#50fa7b">CONSUME_SUCCESS</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">start</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>但是，这种方式有一个很大的限制，就是一个消息只能有一个 TAG，这在一些比较复杂的场景就有点不足了。 这时候，可以使用 SQL 表达式来对消息进行过滤。</p>
 <h4 id="sql-过滤">sql 过滤</h4>
 <p>这个模式的关键是在消费者端使用<code>MessageSelector.bySql(String sql)</code>返回的一个 MessageSelector。这里面的 sql 语句是按照 SQL92 标准来执行的。sql 中可以使用的参数有默认的 TAGS 和一个在生产者中加入的 a 属性</p>
@@ -781,78 +781,78 @@
 <li>只有推模式的消费者可以使用 SQL 过滤。拉模式是用不了的。</li>
 </ul>
 <p>生产者代码样例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.DefaultMQProducer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.remoting.common.RemotingHelper;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SqlFilterProducer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SqlFilterProducer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        DefaultMQProducer producer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQProducer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span>);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">start</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> tags <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">[]</span> <span style="color:#ff79c6">{</span><span style="color:#f1fa8c">&#34;TagA&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TagB&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;TagC&#34;</span><span style="color:#ff79c6">};</span>
+</span></span><span style="display:flex;"><span>        String<span style="color:#ff79c6">[]</span> tags <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">[]</span> {<span style="color:#f1fa8c">&#34;TagA&#34;</span>, <span style="color:#f1fa8c">&#34;TagB&#34;</span>, <span style="color:#f1fa8c">&#34;TagC&#34;</span>};
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            String tag <span style="color:#ff79c6">=</span> tags<span style="color:#ff79c6">[</span>i <span style="color:#ff79c6">%</span> tags<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">];</span>
-</span></span><span style="display:flex;"><span>            String a <span style="color:#ff79c6">=</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">valueOf</span><span style="color:#ff79c6">(</span>i<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            String msgBody <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是一条消息，我的 tag 是 &#34;</span> <span style="color:#ff79c6">+</span> tag <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; a 属性是&#34;</span> <span style="color:#ff79c6">+</span> a<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;SqlFilterTest&#34;</span><span style="color:#ff79c6">,</span>tag<span style="color:#ff79c6">,</span> msgBody<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBytes</span><span style="color:#ff79c6">(</span>RemotingHelper<span style="color:#ff79c6">.</span><span style="color:#50fa7b">DEFAULT_CHARSET</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">putUserProperty</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;a&#34;</span><span style="color:#ff79c6">,</span> a<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 10; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            String tag <span style="color:#ff79c6">=</span> tags<span style="color:#ff79c6">[</span>i <span style="color:#ff79c6">%</span> tags.<span style="color:#50fa7b">length</span><span style="color:#ff79c6">]</span>;
+</span></span><span style="display:flex;"><span>            String a <span style="color:#ff79c6">=</span> String.<span style="color:#50fa7b">valueOf</span>(i);
+</span></span><span style="display:flex;"><span>            String msgBody <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;我是一条消息，我的 tag 是 &#34;</span> <span style="color:#ff79c6">+</span> tag <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; a 属性是&#34;</span> <span style="color:#ff79c6">+</span> a;
+</span></span><span style="display:flex;"><span>            Message msg <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message(<span style="color:#f1fa8c">&#34;SqlFilterTest&#34;</span>,tag, msgBody.<span style="color:#50fa7b">getBytes</span>(RemotingHelper.<span style="color:#50fa7b">DEFAULT_CHARSET</span>)
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>            msg.<span style="color:#50fa7b">putUserProperty</span>(<span style="color:#f1fa8c">&#34;a&#34;</span>, a);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            SendResult sendResult <span style="color:#ff79c6">=</span> producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">send</span><span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;%s%n&#34;</span><span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            SendResult sendResult <span style="color:#ff79c6">=</span> producer.<span style="color:#50fa7b">send</span>(msg);
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;%s%n&#34;</span>, sendResult);
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        producer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">shutdown</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#50fa7b">shutdown</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>消费者样例：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> org.apache.rocketmq.example.filter;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.MessageSelector<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.MessageSelector;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.common.message.MessageExt;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SqlFilterConsumer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SqlFilterConsumer</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Exception <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) <span style="color:#8be9fd;font-style:italic">throws</span> Exception {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setNamesrvAddr</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        DefaultMQPushConsumer consumer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DefaultMQPushConsumer(<span style="color:#f1fa8c">&#34;please_rename_unique_group_name&#34;</span>);
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">setNamesrvAddr</span>(<span style="color:#f1fa8c">&#34;192.168.11.12:9876&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Don&#39;t forget to set enablePropertyFilter=true in broker
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">subscribe</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;SqlFilterTest&#34;</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>            MessageSelector<span style="color:#ff79c6">.</span><span style="color:#50fa7b">bySql</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;(TAGS is not null and TAGS in (&#39;TagA&#39;, &#39;TagB&#39;))&#34;</span> <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;and (a is not null and a between 0 and 3)&#34;</span><span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// Don&#39;t forget to set enablePropertyFilter=true in broker</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">subscribe</span>(<span style="color:#f1fa8c">&#34;SqlFilterTest&#34;</span>,
+</span></span><span style="display:flex;"><span>            MessageSelector.<span style="color:#50fa7b">bySql</span>(<span style="color:#f1fa8c">&#34;(TAGS is not null and TAGS in (&#39;TagA&#39;, &#39;TagB&#39;))&#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;and (a is not null and a between 0 and 3)&#34;</span>));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">registerMessageListener</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> MessageListenerConcurrently<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">registerMessageListener</span>(<span style="color:#ff79c6">new</span> MessageListenerConcurrently() {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeConcurrentlyStatus <span style="color:#50fa7b">consumeMessage</span><span style="color:#ff79c6">(</span>List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs<span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                ConsumeConcurrentlyContext context<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>MessageExt msg <span style="color:#ff79c6">:</span> msgs<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                    System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;收到消息：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">(</span>msg<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBody</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONSUME_SUCCESS</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> ConsumeConcurrentlyStatus <span style="color:#50fa7b">consumeMessage</span>(List<span style="color:#ff79c6">&lt;</span>MessageExt<span style="color:#ff79c6">&gt;</span> msgs,
+</span></span><span style="display:flex;"><span>                ConsumeConcurrentlyContext context) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> (MessageExt msg : msgs) {
+</span></span><span style="display:flex;"><span>                    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;收到消息：&#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">new</span> String(msg.<span style="color:#50fa7b">getBody</span>()) );
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">return</span> ConsumeConcurrentlyStatus.<span style="color:#50fa7b">CONSUME_SUCCESS</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        consumer<span style="color:#ff79c6">.</span><span style="color:#50fa7b">start</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#50fa7b">start</span>();
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;Consumer Started.%n&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>消费者控制台输出：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>Consumer Started.
 </span></span><span style="display:flex;"><span>收到消息：我是一条消息，我的 tag 是 TagA a 属性是 3

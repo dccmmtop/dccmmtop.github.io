@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -147,24 +147,24 @@
 </ol>
 <h3 id="缓存穿透问题解决方案">缓存穿透问题解决方案</h3>
 <h4 id="缓存空对象">缓存空对象</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String <span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>String key<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从缓存中获取数据
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String cacheValue <span style="color:#ff79c6">=</span> cache<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 缓存为空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>StringUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isBlank</span><span style="color:#ff79c6">(</span>cacheValue<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 从存储中获取
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String storageValue <span style="color:#ff79c6">=</span> storage<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        cache<span style="color:#ff79c6">.</span><span style="color:#50fa7b">set</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">,</span> storageValue<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果存储数据为空， 需要设置一个过期时间(300秒)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>storageValue <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            cache<span style="color:#ff79c6">.</span><span style="color:#50fa7b">expire</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">,</span> <span style="color:#bd93f9">60</span> <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">5</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> storageValue<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 缓存非空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> cacheValue<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String <span style="color:#50fa7b">get</span>(String key) {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从缓存中获取数据</span>
+</span></span><span style="display:flex;"><span>    String cacheValue <span style="color:#ff79c6">=</span> cache.<span style="color:#50fa7b">get</span>(key);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 缓存为空</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (StringUtils.<span style="color:#50fa7b">isBlank</span>(cacheValue)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 从存储中获取</span>
+</span></span><span style="display:flex;"><span>        String storageValue <span style="color:#ff79c6">=</span> storage.<span style="color:#50fa7b">get</span>(key);
+</span></span><span style="display:flex;"><span>        cache.<span style="color:#50fa7b">set</span>(key, storageValue);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 如果存储数据为空， 需要设置一个过期时间(300秒)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (storageValue <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>            cache.<span style="color:#50fa7b">expire</span>(key, 60 <span style="color:#ff79c6">*</span> 5);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> storageValue;
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 缓存非空</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> cacheValue;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h4 id="布隆过滤器">布隆过滤器</h4>
 <p>对于恶意攻击，向服务器请求大量不存在的数据造成的缓存穿透可以先用布隆过滤器做一次筛选，对于不存在数据，布隆过滤器一般都能够过滤掉，不让请求再继续往后端走。</p>
 <p>布隆过滤器的特性是：<strong>当它说这个值存在，那么这个值可能存在，也可能不存在；当它说不存在时，这个值一定不存在</strong></p>
@@ -188,57 +188,57 @@
 </span></span></code></pre></div><h5 id="预先放入数据">预先放入数据</h5>
 <p><strong>使用布隆过滤器需要把所有数据提前放入布隆过滤器，并且在增加数据时也要往布隆过滤器里放，但是布隆过滤器不支持删除数据，如果原始数据删除比较多，需要定期重置布隆过滤器，以保持较高的正确性</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">/</span>初始化布隆过滤器
-</span></span><span style="display:flex;"><span>RBloomFilter<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> bloomFilter <span style="color:#ff79c6">=</span> redisson<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBloomFilter</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;nameList&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//初始化布隆过滤器：预计元素为100000000L,误差率为3%
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>bloomFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">tryInit</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">100000000L</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">0.03</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>RBloomFilter<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> bloomFilter <span style="color:#ff79c6">=</span> redisson.<span style="color:#50fa7b">getBloomFilter</span>(<span style="color:#f1fa8c">&#34;nameList&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//初始化布隆过滤器：预计元素为100000000L,误差率为3%</span>
+</span></span><span style="display:flex;"><span>bloomFilter.<span style="color:#50fa7b">tryInit</span>(100000000L,0.<span style="color:#50fa7b">03</span>);
 </span></span><span style="display:flex;"><span>        
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">//把所有数据存入布隆过滤器
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> init<span style="color:#ff79c6">(){</span>
-</span></span><span style="display:flex;"><span>    keys <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">[</span><span style="color:#f1fa8c">&#34;zhangsan&#34;</span><span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;lisi&#34;</span><span style="color:#ff79c6">,</span><span style="color:#f1fa8c">&#34;wanger&#34;</span> <span style="color:#ff79c6">....]</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span>String key<span style="color:#ff79c6">:</span> keys<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        bloomFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">put</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//把所有数据存入布隆过滤器</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">init</span>(){
+</span></span><span style="display:flex;"><span>    keys <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">[</span><span style="color:#f1fa8c">&#34;zhangsan&#34;</span>,<span style="color:#f1fa8c">&#34;lisi&#34;</span>,<span style="color:#f1fa8c">&#34;wanger&#34;</span> ....<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (String key: keys) {
+</span></span><span style="display:flex;"><span>        bloomFilter.<span style="color:#50fa7b">put</span>(key);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h5 id="使用">使用</h5>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">RedissonBloomFilter</span> <span style="color:#ff79c6">{</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">RedissonBloomFilter</span> {
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span><span style="color:#ff79c6">(</span>String<span style="color:#ff79c6">[]</span> args<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        Config config <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Config<span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>        config<span style="color:#ff79c6">.</span><span style="color:#50fa7b">useSingleServer</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">setAddress</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;redis://localhost:6379&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//构造Redisson
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        RedissonClient redisson <span style="color:#ff79c6">=</span> Redisson<span style="color:#ff79c6">.</span><span style="color:#50fa7b">create</span><span style="color:#ff79c6">(</span>config<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">main</span>(String<span style="color:#ff79c6">[]</span> args) {
+</span></span><span style="display:flex;"><span>        Config config <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Config();
+</span></span><span style="display:flex;"><span>        config.<span style="color:#50fa7b">useSingleServer</span>().<span style="color:#50fa7b">setAddress</span>(<span style="color:#f1fa8c">&#34;redis://localhost:6379&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//构造Redisson</span>
+</span></span><span style="display:flex;"><span>        RedissonClient redisson <span style="color:#ff79c6">=</span> Redisson.<span style="color:#50fa7b">create</span>(config);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        RBloomFilter<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> bloomFilter <span style="color:#ff79c6">=</span> redisson<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getBloomFilter</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;nameList&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//初始化布隆过滤器：预计元素为100000000L,误差率为3%,根据这两个参数会计算出底层的bit数组大小
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        bloomFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">tryInit</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">100000000L</span><span style="color:#ff79c6">,</span><span style="color:#bd93f9">0.03</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        RBloomFilter<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> bloomFilter <span style="color:#ff79c6">=</span> redisson.<span style="color:#50fa7b">getBloomFilter</span>(<span style="color:#f1fa8c">&#34;nameList&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//初始化布隆过滤器：预计元素为100000000L,误差率为3%,根据这两个参数会计算出底层的bit数组大小</span>
+</span></span><span style="display:flex;"><span>        bloomFilter.<span style="color:#50fa7b">tryInit</span>(100000000L,0.<span style="color:#50fa7b">03</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//判断下面号码是否在布隆过滤器中
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>bloomFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;sa&#34;</span><span style="color:#ff79c6">));</span><span style="color:#6272a4">//false
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>bloomFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;jlsd&#34;</span><span style="color:#ff79c6">));</span><span style="color:#6272a4">//false
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span>bloomFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">contains</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;zhangsan&#34;</span><span style="color:#ff79c6">));</span><span style="color:#6272a4">//true
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//判断下面号码是否在布隆过滤器中</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(bloomFilter.<span style="color:#50fa7b">contains</span>(<span style="color:#f1fa8c">&#34;sa&#34;</span>));<span style="color:#6272a4">//false</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(bloomFilter.<span style="color:#50fa7b">contains</span>(<span style="color:#f1fa8c">&#34;jlsd&#34;</span>));<span style="color:#6272a4">//false</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(bloomFilter.<span style="color:#50fa7b">contains</span>(<span style="color:#f1fa8c">&#34;zhangsan&#34;</span>));<span style="color:#6272a4">//true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="缓存击穿">缓存击穿</h2>
 <p>由于大批量缓存在同一时间失效可能导致大量得请求同时穿透缓存直达访问数据库，可能会造成数据库瞬间压力过大甚至挂掉。为应对这种情况，我们一般将某批缓存在过期的时间基础上再加一个短暂的随机值，避免同时失效, 伪代码如下:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String <span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>String key<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从缓存中获取数据
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String cacheValue <span style="color:#ff79c6">=</span> cache<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 缓存为空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>StringUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">isBlank</span><span style="color:#ff79c6">(</span>cacheValue<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 从存储中获取
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String storageValue <span style="color:#ff79c6">=</span> storage<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        cache<span style="color:#ff79c6">.</span><span style="color:#50fa7b">set</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">,</span> storageValue<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//设置一个过期时间(300到600之间的一个随机数)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">int</span> expireTime <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Random<span style="color:#ff79c6">().</span><span style="color:#50fa7b">nextInt</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">300</span><span style="color:#ff79c6">)</span>  <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">300</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>storageValue <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            cache<span style="color:#ff79c6">.</span><span style="color:#50fa7b">expire</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">,</span> expireTime<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> storageValue<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span> <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 缓存非空
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> cacheValue<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String <span style="color:#50fa7b">get</span>(String key) {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从缓存中获取数据</span>
+</span></span><span style="display:flex;"><span>    String cacheValue <span style="color:#ff79c6">=</span> cache.<span style="color:#50fa7b">get</span>(key);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 缓存为空</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (StringUtils.<span style="color:#50fa7b">isBlank</span>(cacheValue)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 从存储中获取</span>
+</span></span><span style="display:flex;"><span>        String storageValue <span style="color:#ff79c6">=</span> storage.<span style="color:#50fa7b">get</span>(key);
+</span></span><span style="display:flex;"><span>        cache.<span style="color:#50fa7b">set</span>(key, storageValue);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//设置一个过期时间(300到600之间的一个随机数)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> expireTime <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Random().<span style="color:#50fa7b">nextInt</span>(300)  <span style="color:#ff79c6">+</span> 300;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (storageValue <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>            cache.<span style="color:#50fa7b">expire</span>(key, expireTime);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> storageValue;
+</span></span><span style="display:flex;"><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 缓存非空</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> cacheValue;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="缓存雪崩">缓存雪崩</h2>
 <p>缓存雪崩指的是缓存层支撑不住请求或者宕机了，流量会直接冲击到后端存储层。</p>
 <p>由于缓存层承载这大量的请求，有效的保护了存储层，但是如果某些原因导致缓存层不能提供正常的服务，如：</p>
@@ -265,28 +265,28 @@
 </ol>
 <p>这种情况下缓存失效的瞬间，有大量的线程去重建缓存，造成后端负载过大，甚至导致宕机。解决这个问题的关键是要避免大量线程同时重建缓存：</p>
 <p>可以使用互斥锁来解决，此方法只允许一个线程重建缓存，其他线程等待，然后重新获取最新数据，伪代码如下:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String <span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>String key<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从Redis中获取数据
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    String value <span style="color:#ff79c6">=</span> redis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 如果value为空， 则开始重构缓存
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 只允许一个线程重建缓存， 使用nx， 并设置过期时间ex
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String mutexKey <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;mutext🔑&#34;</span> <span style="color:#ff79c6">+</span> key<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>redis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">set</span><span style="color:#ff79c6">(</span>mutexKey<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;1&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;ex 180&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;nx&#34;</span><span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>             <span style="color:#6272a4">// 从数据源获取数据
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            value <span style="color:#ff79c6">=</span> db<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 回写Redis， 并设置过期时间
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            redis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setex</span><span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">,</span> timeout<span style="color:#ff79c6">,</span> value<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 删除key_mutex
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            redis<span style="color:#ff79c6">.</span><span style="color:#50fa7b">delete</span><span style="color:#ff79c6">(</span>mutexKey<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span><span style="color:#6272a4">// 其他线程休息50毫秒后重试
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            Thread<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sleep</span><span style="color:#ff79c6">(</span><span style="color:#bd93f9">50</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            get<span style="color:#ff79c6">(</span>key<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> value<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>String <span style="color:#50fa7b">get</span>(String key) {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 从Redis中获取数据</span>
+</span></span><span style="display:flex;"><span>    String value <span style="color:#ff79c6">=</span> redis.<span style="color:#50fa7b">get</span>(key);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 如果value为空， 则开始重构缓存</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (value <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">null</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 只允许一个线程重建缓存， 使用nx， 并设置过期时间ex</span>
+</span></span><span style="display:flex;"><span>        String mutexKey <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;mutext:key:&#34;</span> <span style="color:#ff79c6">+</span> key;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (redis.<span style="color:#50fa7b">set</span>(mutexKey, <span style="color:#f1fa8c">&#34;1&#34;</span>, <span style="color:#f1fa8c">&#34;ex 180&#34;</span>, <span style="color:#f1fa8c">&#34;nx&#34;</span>)) {
+</span></span><span style="display:flex;"><span>             <span style="color:#6272a4">// 从数据源获取数据</span>
+</span></span><span style="display:flex;"><span>            value <span style="color:#ff79c6">=</span> db.<span style="color:#50fa7b">get</span>(key);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 回写Redis， 并设置过期时间</span>
+</span></span><span style="display:flex;"><span>            redis.<span style="color:#50fa7b">setex</span>(key, timeout, value);
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 删除key_mutex</span>
+</span></span><span style="display:flex;"><span>            redis.<span style="color:#50fa7b">delete</span>(mutexKey);
+</span></span><span style="display:flex;"><span>        }<span style="color:#6272a4">// 其他线程休息50毫秒后重试</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>            Thread.<span style="color:#50fa7b">sleep</span>(50);
+</span></span><span style="display:flex;"><span>            get(key);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> value;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div>
         </div>
 

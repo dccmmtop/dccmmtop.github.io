@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -166,281 +166,281 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;dependencies&gt;</span>
 </span></span></code></pre></div><h2 id="配置类-extrocketmqtemplate">配置类 ExtRocketMQTemplate</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.config<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.config;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ExtRocketMQTemplateConfiguration<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQTemplate<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ExtRocketMQTemplateConfiguration;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQTemplate;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@ExtRocketMQTemplateConfiguration<span style="color:#ff79c6">()</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ExtRocketMQTemplate</span> <span style="color:#8be9fd;font-style:italic">extends</span> RocketMQTemplate <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>@ExtRocketMQTemplateConfiguration()
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">ExtRocketMQTemplate</span> <span style="color:#8be9fd;font-style:italic">extends</span> RocketMQTemplate {
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="消费者-springconsumer">消费者 SpringConsumer</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ConsumeMode<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.RocketMQMessageListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ConsumeMode;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Component
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// consumerGroup 相同角色的消费者需要具有完全相同的订阅和consumerGroup才能正确实现负载均衡。它是必需的并且需要是全球唯一的。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// consumeMode 控制消费模式，可以选择并发或顺序接收消息。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// 该注解还有很多其他属性，请详细查看源码
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>@RocketMQMessageListener<span style="color:#ff79c6">(</span>consumerGroup <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MyConsumerGroup&#34;</span><span style="color:#ff79c6">,</span> topic <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopic&#34;</span><span style="color:#ff79c6">,</span>consumeMode<span style="color:#ff79c6">=</span> ConsumeMode<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONCURRENTLY</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringConsumer</span> <span style="color:#8be9fd;font-style:italic">implements</span> RocketMQListener<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// consumerGroup 相同角色的消费者需要具有完全相同的订阅和consumerGroup才能正确实现负载均衡。它是必需的并且需要是全球唯一的。</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// consumeMode 控制消费模式，可以选择并发或顺序接收消息。</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 该注解还有很多其他属性，请详细查看源码</span>
+</span></span><span style="display:flex;"><span>@RocketMQMessageListener(consumerGroup <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MyConsumerGroup&#34;</span>, topic <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopic&#34;</span>,consumeMode<span style="color:#ff79c6">=</span> ConsumeMode.<span style="color:#50fa7b">CONCURRENTLY</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringConsumer</span> <span style="color:#8be9fd;font-style:italic">implements</span> RocketMQListener<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onMessage</span><span style="color:#ff79c6">(</span>String message<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Received message : &#34;</span><span style="color:#ff79c6">+</span> message<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onMessage</span>(String message) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;Received message : &#34;</span><span style="color:#ff79c6">+</span> message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="发送者示例-springproducer">发送者示例 SpringProducer</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQTemplate<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.support.RocketMQHeaders<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.support.MessageBuilder<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQTemplate;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.support.RocketMQHeaders;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.support.MessageBuilder;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.annotation.Resource<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.annotation.Resource;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Component
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringProducer</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringProducer</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Resource
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> RocketMQTemplate rocketMQTemplate<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> RocketMQTemplate rocketMQTemplate;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 就是如此简单
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sendMessage</span><span style="color:#ff79c6">(</span>String topic<span style="color:#ff79c6">,</span>String msg<span style="color:#ff79c6">){</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">rocketMQTemplate</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">convertAndSend</span><span style="color:#ff79c6">(</span>topic<span style="color:#ff79c6">,</span>msg<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 就是如此简单</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sendMessage</span>(String topic,String msg){
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">rocketMQTemplate</span>.<span style="color:#50fa7b">convertAndSend</span>(topic,msg);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="更多的发消息示例">更多的发消息示例</h2>
 <h3 id="带有返回数据的消费者">带有返回数据的消费者</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ConsumeMode<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.RocketMQMessageListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQReplyListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ConsumeMode;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQReplyListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Component
-</span></span><span style="display:flex;"><span>@RocketMQMessageListener<span style="color:#ff79c6">(</span>consumerGroup <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MyConsumerGroup1&#34;</span><span style="color:#ff79c6">,</span> topic <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopicReplyString&#34;</span><span style="color:#ff79c6">,</span>consumeMode<span style="color:#ff79c6">=</span> ConsumeMode<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONCURRENTLY</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 这里注意要使用与收到消息对应的类型 &lt;String,String&gt; 代表接收string 消息 返回的也是string类型的消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringConsumerWithReply</span> <span style="color:#8be9fd;font-style:italic">implements</span> RocketMQReplyListener<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">,</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>@RocketMQMessageListener(consumerGroup <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MyConsumerGroup1&#34;</span>, topic <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopicReplyString&#34;</span>,consumeMode<span style="color:#ff79c6">=</span> ConsumeMode.<span style="color:#50fa7b">CONCURRENTLY</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 这里注意要使用与收到消息对应的类型 &lt;String,String&gt; 代表接收string 消息 返回的也是string类型的消息</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringConsumerWithReply</span> <span style="color:#8be9fd;font-style:italic">implements</span> RocketMQReplyListener<span style="color:#ff79c6">&lt;</span>String,String<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">onMessage</span><span style="color:#ff79c6">(</span>String message<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;收到消息，并返回结果, &#34;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">,</span> message<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;OK&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">onMessage</span>(String message) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;收到消息，并返回结果, &#34;</span> <span style="color:#ff79c6">+</span> , message);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;OK&#34;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="接收-user--返回user">接收 User  返回User</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.basic;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.roy.rocketmq.domain.User<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ConsumeMode<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.RocketMQMessageListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQReplyListener<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.roy.rocketmq.domain.User;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.ConsumeMode;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQReplyListener;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.stereotype.Component;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>@Component
-</span></span><span style="display:flex;"><span>@RocketMQMessageListener<span style="color:#ff79c6">(</span>consumerGroup <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MyConsumerGroup2&#34;</span><span style="color:#ff79c6">,</span> topic <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopicUser&#34;</span><span style="color:#ff79c6">,</span>consumeMode<span style="color:#ff79c6">=</span> ConsumeMode<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONCURRENTLY</span><span style="color:#ff79c6">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringConsumerReplyUser</span> <span style="color:#8be9fd;font-style:italic">implements</span> RocketMQReplyListener<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">,</span>User<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>@RocketMQMessageListener(consumerGroup <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MyConsumerGroup2&#34;</span>, topic <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;TestTopicUser&#34;</span>,consumeMode<span style="color:#ff79c6">=</span> ConsumeMode.<span style="color:#50fa7b">CONCURRENTLY</span>)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringConsumerReplyUser</span> <span style="color:#8be9fd;font-style:italic">implements</span> RocketMQReplyListener<span style="color:#ff79c6">&lt;</span>User,User<span style="color:#ff79c6">&gt;</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">onMessage</span><span style="color:#ff79c6">(</span>User user<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">println</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;收到User: &#34;</span> <span style="color:#ff79c6">+</span> user<span style="color:#ff79c6">.</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> user<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">onMessage</span>(User user) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;收到User: &#34;</span> <span style="color:#ff79c6">+</span> user.<span style="color:#50fa7b">toString</span>());
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> user;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="user">User</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.domain<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.domain;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String userName<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Byte userAge<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String userName;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Byte userAge;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getUserName</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> userName<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getUserName</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> userName;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">setUserName</span><span style="color:#ff79c6">(</span>String userName<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">userName</span> <span style="color:#ff79c6">=</span> userName<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">setUserName</span>(String userName) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">userName</span> <span style="color:#ff79c6">=</span> userName;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Byte <span style="color:#50fa7b">getUserAge</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> userAge<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Byte <span style="color:#50fa7b">getUserAge</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> userAge;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">setUserAge</span><span style="color:#ff79c6">(</span>Byte userAge<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">userAge</span> <span style="color:#ff79c6">=</span> userAge<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> User <span style="color:#50fa7b">setUserAge</span>(Byte userAge) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">userAge</span> <span style="color:#ff79c6">=</span> userAge;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Override
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span>() {
 </span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;User{&#34;</span> <span style="color:#ff79c6">+</span>
 </span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;userName=&#39;&#34;</span> <span style="color:#ff79c6">+</span> userName <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
 </span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, userAge=&#34;</span> <span style="color:#ff79c6">+</span> userAge <span style="color:#ff79c6">+</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#39;}&#39;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#39;}&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="orderpaidevent">OrderPaidEvent</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.domain<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq.domain;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.math.BigDecimal<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.math.BigDecimal;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">OrderPaidEvent</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String orderId<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">OrderPaidEvent</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String orderId;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> BigDecimal paidMoney<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> BigDecimal paidMoney;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">OrderPaidEvent</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">OrderPaidEvent</span>() {
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">OrderPaidEvent</span><span style="color:#ff79c6">(</span>String orderId<span style="color:#ff79c6">,</span> BigDecimal paidMoney<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">orderId</span> <span style="color:#ff79c6">=</span> orderId<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">paidMoney</span> <span style="color:#ff79c6">=</span> paidMoney<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">OrderPaidEvent</span>(String orderId, BigDecimal paidMoney) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">orderId</span> <span style="color:#ff79c6">=</span> orderId;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">paidMoney</span> <span style="color:#ff79c6">=</span> paidMoney;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getOrderId</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> orderId<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getOrderId</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> orderId;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setOrderId</span><span style="color:#ff79c6">(</span>String orderId<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">orderId</span> <span style="color:#ff79c6">=</span> orderId<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setOrderId</span>(String orderId) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">orderId</span> <span style="color:#ff79c6">=</span> orderId;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> BigDecimal <span style="color:#50fa7b">getPaidMoney</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> paidMoney<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> BigDecimal <span style="color:#50fa7b">getPaidMoney</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> paidMoney;
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setPaidMoney</span><span style="color:#ff79c6">(</span>BigDecimal paidMoney<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">paidMoney</span> <span style="color:#ff79c6">=</span> paidMoney<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setPaidMoney</span>(BigDecimal paidMoney) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">paidMoney</span> <span style="color:#ff79c6">=</span> paidMoney;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="发送">发送</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> com.roy.rocketmq;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.roy.rocketmq.domain.OrderPaidEvent<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.roy.rocketmq.domain.User<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendCallback<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQLocalRequestCallback<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQTemplate<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.support.RocketMQHeaders<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.junit.Test<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.junit.runner.RunWith<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.test.context.SpringBootTest<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.Message<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.MessageHeaders<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.support.MessageBuilder<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.test.context.junit4.SpringRunner<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.MimeTypeUtils<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.roy.rocketmq.domain.OrderPaidEvent;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.roy.rocketmq.domain.User;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendCallback;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.client.producer.SendResult;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQLocalRequestCallback;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.core.RocketMQTemplate;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.rocketmq.spring.support.RocketMQHeaders;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.junit.Test;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.junit.runner.RunWith;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.boot.test.context.SpringBootTest;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.Message;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.MessageHeaders;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.messaging.support.MessageBuilder;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.test.context.junit4.SpringRunner;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.MimeTypeUtils;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.annotation.Resource<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.math.BigDecimal<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> javax.annotation.Resource;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.math.BigDecimal;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>@RunWith<span style="color:#ff79c6">(</span>SpringRunner<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>@RunWith(SpringRunner.<span style="color:#50fa7b">class</span>)
 </span></span><span style="display:flex;"><span>@SpringBootTest
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringRocketTest</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">SpringRocketTest</span> {
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Resource
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> RocketMQTemplate rocketMQTemplate<span style="color:#ff79c6">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> RocketMQTemplate rocketMQTemplate;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    @Test
-</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sendMessageTest</span><span style="color:#ff79c6">(){</span>
-</span></span><span style="display:flex;"><span>        String springTopic<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TestTopic&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        String springTopicReplyString<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TestTopicString&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        String springTopicUser<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TestTopicUser&#34;</span><span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送字符消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        SendResult sendResult <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">syncSend</span><span style="color:#ff79c6">(</span>springTopic<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;你好！&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;syncSend1 to topic %s sendResult=%s %n&#34;</span><span style="color:#ff79c6">,</span> springTopic<span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">sendMessageTest</span>(){
+</span></span><span style="display:flex;"><span>        String springTopic<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TestTopic&#34;</span>;
+</span></span><span style="display:flex;"><span>        String springTopicReplyString<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TestTopicString&#34;</span>;
+</span></span><span style="display:flex;"><span>        String springTopicUser<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TestTopicUser&#34;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送字符消息</span>
+</span></span><span style="display:flex;"><span>        SendResult sendResult <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">syncSend</span>(springTopic, <span style="color:#f1fa8c">&#34;你好！&#34;</span>);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;syncSend1 to topic %s sendResult=%s %n&#34;</span>, springTopic, sendResult);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        sendResult <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">syncSend</span><span style="color:#ff79c6">(</span>springTopic<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">().</span><span style="color:#50fa7b">setUserAge</span><span style="color:#ff79c6">((</span><span style="color:#8be9fd">byte</span><span style="color:#ff79c6">)</span> <span style="color:#bd93f9">18</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">setUserName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Kitty&#34;</span><span style="color:#ff79c6">));</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;syncSend1 to topic %s sendResult=%s %n&#34;</span><span style="color:#ff79c6">,</span> springTopic<span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        sendResult <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">syncSend</span>(springTopic, <span style="color:#ff79c6">new</span> User().<span style="color:#50fa7b">setUserAge</span>((<span style="color:#8be9fd">byte</span>) 18).<span style="color:#50fa7b">setUserName</span>(<span style="color:#f1fa8c">&#34;Kitty&#34;</span>));
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;syncSend1 to topic %s sendResult=%s %n&#34;</span>, springTopic, sendResult);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        sendResult <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">syncSend</span><span style="color:#ff79c6">(</span>springTopic<span style="color:#ff79c6">,</span> MessageBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">withPayload</span><span style="color:#ff79c6">(</span>
-</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">().</span><span style="color:#50fa7b">setUserAge</span><span style="color:#ff79c6">((</span><span style="color:#8be9fd">byte</span><span style="color:#ff79c6">)</span> <span style="color:#bd93f9">21</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">setUserName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Lester&#34;</span><span style="color:#ff79c6">)).</span><span style="color:#50fa7b">setHeader</span><span style="color:#ff79c6">(</span>MessageHeaders<span style="color:#ff79c6">.</span><span style="color:#50fa7b">CONTENT_TYPE</span><span style="color:#ff79c6">,</span> MimeTypeUtils<span style="color:#ff79c6">.</span><span style="color:#50fa7b">APPLICATION_JSON_VALUE</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;syncSend1 to topic %s sendResult=%s %n&#34;</span><span style="color:#ff79c6">,</span> springTopic<span style="color:#ff79c6">,</span> sendResult<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        sendResult <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">syncSend</span>(springTopic, MessageBuilder.<span style="color:#50fa7b">withPayload</span>(
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">new</span> User().<span style="color:#50fa7b">setUserAge</span>((<span style="color:#8be9fd">byte</span>) 21).<span style="color:#50fa7b">setUserName</span>(<span style="color:#f1fa8c">&#34;Lester&#34;</span>)).<span style="color:#50fa7b">setHeader</span>(MessageHeaders.<span style="color:#50fa7b">CONTENT_TYPE</span>, MimeTypeUtils.<span style="color:#50fa7b">APPLICATION_JSON_VALUE</span>).<span style="color:#50fa7b">build</span>());
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;syncSend1 to topic %s sendResult=%s %n&#34;</span>, springTopic, sendResult);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送对象消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">asyncSend</span><span style="color:#ff79c6">(</span>springTopic<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> OrderPaidEvent<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;T_001&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> BigDecimal<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;88.00&#34;</span><span style="color:#ff79c6">)),</span> <span style="color:#ff79c6">new</span> SendCallback<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送对象消息</span>
+</span></span><span style="display:flex;"><span>        rocketMQTemplate.<span style="color:#50fa7b">asyncSend</span>(springTopic, <span style="color:#ff79c6">new</span> OrderPaidEvent(<span style="color:#f1fa8c">&#34;T_001&#34;</span>, <span style="color:#ff79c6">new</span> BigDecimal(<span style="color:#f1fa8c">&#34;88.00&#34;</span>)), <span style="color:#ff79c6">new</span> SendCallback() {
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span><span style="color:#ff79c6">(</span>SendResult var1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;async onSucess SendResult=%s %n&#34;</span><span style="color:#ff79c6">,</span> var1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span>(SendResult var1) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;async onSucess SendResult=%s %n&#34;</span>, var1);
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>            @Override
-</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span><span style="color:#ff79c6">(</span>Throwable var1<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;async onException Throwable=%s %n&#34;</span><span style="color:#ff79c6">,</span> var1<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span>(Throwable var1) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;async onException Throwable=%s %n&#34;</span>, var1);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送指定TAG的消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 注意这里指定tag的方式，topic + : + tag
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">convertAndSend</span><span style="color:#ff79c6">(</span>springTopic <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:tag0&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;I&#39;m from tag0&#34;</span><span style="color:#ff79c6">);</span>  <span style="color:#6272a4">// tag0 will not be consumer-selected
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;syncSend topic %s tag %s %n&#34;</span><span style="color:#ff79c6">,</span> springTopic<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;tag0&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">convertAndSend</span><span style="color:#ff79c6">(</span>springTopic <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:tag1&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;I&#39;m from tag1&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;syncSend topic %s tag %s %n&#34;</span><span style="color:#ff79c6">,</span> springTopic<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;tag1&#34;</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送指定TAG的消息</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注意这里指定tag的方式，topic + : + tag</span>
+</span></span><span style="display:flex;"><span>        rocketMQTemplate.<span style="color:#50fa7b">convertAndSend</span>(springTopic <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:tag0&#34;</span>, <span style="color:#f1fa8c">&#34;I&#39;m from tag0&#34;</span>);  <span style="color:#6272a4">// tag0 will not be consumer-selected</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;syncSend topic %s tag %s %n&#34;</span>, springTopic, <span style="color:#f1fa8c">&#34;tag0&#34;</span>);
+</span></span><span style="display:flex;"><span>        rocketMQTemplate.<span style="color:#50fa7b">convertAndSend</span>(springTopic <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;:tag1&#34;</span>, <span style="color:#f1fa8c">&#34;I&#39;m from tag1&#34;</span>);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;syncSend topic %s tag %s %n&#34;</span>, springTopic, <span style="color:#f1fa8c">&#34;tag1&#34;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//同步发送消息并且返回一个String类型的结果。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String replyString <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendAndReceive</span><span style="color:#ff79c6">(</span>springTopicReplyString<span style="color:#ff79c6">,</span> MessageBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">withPayload</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;同步发送测试&#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">(),</span> String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;request string&#34;</span><span style="color:#ff79c6">,</span> replyString<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//同步发送消息并且返回一个String类型的结果。</span>
+</span></span><span style="display:flex;"><span>        String replyString <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">sendAndReceive</span>(springTopicReplyString, MessageBuilder.<span style="color:#50fa7b">withPayload</span>(<span style="color:#f1fa8c">&#34;同步发送测试&#34;</span>).<span style="color:#50fa7b">build</span>(), String.<span style="color:#50fa7b">class</span>);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span>, <span style="color:#f1fa8c">&#34;request string&#34;</span>, replyString);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//同步发送消息并且返回一个Byte数组类型的结果。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> replyBytes <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendAndReceive</span><span style="color:#ff79c6">(</span>springTopicReplyString<span style="color:#ff79c6">,</span> MessageBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">withPayload</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;request byte[]&#34;</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">(),</span> <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[].</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">3000</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;request byte[]&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> String<span style="color:#ff79c6">(</span>replyBytes<span style="color:#ff79c6">));</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//同步发送消息并且返回一个Byte数组类型的结果。</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span> replyBytes <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">sendAndReceive</span>(springTopicReplyString, MessageBuilder.<span style="color:#50fa7b">withPayload</span>(<span style="color:#f1fa8c">&#34;request byte[]&#34;</span>).<span style="color:#50fa7b">build</span>(), <span style="color:#8be9fd">byte</span><span style="color:#ff79c6">[]</span>.<span style="color:#50fa7b">class</span>, 3000);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span>, <span style="color:#f1fa8c">&#34;request byte[]&#34;</span>, <span style="color:#ff79c6">new</span> String(replyBytes));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 同步发送一个带hash参数的请求(排序消息)，并返回一个User类型的结果
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        User requestUser <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">().</span><span style="color:#50fa7b">setUserAge</span><span style="color:#ff79c6">((</span><span style="color:#8be9fd">byte</span><span style="color:#ff79c6">)</span> <span style="color:#bd93f9">9</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">setUserName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;requestUserName&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        User replyUser <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendAndReceive</span><span style="color:#ff79c6">(</span>springTopicUser<span style="color:#ff79c6">,</span> requestUser<span style="color:#ff79c6">,</span> User<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;order-id&#34;</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span><span style="color:#ff79c6">,</span> requestUser<span style="color:#ff79c6">,</span> replyUser<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 同步发送一个带hash参数的请求(排序消息)，并返回一个User类型的结果</span>
+</span></span><span style="display:flex;"><span>        User requestUser <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User().<span style="color:#50fa7b">setUserAge</span>((<span style="color:#8be9fd">byte</span>) 9).<span style="color:#50fa7b">setUserName</span>(<span style="color:#f1fa8c">&#34;requestUserName&#34;</span>);
+</span></span><span style="display:flex;"><span>        User replyUser <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">sendAndReceive</span>(springTopicUser, requestUser, User.<span style="color:#50fa7b">class</span>, <span style="color:#f1fa8c">&#34;order-id&#34;</span>);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span>, requestUser, replyUser);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//同步发送一个带延迟级别的消息(延迟消息)
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        String replyGenericObject <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendAndReceive</span><span style="color:#ff79c6">(</span>springTopicReplyString<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;request generic&#34;</span><span style="color:#ff79c6">,</span>
-</span></span><span style="display:flex;"><span>                String<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">30000</span><span style="color:#ff79c6">,</span> <span style="color:#bd93f9">2</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;request generic&#34;</span><span style="color:#ff79c6">,</span> replyGenericObject<span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//同步发送一个带延迟级别的消息(延迟消息)</span>
+</span></span><span style="display:flex;"><span>        String replyGenericObject <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">sendAndReceive</span>(springTopicReplyString, <span style="color:#f1fa8c">&#34;request generic&#34;</span>,
+</span></span><span style="display:flex;"><span>                String.<span style="color:#50fa7b">class</span>, 30000, 2);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span>, <span style="color:#f1fa8c">&#34;request generic&#34;</span>, replyGenericObject);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//异步发送消息，返回String类型结果。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendAndReceive</span><span style="color:#ff79c6">(</span>springTopicReplyString<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;request string&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> RocketMQLocalRequestCallback<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span><span style="color:#ff79c6">(</span>String message<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;request string&#34;</span><span style="color:#ff79c6">,</span> message<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//异步发送消息，返回String类型结果。</span>
+</span></span><span style="display:flex;"><span>        rocketMQTemplate.<span style="color:#50fa7b">sendAndReceive</span>(springTopicReplyString, <span style="color:#f1fa8c">&#34;request string&#34;</span>, <span style="color:#ff79c6">new</span> RocketMQLocalRequestCallback<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span>() {
+</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span>(String message) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;send %s and receive %s %n&#34;</span>, <span style="color:#f1fa8c">&#34;request string&#34;</span>, message);
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span><span style="color:#ff79c6">(</span>Throwable e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">});</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//异步发送消息，并返回一个User类型的结果。
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">sendAndReceive</span><span style="color:#ff79c6">(</span>springTopicUser<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">new</span> User<span style="color:#ff79c6">().</span><span style="color:#50fa7b">setUserAge</span><span style="color:#ff79c6">((</span><span style="color:#8be9fd">byte</span><span style="color:#ff79c6">)</span> <span style="color:#bd93f9">9</span><span style="color:#ff79c6">).</span><span style="color:#50fa7b">setUserName</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;requestUserName&#34;</span><span style="color:#ff79c6">),</span> <span style="color:#ff79c6">new</span> RocketMQLocalRequestCallback<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span><span style="color:#ff79c6">(</span>User message<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;send user object and receive %s %n&#34;</span><span style="color:#ff79c6">,</span> message<span style="color:#ff79c6">.</span><span style="color:#50fa7b">toString</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span>(Throwable e) {
+</span></span><span style="display:flex;"><span>                e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//异步发送消息，并返回一个User类型的结果。</span>
+</span></span><span style="display:flex;"><span>        rocketMQTemplate.<span style="color:#50fa7b">sendAndReceive</span>(springTopicUser, <span style="color:#ff79c6">new</span> User().<span style="color:#50fa7b">setUserAge</span>((<span style="color:#8be9fd">byte</span>) 9).<span style="color:#50fa7b">setUserName</span>(<span style="color:#f1fa8c">&#34;requestUserName&#34;</span>), <span style="color:#ff79c6">new</span> RocketMQLocalRequestCallback<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span>() {
+</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onSuccess</span>(User message) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;send user object and receive %s %n&#34;</span>, message.<span style="color:#50fa7b">toString</span>());
+</span></span><span style="display:flex;"><span>            }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span><span style="color:#ff79c6">(</span>Throwable e<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>                e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">printStackTrace</span><span style="color:#ff79c6">();</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">},</span> <span style="color:#bd93f9">5000</span><span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送批量消息
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> msgs <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;();</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span><span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>            msgs<span style="color:#ff79c6">.</span><span style="color:#50fa7b">add</span><span style="color:#ff79c6">(</span>MessageBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">withPayload</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;Hello RocketMQ Batch Msg#&#34;</span> <span style="color:#ff79c6">+</span> i<span style="color:#ff79c6">).</span>
-</span></span><span style="display:flex;"><span>                    setHeader<span style="color:#ff79c6">(</span>RocketMQHeaders<span style="color:#ff79c6">.</span><span style="color:#50fa7b">KEYS</span><span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;KEY_&#34;</span> <span style="color:#ff79c6">+</span> i<span style="color:#ff79c6">).</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">());</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>            @Override <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">onException</span>(Throwable e) {
+</span></span><span style="display:flex;"><span>                e.<span style="color:#50fa7b">printStackTrace</span>();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }, 5000);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//发送批量消息</span>
+</span></span><span style="display:flex;"><span>        List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> msgs <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 10; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>            msgs.<span style="color:#50fa7b">add</span>(MessageBuilder.<span style="color:#50fa7b">withPayload</span>(<span style="color:#f1fa8c">&#34;Hello RocketMQ Batch Msg#&#34;</span> <span style="color:#ff79c6">+</span> i).
+</span></span><span style="display:flex;"><span>                    setHeader(RocketMQHeaders.<span style="color:#50fa7b">KEYS</span>, <span style="color:#f1fa8c">&#34;KEY_&#34;</span> <span style="color:#ff79c6">+</span> i).<span style="color:#50fa7b">build</span>());
+</span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        SendResult sr <span style="color:#ff79c6">=</span> rocketMQTemplate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">syncSend</span><span style="color:#ff79c6">(</span>springTopic<span style="color:#ff79c6">,</span> msgs<span style="color:#ff79c6">,</span> <span style="color:#bd93f9">60000</span><span style="color:#ff79c6">);</span>
+</span></span><span style="display:flex;"><span>        SendResult sr <span style="color:#ff79c6">=</span> rocketMQTemplate.<span style="color:#50fa7b">syncSend</span>(springTopic, msgs, 60000);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        System<span style="color:#ff79c6">.</span><span style="color:#50fa7b">out</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">printf</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;--- Batch messages send result :&#34;</span> <span style="color:#ff79c6">+</span> sr<span style="color:#ff79c6">);</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">printf</span>(<span style="color:#f1fa8c">&#34;--- Batch messages send result :&#34;</span> <span style="color:#ff79c6">+</span> sr);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div>
         </div>
 

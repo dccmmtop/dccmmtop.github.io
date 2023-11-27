@@ -48,7 +48,7 @@
     <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
     
 
-    <meta name="generator" content="Hugo 0.111.3">
+    <meta name="generator" content="Hugo 0.120.4">
 </head>
 
 <body>
@@ -214,15 +214,15 @@ sync-binlog=1
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001
 </span></span></code></pre></div><h3 id="数据恢复">数据恢复</h3>
 <h4 id="恢复全部数据">恢复全部数据</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p test <span style="color:#6272a4"># test 是数据库名</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p <span style="color:#8be9fd;font-style:italic">test</span> <span style="color:#6272a4"># test 是数据库名</span>
 </span></span></code></pre></div><h4 id="恢复指定时间段数据">恢复指定时间段数据</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p <span style="color:#8be9fd;font-style:italic">test</span>
 </span></span></code></pre></div><h3 id="恢复指定位置数据">恢复指定位置数据</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults --start-position<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;408&#34;</span> --stop-position<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;731&#34;</span>  /usr/local/mysql/data/binlog/mysql-bin.000001 |mysql -uroot -p <span style="color:#8be9fd;font-style:italic">test</span>
 </span></span></code></pre></div><p>&ndash;start-position  = &ldquo;408&rdquo; &ndash;start-position  = &lsquo;&lsquo;731&quot;</p>
 <p>怎么找到呢？</p>
 <p>我们需要使用工具查看bin-log信息:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/usr/local/mysql/bin/mysqlbinlog --no-defaults /usr/local/mysql/data/binlog/mysql-bin.000001 --stop-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2018-03-02 12:00:00&#34;</span>  --start-date<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2019-03-02 11:55:00&#34;</span>|mysql -uroot -p <span style="color:#8be9fd;font-style:italic">test</span>
 </span></span></code></pre></div><p>信息如下:<br>
 <img src='https://raw.githubusercontent.com/dccmmtop/notebook/master/images/Pasted%20image%2020220802112217.png'/></p>
 <p>由此便可以恢复指定位置或日期的数据了.</p>
