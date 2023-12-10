@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sharding分库分表与读写分离实战 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="Sharding分库分表与读写分离实战" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/sharding%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%B8%8E%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AE%9E%E6%88%98/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.120.4">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">Sharding分库分表与读写分离实战</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/sharding%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E4%B8%8E%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E5%AE%9E%E6%88%98/" class="article-date">
+                <time datetime='2023-12-10T16:54:08.000&#43;00:00' itemprop="datePublished">2023-12-10</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <p><a href="#%E5%85%B3%E4%BA%8E-shardingsphere">关于 ShardingSphere</a></p>
+<ul>
+<li><a href="#%E5%85%B3%E4%BA%8E-shardingsphere">关于 ShardingSphere</a>
+<ul>
+<li><a href="#%E5%8A%9F%E8%83%BD">功能</a>
+<ul>
+<li><a href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%9A%84%E4%BD%9C%E7%94%A8">分库分表的作用</a></li>
+<li><a href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8%E7%AD%96%E7%95%A5%E7%9A%84%E9%80%89%E6%8B%A9">分库分表策略的选择</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">核心概念</a></li>
+<li><a href="#%E5%88%86%E7%89%87%E7%AD%96%E7%95%A5%E4%BB%8B%E7%BB%8D">分片策略介绍</a>
+<ul>
+<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a>
+<ul>
+<li><a href="#1-%E6%95%B0%E6%8D%AE%E5%BA%93">1. 数据库</a></li>
+<li><a href="#2-%E6%96%B0%E5%BB%BA-springboot-%E9%A1%B9%E7%9B%AE">2. 新建 SpringBoot 项目</a></li>
+<li><a href="#3-%E5%9C%A8%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90">3. 在项目中配置数据源</a></li>
+<li><a href="#4-%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">4. 项目目录结构</a></li>
+</ul>
+</li>
+<li><a href="#inline">inline</a>
+<ul>
+<li><a href="#1-%E6%96%B0%E5%BB%BA-course-%E8%A1%A8">1. 新建 course 表</a></li>
+<li><a href="#2-%E6%8C%87%E5%AE%9A%E9%80%BB%E8%BE%91%E8%A1%A8%E4%B8%8E%E5%AE%9E%E9%99%85%E8%A1%A8%E7%9A%84%E5%85%B3%E7%B3%BB">2. 指定逻辑表与实际表的关系</a></li>
+<li><a href="#3-%E7%BC%96%E5%86%99%E5%AE%9E%E4%BD%93%E7%B1%BB">3. 编写实体类</a></li>
+<li><a href="#4-%E6%B5%8B%E8%AF%95%E6%8F%92%E5%85%A5">4. 测试插入</a></li>
+<li><a href="#5-%E6%B5%8B%E8%AF%95%E5%85%A8%E8%A1%A8%E6%9F%A5%E8%AF%A2">5. 测试全表查询</a></li>
+<li><a href="#6-%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2">6. 精确查询</a></li>
+<li><a href="#7-%E8%8C%83%E5%9B%B4%E6%9F%A5%E8%AF%A2">7. 范围查询</a></li>
+</ul>
+</li>
+<li><a href="#standard">standard</a>
+<ul>
+<li><a href="#1-%E5%88%9B%E5%BB%BA%E8%A1%A8">1. 创建表</a></li>
+<li><a href="#2-%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE">2. 添加配置</a></li>
+<li><a href="#3-%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8C-mapper">3. 创建实体类和 Mapper</a></li>
+<li><a href="#4-%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E9%87%8D%E7%82%B9">4. 算法实现【重点】</a>
+<ul>
+<li><a href="#%E5%88%86%E5%BA%93%E7%AE%97%E6%B3%95">分库算法：</a></li>
+<li><a href="#%E5%88%86%E8%A1%A8%E7%AE%97%E6%B3%95">分表算法</a></li>
+</ul>
+</li>
+<li><a href="#5-%E6%B5%8B%E8%AF%95%E6%8F%92%E5%85%A5">5. 测试插入</a></li>
+<li><a href="#6-%E6%B5%8B%E8%AF%95%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2">6. 测试精确查询</a></li>
+<li><a href="#7-%E6%B5%8B%E8%AF%95%E8%8C%83%E5%9B%B4%E6%9F%A5%E8%AF%A2">7. 测试范围查询</a></li>
+</ul>
+</li>
+<li><a href="#complex">complex</a>
+<ul>
+<li><a href="#1-%E5%88%9B%E5%BB%BA-message-%E8%A1%A8">1. 创建 message 表</a></li>
+<li><a href="#2-%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8C-mapper">2. 创建实体类和 Mapper</a></li>
+<li><a href="#3-%E6%B7%BB%E5%8A%A0%E5%88%86%E7%89%87%E9%85%8D%E7%BD%AE">3. 添加分片配置</a></li>
+<li><a href="#4-%E5%88%86%E7%89%87%E7%AE%97%E6%B3%95">4. 分片算法</a>
+<ul>
+<li><a href="#%E5%88%86%E5%BA%93">分库</a></li>
+<li><a href="#%E5%88%86%E8%A1%A8">分表</a></li>
+</ul>
+</li>
+<li><a href="#5-%E6%B5%8B%E8%AF%95%E6%8F%92%E5%85%A5-1">5. 测试插入</a></li>
+<li><a href="#6-%E6%B5%8B%E8%AF%95%E6%9F%A5%E8%AF%A2">6. 测试查询</a></li>
+</ul>
+</li>
+<li><a href="#hint">hint</a>
+<ul>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%A6%82%E4%B8%8B">配置如下：</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BA%E8%A1%A8%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8C-mapper">创建表，实体类和 Mapper</a></li>
+<li><a href="#%E5%88%86%E7%89%87%E7%AE%97%E6%B3%95">分片算法</a>
+<ul>
+<li><a href="#%E5%88%86%E5%BA%93-1">分库</a></li>
+<li><a href="#%E5%88%86%E8%A1%A8-1">分表</a></li>
+</ul>
+</li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E6%8F%92%E5%85%A5">测试插入</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B9%BF%E6%92%AD%E8%A1%A8">广播表</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB">读写分离</a>
+<ul>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E6%8F%92%E5%85%A5-1">测试插入</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E6%9F%A5%E8%AF%A2">测试查询</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="关于-shardingsphere">关于 ShardingSphere</h1>
+<p>下图是官网的介绍<br>
+<img src="../../images/2023-12-04-07-41-42.png" alt=""></p>
+<p>本篇文章只介绍 ShardingSphere-JDBC 的使用</p>
+<h2 id="功能">功能</h2>
+<p><img src="../../images/2023-12-04-07-45-26.png" alt=""></p>
+<p>ShardingSphere-JDBC 的核心功能是数据分片和读写分离，通过 ShardingSphere=JDBC 应用可以透明的使用 JDBC 访问已经分库分表，读写分离的多个数据源，而不用关心数据源的数量以及数据如何分布。</p>
+<p>在开始使用 SharedingSphere 之前在温习一下分库分表的基本要点：</p>
+<h3 id="分库分表的作用">分库分表的作用</h3>
+<ul>
+<li>加大存储</li>
+<li>提升查询效率</li>
+<li>提升数据库并发能力</li>
+</ul>
+<h3 id="分库分表策略的选择">分库分表策略的选择</h3>
+<ul>
+<li>分库分表一定要提前设计，尽量避免临时设计。只针对最核心的表</li>
+<li>分库分表后，<strong>对表的查询尽量简单</strong>，不要有跨表，跨库的复杂查询</li>
+<li>分库分表尽量同时进行，可以分担网络的压力</li>
+</ul>
+<h1 id="核心概念">核心概念</h1>
+<ul>
+<li>逻辑表：水平拆分后，逻辑和数据结构相同的表的总称。user 被拆分成 user_1  user_2 ，user 就是逻辑表。</li>
+<li>真实表：在分片数据库中真实存在的物理表，user_1 user_2 就是真实表</li>
+<li>数据节点：数据分片的最小单元，有数据源名称和数据表组成。</li>
+<li>绑定表：分片规则一致的主表和子表</li>
+<li>广播表：也叫公共表，指的是在所有的分片数据源中都存在的表，结构和数据完全一致，一般是配置表，字典表，这种关联次数多，几乎不会发生变化，数据量小的表。</li>
+<li>分片键：用于分片的数据库字段，是将数据库表水平拆分的关键字段，比如按照 id 取模分表。id 就是分片键，SQL 语句中如果不含分片键，将会执行全路由，性能会很差。</li>
+<li>分片算法：通过分片算法将数据进行分片，支持通过 = BETWEEN IN 分片，算法需要开发者自行实现，灵活度高。</li>
+<li>分片策略：真正用于分片操作的是分片键+分片算法，也就是分片策略。在 ShardingSphereJDBC 中，一般采用 Groovy 表达式来描述分片策略。如 inline 策略的描述：user_$-&gt;{u_id%8}, 它描述了根据 u_id 模 8，分成 8 张表，表名称是 user_0 到 user_7</li>
+</ul>
+<h1 id="分片策略介绍">分片策略介绍</h1>
+<ul>
+<li>inline: 直接在配置文件中通过 Groovy 表达式实现分片策略，如：user_$-&gt;{u_id%8}, 只支持精确查找 ( = in)，不支持范围查找</li>
+<li>standard: 标准分片策略，用户通过编写分片精确查找和范围查找算法，实现自定义的分片，可以支持精确查找和范围查找，但是分片键只能有一个，也就是只能根据一列来进行分片</li>
+<li>complex： 复合分片，和标准分片一样，但是可以支持多个列对数据进行分片</li>
+<li>hint: 强制路由策略，不再由 SQL 决定如何分片，直接由用户指定分片参数</li>
+</ul>
+<p>下面分别介绍这几种分片策略的使用：</p>
+<h2 id="准备工作">准备工作</h2>
+<h3 id="1-数据库">1. 数据库</h3>
+<p>准备两个数据库，建议使用 docker-compose 快速搭建<br>
+m1 数据源下的 sharing_1 库 m2 数据源下的 sharing_2 数据库</p>
+<p><img src="../../images/2023-12-09-18-01-27.png" alt=""></p>
+<p>docker-compose.yml:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#ff79c6">version</span>: <span style="color:#f1fa8c">&#39;3.8&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">mysql-master</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">container_name</span>: mysql-single
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: mysql:5.7.31
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">restart</span>: always
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#bd93f9">3342</span>:<span style="color:#bd93f9">3306</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">privileged</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - $PWD/log:/var/log/mysql
+</span></span><span style="display:flex;"><span>      - $PWD/my.cnf:/etc/mysql/my.cnf
+</span></span><span style="display:flex;"><span>      - $PWD/data:/var/lib/mysql
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">MYSQL_ROOT_PASSWORD</span>: <span style="color:#f1fa8c">&#34;123456&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">command</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;--character-set-server=utf8mb4&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;--collation-server=utf8mb4_general_ci&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;--max_connections=3000&#39;</span>
+</span></span><span style="display:flex;"><span>    ]
+</span></span></code></pre></div><h3 id="2-新建-springboot-项目">2. 新建 SpringBoot 项目</h3>
+<p>要用到的依赖如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#ff79c6">&lt;properties&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;java.version&gt;</span>1.8<span style="color:#ff79c6">&lt;/java.version&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/project.build.sourceEncoding&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/project.reporting.outputEncoding&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;spring-boot.version&gt;</span>2.6.13<span style="color:#ff79c6">&lt;/spring-boot.version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/properties&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;dependencies&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>spring-boot-starter-web<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>org.mybatis.spring.boot<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>mybatis-spring-boot-starter<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;version&gt;</span>2.2.2<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>org.apache.shardingsphere<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>sharding-jdbc-spring-boot-starter<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;version&gt;</span>4.1.1<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>spring-boot-starter-test<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;scope&gt;</span>test<span style="color:#ff79c6">&lt;/scope&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>com.alibaba<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>druid<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;version&gt;</span>1.1.22<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>mysql<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>mysql-connector-java<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">&lt;!-- 使用 mybatis plus 简化数据操作，专注 ShardingSphere JDBC 框架的使用--&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>com.baomidou<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>mybatis-plus-boot-starter<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;version&gt;</span>3.5.2<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">&lt;!-- 需要用到一些日期操作， 借助第三方工具包--&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;groupId&gt;</span>cn.hutool<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;artifactId&gt;</span>hutool-core<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;version&gt;</span>5.8.23<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/dependencies&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;dependencyManagement&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;dependencies&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#ff79c6">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;artifactId&gt;</span>spring-boot-dependencies<span style="color:#ff79c6">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;version&gt;</span>${spring-boot.version}<span style="color:#ff79c6">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;type&gt;</span>pom<span style="color:#ff79c6">&lt;/type&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;scope&gt;</span>import<span style="color:#ff79c6">&lt;/scope&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/dependencies&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/dependencyManagement&gt;</span>
+</span></span></code></pre></div><h3 id="3-在项目中配置数据源">3. 在项目中配置数据源</h3>
+<p>在 application.properties 中添加数据源的配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#6272a4"># 配置多个数据源 m1 m2</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.names</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">m1,m2</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.alibaba.druid.pool.DruidDataSource</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.driver-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.mysql.cj.jdbc.Driver</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.url</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">jdbc:mysql://192.168.11.12:3340/sharding_1?serverTimezone=GMT%2B8</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.username</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">root</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.password</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">123456</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m2.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.alibaba.druid.pool.DruidDataSource</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m2.driver-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.mysql.cj.jdbc.Driver</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m2.url</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">jdbc:mysql://192.168.11.12:3342/sharding_2?serverTimezone=GMT%2B8</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m2.username</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">root</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m2.password</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">123456</span>
+</span></span></code></pre></div><h3 id="4-项目目录结构">4. 项目目录结构</h3>
+<p><img src="../../images/2023-12-09-18-19-52.png" alt=""></p>
+<h2 id="inline">inline</h2>
+<h3 id="1-新建-course-表">1. 新建 course 表</h3>
+<p>ShardingSphere 不会帮助我们建表，只是将 SQL 解析成符合分表分库之后的实际 SQL</p>
+<p>我们使用 course 表举例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> course_1
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    cid     <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    cname   <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">50</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    user_id <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)  <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    cstatus <span style="color:#8be9fd;font-style:italic">varchar</span>(<span style="color:#bd93f9">10</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> course_2
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    cid     <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    cname   <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">50</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    user_id <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)  <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    cstatus <span style="color:#8be9fd;font-style:italic">varchar</span>(<span style="color:#bd93f9">10</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>分别在两个数据库中执行 建表 sql。</p>
+<h3 id="2-指定逻辑表与实际表的关系">2. 指定逻辑表与实际表的关系</h3>
+<p>在 application.properties 配置文件中添加：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span># table.course 指定一个逻辑表是 course, 这个表不用真实存在
+</span></span><span style="display:flex;"><span># course 是逻辑表， 他下面分布的真实表 course_1 course_2  groovy 表达方式
+</span></span><span style="display:flex;"><span># course 逻辑表下面有 4 个真实表，分别是 m1:course_1 m1:course_2 m2:course_1 m2:course_2
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.actual-data-nodes=m$-&gt;{1..2}.course_$-&gt;{1..2}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 使用雪花算法生成 cid 列的内容
+</span></span><span style="display:flex;"><span># 下面三行的配置指定了 course 表主键生成的策略，使用了雪花算法。它是一种效率较高的分布式 ID, 算法实现细节自行查阅。
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.key-generator.column=cid
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.key-generator.type=SNOWFLAKE
+</span></span><span style="display:flex;"><span># 雪花算法需要的参数，可以不写
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.key-generator.props.worker.id=2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 分片算法， 选库，这里根据 cid 进行选择
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.database-strategy.inline.sharding-column=cid
+</span></span><span style="display:flex;"><span># 表达式可能的结果是 m1  m2
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.database-strategy.inline.algorithm-expression=m$-&gt;{cid%2+1}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># 分片算法，选表
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.table-strategy.inline.sharding-column=cid
+</span></span><span style="display:flex;"><span># 结果表达式的结果可能是：course_1  course_2
+</span></span><span style="display:flex;"><span>spring.shardingsphere.sharding.tables.course.table-strategy.inline.algorithm-expression=course_$-&gt;{cid%2+1}
+</span></span></code></pre></div><p>先选出所有符合条件的库，然后在每个库下选出复合条件的表。这里一共有四张表 m1:course_1  m1:course_2 m2:course_1 m2:course_2, 我们想要实现的效果是 cid 为奇数的放入 m2:course_2 cid 为偶数的放入 m1:course_1</p>
+<p><strong>【疑问】</strong><br>
+这种分片下就用不到 m1:course_2 和 m2:course_1, 是不是这两张表就不用建了呢？<br>
+不是！ 原因可以看下面的实践</p>
+<h3 id="3-编写实体类">3. 编写实体类</h3>
+<p>如下：<br>
+Course.java:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.model;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.baomidou.mybatisplus.annotation.TableId;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/4
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Course</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 使用雪花算法生成 id 时， 这里要用 Long 而不是 long</span>
+</span></span><span style="display:flex;"><span>    @TableId
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long cid;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String cname;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long userId;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String cstatus;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getCid</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> cid;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setCid</span>(Long cid) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">cid</span> <span style="color:#ff79c6">=</span> cid;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getCname</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> cname;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setCname</span>(String cname) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">cname</span> <span style="color:#ff79c6">=</span> cname;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getUserId</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> userId;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setUserId</span>(Long userId) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">userId</span> <span style="color:#ff79c6">=</span> userId;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getCstatus</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> cstatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setCstatus</span>(String cstatus) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">cstatus</span> <span style="color:#ff79c6">=</span> cstatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;Course{&#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;cid=&#34;</span> <span style="color:#ff79c6">+</span> cid <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, cname=&#39;&#34;</span> <span style="color:#ff79c6">+</span> cname <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, userId=&#34;</span> <span style="color:#ff79c6">+</span> userId <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, cstatus=&#39;&#34;</span> <span style="color:#ff79c6">+</span> cstatus <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#39;}&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="4-测试插入">4. 测试插入</h3>
+<p>在测试类中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">addCourse</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 1; i <span style="color:#ff79c6">&lt;=</span> 200; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>        Course c <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Course();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 注意，因为使用了雪花算法生成 cid，这里不要手动设置</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//  c.setCid(Long.valueOf(i));</span>
+</span></span><span style="display:flex;"><span>        c.<span style="color:#50fa7b">setCname</span>(<span style="color:#f1fa8c">&#34;xxx&#34;</span>);
+</span></span><span style="display:flex;"><span>        c.<span style="color:#50fa7b">setUserId</span>(Long.<span style="color:#50fa7b">valueOf</span>(1000 <span style="color:#ff79c6">+</span> i));
+</span></span><span style="display:flex;"><span>        c.<span style="color:#50fa7b">setCstatus</span>(<span style="color:#f1fa8c">&#34;1&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        courseMapper.<span style="color:#50fa7b">insert</span>(c);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行这个测试方法，控制台部分输出如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>2023-12-09 18:36:05.455  INFO 22524 --- [main] ShardingSphere-SQL:Logic SQL: INSERT INTO course  ( cid, cname, user_id, cstatus )  VALUES  ( ?, ?, ?, ? ) 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 18:36:05.455  INFO 22524 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: INSERT INTO course_2  ( cid, cname, user_id, cstatus )  VALUES  (?, ?, ?, ?) ::: [1733435338651176961, xxx, 1001, 1] 
+</span></span></code></pre></div><p>插入一条数据产生两条 sql，一条是逻辑 sql，一条是真实 sql，并且真实 sql 是插入到了 m2:course_2 中，cid 是奇数。复合我们的配置，下面看下数据库的数据分布：<br>
+<img src="../../images/2023-12-09-18-43-59.png" alt=""></p>
+<p><img src="../../images/2023-12-09-18-45-22.png" alt=""></p>
+<p>可以看到，m1:course_1 cid 都是偶数，m1:course_2 为空 m2:course_1 cid 为空，m2:course_2 都是奇数</p>
+<h3 id="5-测试全表查询">5. 测试全表查询</h3>
+<p>添加测试方法，测试全表查询</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryCourse</span>() {
+</span></span><span style="display:flex;"><span>    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;全表查询&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// mybatis plus 写法</span>
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Course<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">orderByDesc</span>(<span style="color:#f1fa8c">&#34;cid&#34;</span>).<span style="color:#50fa7b">orderByDesc</span>(<span style="color:#f1fa8c">&#34;user_id&#34;</span>);
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Course<span style="color:#ff79c6">&gt;</span> courseList <span style="color:#ff79c6">=</span> courseMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Course course : courseList) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(course);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运行测试方法，控制台部分输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>全表查询
+</span></span><span style="display:flex;"><span>2023-12-09 18:50:35.066  INFO 17952 --- [main] ShardingSphere-SQL: Logic SQL: SELECT  cid,cname,user_id,cstatus  FROM course ORDER BY cid DESC,user_id DESC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 18:50:35.067  INFO 17952 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  cid,cname,user_id,cstatus  FROM course_1 ORDER BY cid DESC,user_id DESC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 18:50:35.067  INFO 17952 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  cid,cname,user_id,cstatus  FROM course_2 ORDER BY cid DESC,user_id DESC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 18:50:35.067  INFO 17952 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  cid,cname,user_id,cstatus  FROM course_1 ORDER BY cid DESC,user_id DESC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 18:50:35.067  INFO 17952 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  cid,cname,user_id,cstatus  FROM course_2 ORDER BY cid DESC,user_id DESC
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Course{cid=1733435344938438657, cname=&#39;xxx&#39;, userId=1200, cstatus=&#39;1&#39;}
+</span></span><span style="display:flex;"><span>Course{cid=1733435344904884226, cname=&#39;xxx&#39;, userId=1199, cstatus=&#39;1&#39;}
+</span></span><span style="display:flex;"><span>Course{cid=1733435344883912706, cname=&#39;xxx&#39;, userId=1198, cstatus=&#39;1&#39;}
+</span></span><span style="display:flex;"><span>.... 省略
+</span></span></code></pre></div><p>因为没有用到分片键，产生了四条真实 sql，四张表都查了一遍。这个案例可解上面的疑问，为什么用不到表还要建出来。也许可以调整 groovy 表达式的写法，只需见 2 张表就行了。后面调研一下。</p>
+<h3 id="6-精确查询">6. 精确查询</h3>
+<p>添加测试方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryCourseById</span>() {
+</span></span><span style="display:flex;"><span>    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;按照 Id 查询&#34;</span>);
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Course<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;cid&#34;</span>, 1733435340907712513L);
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Course<span style="color:#ff79c6">&gt;</span> courseList <span style="color:#ff79c6">=</span> courseMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;按照 ID&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Course course : courseList) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(course);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">clear</span>();
+</span></span><span style="display:flex;"><span>    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;in 查询&#34;</span>);
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">in</span>(<span style="color:#f1fa8c">&#34;cid&#34;</span>, Arrays.<span style="color:#50fa7b">asList</span>(1733435340953849857L, 1733435340844797954L));
+</span></span><span style="display:flex;"><span>    courseList <span style="color:#ff79c6">=</span> courseMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Course course : courseList) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(course);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运行测试方法，控制台输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>按照 Id 查询
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.664  INFO 14872 --- [main] ShardingSphere-SQL: Logic SQL: SELECT  cid,cname,user_id,cstatus  FROM course WHERE (cid = ?)
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.664  INFO 14872 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  cid,cname,user_id,cstatus  FROM course_2 WHERE (cid = ?) ::: [1733435340907712513]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>按照 ID
+</span></span><span style="display:flex;"><span>Course{cid=1733435340907712513, cname=&#39;xxx&#39;, userId=1020, cstatus=&#39;1&#39;}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>in 查询
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.714  INFO 14872 --- [main] ShardingSphere-SQL: Logic SQL: SELECT  cid,cname,user_id,cstatus  FROM course WHERE (cid IN (?,?))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.714  INFO 14872 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  cid,cname,user_id,cstatus  FROM course_1 WHERE (cid IN (?,?)) ::: [1733435340953849857, 1733435340844797954]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.714  INFO 14872 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  cid,cname,user_id,cstatus  FROM course_2 WHERE (cid IN (?,?)) ::: [1733435340953849857, 1733435340844797954]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.714  INFO 14872 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  cid,cname,user_id,cstatus  FROM course_1 WHERE (cid IN (?,?)) ::: [1733435340953849857, 1733435340844797954]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-09 19:19:00.714  INFO 14872 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  cid,cname,user_id,cstatus  FROM course_2 WHERE (cid IN (?,?)) ::: [1733435340953849857, 1733435340844797954]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Course{cid=1733435340844797954, cname=&#39;xxx&#39;, userId=1018, cstatus=&#39;1&#39;}
+</span></span><span style="display:flex;"><span>Course{cid=1733435340953849857, cname=&#39;xxx&#39;, userId=1022, cstatus=&#39;1&#39;}
+</span></span></code></pre></div><p>按照 Id 查询，只产生了一条 SQL，根据我们设置的分片算法直接定位到 m2:cour2 表。</p>
+<p>按照 in 查询，进行了全表路由</p>
+<h3 id="7-范围查询">7. 范围查询</h3>
+<p>添加测试方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryCourseByRange</span>() {
+</span></span><span style="display:flex;"><span>    System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;按照 Id 范围查询&#34;</span>);
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Course<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">between</span>(<span style="color:#f1fa8c">&#34;cid&#34;</span>, 938561391969701888L, 938561392535932929L);
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Course<span style="color:#ff79c6">&gt;</span> courseList <span style="color:#ff79c6">=</span> courseMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Course course : courseList) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(course);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 在 inline 策略下，不支持范围查询</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行报错：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.PersistenceException: 
+</span></span><span style="display:flex;"><span>### Error querying database.  Cause: java.lang.IllegalStateException: Inline strategy cannot support this type sharding:RangeRouteValue(columnName=cid, tableName=course, valueRange=[938561391969701888‥938561392535932929])
+</span></span></code></pre></div><p>报错信息是 inline 策略不支持范围查询。</p>
+<p>由于这个策略不支持范围查询，灵活度远远不够，接下来看支持范围查询的 stander 策略</p>
+<h2 id="standard">standard</h2>
+<p>standard 策略我们用 dept 表验证：</p>
+<h3 id="1-创建表">1. 创建表</h3>
+<p>分别在两个数据库中执行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> dept_1;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> dept_1
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    did      <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    name     <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">10</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    user_num <span style="color:#8be9fd;font-style:italic">int</span>         <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> <span style="color:#ff79c6">default</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> dept_2;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> dept_2
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    did      <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    name     <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">10</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    user_num <span style="color:#8be9fd;font-style:italic">int</span>         <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span> <span style="color:#ff79c6">default</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><h3 id="2-添加配置">2. 添加配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#6272a4"># 指定逻辑表和真实表的对应关系</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.actual-data-nodes</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">m$-&gt;{1..2}.dept_$-&gt;{1..2}</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 使用雪花算法生成 did 列的内容</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.key-generator.column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">did</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.key-generator.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">SNOWFLAKE</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">## 标准策略分片</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">## 分表时选择 did 作为分片键</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.table-strategy.standard.sharding-column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">did</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 支持精确查询和范围查询，都需要自己实现分片算法</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 精确查询时选择表</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.table-strategy.standard.precise-algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.DeptTablePreciseAlgorithm</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 范围查询时选择表</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.table-strategy.standard.range-algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.DeptTableRangeAlgorithm</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">## 分库时选择 did 作为分片键</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.database-strategy.standard.sharding-column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">did</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 精确查询时选择库</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.database-strategy.standard.precise-algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.DeptDsPreciseAlgorithm</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 范围查询时选择库</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dept.database-strategy.standard.range-algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.DeptDsRangeAlgorithm</span>
+</span></span></code></pre></div><h3 id="3-创建实体类和-mapper">3. 创建实体类和 Mapper</h3>
+<p>实体类 Dept.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.model;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/6
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Dept</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long did;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer userNum;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getDid</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> did;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setDid</span>(Long did) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">did</span> <span style="color:#ff79c6">=</span> did;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">getUserNum</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> userNum;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setUserNum</span>(Integer userNum) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">userNum</span> <span style="color:#ff79c6">=</span> userNum;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getName</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> name;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setName</span>(String name) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">name</span> <span style="color:#ff79c6">=</span> name;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;Dept{&#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;did=&#34;</span> <span style="color:#ff79c6">+</span> did <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, userNum=&#34;</span> <span style="color:#ff79c6">+</span> userNum <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, name=&#39;&#34;</span> <span style="color:#ff79c6">+</span> name <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#39;}&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>DeptMapper.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.mapper;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.baomidou.mybatisplus.core.mapper.BaseMapper;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.shardingjdbc.model.Dept;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.shardingjdbc.model.User;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/4
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">DeptMapper</span> <span style="color:#8be9fd;font-style:italic">extends</span> BaseMapper<span style="color:#ff79c6">&lt;</span>Dept<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="4-算法实现重点">4. 算法实现【重点】</h3>
+<p>假如想要 did 最后一位等于 1 的放到 m1:dept_1 中，其他情况放入 m2:dept_2 中</p>
+<h4 id="分库算法">分库算法：</h4>
+<p>在配置文件中已经配置 分库算法的类名：<code>DeptDsPreciseAlgorithm</code> 和 <code>DeptDsRangeAlgorithm</code>, 下面开始实现这两种算法：<br>
+DeptDsPreciseAlgorithm.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.PreciseShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.PreciseShardingValue;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/5
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * PreciseShardingAlgorithm&lt;T&gt; 实现精确查询分片算法 T 是分片键的类型
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">DeptDsPreciseAlgorithm</span> <span style="color:#8be9fd;font-style:italic">implements</span> PreciseShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param databases 已经配置的数据源
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param preciseShardingValue 分片键相关信息， 包含分片键和逻辑表
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @return 从哪个库中查询（插入）。因为这是精确分片，只会返回一个值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> databases, PreciseShardingValue<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> preciseShardingValue) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;dept 库精确&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取分片键的值</span>
+</span></span><span style="display:flex;"><span>        Long cid <span style="color:#ff79c6">=</span> preciseShardingValue.<span style="color:#50fa7b">getValue</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(cid <span style="color:#ff79c6">%</span> 10 <span style="color:#ff79c6">==</span> 1){
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;在 m1 库中查找&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;m1&#34;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;在 m2 库中查找&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;m2&#34;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接下来看范围查询算法实现：<br>
+DeptDsRangeAlgorithm.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.RangeShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.RangeShardingValue;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/5
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 实现 RangeShardingAlgorithm&lt;Long&gt; 接口
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">DeptDsRangeAlgorithm</span> <span style="color:#8be9fd;font-style:italic">implements</span> RangeShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param databases 配置的数据源
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @param rangeShardingValue 分片相关信息
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * @return 因为是范围查询，可能要在多个数据源中才能找到所有数据，所以返回值是集合
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> databases, RangeShardingValue<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> rangeShardingValue) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取范围查询中范围的最小值</span>
+</span></span><span style="display:flex;"><span>        Long min <span style="color:#ff79c6">=</span> rangeShardingValue.<span style="color:#50fa7b">getValueRange</span>().<span style="color:#50fa7b">lowerEndpoint</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取范围查询中范围的最大值</span>
+</span></span><span style="display:flex;"><span>        Long max <span style="color:#ff79c6">=</span> rangeShardingValue.<span style="color:#50fa7b">getValueRange</span>().<span style="color:#50fa7b">upperEndpoint</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取逻辑表名</span>
+</span></span><span style="display:flex;"><span>        String logicTableName <span style="color:#ff79c6">=</span> rangeShardingValue.<span style="color:#50fa7b">getLogicTableName</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取分片键列的名字</span>
+</span></span><span style="display:flex;"><span>        String columnName <span style="color:#ff79c6">=</span> rangeShardingValue.<span style="color:#50fa7b">getColumnName</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 范围查询需要在所有的库中查询， 暂时没有想到好的案例，没有用到上面几个变量，仅仅做演示</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> databases;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="分表算法">分表算法</h4>
+<p>与分库算法差不多</p>
+<p>DeptTablePreciseAlgorithm.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.PreciseShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.PreciseShardingValue;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.math.BigInteger;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/5
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">DeptTablePreciseAlgorithm</span> <span style="color:#8be9fd;font-style:italic">implements</span> PreciseShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> availableTargetNames, PreciseShardingValue<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> preciseShardingValue) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;dept 表精确&#34;</span>);
+</span></span><span style="display:flex;"><span>        Long cid <span style="color:#ff79c6">=</span> preciseShardingValue.<span style="color:#50fa7b">getValue</span>();
+</span></span><span style="display:flex;"><span>        String logicTable <span style="color:#ff79c6">=</span> preciseShardingValue.<span style="color:#50fa7b">getLogicTableName</span>();
+</span></span><span style="display:flex;"><span>        String actualTable <span style="color:#ff79c6">=</span> logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_&#34;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (cid <span style="color:#ff79c6">%</span> 10 <span style="color:#ff79c6">==</span> 1) {
+</span></span><span style="display:flex;"><span>            actualTable <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#34;1&#34;</span>;
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;在 &#34;</span> <span style="color:#ff79c6">+</span> actualTable<span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; 中查找&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> actualTable;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        actualTable <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#34;2&#34;</span>;
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;在 &#34;</span> <span style="color:#ff79c6">+</span> actualTable<span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; 中查找&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> actualTable;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>DeptTableRangeAlgorithm.java</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.RangeShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.standard.RangeShardingValue;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/5
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">DeptTableRangeAlgorithm</span> <span style="color:#8be9fd;font-style:italic">implements</span> RangeShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> tableNames, RangeShardingValue<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> rangeShardingValue) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;===========range================&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 范围查询应该在所有表中都查一遍</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> tableNames;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="5-测试插入">5. 测试插入</h3>
+<p>添加测试方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">insertDept</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 100; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>        Dept dept <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dept();
+</span></span><span style="display:flex;"><span>        dept.<span style="color:#50fa7b">setUserNum</span>((i <span style="color:#ff79c6">+</span>1) <span style="color:#ff79c6">*</span> 200);
+</span></span><span style="display:flex;"><span>        dept.<span style="color:#50fa7b">setName</span>(<span style="color:#f1fa8c">&#34;测试标准策略_&#34;</span> <span style="color:#ff79c6">+</span> i);
+</span></span><span style="display:flex;"><span>        deptMapper.<span style="color:#50fa7b">insert</span>(dept);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行方法后，查看数据库如下：<br>
+<img src="../../images/2023-12-10-15-50-34.png" alt=""></p>
+<p><img src="../../images/2023-12-10-15-51-37.png" alt=""></p>
+<p>发现数据分布正如分片算法一致，did 追后一位等于 1 的都在 m1:dept_1，下面测试一下查询</p>
+<h3 id="6-测试精确查询">6. 测试精确查询</h3>
+<p>新建测试方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryDept</span>() {
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Dept<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;did&#34;</span>,940635075672801281L);
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Dept<span style="color:#ff79c6">&gt;</span> deptList <span style="color:#ff79c6">=</span> deptMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Dept dept : deptList) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(dept);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行方法，控制台有如下输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>dept 库精确
+</span></span><span style="display:flex;"><span>在 m1 库中查找
+</span></span><span style="display:flex;"><span>dept 表精确
+</span></span><span style="display:flex;"><span>在 dept_1 中查找
+</span></span><span style="display:flex;"><span>2023-12-10 15:55:33.006  INFO 19080 --- [main] ShardingSphere-SQL: Logic SQL: SELECT  did,user_num,name  FROM dept WHERE (did = ?)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> 2023-12-10 15:55:33.006  INFO 19080 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  did,user_num,name  FROM dept_1 WHERE (did = ?) ::: [940635075672801281]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Dept{did=940635075672801281, userNum=6000, name=&#39;测试标准策略_29&#39;}
+</span></span></code></pre></div><p>走了精确查询算法，所以只产生了一条真实 SQL</p>
+<h3 id="7-测试范围查询">7. 测试范围查询</h3>
+<p>添加测试方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryDeptRange</span>() {
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Dept<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">between</span>(<span style="color:#f1fa8c">&#34;did&#34;</span>,940635075672801281L, 940635076750737408L);
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Dept<span style="color:#ff79c6">&gt;</span> deptList <span style="color:#ff79c6">=</span> deptMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Dept dept : deptList) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(dept);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行方法，控制台有如下部分输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>2023-12-10 16:02:04.018  INFO 23444 --- [main] ShardingSphere-SQL: Logic SQL: SELECT  did,user_num,name  FROM dept WHERE (did BETWEEN ? AND ?)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-10 16:02:04.018  INFO 23444 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  did,user_num,name  FROM dept_1 WHERE (did BETWEEN ? AND ?) ::: [940635075672801281, 940635076750737408]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-10 16:02:04.019  INFO 23444 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: SELECT  did,user_num,name  FROM dept_2 WHERE (did BETWEEN ? AND ?) ::: [940635075672801281, 940635076750737408]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-10 16:02:04.019  INFO 23444 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  did,user_num,name  FROM dept_1 WHERE (did BETWEEN ? AND ?) ::: [940635075672801281, 940635076750737408]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2023-12-10 16:02:04.019  INFO 23444 --- [main] ShardingSphere-SQL: Actual SQL: m2 ::: SELECT  did,user_num,name  FROM dept_2 WHERE (did BETWEEN ? AND ?) ::: [940635075672801281, 940635076750737408]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Dept{did=940635075672801281, userNum=6000, name=&#39;测试标准策略_29&#39;}
+</span></span><span style="display:flex;"><span>Dept{did=940635075714744321, userNum=6400, name=&#39;测试标准策略_31&#39;}
+</span></span><span style="display:flex;"><span>Dept{did=940635075756687361, userNum=6800, name=&#39;测试标准策略_33&#39;}
+</span></span><span style="display:flex;"><span>Dept{did=940635075924459521, userNum=8400, name=&#39;测试标准策略_41&#39;}
+</span></span><span style="display:flex;"><span>Dept{did=940635076134174721, userNum=10800, name=&#39;测试标准策略_53&#39;}
+</span></span><span style="display:flex;"><span>Dept{did=940635076176117761, userNum=11200, name=&#39;测试标准策略_55&#39;}
+</span></span><span style="display:flex;"><span>Dept{did=940635076301946881, userNum=12800, name=&#39;测试标准策略_63&#39;}
+</span></span></code></pre></div><p>产生了 4 条 SQL，符合分片算法</p>
+<h2 id="complex">complex</h2>
+<p>上面两种策略的分片键只能是单个， 复合策略可以支持多个分片键。</p>
+<p>用 message 来演示：</p>
+<h3 id="1-创建-message-表">1. 创建 message 表</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> message_1;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> message_1
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    mid          <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    body         <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">500</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    created_time <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    created_time_str <span style="color:#8be9fd;font-style:italic">char</span>(<span style="color:#bd93f9">19</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">type</span>         <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> message_2;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> message_2
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    mid          <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    body         <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">500</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">type</span>         <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    created_time_str <span style="color:#8be9fd;font-style:italic">char</span>(<span style="color:#bd93f9">19</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    created_time <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> message_3;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> message_3
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    mid          <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    body         <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">500</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">type</span>         <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    created_time_str <span style="color:#8be9fd;font-style:italic">char</span>(<span style="color:#bd93f9">19</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    created_time <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>)   <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><p>分别在两个数据源中执行</p>
+<h3 id="2-创建实体类和-mapper">2. 创建实体类和 Mapper</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.model;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.baomidou.mybatisplus.annotation.TableId;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/6
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Message</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 消息 id
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @TableId
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long mid;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 消息文本
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String body;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 消息类型
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long type;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 消息创建时间
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long createdTime;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String createdTimeStr;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getMid</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> mid;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setMid</span>(Long mid) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">mid</span> <span style="color:#ff79c6">=</span> mid;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getBody</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> body;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setBody</span>(String body) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">body</span> <span style="color:#ff79c6">=</span> body;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getCreatedTime</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> createdTime;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setCreatedTime</span>(Long createdTime) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">createdTime</span> <span style="color:#ff79c6">=</span> createdTime;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getType</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> type;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setType</span>(Long type) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">type</span> <span style="color:#ff79c6">=</span> type;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getCreatedTimeStr</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> createdTimeStr;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setCreatedTimeStr</span>(String createdTimeStr) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">createdTimeStr</span> <span style="color:#ff79c6">=</span> createdTimeStr;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;Message{&#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;mid=&#34;</span> <span style="color:#ff79c6">+</span> mid <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, body=&#39;&#34;</span> <span style="color:#ff79c6">+</span> body <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, type=&#34;</span> <span style="color:#ff79c6">+</span> type <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, createdTime=&#34;</span> <span style="color:#ff79c6">+</span> createdTime <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, createdTimeStr=&#39;&#34;</span> <span style="color:#ff79c6">+</span> createdTimeStr <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#39;}&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Mapper:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.mapper;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.baomidou.mybatisplus.core.mapper.BaseMapper;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.shardingjdbc.model.Course;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.shardingjdbc.model.Message;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">MessageMapper</span> <span style="color:#8be9fd;font-style:italic">extends</span> BaseMapper<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="3-添加分片配置">3. 添加分片配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#6272a4"># 对 message 表进行分表分库， 采用复杂策略</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.actual-data-nodes</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">m$-&gt;{1..2}.message_$-&gt;{1..3}</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.key-generator.column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">mid</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.key-generator.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">SNOWFLAKE</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 雪花算法需要的参数，可以不写（工作机器编号，生成分布式 id 需要）</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.key-generator.props.worker.id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 复杂策略分片</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 分片键</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.table-strategy.complex.sharding-columns</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">type,created_time</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.table-strategy.complex.algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.MessageTableComplexSharing</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.database-strategy.complex.sharding-columns</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">type,created_time</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.message.database-strategy.complex.algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.MessageDatabaseComplexSharing</span>
+</span></span></code></pre></div><p>写法和标准策略一样，只是不再区分精确查找，还是范围查找，由算法来负责实现<br>
+想实现如下分片功能</p>
+<ul>
+<li>消息类型 (type) 等于 1，并且 消息创建时间 (created_time) 小于 20231201 放入 m1:message_1 中</li>
+<li>消息类型 (type) 等于 2，并且 消息创建时间 (created_time) 大于 20231201 放入 m1:message_2 中</li>
+<li>其他情况放入 m1:message_3</li>
+</ul>
+<p>下面直接看分片算法如何实现</p>
+<h3 id="4-分片算法">4. 分片算法</h3>
+<h4 id="分库">分库</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> cn.hutool.core.date.DateUtil;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.google.common.collect.Range;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.complex.ComplexKeysShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.complex.ComplexKeysShardingValue;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.ObjectUtils;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/6
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageDatabaseComplexSharing</span> <span style="color:#8be9fd;font-style:italic">implements</span> ComplexKeysShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 将消息类型为 1 的，并且时间在 2023-12-01 之前的插入 m1 库 message_1 表中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 将消息类型为 2 的，并且时间在 2023-12-01 之后的插入 m2 库 message_2 表中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     * 其他情况数据在 m1 库中的 message_3
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">     */</span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> collection, ComplexKeysShardingValue<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> complexKeysShardingValue) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取精确查找的字段</span>
+</span></span><span style="display:flex;"><span>        Collection<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> typeList <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndShardingValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>);
+</span></span><span style="display:flex;"><span>        Collection<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> createdTimeList <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndShardingValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取范围类型的字段</span>
+</span></span><span style="display:flex;"><span>        Range<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> typeRange <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndRangeValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>);
+</span></span><span style="display:flex;"><span>        Range<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> createdTimeRange <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndRangeValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> databases <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">long</span> now <span style="color:#ff79c6">=</span> DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231201&#34;</span>).<span style="color:#50fa7b">getTime</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 两个字段都是精确值</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(typeList) <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(createdTimeList)) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选库： type 和 created_time 都是精确查找&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (Long type : typeList) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> (Long createTime : createdTimeList) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(1L) <span style="color:#ff79c6">&amp;&amp;</span> createTime.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&lt;</span> 0) {
+</span></span><span style="display:flex;"><span>                        databases.<span style="color:#50fa7b">add</span>(<span style="color:#f1fa8c">&#34;m1&#34;</span>);
+</span></span><span style="display:flex;"><span>                    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(2L) <span style="color:#ff79c6">&amp;&amp;</span> createTime.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                        databases.<span style="color:#50fa7b">add</span>(<span style="color:#f1fa8c">&#34;m2&#34;</span>);
+</span></span><span style="display:flex;"><span>                    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>                        databases.<span style="color:#50fa7b">add</span>(<span style="color:#f1fa8c">&#34;m1&#34;</span>);
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选中的库有&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (String database : databases) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(database);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> databases;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// type 是精确值， created_time 是范围值，如：</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// type = 1 and (created_time between (&#39;20231202&#39;,&#39;20231204&#39;))</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(typeList) <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(createdTimeRange)) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选库： type 是精确查找，created_time 是范围查找&#34;</span>);
+</span></span><span style="display:flex;"><span>            Long min <span style="color:#ff79c6">=</span> createdTimeRange.<span style="color:#50fa7b">lowerEndpoint</span>();
+</span></span><span style="display:flex;"><span>            Long max <span style="color:#ff79c6">=</span> createdTimeRange.<span style="color:#50fa7b">upperEndpoint</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 根据分片规则</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (Long type : typeList) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(1L) <span style="color:#ff79c6">&amp;&amp;</span> max.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&lt;</span> 0) {
+</span></span><span style="display:flex;"><span>                    databases.<span style="color:#50fa7b">add</span>(<span style="color:#f1fa8c">&#34;m1&#34;</span>);
+</span></span><span style="display:flex;"><span>                } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(2L) <span style="color:#ff79c6">&amp;&amp;</span> min.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                    databases.<span style="color:#50fa7b">add</span>(<span style="color:#f1fa8c">&#34;m2&#34;</span>);
+</span></span><span style="display:flex;"><span>                } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>                    databases.<span style="color:#50fa7b">add</span>(<span style="color:#f1fa8c">&#34;m1&#34;</span>);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选中的库有&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (String database : databases) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(database);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> databases;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选库：其他情况在所有的数据库中查找&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> collection;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="分表">分表</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> cn.hutool.core.date.DateUtil;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.google.common.collect.Range;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.complex.ComplexKeysShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.complex.ComplexKeysShardingValue;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.springframework.util.ObjectUtils;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.ArrayList;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/6
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 将消息类型为 1 的，并且时间在 2023-12-01 之前的插入 m1 库 message_1 表中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 将消息类型为 2 的，并且时间在 2023-12-01 之后的插入 m2 库 message_2 表中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 其他情况数据在 m1 库中的 message_3
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MessageTableComplexSharing</span> <span style="color:#8be9fd;font-style:italic">implements</span> ComplexKeysShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> collection, ComplexKeysShardingValue<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> complexKeysShardingValue) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取精确查找的字段</span>
+</span></span><span style="display:flex;"><span>        Collection<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> typeList <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndShardingValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>);
+</span></span><span style="display:flex;"><span>        Collection<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> createdTimeList <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndShardingValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取范围类型的字段</span>
+</span></span><span style="display:flex;"><span>        Range<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> typeRange <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndRangeValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>);
+</span></span><span style="display:flex;"><span>        Range<span style="color:#ff79c6">&lt;</span>Long<span style="color:#ff79c6">&gt;</span> createdTimeRange <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getColumnNameAndRangeValuesMap</span>().<span style="color:#50fa7b">get</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> tables <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>        String logicTable <span style="color:#ff79c6">=</span> complexKeysShardingValue.<span style="color:#50fa7b">getLogicTableName</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">long</span> now <span style="color:#ff79c6">=</span> DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231201&#34;</span>).<span style="color:#50fa7b">getTime</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 规则 1： 两个字段都是精确值，数据插入时唯一命中的。因为不可能插入一个范围吧</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(typeList) <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(createdTimeList)) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选表： type 和 created_time 都是精确查找&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (Long type : typeList) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">for</span> (Long createTime : createdTimeList) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(1L) <span style="color:#ff79c6">&amp;&amp;</span> createTime.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&lt;</span> 0) {
+</span></span><span style="display:flex;"><span>                        tables.<span style="color:#50fa7b">add</span>(logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_1&#34;</span>);
+</span></span><span style="display:flex;"><span>                    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(2L) <span style="color:#ff79c6">&amp;&amp;</span> createTime.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                        tables.<span style="color:#50fa7b">add</span>(logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_2&#34;</span>);
+</span></span><span style="display:flex;"><span>                    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>                        tables.<span style="color:#50fa7b">add</span>(logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_3&#34;</span>);
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选中的表有：&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (String table : tables) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(table);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> tables;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 规则 2: type 是精确值， created_time 是范围值，如：type = 1 and (created_time between (&#39;20231202&#39;,&#39;20231204&#39;))</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(typeList) <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!</span>ObjectUtils.<span style="color:#50fa7b">isEmpty</span>(createdTimeRange)) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选库： type 是精确查找，created_time 是范围查找&#34;</span>);
+</span></span><span style="display:flex;"><span>            Long min <span style="color:#ff79c6">=</span> createdTimeRange.<span style="color:#50fa7b">lowerEndpoint</span>();
+</span></span><span style="display:flex;"><span>            Long max <span style="color:#ff79c6">=</span> createdTimeRange.<span style="color:#50fa7b">upperEndpoint</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 根据分片规则</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (Long type : typeList) {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(1L) <span style="color:#ff79c6">&amp;&amp;</span> max.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&lt;</span> 0) {
+</span></span><span style="display:flex;"><span>                    tables.<span style="color:#50fa7b">add</span>(logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_1&#34;</span>);
+</span></span><span style="display:flex;"><span>                } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (type.<span style="color:#50fa7b">equals</span>(2L) <span style="color:#ff79c6">&amp;&amp;</span> min.<span style="color:#50fa7b">compareTo</span>(now) <span style="color:#ff79c6">&gt;</span> 0) {
+</span></span><span style="display:flex;"><span>                    tables.<span style="color:#50fa7b">add</span>(logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_2&#34;</span>);
+</span></span><span style="display:flex;"><span>                } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span>                    tables.<span style="color:#50fa7b">add</span>(logicTable <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_3&#34;</span>);
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选中的表有：&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (String table : tables) {
+</span></span><span style="display:flex;"><span>                System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(table);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> tables;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;选表：其他情况在所有的数据库中查找&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> collection;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="5-测试插入-1">5. 测试插入</h3>
+<p>添加测试方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">insertMessage</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 创建时间 分布在 20231201 前后</span>
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Date<span style="color:#ff79c6">&gt;</span> dateList <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ArrayList<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231101&#34;</span>));
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231102&#34;</span>));
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231103&#34;</span>));
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231201&#34;</span>));
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231202&#34;</span>));
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231203&#34;</span>));
+</span></span><span style="display:flex;"><span>    dateList.<span style="color:#50fa7b">add</span>(DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231204&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 100; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>        Message message <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Message();
+</span></span><span style="display:flex;"><span>        message.<span style="color:#50fa7b">setBody</span>(<span style="color:#f1fa8c">&#34;测试分库分表&#34;</span> <span style="color:#ff79c6">+</span> i);
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// type 取值范围 [0 1 2]</span>
+</span></span><span style="display:flex;"><span>        message.<span style="color:#50fa7b">setType</span>((<span style="color:#8be9fd">long</span>) (i <span style="color:#ff79c6">%</span> 3));
+</span></span><span style="display:flex;"><span>        Date date <span style="color:#ff79c6">=</span> dateList.<span style="color:#50fa7b">get</span>(i <span style="color:#ff79c6">%</span> dateList.<span style="color:#50fa7b">size</span>());
+</span></span><span style="display:flex;"><span>        message.<span style="color:#50fa7b">setCreatedTime</span>(date.<span style="color:#50fa7b">getTime</span>());
+</span></span><span style="display:flex;"><span>        message.<span style="color:#50fa7b">setCreatedTimeStr</span>(DateUtil.<span style="color:#50fa7b">format</span>(date, <span style="color:#f1fa8c">&#34;yyyy-MM-dd HH:mm:ss&#34;</span>));
+</span></span><span style="display:flex;"><span>        messageMapper.<span style="color:#50fa7b">insert</span>(message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行测试方法，查看数据分布：<br>
+<img src="../../images/2023-12-10-16-20-57.png" alt=""></p>
+<p><img src="../../images/2023-12-10-16-21-28.png" alt=""></p>
+<p><img src="../../images/2023-12-10-16-21-43.png" alt=""></p>
+<p>可以看出数据分布复合分片算法设置的规则</p>
+<h3 id="6-测试查询">6. 测试查询</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 符合规则 1，应该只在 m1:message_1 中查找
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryMessageEq</span>() {
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>, 1L).<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>, DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231102&#34;</span>).<span style="color:#50fa7b">getTime</span>());
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> messages <span style="color:#ff79c6">=</span> messageMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Message message : messages) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * =  和 in 仍然属于精确查找，type = 1 and created_time in (20231102,20231203)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 应该在 m1:message_1 和 m1:message_3 查找
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryMessageIn</span>() {
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>, 1L);
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">in</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>, DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231102&#34;</span>).<span style="color:#50fa7b">getTime</span>(), DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231203&#34;</span>).<span style="color:#50fa7b">getTime</span>());
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> messages <span style="color:#ff79c6">=</span> messageMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Message message : messages) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * =  和 in 仍然属于精确查找，type = 2 and created_time in (20231102,20231203)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 应该在 m2:message_2 和 m1:message_3 查找
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 但是实际输出的 SQL 是 m1:message_2 m1:messsage_3  m2:message_2 m3:message_3
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 我猜测他的工作原理如下：
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 1. 先根据要查找的数据找出数据库： 2 和 20231102 结合得出要在 m1 中查找；2 和 20231203 结合得出要在 m2 中查找
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 2. 再根据要查找的数据找出表：  2 和 20231102 结合得出要在 message_3 中查找；2 和 20231203 结合得出要在 message_2 中查找
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 3. [m1 m2] 和 [message_2  message_3] 交叉结合 即： m1:message_2  m1:message_3  m2:message_2 m2:message_3
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 所以是 4 条 sql。该规则适用于上面 queryMessageIn 方法
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryMessageIn2</span>() {
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>, 2L);
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">in</span>(<span style="color:#f1fa8c">&#34;created_time&#34;</span>, DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231102&#34;</span>).<span style="color:#50fa7b">getTime</span>(), DateUtil.<span style="color:#50fa7b">parse</span>(<span style="color:#f1fa8c">&#34;20231203&#34;</span>).<span style="color:#50fa7b">getTime</span>());
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Message<span style="color:#ff79c6">&gt;</span> messages <span style="color:#ff79c6">=</span> messageMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Message message : messages) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>请读者自行测试</p>
+<h2 id="hint">hint</h2>
+<p>强制路由策略，不再根据 SQL 来选择分表分库，而是直接有用户指定</p>
+<h3 id="配置如下">配置如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#6272a4"># 对 user 表采用强制路由策略</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.user.actual-data-nodes</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">m$-&gt;{1..2}.user_$-&gt;{1..2}</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.user.key-generator.column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">uid</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.user.key-generator.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">snowflake</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.user.key-generator.props.worker.id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 强制路由策略分片，没有分片键，因为它不再依赖 sql 了。在程序中直接指定</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.user.table-strategy.hint.algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.UserTableHintSharding</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.user.database-strategy.hint.algorithm-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">io.dc.shardingjdbc.algorithm.UserDatabaseHintSharding</span>
+</span></span></code></pre></div><h3 id="创建表实体类和-mapper">创建表，实体类和 Mapper</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> user_1;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> user_1
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    uid  <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    name <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">10</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    age  <span style="color:#8be9fd;font-style:italic">int</span>         <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    sex  tinyint     <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">drop</span> <span style="color:#ff79c6">table</span> <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">exists</span> user_2;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">create</span> <span style="color:#ff79c6">table</span> user_2
+</span></span><span style="display:flex;"><span>(
+</span></span><span style="display:flex;"><span>    uid  <span style="color:#8be9fd;font-style:italic">BIGINT</span>(<span style="color:#bd93f9">20</span>) <span style="color:#ff79c6">PRIMARY</span> <span style="color:#ff79c6">KEY</span>,
+</span></span><span style="display:flex;"><span>    name <span style="color:#8be9fd;font-style:italic">VARCHAR</span>(<span style="color:#bd93f9">10</span>) <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    age  <span style="color:#8be9fd;font-style:italic">int</span>         <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>,
+</span></span><span style="display:flex;"><span>    sex  tinyint     <span style="color:#ff79c6">NOT</span> <span style="color:#ff79c6">NULL</span>
+</span></span><span style="display:flex;"><span>);
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.model;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.baomidou.mybatisplus.annotation.TableId;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/6
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">User</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Long uid;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer sex;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> Integer age;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">private</span> String name;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Long <span style="color:#50fa7b">getUid</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> uid;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setUid</span>(Long uid) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">uid</span> <span style="color:#ff79c6">=</span> uid;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">getSex</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> sex;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setSex</span>(Integer sex) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">sex</span> <span style="color:#ff79c6">=</span> sex;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Integer <span style="color:#50fa7b">getAge</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> age;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setAge</span>(Integer age) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">age</span> <span style="color:#ff79c6">=</span> age;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">getName</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> name;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">setName</span>(String name) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">name</span> <span style="color:#ff79c6">=</span> name;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> String <span style="color:#50fa7b">toString</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;User{&#34;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;uid=&#34;</span> <span style="color:#ff79c6">+</span> uid <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, sex=&#34;</span> <span style="color:#ff79c6">+</span> sex <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, age=&#34;</span> <span style="color:#ff79c6">+</span> age <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;, name=&#39;&#34;</span> <span style="color:#ff79c6">+</span> name <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;\&#39;&#39;</span> <span style="color:#ff79c6">+</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#39;}&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.mapper;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> com.baomidou.mybatisplus.core.mapper.BaseMapper;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io.dc.shardingjdbc.model.User;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">interface</span> <span style="color:#50fa7b">UserMapper</span> <span style="color:#8be9fd;font-style:italic">extends</span> BaseMapper<span style="color:#ff79c6">&lt;</span>User<span style="color:#ff79c6">&gt;</span> {}
+</span></span></code></pre></div><h3 id="分片算法">分片算法</h3>
+<h4 id="分库-1">分库</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.hint.HintShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.hint.HintShardingValue;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collections;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/8
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">UserDatabaseHintSharding</span> <span style="color:#8be9fd;font-style:italic">implements</span> HintShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> collection, HintShardingValue<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">&gt;</span> hintShardingValue) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取用户传指定的库，用户可以传入多个参数，所以是集合，这里只取第一个</span>
+</span></span><span style="display:flex;"><span>        Integer index <span style="color:#ff79c6">=</span> (Integer) hintShardingValue.<span style="color:#50fa7b">getValues</span>().<span style="color:#50fa7b">toArray</span>()<span style="color:#ff79c6">[</span>0<span style="color:#ff79c6">]</span>;
+</span></span><span style="display:flex;"><span>        String database <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;m&#34;</span> <span style="color:#ff79c6">+</span> index;
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;强制路由 选中数据库 &#34;</span> <span style="color:#ff79c6">+</span> database);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (collection.<span style="color:#50fa7b">contains</span>(database)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> Collections.<span style="color:#50fa7b">singletonList</span>(database);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException(<span style="color:#f1fa8c">&#34;未知的数据库：&#34;</span> <span style="color:#ff79c6">+</span> database);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="分表-1">分表</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> io.dc.shardingjdbc.algorithm;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.hint.HintShardingAlgorithm;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> org.apache.shardingsphere.api.sharding.hint.HintShardingValue;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collection;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> java.util.Collections;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @author dc on 2023/12/8
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">UserTableHintSharding</span> <span style="color:#8be9fd;font-style:italic">implements</span> HintShardingAlgorithm<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">&gt;</span> {
+</span></span><span style="display:flex;"><span>    @Override
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">public</span> Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">doSharding</span>(Collection<span style="color:#ff79c6">&lt;</span>String<span style="color:#ff79c6">&gt;</span> collection, HintShardingValue<span style="color:#ff79c6">&lt;</span>Integer<span style="color:#ff79c6">&gt;</span> hintShardingValue) {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 获取用户指定的表</span>
+</span></span><span style="display:flex;"><span>        Integer index <span style="color:#ff79c6">=</span> (Integer) hintShardingValue.<span style="color:#50fa7b">getValues</span>().<span style="color:#50fa7b">toArray</span>()<span style="color:#ff79c6">[</span>0<span style="color:#ff79c6">]</span>;
+</span></span><span style="display:flex;"><span>        String table <span style="color:#ff79c6">=</span> hintShardingValue.<span style="color:#50fa7b">getLogicTableName</span>() <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;_&#34;</span> <span style="color:#ff79c6">+</span> index;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (collection.<span style="color:#50fa7b">contains</span>(table)) {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(<span style="color:#f1fa8c">&#34;强制路由 选中表 &#34;</span> <span style="color:#ff79c6">+</span> table);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> Collections.<span style="color:#50fa7b">singletonList</span>(table);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> RuntimeException(<span style="color:#f1fa8c">&#34;未知的表：&#34;</span> <span style="color:#ff79c6">+</span> table);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="测试插入">测试插入</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 强制路由策略插入数据 age &lt; 50 的插入 m1:user_1  age &gt;= 50 的插入 m2:user_2
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">insertUser</span>() {
+</span></span><span style="display:flex;"><span>    HintManager hintManager1 <span style="color:#ff79c6">=</span> HintManager.<span style="color:#50fa7b">getInstance</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 用户直接指定选择哪个库那个表进行插入，查询写法一致，不再编写示例</span>
+</span></span><span style="display:flex;"><span>    hintManager1.<span style="color:#50fa7b">addTableShardingValue</span>(<span style="color:#f1fa8c">&#34;user&#34;</span>, 1);
+</span></span><span style="display:flex;"><span>    hintManager1.<span style="color:#50fa7b">addDatabaseShardingValue</span>(<span style="color:#f1fa8c">&#34;user&#34;</span>, 1);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0; i <span style="color:#ff79c6">&lt;</span> 50; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>        User user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User();
+</span></span><span style="display:flex;"><span>        user.<span style="color:#50fa7b">setAge</span>(i <span style="color:#ff79c6">%</span> 50 <span style="color:#ff79c6">+</span> 1);
+</span></span><span style="display:flex;"><span>        user.<span style="color:#50fa7b">setName</span>(<span style="color:#f1fa8c">&#34;测试强制路由_&#34;</span> <span style="color:#ff79c6">+</span> i);
+</span></span><span style="display:flex;"><span>        user.<span style="color:#50fa7b">setSex</span>(i <span style="color:#ff79c6">%</span> 2);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        userMapper.<span style="color:#50fa7b">insert</span>(user);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    hintManager1.<span style="color:#50fa7b">close</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    HintManager hintManager2 <span style="color:#ff79c6">=</span> HintManager.<span style="color:#50fa7b">getInstance</span>();
+</span></span><span style="display:flex;"><span>    hintManager2.<span style="color:#50fa7b">addTableShardingValue</span>(<span style="color:#f1fa8c">&#34;user&#34;</span>, 2);
+</span></span><span style="display:flex;"><span>    hintManager2.<span style="color:#50fa7b">addDatabaseShardingValue</span>(<span style="color:#f1fa8c">&#34;user&#34;</span>, 2);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 50; i <span style="color:#ff79c6">&lt;</span> 100; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>        User user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> User();
+</span></span><span style="display:flex;"><span>        user.<span style="color:#50fa7b">setAge</span>(i <span style="color:#ff79c6">%</span> 50 <span style="color:#ff79c6">+</span> 1);
+</span></span><span style="display:flex;"><span>        user.<span style="color:#50fa7b">setName</span>(<span style="color:#f1fa8c">&#34;测试强制路由_&#34;</span> <span style="color:#ff79c6">+</span> i);
+</span></span><span style="display:flex;"><span>        user.<span style="color:#50fa7b">setSex</span>(i <span style="color:#ff79c6">%</span> 2);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        userMapper.<span style="color:#50fa7b">insert</span>(user);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    hintManager2.<span style="color:#50fa7b">close</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>执行方法，查看数据分布：<br>
+<img src="../../images/2023-12-10-16-43-32.png" alt=""></p>
+<p><img src="../../images/2023-12-10-16-48-57.png" alt=""></p>
+<h2 id="广播表">广播表</h2>
+<p>见名思意，就是在所有的数据库中都会存在的表，它一般是字典表。对他写的操作，会同步到所有库中。配置如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#6272a4"># 广播表, 见名思意，就是每个数据库中都会全量存一份的表</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 一般是配置表，表中数据变化比较少，关联次数比较多的表</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.broadcast-tables</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">dict</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 配置主键生成策略</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dict.key-generator.column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">did</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dict.key-generator.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">SNOWFLAKE</span>
+</span></span></code></pre></div><p>由于比较简单，不再测试</p>
+<h2 id="总结">总结</h2>
+<p>至此，几种分片策略已经演示完毕。标准和复合策略在项目中使用的最多。<br>
+关于分库分表，尽量在系统设计之初做。如果是现有系统，在现有可用的手段用尽之前（缓存，ES）不要考虑分库分表,带来的维护成本将非常大。</p>
+<h2 id="读写分离">读写分离</h2>
+<p>ShardingSphere 使用读写分离比较简单，只需配置主从关系即可。</p>
+<h3 id="配置">配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-properties" data-lang="properties"><span style="display:flex;"><span><span style="color:#6272a4"># 读写分离配置示例</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.names</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">m1,s1</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.alibaba.druid.pool.DruidDataSource</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.driver-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.mysql.cj.jdbc.Driver</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.url</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">jdbc:mysql://192.168.11.12:3340/sharding_1?serverTimezone=GMT%2B8</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.username</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">root</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.m1.password</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">123456</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.s1.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.alibaba.druid.pool.DruidDataSource</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.s1.driver-class-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">com.mysql.cj.jdbc.Driver</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.s1.url</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">jdbc:mysql://192.168.11.12:3341/sharding_1?serverTimezone=GMT%2B8</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.s1.username</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">root</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.datasource.s1.password</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">123456</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># ds0 是自定义的主从规则, 同时指定了主库是m1</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.master-slave-rules.ds0.master-data-source-name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">m1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 从库可以有多个，这里只配一个s1</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.master-slave-rules.ds0.slave-data-source-names[0]</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">s1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 设置需要读写分离的表</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dict.actual-data-nodes</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">ds0.dict</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 配置主键生成策略</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dict.key-generator.column</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">did</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.sharding.tables.dict.key-generator.type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">SNOWFLAKE</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.shardingsphere.props.sql.show</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#50fa7b">spring.main.allow-bean-definition-overriding</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">true</span>
+</span></span></code></pre></div><h3 id="测试插入-1">测试插入</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 测试读写分离插入
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">insertDict</span>() {
+</span></span><span style="display:flex;"><span>    Dict dict <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dict();
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setType</span>(1);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setKeyword</span>(1);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setValue</span>(<span style="color:#f1fa8c">&#34;使用账号密码登录&#34;</span>);
+</span></span><span style="display:flex;"><span>    dictMapper.<span style="color:#50fa7b">insert</span>(dict);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dict <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dict();
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setType</span>(1);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setKeyword</span>(2);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setValue</span>(<span style="color:#f1fa8c">&#34;使用短信验证码登录&#34;</span>);
+</span></span><span style="display:flex;"><span>    dictMapper.<span style="color:#50fa7b">insert</span>(dict);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dict <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dict();
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setType</span>(2);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setKeyword</span>(1);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setValue</span>(<span style="color:#f1fa8c">&#34;开启设备绑定&#34;</span>);
+</span></span><span style="display:flex;"><span>    dictMapper.<span style="color:#50fa7b">insert</span>(dict);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dict <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dict();
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setType</span>(2);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setKeyword</span>(2);
+</span></span><span style="display:flex;"><span>    dict.<span style="color:#50fa7b">setValue</span>(<span style="color:#f1fa8c">&#34;关闭设备绑定&#34;</span>);
+</span></span><span style="display:flex;"><span>    dictMapper.<span style="color:#50fa7b">insert</span>(dict);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运行方法，控制台如下输出:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>2023-12-10 17:21:28.567  INFO 22224 --- [main] ShardingSphere-SQL: Actual SQL: m1 ::: INSERT INTO dict  ( did, type, keyword, value )  VALUES  (?, ?, ?, ?) ::: [1733778949163016193, 1, 1, 使用账号密码登录]
+</span></span></code></pre></div><p>可以看到插入只在主库</p>
+<h3 id="测试查询">测试查询</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * 测试读写分离查询
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
+</span></span><span style="display:flex;"><span>@Test
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">queryDict</span>() {
+</span></span><span style="display:flex;"><span>    QueryWrapper<span style="color:#ff79c6">&lt;</span>Dict<span style="color:#ff79c6">&gt;</span> wrapper <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> QueryWrapper<span style="color:#ff79c6">&lt;&gt;</span>();
+</span></span><span style="display:flex;"><span>    wrapper.<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;type&#34;</span>, 2).<span style="color:#50fa7b">eq</span>(<span style="color:#f1fa8c">&#34;keyword&#34;</span>, 2);
+</span></span><span style="display:flex;"><span>    List<span style="color:#ff79c6">&lt;</span>Dict<span style="color:#ff79c6">&gt;</span> dicts <span style="color:#ff79c6">=</span> dictMapper.<span style="color:#50fa7b">selectList</span>(wrapper);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (Dict dict : dicts) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#50fa7b">out</span>.<span style="color:#50fa7b">println</span>(dict);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>控制台输出如下:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>2023-12-10 17:23:08.519  INFO 9584 --- [main] ShardingSphere-SQL: Actual SQL: s1 ::: SELECT  did,type,keyword,value  FROM dict WHERE (type = ? AND keyword = ?) ::: [2, 2]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Dict{did=1733778950933012482, type=2, keyword=2, value=&#39;关闭设备绑定&#39;}
+</span></span></code></pre></div><p>可以看出查询只在从库 s1</p>
+<blockquote>
+<p>联系方式: <a href="mailto:dccmmtop@foxmail.com">dccmmtop@foxmail.com</a></p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/mysql">mysql
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    
+    <a href="../../posts/mysql%E9%AB%98%E5%8F%AF%E7%94%A8%E6%9E%B6%E6%9E%84/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">MySQL 高可用架构&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2023 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>
