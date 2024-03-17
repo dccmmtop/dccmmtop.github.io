@@ -102,6 +102,84 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/">jvm对象的内存分配与回收</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/jvm%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="article-date">
+                        <time datetime='2022-08-28T22:27:11.000&#43;00:00' itemprop="datePublished">2022-08-28</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    对象分配过程简略流程图 对象栈上分配 我们都知道对象分配在堆上，当对象没有被引用时就会当成垃圾回收，如果对象数量比较多，会给GC带来较大的压力，影响性能，为了减少临时对象在堆内的分配次数，JVM 通过逃逸分
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/">jvm中对象的创建过程</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/jvm%E4%B8%AD%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA%E8%BF%87%E7%A8%8B/" class="article-date">
+                        <time datetime='2022-08-28T09:34:49.000&#43;00:00' itemprop="datePublished">2022-08-28</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    1. 类加载检查 虚拟机遇到一条 new 指令时，首先检查这个指令的参数能否在常量池中找到一个类符号引用，并且检查这个符号引用代表的类是否已经被加载，解析，初始化过。如果没有必须先执行类的加载初始化过程。 2. 分配内存
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">jvm内存分配</a></h1>
                 </header>
                 
@@ -614,84 +692,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/linux%E4%B8%8B%E7%9A%84%E5%BE%AA%E7%8E%AF/">Linux下的循环</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/linux%E4%B8%8B%E7%9A%84%E5%BE%AA%E7%8E%AF/" class="article-date">
-                        <time datetime='2022-07-28T18:26:36.000&#43;00:00' itemprop="datePublished">2022-07-28</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    数字性循环 #!/bin/bash for((i=1;i&lt;=10;i++)); do echo $(expr $i \* 3 + 1); done #!/bin/bash for i in $(seq 1 10) do echo $(expr $i \* 3 + 1); done #!/bin/bash for i in {1..10} do echo $(expr $i \* 3 + 1); done #!/bin/bash awk &#39;BEGIN{for(i=1; i&lt;=10; i++) print i}&#39; 字符性循环 #!/bin/bash for i in `ls`; do echo $i is file name\! ; done #!/bin/bash for i in $* ; do echo $i is input chart\! ; done #!/bin/bash for i in f1 f2 f3 ; do echo $i is appoint ; done
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6/">Go逐行读取文件</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/go%E9%80%90%E8%A1%8C%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6/" class="article-date">
-                        <time datetime='2022-07-28T09:03:18.000&#43;00:00' itemprop="datePublished">2022-07-28</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    package main import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io&#34; &#34;os&#34; ) func main() { filename := &#34;./1.txt&#34; f, err := os.Open(filename) if err != nil { fmt.Printf(&#34;read %s fail, err: %v\n&#34;, filename, err) } defer f.Close() reader := bufio.NewReader(f) for { line, _, err := reader.ReadLine() if err == io.EOF { fmt.Println(&#34;done!&#34;) break } fmt.Println(line) // TODO } }
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -771,7 +771,7 @@
     <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2023 dc
+            &copy; 2024 dc
             <br />
             Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
                 href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>

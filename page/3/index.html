@@ -102,6 +102,89 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84spring/">面向切面的Spring</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%9A%84spring/" class="article-date">
+                        <time datetime='2022-11-27T15:06:05.000&#43;00:00' itemprop="datePublished">2022-11-27</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    横切关注点 散播应用中多处的功能被称为横切关注点 安全就是一个关注点，每个方法或者类都需要注重安全 方法参数日志记录也是一个关注点 以及事务管理 横切关注点从概念上讲是与业务分离的，但往往会直接嵌入到业务中 多个
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/spring%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/">spring 如何解决循环依赖</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/spring%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96/" class="article-date">
+                        <time datetime='2022-11-19T18:14:12.000&#43;00:00' itemprop="datePublished">2022-11-19</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    什么是循环依赖 A 类中有一个属性 B ，也就是说 A 依赖 B，同时 B 类中有一个属性 A, 也就是说 B 依赖 A. 他们之间的依赖关系形成了环。就是我们说的循环依赖，如下图： 循环依赖示例 public class CircularDependenciesDemo { public static void main(String[] args) { new A1(); } } class A1 { private B1 b1;
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E8%8E%B7%E5%8F%96%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E8%BF%9B%E7%A8%8B/">获取正在运行的进程</a></h1>
                 </header>
                 
@@ -614,84 +697,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/arraylist%E5%92%8Ccopyonwritearraylist/">ArrayList和CopyOnWriteArrayList</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/arraylist%E5%92%8Ccopyonwritearraylist/" class="article-date">
-                        <time datetime='2022-10-18T17:08:33.000&#43;00:00' itemprop="datePublished">2022-10-18</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    ArrayList ArrayList 的保护机制 for(String str : list){ if(str.equals(&#34;123&#34;)){ list.remove(str); //抛出异常 } } 这里的 foreach 语法糖实际上调用了 ArrayList 的迭代器类。如下： 如果在开始迭代的时候数组中有 5 个元素，但是在迭代中移除了一个元素，数组实际上还有 4 个元素，但是还是会遍历第五个元
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/concurrenthashmap%E4%B8%8Ehashtable/">ConcurrentHashMap与HashTable</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/concurrenthashmap%E4%B8%8Ehashtable/" class="article-date">
-                        <time datetime='2022-10-18T15:10:48.000&#43;00:00' itemprop="datePublished">2022-10-18</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    HashTable 是什么？ 之前详细介绍过 HashMap 的原理，HashTable 与 HashMap 用法一样，都是 key-value 结构，底层的实现都差不多，最大的区别是， HashTable 是线程安全的，HashMap 不是线程安全的。 为什么需要线程安全？ 我们知道，HashMa
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -771,7 +776,7 @@
     <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2023 dc
+            &copy; 2024 dc
             <br />
             Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
                 href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
