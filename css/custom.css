@@ -189,13 +189,24 @@ p {
 @font-face {
   font-family: "仓耳兰楷";
   src: url("/fonts/仓耳兰楷.ttf") format("truetype");
+}
 
+@font-face {
+  font-family: "仓耳雅宋";
+  src: url("/fonts/仓耳雅宋.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "仓耳阳明体";
+  src: url("/fonts/仓耳阳明体.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "仿宋";
+  src: url("/fonts/仿宋.ttf") format("truetype");
 }
 
 
 #header-inner {
-  font-family: fangsong;
-}
-.article-entry{
-  font-family: 仓耳兰楷;
+  font-family: 仿宋;
 }
