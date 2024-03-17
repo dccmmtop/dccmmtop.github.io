@@ -186,6 +186,16 @@ p {
   border-radius: 13px;
 }
 
+@font-face {
+  font-family: "仓耳兰楷";
+  src: url("/fonts/仓耳兰楷.ttf") format("truetype");
+
+}
+
+
 #header-inner {
   font-family: fangsong;
+}
+.article-entry{
+  font-family: 仓耳兰楷;
 }
