@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/springboot%E6%95%B4%E5%90%88rocketmq/">SpringBoot整合RocketMQ</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/springboot%E6%95%B4%E5%90%88rocketmq/" class="article-date">
+                        <time datetime='2023-05-16T07:53:08.000&#43;00:00' itemprop="datePublished">2023-05-16</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    SpringBoot整合RocketMQ使用非常简单，下面是一个简单的例子，作为备忘： 完整项目代码： https://github.com/dccmmtop/springBootRocketMQ 项目目录结构 依赖 &laquo;&laquo;&laquo;&lt; HEAD ======= 259748c5d94d9dc096c2c8ea1a2f98cc9cf7c13a &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org.apache.rocketmq&lt;/groupId&gt; &lt;artifactId&gt;rocketmq-spring-boot-starter&lt;/artifactId&gt; &lt;version&gt;2.1.1&lt;/version&gt; &lt;exclusions&gt; &lt;exclusion&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;exclusion&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-core&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;exclusion&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;/exclusions&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;version&gt;2.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;version&gt;2.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependencies&gt; 配置类 ExtRocketMQTemplate package com.roy.rocketmq.config;
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rocketmq">RocketMQ
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/rocketmq%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">RocketMQ 的介绍和基本使用</a></h1>
                 </header>
                 
@@ -634,45 +673,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E5%B9%B4%E8%AE%B0">年记
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E5%A4%87%E5%BF%98/">常用工具备忘</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E5%A4%87%E5%BF%98/" class="article-date">
-                        <time datetime='2022-12-30T14:42:18.000&#43;00:00' itemprop="datePublished">2022-12-30</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    查看项目依赖 gradle: gradle dependencies maven: mvn dependency:tree 排除依赖 不需要某个依赖或者需要替换掉某依赖时，就需要把这个依赖排除: 以Spring Boot的Web起步依赖为例，它传递依赖了Jackson JSON库。如果你正在构建一个生产或消
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
                             </a>
                         </li>
                         

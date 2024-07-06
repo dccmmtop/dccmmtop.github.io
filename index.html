@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="./posts/%E4%BB%A3%E7%90%86/">js中代理</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="./posts/%E4%BB%A3%E7%90%86/" class="article-date">
+                        <time datetime='2024-07-04T21:34:35.000&#43;00:00' itemprop="datePublished">2024-07-04</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    代理原对象的 get 方法 // 代理 const target = { id: &#34;target_id&#34;, name: &#34;target_name&#34;, }; const handler = { get(origin, property, receiver) { // 原始对象 (target) console.log(origin === target); // 访问的属性 console.log(property); // 目标对象 console.log(receiver === proxy); // 原对象的属性 + ：proxy return origin[property] + &#34;:proxy&#34;; }, }; const proxy = new Proxy(target, handler); // 访问属性时回出发 get() 方法 console.log(proxy.name); 捕获器不变式 不可
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/js">js
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="./posts/%E4%BA%B2%E5%AF%86%E5%85%B3%E7%B3%BB/">亲密关系</a></h1>
                 </header>
                 
@@ -634,45 +673,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/linux">linux
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="./posts/springboot%E6%95%B4%E5%90%88rocketmq/">SpringBoot整合RocketMQ</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="./posts/springboot%E6%95%B4%E5%90%88rocketmq/" class="article-date">
-                        <time datetime='2023-05-16T07:53:08.000&#43;00:00' itemprop="datePublished">2023-05-16</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    SpringBoot整合RocketMQ使用非常简单，下面是一个简单的例子，作为备忘： 完整项目代码： https://github.com/dccmmtop/springBootRocketMQ 项目目录结构 依赖 &laquo;&laquo;&laquo;&lt; HEAD ======= 259748c5d94d9dc096c2c8ea1a2f98cc9cf7c13a &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org.apache.rocketmq&lt;/groupId&gt; &lt;artifactId&gt;rocketmq-spring-boot-starter&lt;/artifactId&gt; &lt;version&gt;2.1.1&lt;/version&gt; &lt;exclusions&gt; &lt;exclusion&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;exclusion&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-core&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;exclusion&gt; &lt;groupId&gt;org.springframework&lt;/groupId&gt; &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt; &lt;/exclusion&gt; &lt;/exclusions&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;version&gt;2.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt; &lt;version&gt;2.1.6.RELEASE&lt;/version&gt; &lt;/dependency&gt; &lt;dependencies&gt; 配置类 ExtRocketMQTemplate package com.roy.rocketmq.config;
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rocketmq">RocketMQ
                             </a>
                         </li>
                         

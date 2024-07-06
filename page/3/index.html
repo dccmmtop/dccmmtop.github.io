@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E5%A4%87%E5%BF%98/">常用工具备忘</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E5%A4%87%E5%BF%98/" class="article-date">
+                        <time datetime='2022-12-30T14:42:18.000&#43;00:00' itemprop="datePublished">2022-12-30</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    查看项目依赖 gradle: gradle dependencies maven: mvn dependency:tree 排除依赖 不需要某个依赖或者需要替换掉某依赖时，就需要把这个依赖排除: 以Spring Boot的Web起步依赖为例，它传递依赖了Jackson JSON库。如果你正在构建一个生产或消
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/spring">spring
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/aop%E7%9A%84%E4%BD%BF%E7%94%A8/">AOP 的使用</a></h1>
                 </header>
                 
@@ -649,45 +688,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/hidden">hidden
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/">线程池原理</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/" class="article-date">
-                        <time datetime='2022-10-20T09:52:20.000&#43;00:00' itemprop="datePublished">2022-10-20</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    ThreadPoolExecute 使用示例 public class User { public static void main(String[] args) { ThreadPoolExecutor executor = new ThreadPoolExecutor(2,10,60, TimeUnit.SECONDS,new ArrayBlockingQueue&lt;Runnable&gt;(10)); for(int i =0 ;i &lt; 20; i ++){ executor.execute(new Task(i)); } executor.shutdown(); } } class Task implements Runnable { int i; public Task(int i ) { this.i = i; } @Override public void run() { System.out.println(new Date() + &#34;:&#34;+ i + &#34;:&#34; + Thread.currentThread().getName()); try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); } } } 先使用构造方法生成一个线程池对象，然后使用 execute
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
                             </a>
                         </li>
                         
