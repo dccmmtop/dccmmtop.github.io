@@ -16,7 +16,7 @@
       <link>https://dccmmtop.github.io/posts/%E4%BB%A3%E7%90%86/</link>
       <pubDate>Thu, 04 Jul 2024 21:34:35 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/%E4%BB%A3%E7%90%86/</guid>
-      <description>代理原对象的 get 方法 // 代理 const target = { id: &amp;#34;target_id&amp;#34;, name: &amp;#34;target_name&amp;#34;, }; const handler = { get(origin, property, receiver) { // 原始对象 (target) console.log(origin === target); // 访问的属性 console.log(property); // 目标对象 console.log(receiver === proxy); // 原对象的属性 + ：proxy return origin[property] + &amp;#34;:proxy&amp;#34;; }, }; const proxy = new Proxy(target, handler); // 访问属性时回出发 get() 方法 console.log(proxy.name); 捕获器不变式 不可</description>
+      <description>代理原对象的 get 方法 捕获器不变式 可撤销代理 十三种捕获器 1. get() 2. set() 3. has 捕获器 4. defineProperty() 捕获器 5. getOwnPropertyDescriptor 6. deleteProperty() 7. ownKeys() 8. getPrototypeOf() 9. setPrototypeOf() 10. isExtensible() 11. preventExtensions() 12. apply() 13. construct() 常见代理使用场景 跟踪属性访问 隐藏属性 属性验证 构造函数参数验证 数据绑定 代理原对象的 get 方</description>
     </item>
     <item>
       <title>亲密关系</title>
