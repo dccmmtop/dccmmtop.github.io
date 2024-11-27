@@ -9,8 +9,15 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Thu, 04 Jul 2024 21:34:35 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 09 Jul 2024 07:25:41 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>js 函数</title>
+      <link>https://dccmmtop.github.io/posts/js%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Tue, 09 Jul 2024 07:25:41 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/js%E5%87%BD%E6%95%B0/</guid>
+      <description>js 中的函数，既不关心参数个数，也不关心参数类型 函数的参数在内部表现为一个数组。函数被调用时总会接收一个数组，但函数并不关心这个数组中包含什么。如果数组中什么也没有，那没问题；如果数组的元素超出了要求，</description>
+    </item>
     <item>
       <title>js中代理</title>
       <link>https://dccmmtop.github.io/posts/%E4%BB%A3%E7%90%86/</link>

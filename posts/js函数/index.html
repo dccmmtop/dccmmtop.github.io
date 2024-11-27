@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>js 函数 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="js 函数" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/js%E5%87%BD%E6%95%B0/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.120.4">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">js 函数</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/js%E5%87%BD%E6%95%B0/" class="article-date">
+                <time datetime='2024-07-09T07:25:41.000&#43;00:00' itemprop="datePublished">2024-07-09</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <p>js 中的函数，<strong>既不关心参数个数，也不关心参数类型</strong></p>
+<blockquote>
+<p>函数的参数在内部表现为一个数组。函数被调用时总会接收一个数组，但函数并不关心这个数组中包含什么。如果数组中什么也没有，那没问题；如果数组的元素超出了要求，那也没问题</p>
+</blockquote>
+<h2 id="arguments">arguments</h2>
+<p>在使用function关键字定义（非箭头）函数时，可以在函数内部访问arguments对象，从中取得传进来的每个参数值。<br>
+<strong>箭头函数不行</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> doAdd() {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (arguments.length <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">1</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> arguments[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">10</span>;
+</span></span><span style="display:flex;"><span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (arguments.length <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">2</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> arguments[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">+</span> arguments[<span style="color:#bd93f9">1</span>];
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>console.log(doAdd(<span style="color:#bd93f9">1</span>)); <span style="color:#6272a4">//11
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>console.log(doAdd(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>)); <span style="color:#6272a4">//3
+</span></span></span></code></pre></div><h3 id="参数名与arguments">参数名与arguments</h3>
+<p>两者可以同时使用，并且绑定，同步发生变化</p>
+<blockquote>
+<p>它们在内存中还是分开的，只不过会保持同步而已</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> doAdd(num1, num2) {
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;num1: &#34;</span> <span style="color:#ff79c6">+</span> num1);
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;num1: &#34;</span> <span style="color:#ff79c6">+</span> arguments[<span style="color:#bd93f9">0</span>]);
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;num2: &#34;</span> <span style="color:#ff79c6">+</span> num2);
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;num2: &#34;</span> <span style="color:#ff79c6">+</span> arguments[<span style="color:#bd93f9">1</span>]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  num1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10</span>;
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;num1_change: &#34;</span> <span style="color:#ff79c6">+</span> num1); <span style="color:#6272a4">//10
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  console.log(<span style="color:#f1fa8c">&#34;num1_change: &#34;</span> <span style="color:#ff79c6">+</span> arguments[<span style="color:#bd93f9">0</span>]); <span style="color:#6272a4">//10
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>  arguments[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span>;
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;num2_change: &#34;</span> <span style="color:#ff79c6">+</span> num2); <span style="color:#6272a4">//20
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  console.log(<span style="color:#f1fa8c">&#34;num2_change: &#34;</span> <span style="color:#ff79c6">+</span> arguments[<span style="color:#bd93f9">1</span>]); <span style="color:#6272a4">//20
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>doAdd(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>);
+</span></span></code></pre></div><p><strong>arguments 只和实际传入的参数绑定，与声明时参数个数无关</strong></p>
+<h2 id="没有重载">没有重载</h2>
+<p>同名函数，后定义覆盖先定义的</p>
+<h2 id="参数默认值">参数默认值</h2>
+<p>在 ES5.1 之前，没有默认值的实现，需要在函数中判断参数是否等于 undefined, 然后手动赋值</p>
+<p>ES6 之后，支持定义默认值参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> say(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;dc&#34;</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">`你好 </span><span style="color:#f1fa8c">${</span>name<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>console.log(say());
+</span></span></code></pre></div><h3 id="使用函数返回值做默认值">使用函数返回值做默认值</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> randNum() {
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">&#34;获取随机数....&#34;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">Math</span>.floor(<span style="color:#8be9fd;font-style:italic">Math</span>.random() <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">10</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> say(name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;dc&#34;</span>, num <span style="color:#ff79c6">=</span> randNum()) {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">`你好 </span><span style="color:#f1fa8c">${</span>name<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> </span><span style="color:#f1fa8c">${</span>num<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>console.log(say(<span style="color:#f1fa8c">&#34;dch&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// undefined 占位，name 仍然使用默认值，
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// num 使用确定值，randNum()不会调用
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>console.log(say(<span style="color:#ff79c6">undefined</span>,<span style="color:#bd93f9">1</span>)); <span style="color:#6272a4">//你好 dc 1
+</span></span></span></code></pre></div><h2 id="参数的扩展与收集">参数的扩展与收集</h2>
+<h3 id="扩展">扩展</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> sum() {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arguments.length; i<span style="color:#ff79c6">++</span>) {
+</span></span><span style="display:flex;"><span>    sum <span style="color:#ff79c6">+=</span> arguments[i];
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">let</span> value <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>console.log(sum(...value));
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 扩展参数前后仍然可以使用参数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>console.log(sum(<span style="color:#bd93f9">1</span>,...value,<span style="color:#bd93f9">2</span>));
+</span></span></code></pre></div><h3 id="收集">收集</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> sum(...values) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 把传进来的参数封装成一个数组到 values 中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> values.reduce((x, y) =&gt; x <span style="color:#ff79c6">+</span> y, <span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>console.log(sum(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>));
+</span></span></code></pre></div><h2 id="函数内部">函数内部</h2>
+<h3 id="callee">callee</h3>
+<p>arguments对象其实还有一个callee属性，是一个指向arguments对象所在函数的指针，其用法：<br>
+阶乘算法实现1：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> factorial(num) {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (num <span style="color:#ff79c6">&lt;=</span> <span style="color:#bd93f9">1</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> num <span style="color:#ff79c6">*</span> factorial(num <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>阶乘算法实现2：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> factorial(num) {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (num <span style="color:#ff79c6">&lt;=</span> <span style="color:#bd93f9">1</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> num <span style="color:#ff79c6">*</span> arguments.callee(num <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>算法2 函数内部不使用方法名，而是使用函数指针，避免了函数被覆盖而导致的算法失效</p>
+<h3 id="this">this</h3>
+<ul>
+<li>在标准函数中，this是方法调用的上下文对象</li>
+<li>在箭头函数中，this定义箭头函数的上下文对象</li>
+</ul>
+<p>标准函数:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> sayColor() {
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#ff79c6">this</span>.color);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">window</span> <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span>  color<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;red&#34;</span>,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">window</span>.sayColor <span style="color:#ff79c6">=</span> sayColor;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">window</span>.sayColor(); <span style="color:#6272a4">// red
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>o <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span>  color<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;blue&#34;</span>,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>o.sayColor <span style="color:#ff79c6">=</span> sayColor;
+</span></span><span style="display:flex;"><span>o.sayColor(); <span style="color:#6272a4">// blue
+</span></span></span></code></pre></div><p>箭头函数:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">let</span> sayColor <span style="color:#ff79c6">=</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 顶层，this 是 window
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  console.log(<span style="color:#ff79c6">this</span>.color);
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>Red <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span>  color<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;red&#34;</span>,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>Red.sayColor <span style="color:#ff79c6">=</span> sayColor;
+</span></span><span style="display:flex;"><span>Red.sayColor(); <span style="color:#6272a4">// undefined
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>Blue <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span>  color<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;blue&#34;</span>,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Blue.sayColor <span style="color:#ff79c6">=</span> sayColor;
+</span></span><span style="display:flex;"><span>Blue.sayColor(); <span style="color:#6272a4">// undefined
+</span></span></span></code></pre></div><h3 id="caller">caller</h3>
+<p>返回函数的调用者</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> inner() {
+</span></span><span style="display:flex;"><span>  console.log(inner.caller);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> out() {
+</span></span><span style="display:flex;"><span>  inner();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> out1() {
+</span></span><span style="display:flex;"><span>  inner();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>out(); <span style="color:#6272a4">// [Function: out]
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>out1(); <span style="color:#6272a4">// [Function: out1]
+</span></span></span></code></pre></div><h3 id="newtarget">new.target</h3>
+<p>ECMAScript 6新增了检测函数是否使用new关键字调用的属性: new.target<br>
+如果函数是正常调用的，则new.target的值是undefined；如果是使用new关键字调用的，则new.target将引用被调用的构造函数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">function</span> King() {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">new</span>.target) <span style="color:#ff79c6">throw</span> <span style="color:#f1fa8c">&#34;只能通过new 初始化&#34;</span>;
+</span></span><span style="display:flex;"><span>  console.log(<span style="color:#f1fa8c">`Success </span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">new</span>.target<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">new</span> King(); <span style="color:#6272a4">// Succss, [Function: King]
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>King(); <span style="color:#6272a4">//  只能通过new 初始化
+</span></span></span></code></pre></div><blockquote>
+<p>联系方式：dccmmtop@foxmail.com</p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/js">js
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    
+    <a href="../../posts/%E4%BB%A3%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">js中代理&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2024 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

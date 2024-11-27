@@ -102,6 +102,50 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%91%A8%E6%9C%9F%E6%80%A7%E4%BB%BB%E5%8A%A1%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86/">定时任务和周期性任务线程池的应用及原理</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E5%92%8C%E5%91%A8%E6%9C%9F%E6%80%A7%E4%BB%BB%E5%8A%A1%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%BA%94%E7%94%A8%E5%8F%8A%E5%8E%9F%E7%90%86/" class="article-date">
+                        <time datetime='2022-10-24T08:55:22.000&#43;00:00' itemprop="datePublished">2022-10-24</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    在 线程池的应用 一文中，讲解了常见几种线程池的使用方法与差别，今天再深入学一下其中定时任务线程池的用法和原理。 定时任务线程池 public class User { public static void main(String[] args) { // 创建一个定时任务线程池 ScheduledExecutorService executor =Executors.newScheduledThreadPool(1); // 提交任务，1 秒后开始执行 executor.schedule(new
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/hidden">hidden
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8E%9F%E7%90%86/">线程池原理</a></h1>
                 </header>
                 
@@ -629,45 +673,6 @@
                     <p>
                         
                     jps 查看启动的 java 进程 jmap 实例个数与内存占用 看内存信息，实例个数以及占用内存大小 [C is a char[]，[S is a short[]，[I is a int[]，[B is a byte[]，[[I is a int[][] 堆信息 jump -heap 17680 导出堆内存占用信
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/">G1垃圾收集器</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/g1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" class="article-date">
-                        <time datetime='2022-09-10T08:58:04.000&#43;00:00' itemprop="datePublished">2022-09-10</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    G1 (Garbage-First) 是一款面向服务器的垃圾收集器，主要针对多颗处理器及大容量内存的机器，具备极短的 GC 停顿时间和高吞吐量的特征. G1 堆内存划分 G1 不像 CMS 那样，老年代和年轻代不再有明显的区分。而是将内存分为很多和区域（Reg
                     </p>
                     
                 </div>
