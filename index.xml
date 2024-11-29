@@ -9,8 +9,15 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Tue, 09 Jul 2024 07:25:41 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 24 Oct 2024 08:07:20 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dart 学习笔记</title>
+      <link>https://dccmmtop.github.io/posts/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Thu, 24 Oct 2024 08:07:20 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description>字符串 多行字符串 String str1 = &amp;#34;&amp;#34;&amp;#34; 你好 dart &amp;#34;&amp;#34;&amp;#34;; print(str1); 字符串拼接 String str2 = &amp;#34;你好&amp;#34;; String str3 = &amp;#34;dart&amp;#34;; print(&amp;#34;$str2 $str3&amp;#34;); 列表 指定类型创建 var l1=&amp;lt;String&amp;gt;[&amp;#34;1&amp;#34;,&amp;#34;2&amp;#34;] var l2=&amp;lt;int&amp;gt;[1,2,3]; 移除 new List（） 新版本不支持 new 创建列表 List.filled 创建固定长度列表 // 创建长度是 5，每个元素的值是</description>
+    </item>
     <item>
       <title>js 函数</title>
       <link>https://dccmmtop.github.io/posts/js%E5%87%BD%E6%95%B0/</link>
