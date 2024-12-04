@@ -102,6 +102,89 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/">MySQL事务和锁详解</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/mysql%E4%BA%8B%E5%8A%A1%E5%92%8C%E9%94%81/" class="article-date">
+                        <time datetime='2022-08-03T23:16:55.000&#43;00:00' itemprop="datePublished">2022-08-03</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    数据库一般都会并发执行多个事务，多个事务可能会并发的对相同的一批数据进行增删改查操作，可能就会导致我们说的脏写、脏读、不可重复读、幻读这些问题。 这些问题的本质都是数据库的多事务并发问题，为了解决多事务
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/">索引优化</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96/" class="article-date">
+                        <time datetime='2022-08-03T17:10:57.000&#43;00:00' itemprop="datePublished">2022-08-03</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    CREATE TABLE `employees` ( `id` int(11) NOT NULL AUTO_INCREMENT, `name` varchar(24) NOT NULL DEFAULT &#39;&#39; COMMENT &#39;姓名&#39;, `age` int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;年龄&#39;, `position` varchar(20) NOT NULL DEFAULT &#39;&#39; COMMENT &#39;职位&#39;, `hire_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT &#39;入职时间&#39;, PRIMARY KEY (`id`), KEY `idx_name_age_position` (`name`,`age`,`position`) USING BTREE )
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/%E7%B4%A2%E5%BC%95">索引
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84/">MySQL内部结构</a></h1>
                 </header>
                 
@@ -610,84 +693,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/powershell">powershell
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/awk%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/">awk分组统计</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/awk%E5%88%86%E7%BB%84%E7%BB%9F%E8%AE%A1/" class="article-date">
-                        <time datetime='2022-05-10T15:51:00.000&#43;00:00' itemprop="datePublished">2022-05-10</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    Shell学习笔记：awk实现group by分组统计功能 日常部分数据以 txt 的文件格式提供，为避免入库之后再进行统计的麻烦，故学习 shell 进行处理，减少工作量。 1.样例数据 test.txt YD5Gxxx|6618151|68
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/awk">awk
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/golnag%E6%8F%92%E4%BB%B6%E5%BC%8F%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E7%A7%8D%E6%A1%88%E4%BE%8B/">golnag插件式开发的一种案例</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/golnag%E6%8F%92%E4%BB%B6%E5%BC%8F%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E7%A7%8D%E6%A1%88%E4%BE%8B/" class="article-date">
-                        <time datetime='2022-05-08T22:06:51.000&#43;00:00' itemprop="datePublished">2022-05-08</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    OCP：开闭原则 软件的5大设计原则 “SOLID” 原则,其中之一就是 OCP(开闭原则) 该设计原则是由Bertrand Meyer在20世纪80年代大力推广的，其核心要素是：如果软件系统想要更容易被改变，那
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
                             </a>
                         </li>
                         

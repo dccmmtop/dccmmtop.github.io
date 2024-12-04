@@ -102,6 +102,84 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/">Callable与Future的应用</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/callable%E4%B8%8Efuture%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
+                        <time datetime='2022-10-29T17:15:31.000&#43;00:00' itemprop="datePublished">2022-10-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    为什么需要 Callable 无论是继承 Thread 类，还是实现 Runnale 接口，或者使用线程池的 execute 方法去执行一个异步任务，都无法将这个任务的返回值带出来，以 Runnale 接口为例： /** * @since JDK1.0 */ @FunctionalInterface public interface Runnable { public abstract void run(); } 可以看到 run() 方法没有参数，没有返回值，没
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bforkjoin%E6%A1%86%E6%9E%B6/">并发编程之 ForkJoin 框架</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B9%8Bforkjoin%E6%A1%86%E6%9E%B6/" class="article-date">
+                        <time datetime='2022-10-29T15:24:32.000&#43;00:00' itemprop="datePublished">2022-10-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    什么是 Fork/Join 框架 Fork/Join 是从 java7 开始提供的并行执行任务的框架，是一个把大任务分割成若干个小任务，最终汇总每个小任务的结果，得到大任务结果的框架. 如下图： Fork/Join 的特性 ForJoinPool 不是为了替代 ExecutorService, 而是它的补充，在一些可分割的大任务场
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/idea%E9%85%8D%E7%BD%AE%E5%92%8C%E6%8F%92%E4%BB%B6%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E7%9A%84%E6%96%B9%E6%B3%95/">idea配置和插件导入导出的方法</a></h1>
                 </header>
                 
@@ -600,89 +678,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/">java常量池</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/java%E5%B8%B8%E9%87%8F%E6%B1%A0/" class="article-date">
-                        <time datetime='2022-09-15T10:05:51.000&#43;00:00' itemprop="datePublished">2022-09-15</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    Class常量池 Class常量池可以理解为class文件中的资源仓库，class 文件中除了包含类信息，方法，字段，接口信息之外还有常量池信息，用于存放编译期生成的各种字面量和符号引用。 如下: 常量池主要
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E5%8E%9F%E5%AD%90%E6%80%A7%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98/">并发编程中的可见性,原子性，有序性问题</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%8F%AF%E8%A7%81%E6%80%A7%E5%8E%9F%E5%AD%90%E6%80%A7%E6%9C%89%E5%BA%8F%E6%80%A7%E9%97%AE%E9%A2%98/" class="article-date">
-                        <time datetime='2022-09-15T08:16:56.000&#43;00:00' itemprop="datePublished">2022-09-15</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    java内存模型 （JMM） 这种模型和 jvm 中的堆不同， JMM 是抽象概念，不真实存在。它是一种规范，指定了程序中的各变量的访问方式 主内存 JMM 规定所有变量都存放在主内存，主内存是所有线程共享的，但是线程的操作在线程
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
-                            </a>
-                        </li>
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/hidden">hidden
                             </a>
                         </li>
                         

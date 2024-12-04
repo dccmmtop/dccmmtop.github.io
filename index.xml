@@ -9,8 +9,22 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Thu, 24 Oct 2024 08:07:20 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 04 Dec 2024 22:04:46 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>图片组件</title>
+      <link>https://dccmmtop.github.io/posts/%E5%9B%BE%E7%89%87%E7%BB%84%E4%BB%B6/</link>
+      <pubDate>Wed, 04 Dec 2024 22:04:46 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E5%9B%BE%E7%89%87%E7%BB%84%E4%BB%B6/</guid>
+      <description>从网络加载图片 child: Image.network(&amp;#34;https://profile-avatar.csdnimg.cn/cbaf0093c7ea46a89fd3780f1a250fbe_a141210104.jpg&amp;#34;), 默认保持比例缩放： class MyApp extends StatelessWidget { const MyApp({super.key}); @override Widget build(BuildContext context) { return Center( child: Container( width: 30, height: 300, color: Colors.green, child: Image.network(&amp;#34;https://profile-avatar.csdnimg.cn/cbaf0093c7ea46a89fd3780f1a250fbe_a141210104.jpg&amp;#34;), ), ); } } 效果: 常用属性 对齐方式, alignment 设置放在父容器中的位置, 默认居中 Image.network( &amp;#34;https://profile-avatar.csdnimg.cn/cbaf0093c7ea46a89fd3780f1a250fbe_a141210104.jpg&amp;#34;, // 父容器左顶点 alignment: Alignment.topLeft) 缩放 scale Image.network( &amp;#34;https://profile-avatar.csdnimg.cn/cbaf0093c7ea46a89fd3780f1a250fbe_a141210104.jpg&amp;#34;, // 缩小2倍 scale: 2) 平铺</description>
+    </item>
+    <item>
+      <title>Container 使用</title>
+      <link>https://dccmmtop.github.io/posts/container%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Mon, 02 Dec 2024 22:50:04 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/container%E4%BD%BF%E7%94%A8/</guid>
+      <description>Container 它可以包含其他 Widget，并允许你控制其布局、大小、边距、填充、装饰等属性 Container 有许多属性，主要包括： alignment：设置子 Widget 的对齐方式。 width 和 height：设置容器的宽度和高度。 padding：设</description>
+    </item>
     <item>
       <title>Dart 学习笔记</title>
       <link>https://dccmmtop.github.io/posts/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
