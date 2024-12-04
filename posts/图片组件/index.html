@@ -112,7 +112,29 @@
             
         </div>
         <div class="article-entry" itemprop="articleBody">
-            <h2 id="从网络加载图片">从网络加载图片</h2>
+            <ul>
+<li><a href="#%E4%BB%8E%E7%BD%91%E7%BB%9C%E5%8A%A0%E8%BD%BD%E5%9B%BE%E7%89%87">从网络加载图片</a>
+<ul>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7">常用属性</a>
+<ul>
+<li><a href="#%E5%AF%B9%E9%BD%90%E6%96%B9%E5%BC%8F-alignment">对齐方式, alignment</a></li>
+<li><a href="#%E7%BC%A9%E6%94%BE--scale">缩放  scale</a></li>
+<li><a href="#%E5%B9%B3%E9%93%BA%E6%96%B9%E5%BC%8F-fit">平铺方式 fit</a></li>
+<li><a href="#%E9%87%8D%E5%A4%8D%E6%96%B9%E5%BC%8F-repeat">重复方式 repeat</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9C%86%E5%BD%A2%E5%9B%BE%E7%89%87">圆形图片</a>
+<ul>
+<li><a href="#container-%E6%96%B9%E5%BC%8F">Container 方式</a></li>
+<li><a href="#clipoval-%E6%96%B9%E5%BC%8F">ClipOval 方式</a></li>
+<li><a href="#clipoval-%E4%BB%8B%E7%BB%8D">ClipOval 介绍</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%AF%BB%E5%8F%96%E6%9C%AC%E5%9C%B0%E5%9B%BE%E7%89%87">读取本地图片</a></li>
+</ul>
+<h2 id="从网络加载图片">从网络加载图片</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">child:</span> Image.network(<span style="color:#f1fa8c">&#34;https://profile-avatar.csdnimg.cn/cbaf0093c7ea46a89fd3780f1a250fbe_a141210104.jpg&#34;</span>),
 </span></span></code></pre></div><p>默认保持比例缩放：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyApp</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
