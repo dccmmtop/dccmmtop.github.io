@@ -23,7 +23,7 @@
       <link>https://dccmmtop.github.io/posts/container%E4%BD%BF%E7%94%A8/</link>
       <pubDate>Mon, 02 Dec 2024 22:50:04 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
       <guid>https://dccmmtop.github.io/posts/container%E4%BD%BF%E7%94%A8/</guid>
-      <description>Container 它可以包含其他 Widget，并允许你控制其布局、大小、边距、填充、装饰等属性 Container 有许多属性，主要包括： alignment：设置子 Widget 的对齐方式。 width 和 height：设置容器的宽度和高度。 padding：设</description>
+      <description>Container 圆角 阴影 渐变 线性渐变 圆形渐变 扫描渐变 位移 水平方向或者垂直方向移动 旋转 缩放 完整示例 Container 它可以包含其他 Widget，并允许你控制其布局、大小、边距、填充、装饰等属性 Container 有许多属性，主要包括： alignmen</description>
     </item>
     <item>
       <title>Dart 学习笔记</title>
