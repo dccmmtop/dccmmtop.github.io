@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/go%E4%B8%8Esql/">Go与SQL</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/go%E4%B8%8Esql/" class="article-date">
+                        <time datetime='2021-11-13T22:21:13.000&#43;00:00' itemprop="datePublished">2021-11-13</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    连接数据库 sq1.DB结构是一个数据库句柄（handle），它代表的是一个包含了零个或任意多个数据库连接的连接池（pool），这个连接池由sql包管理。程序可以通过调用Open函数，并将相应的数据库驱
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/sql%E4%BC%98%E5%8C%96/">SQL优化</a></h1>
                 </header>
                 
@@ -633,45 +672,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/http">HTTP
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E8%AE%BE%E7%BD%AE%E5%93%8D%E5%BA%94%E9%A6%96%E9%83%A8/">设置响应首部及响应体示例</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E8%AE%BE%E7%BD%AE%E5%93%8D%E5%BA%94%E9%A6%96%E9%83%A8/" class="article-date">
-                        <time datetime='2021-10-26T22:54:48.000&#43;00:00' itemprop="datePublished">2021-10-26</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    返回体 func writeExample(w http.ResponseWriter, request *http.Request) { // 没有手动设置响应类型，会通过检测响应的前 512 个字节自动判断响应类型 // 这里是 Content-Type: text/html; charset=utf-8 str:= `&lt;html&gt; &lt;head&gt;&lt;title&gt;Go Web Programming&lt;/title&gt;&lt;/head&gt; &lt;body&gt;&lt;hl&gt;Hello World&lt;/hl&gt;&lt;/body&gt; &lt;/html&gt;` w.Write([]byte(str)) } 设置状态码 func writeHeaderExample(w http.ResponseWriter, request *http.Request) { // 设置HTTP 状态码, WriteHeader 方法名有误导，只能设置状态码，而不是
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
                             </a>
                         </li>
                         
