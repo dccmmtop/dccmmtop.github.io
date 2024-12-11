@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>列表组件 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="列表组件" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.120.4">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">列表组件</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6/" class="article-date">
+                <time datetime='2024-12-11T08:19:00.000&#43;00:00' itemprop="datePublished">2024-12-11</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <h1 id="listview-常用属性讲解">ListView 常用属性讲解</h1>
+<p><code>ListView</code> 是 Flutter 中用于展示滚动列表的一个非常常用的小部件。以下是一些常用的 <code>ListView</code> 属性及其说明：</p>
+<h2 id="1-children">1. children</h2>
+<ul>
+<li>
+<p><strong>类型</strong>: <code>List&lt;Widget&gt;</code></p>
+</li>
+<li>
+<p><strong>说明</strong>: 用于直接传入一个包含多个子小部件的列表。适合子项数量较少的情况。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span>ListView(
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">children:</span> <span style="color:#ff79c6">&lt;</span>Widget<span style="color:#ff79c6">&gt;</span>[
+</span></span><span style="display:flex;"><span>    ListTile(<span style="color:#8be9fd;font-style:italic">title:</span> Text(<span style="color:#f1fa8c">&#39;Item 1&#39;</span>)),
+</span></span><span style="display:flex;"><span>    ListTile(<span style="color:#8be9fd;font-style:italic">title:</span> Text(<span style="color:#f1fa8c">&#39;Item 2&#39;</span>)),
+</span></span><span style="display:flex;"><span>    ListTile(<span style="color:#8be9fd;font-style:italic">title:</span> Text(<span style="color:#f1fa8c">&#39;Item 3&#39;</span>)),
+</span></span><span style="display:flex;"><span>  ],
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div></li>
+</ul>
+<h2 id="2-builder">2. builder</h2>
+<ul>
+<li>类型: IndexedWidgetBuilder</li>
+<li>说明: 用于懒加载子项，适合子项数量较多的情况。只有在需要时才会构建可见的子项。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span>ListView.builder(
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">itemCount:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">itemBuilder:</span> (context, index) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> ListTile(<span style="color:#8be9fd;font-style:italic">title:</span> Text(<span style="color:#f1fa8c">&#39;Item </span><span style="color:#f1fa8c">$</span>index<span style="color:#f1fa8c">&#39;</span>));
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="3-separatorbuilder">3. separatorBuilder</h2>
+<p>说明: 用于在 ListView.separated 中指定分隔符的构建方式。可以用于添加分隔线或间距。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span>ListView.separated(
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">itemCount:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">itemBuilder:</span> (context, index) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> ListTile(<span style="color:#8be9fd;font-style:italic">title:</span> Text(<span style="color:#f1fa8c">&#39;Item </span><span style="color:#f1fa8c">$</span>index<span style="color:#f1fa8c">&#39;</span>));
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">separatorBuilder:</span> (context, index) <span style="color:#ff79c6">=&gt;</span> Divider(),
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="4-scrolldirection">4. scrollDirection</h2>
+<ul>
+<li>类型: Axis</li>
+<li>说明: 用于设置滚动方向，可以是 Axis.vertical（默认）或 Axis.horizontal。</li>
+</ul>
+<h2 id="5-physics">5. physics</h2>
+<ul>
+<li>类型: ScrollPhysics</li>
+<li>说明: 用于控制滚动行为，例如设置为 NeverScrollableScrollPhysics 来禁用滚动。</li>
+</ul>
+<h2 id="6-shrinkwrap">6. shrinkWrap</h2>
+<ul>
+<li>类型: bool</li>
+<li>说明: 指示 ListView 是否应根据子项的大小来计算自身的高度。通常在嵌套滚动视图时使用。</li>
+</ul>
+<h2 id="7-padding">7. padding</h2>
+<ul>
+<li>类型: EdgeInsets</li>
+<li>说明: 用于设置 ListView 的内边距。</li>
+</ul>
+<h2 id="8-itemextent">8. itemExtent</h2>
+<ul>
+<li>类型: double</li>
+<li>说明: 用于设置每个列表项的高度，适合高度固定的列表以提高性能。</li>
+</ul>
+<h1 id="listtile-使用">ListTile 使用</h1>
+<p>ListTile 是 Flutter 中用于构建列表项的一个小部件。它通常用于在 ListView 或其他列表结构中显示一个条目。ListTile 提供了一种标准化的方式来展示信息，包括标题、副标题、图标等。</p>
+<p>主要属性</p>
+<ul>
+<li>leading:<br>
+用于显示在列表项前面的图标或小部件（如 Icon 或 CircleAvatar）。</li>
+<li>title:<br>
+列表项的主标题，通常是一个 Text 小部件。</li>
+<li>subtitle:<br>
+列表项的副标题，通常也是一个 Text 小部件，可以用于显示额外信息。</li>
+<li>trailing:<br>
+用于显示在列表项后面的图标或小部件，常用于操作按钮或状态指示器。</li>
+<li>onTap:<br>
+点击列表项时执行的回调函数，允许你在用户点击时执行特定操作。</li>
+<li>isThreeLine:<br>
+一个布尔值，指示列表项是否有三行文本（标题、副标题和额外的文本）。</li>
+<li>dense:<br>
+一个布尔值，指示列表项是否应更紧凑地显示。</li>
+</ul>
+<p>使用示例</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span>ListTile(
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">leading:</span> Icon(Icons.album),
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">title:</span> Text(<span style="color:#f1fa8c">&#39;音乐专辑&#39;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">subtitle:</span> Text(<span style="color:#f1fa8c">&#39;艺术家名称&#39;</span>),
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">trailing:</span> Icon(Icons.more_vert),
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">onTap:</span> () {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 执行某个操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  },
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>效果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;package:flutter/material.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() {
+</span></span><span style="display:flex;"><span>  runApp(
+</span></span><span style="display:flex;"><span>    MaterialApp(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">home:</span> Scaffold(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">appBar:</span>
+</span></span><span style="display:flex;"><span>            AppBar(<span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;App Title&#34;</span>), <span style="color:#8be9fd;font-style:italic">backgroundColor:</span> Colors.red),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">body:</span> <span style="color:#8be9fd;font-style:italic">const</span> MyList(),
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyList</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">const</span> MyList({<span style="color:#ff79c6">super</span>.key});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  @override
+</span></span><span style="display:flex;"><span>  Widget build(BuildContext context) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Center(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">child:</span> ListView(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">padding:</span> <span style="color:#8be9fd;font-style:italic">const</span> EdgeInsets.only(<span style="color:#8be9fd;font-style:italic">top:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">children:</span> [
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 设置前图片
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>              <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN1733813355177423YPNX22U.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;外交部:推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">subtitle:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;中方呼吁各方开展建设性对话与合作,共同推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> Divider(),
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>                <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN1733839403962N0OCKJB5ST.jpg&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;日用家电零售11月同比增长74.4%&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> Divider(),
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>              <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN1733793685988EYPIIFO3TV.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;2024中华文化国际传播论坛举行&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">subtitle:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;中方呼吁各方开展建设性对话与合作,共同推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> Divider(),
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>              <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN1733839403877Y0W2V4B91F.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;外交部:推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">subtitle:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;中方呼吁各方开展建设性对话与合作,共同推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> Divider(),
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>              <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN17337944922831E47YQPF4V.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;外交部:推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">subtitle:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;中方呼吁各方开展建设性对话与合作,共同推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> Divider(),
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>              <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN1733843461835Q6SZWKGIS9.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;外交部:推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">subtitle:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;中方呼吁各方开展建设性对话与合作,共同推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> Divider(),
+</span></span><span style="display:flex;"><span>          ListTile(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">leading:</span> Image.network(
+</span></span><span style="display:flex;"><span>              <span style="color:#f1fa8c">&#34;http://www.people.com.cn/NMediaFile/2024/1210/MAIN1733839403914U9M3IAKRAR.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;外交部:推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">subtitle:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;中方呼吁各方开展建设性对话与合作,共同推动国际人权事业健康发展&#34;</span>),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="../../images/2024-12-11-08-30-05.png" alt=""></p>
+<blockquote>
+<p>联系方式: <a href="mailto:dccmmtop@foxmail.com">dccmmtop@foxmail.com</a></p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/flutter">flutter
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    
+    <a href="../../posts/%E5%86%85%E7%BD%AE%E5%9B%BE%E6%A0%87%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%A0%87%E7%9A%84%E4%BD%BF%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">内置图标和自定义图标的使用&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2024 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

@@ -9,8 +9,15 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Mon, 09 Dec 2024 22:32:21 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Dec 2024 08:19:00 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>列表组件</title>
+      <link>https://dccmmtop.github.io/posts/%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6/</link>
+      <pubDate>Wed, 11 Dec 2024 08:19:00 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6/</guid>
+      <description>ListView 常用属性讲解 ListView 是 Flutter 中用于展示滚动列表的一个非常常用的小部件。以下是一些常用的 ListView 属性及其说明： 1. children 类型: List&amp;lt;Widget&amp;gt; 说明: 用于直接传入一个包含多个子小部件的列表。适合子项数量较少的情况。 ListView( children: &amp;lt;Widget&amp;gt;[ ListTile(title: Text(&amp;#39;Item 1&amp;#39;)), ListTile(title: Text(&amp;#39;Item 2&amp;#39;)), ListTile(title: Text(&amp;#39;Item 3&amp;#39;)),</description>
+    </item>
     <item>
       <title>内置图标和自定义图标的使用</title>
       <link>https://dccmmtop.github.io/posts/%E5%86%85%E7%BD%AE%E5%9B%BE%E6%A0%87%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9B%BE%E6%A0%87%E7%9A%84%E4%BD%BF%E7%94%A8/</link>

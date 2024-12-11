@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/bat%E8%84%9A%E6%9C%AC%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8Cexe/">bat脚本后台运行exe</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/bat%E8%84%9A%E6%9C%AC%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8Cexe/" class="article-date">
+                        <time datetime='2022-09-22T14:32:14.000&#43;00:00' itemprop="datePublished">2022-09-22</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    新建start.bat文件，输入如下命令： Set ws = CreateObject(&#34;Wscript.Shell&#34;) ws.run &#34;cmd /c D:/1.exe&#34;,vbhide
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/win">win
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/gc%E6%97%A5%E5%BF%97%E8%AF%A6%E8%A7%A3/">GC日志详解</a></h1>
                 </header>
                 
@@ -629,45 +668,6 @@
                     <p>
                         
                     介绍 BufferPool 之前，先抛出一个问题，每次更新，新增，删除的动作，都会去写磁盘吗？如果是，那样效率会不会很低，如果不是，怎么保证数据不会丢失？ 不会实时写入磁盘 如果每次对数据的操作都要实时同步到硬盘中,那么将要产
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mvcc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">MVCC实现原理</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mvcc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="article-date">
-                        <time datetime='2022-08-07T10:48:12.000&#43;00:00' itemprop="datePublished">2022-08-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    MVCC多版本并发控制机制 在上面博客中介绍了可重复的事务隔离级别下，无法读到其他事务已提交的数据，这个功能就是MVCC(Multi-Version Concurrency Control)来实现的， 对一行数据的读和写两个操作
                     </p>
                     
                 </div>

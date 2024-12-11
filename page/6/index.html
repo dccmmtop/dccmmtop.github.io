@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/mvcc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/">MVCC实现原理</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/mvcc%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/" class="article-date">
+                        <time datetime='2022-08-07T10:48:12.000&#43;00:00' itemprop="datePublished">2022-08-07</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    MVCC多版本并发控制机制 在上面博客中介绍了可重复的事务隔离级别下，无法读到其他事务已提交的数据，这个功能就是MVCC(Multi-Version Concurrency Control)来实现的， 对一行数据的读和写两个操作
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E4%BD%BF%E7%94%A8/">MySQL数据类型的使用</a></h1>
                 </header>
                 
@@ -644,45 +683,6 @@
                     <p>
                         
                     本文采用docker-compose 的方式部署 rabbitMQ集群 docker-compose.yml version: &#34;3&#34; services: rabbitmq: restart: always container_name: rabbitMQ image: rabbitmq:3.7.7-management # 注意 hostname（本地域名）, rabbitMQ集群之间的通信就是靠此寻址的。物理机部署时也可以使用固定IP
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/">RabbitMQ应答队列</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E5%BA%94%E7%AD%94%E9%98%9F%E5%88%97/" class="article-date">
-                        <time datetime='2022-06-27T22:57:24.000&#43;00:00' itemprop="datePublished">2022-06-27</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    生产者在某个队列上等待消费者返回的消息， 这个队列被称为应答队列,RabbitMQ 天生支持应答队列的机制。 什么时候需要应答队列 当一条消息被消费者处理后，需要告知生产者一些信息时，消费者就需要在应答队列上
                     </p>
                     
                 </div>
