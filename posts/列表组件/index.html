@@ -288,6 +288,221 @@
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><img src="../../images/2024-12-11-08-30-05.png" alt=""></p>
+<h1 id="自定义垂直列表组件">自定义垂直列表组件</h1>
+<p>children 中可以放任意组件:</p>
+<ul>
+<li>垂直列表组件无法设置宽度。会根据屏幕自适应</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;package:flutter/material.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() {
+</span></span><span style="display:flex;"><span>  runApp(
+</span></span><span style="display:flex;"><span>    MaterialApp(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">home:</span> Scaffold(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">appBar:</span>
+</span></span><span style="display:flex;"><span>            AppBar(<span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;App Title&#34;</span>), <span style="color:#8be9fd;font-style:italic">backgroundColor:</span> Colors.red),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">body:</span> <span style="color:#8be9fd;font-style:italic">const</span> MyList(),
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyList</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">const</span> MyList({<span style="color:#ff79c6">super</span>.key});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  @override
+</span></span><span style="display:flex;"><span>  Widget build(BuildContext context) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Center(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">child:</span> ListView(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">padding:</span> <span style="color:#8be9fd;font-style:italic">const</span> EdgeInsets.only(<span style="color:#8be9fd;font-style:italic">top:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 可以放任意组件, 垂直列表中，宽度根据屏幕自适应，不能手动设置宽度
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd;font-style:italic">children:</span> [
+</span></span><span style="display:flex;"><span>          Image.network(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://developer.qcloudimg.com/operation/attachment/900005/20241205-9e91b6ad.png&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">400</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">60</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 设置宽度无效
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.red),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">60</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.blue),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">60</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.yellowAccent),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">60</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.blueGrey),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>效果:</strong><br>
+<img src="../../images/2024-12-12-07-57-33.png" alt=""></p>
+<h1 id="自定义水平列表">自定义水平列表</h1>
+<ul>
+<li>水平列表中，如果没有给列表的父容器设置高度，则列表的高度根据屏幕自适应，不能手动设置宽度</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;package:flutter/material.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() {
+</span></span><span style="display:flex;"><span>  runApp(
+</span></span><span style="display:flex;"><span>    MaterialApp(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">home:</span> Scaffold(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">appBar:</span>
+</span></span><span style="display:flex;"><span>            AppBar(<span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;App Title&#34;</span>), <span style="color:#8be9fd;font-style:italic">backgroundColor:</span> Colors.red),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">body:</span> <span style="color:#8be9fd;font-style:italic">const</span> MyList(),
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyList</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">const</span> MyList({<span style="color:#ff79c6">super</span>.key});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  @override
+</span></span><span style="display:flex;"><span>  Widget build(BuildContext context) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> SizedBox(
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 父容器设置高度，控制列表整体的高度
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">220</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">child:</span> ListView(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">scrollDirection:</span> Axis.horizontal,
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">padding:</span> <span style="color:#8be9fd;font-style:italic">const</span> EdgeInsets.only(<span style="color:#8be9fd;font-style:italic">top:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 水平列表中，如果没有给列表的父容器设置高度，则列表的高度根据屏幕自适应，不能手动设置宽度
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd;font-style:italic">children:</span> [
+</span></span><span style="display:flex;"><span>          Image.network(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://developer.qcloudimg.com/operation/attachment/900005/20241205-9e91b6ad.png&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.red),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">// 水平列表设置高度无效
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">420</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.blue),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.yellowAccent),
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Container(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(<span style="color:#8be9fd;font-style:italic">color:</span> Colors.blueGrey),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>效果:</strong><br>
+<img src="../../images/2024-12-12-08-08-39.png" alt=""></p>
+<h1 id="实现水平列表商品效果">实现水平列表商品效果</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;package:flutter/material.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() {
+</span></span><span style="display:flex;"><span>  runApp(
+</span></span><span style="display:flex;"><span>    MaterialApp(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">home:</span> Scaffold(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">appBar:</span>
+</span></span><span style="display:flex;"><span>            AppBar(<span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;App Title&#34;</span>), <span style="color:#8be9fd;font-style:italic">backgroundColor:</span> Colors.red),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">body:</span> <span style="color:#8be9fd;font-style:italic">const</span> MyList(),
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyList</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">const</span> MyList({<span style="color:#ff79c6">super</span>.key});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  @override
+</span></span><span style="display:flex;"><span>  Widget build(BuildContext context) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> SizedBox(
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 父容器设置高度，控制列表整体的高度
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">120</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">child:</span> ListView(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">scrollDirection:</span> Axis.horizontal,
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// padding: const EdgeInsets.only(top: 5),
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 水平列表中，如果没有给列表的父容器设置高度，则列表的高度根据屏幕自适应，不能手动设置宽度
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#8be9fd;font-style:italic">children:</span> [
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> SizedBox(<span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> SizedBox(<span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> SizedBox(<span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> SizedBox(<span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> SizedBox(<span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          <span style="color:#8be9fd;font-style:italic">const</span> SizedBox(<span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">5</span>),
+</span></span><span style="display:flex;"><span>          MyShop(
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;https://img14.360buyimg.com/n0/jfs/t1/226009/21/18660/59607/664f0109Fd05e02d9/6fb2028c374334c7.jpg&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#34;键盘&#34;</span>,
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyShop</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">String</span> imgUrl;
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd">String</span> text;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  MyShop(<span style="color:#ff79c6">this</span>.imgUrl, <span style="color:#ff79c6">this</span>.text, {<span style="color:#ff79c6">super</span>.key});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  @override
+</span></span><span style="display:flex;"><span>  Widget build(BuildContext context) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> Container(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">decoration:</span> <span style="color:#8be9fd;font-style:italic">const</span> BoxDecoration(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">color:</span> Colors.blueGrey,
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">width:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">child:</span> Column(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">children:</span> [
+</span></span><span style="display:flex;"><span>          SizedBox(
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">height:</span> <span style="color:#bd93f9">100</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#8be9fd;font-style:italic">child:</span> Image.network(
+</span></span><span style="display:flex;"><span>              imgUrl,
+</span></span><span style="display:flex;"><span>            ),
+</span></span><span style="display:flex;"><span>          ),
+</span></span><span style="display:flex;"><span>          Text(text),
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>效果</strong><br>
+<img src="../../images/2024-12-12-08-30-16.png" alt=""></p>
 <blockquote>
 <p>联系方式: <a href="mailto:dccmmtop@foxmail.com">dccmmtop@foxmail.com</a></p>
 </blockquote>
