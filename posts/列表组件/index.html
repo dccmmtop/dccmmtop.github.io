@@ -112,7 +112,25 @@
             
         </div>
         <div class="article-entry" itemprop="articleBody">
-            <h1 id="listview-常用属性讲解">ListView 常用属性讲解</h1>
+            <ul>
+<li><a href="#listview-%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7%E8%AE%B2%E8%A7%A3">ListView 常用属性讲解</a>
+<ul>
+<li><a href="#1-children">1. children</a></li>
+<li><a href="#3-separatorbuilder">3. separatorBuilder</a></li>
+<li><a href="#4-scrolldirection">4. scrollDirection</a></li>
+<li><a href="#5-physics">5. physics</a></li>
+<li><a href="#6-shrinkwrap">6. shrinkWrap</a></li>
+<li><a href="#7-padding">7. padding</a></li>
+<li><a href="#8-itemextent">8. itemExtent</a></li>
+</ul>
+</li>
+<li><a href="#listtile-%E4%BD%BF%E7%94%A8">ListTile 使用</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9E%82%E7%9B%B4%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6">自定义垂直列表组件</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B0%B4%E5%B9%B3%E5%88%97%E8%A1%A8">自定义水平列表</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E6%B0%B4%E5%B9%B3%E5%88%97%E8%A1%A8%E5%95%86%E5%93%81%E6%95%88%E6%9E%9C">实现水平列表商品效果</a></li>
+<li><a href="#listviewbuilder-%E4%BD%BF%E7%94%A8">ListView.builder 使用</a></li>
+</ul>
+<h1 id="listview-常用属性讲解">ListView 常用属性讲解</h1>
 <p><code>ListView</code> 是 Flutter 中用于展示滚动列表的一个非常常用的小部件。以下是一些常用的 <code>ListView</code> 属性及其说明：</p>
 <h2 id="1-children">1. children</h2>
 <ul>
@@ -503,6 +521,104 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><strong>效果</strong><br>
 <img src="../../images/2024-12-12-08-30-16.png" alt=""></p>
+<h1 id="listviewbuilder-使用">ListView.builder 使用</h1>
+<p>准备数据: <strong>data.dart</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Data</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">static</span> List<span style="color:#ff79c6">&lt;</span>Map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">String</span>, <span style="color:#8be9fd">String</span><span style="color:#ff79c6">&gt;&gt;</span> blogs <span style="color:#ff79c6">=</span> [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;晨曦曙光&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;黎明的第一缕阳光&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;森林漫步&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;绿叶间的宁静小径&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;海洋之心&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;深蓝海面下的神秘世界&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;雪山之巅&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;白色世界的壮丽景观&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;城市夜景&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;夜晚灯光下的都市风情&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;静谧湖泊&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;倒映天空的平静湖水&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;星空奇观&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;繁星点点的浩瀚宇宙&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;古老城堡&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;岁月沉淀的历史建筑&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;瀑布轰鸣&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;水流奔腾而下的壮观景象&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;沙漠绿洲&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;干旱中的生命奇迹&#34;</span>,
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;title&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;热带雨林&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;subtitle&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;丰富的生物多样性&#34;</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>main.dart</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;package:flutter/material.dart&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./data.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() {
+</span></span><span style="display:flex;"><span>  runApp(
+</span></span><span style="display:flex;"><span>    MaterialApp(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd;font-style:italic">home:</span> Scaffold(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">appBar:</span>
+</span></span><span style="display:flex;"><span>            AppBar(<span style="color:#8be9fd;font-style:italic">title:</span> <span style="color:#8be9fd;font-style:italic">const</span> Text(<span style="color:#f1fa8c">&#34;App Title&#34;</span>), <span style="color:#8be9fd;font-style:italic">backgroundColor:</span> Colors.red),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">body:</span> MyList(),
+</span></span><span style="display:flex;"><span>      ),
+</span></span><span style="display:flex;"><span>    ),
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyList</span> <span style="color:#8be9fd;font-style:italic">extends</span> StatelessWidget {
+</span></span><span style="display:flex;"><span>  MyList({<span style="color:#ff79c6">super</span>.key}) {
+</span></span><span style="display:flex;"><span>    initData();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  List<span style="color:#ff79c6">&lt;</span>Widget<span style="color:#ff79c6">&gt;</span> blogs <span style="color:#ff79c6">=</span> [];
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  initData() {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// Data.blogs 是 data.dart 中的数据 也可以来自网络
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">for</span> (Map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">String</span>, <span style="color:#8be9fd">String</span><span style="color:#ff79c6">&gt;</span> value <span style="color:#ff79c6">in</span> Data.blogs) {
+</span></span><span style="display:flex;"><span>      ListTile listTile <span style="color:#ff79c6">=</span> ListTile(
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">title:</span> Text(value[<span style="color:#f1fa8c">&#34;title&#34;</span>]<span style="color:#ff79c6">!</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">subtitle:</span> Text(value[<span style="color:#f1fa8c">&#34;subtitle&#34;</span>]<span style="color:#ff79c6">!</span>),
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// leading: Image.network(value[&#34;image_url&#34;]!),
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      );
+</span></span><span style="display:flex;"><span>      blogs.add(listTile);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  @override
+</span></span><span style="display:flex;"><span>  Widget build(BuildContext context) {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> ListView.builder(
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 此字段必填, 否则数量不确定，会数组越界
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">itemCount:</span> blogs.length,
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 构建列表元素
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">itemBuilder:</span> (context, index) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> blogs[index];
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>效果</strong><br>
+<img src="../../images/2024-12-12-22-41-21.png" alt=""></p>
 <blockquote>
 <p>联系方式: <a href="mailto:dccmmtop@foxmail.com">dccmmtop@foxmail.com</a></p>
 </blockquote>
