@@ -102,6 +102,45 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/yml%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96/">yml配置文件读取</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/yml%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96/" class="article-date">
+                        <time datetime='2022-09-29T14:42:32.000&#43;00:00' itemprop="datePublished">2022-09-29</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    import ( &#34;fmt&#34; &#34;github.com/spf13/viper&#34; &#34;os&#34; &#34;path/filepath&#34; ) type Config struct { DesDir string SourceFiles []string } func loadConfig()(con Config){ home := os.Getenv(&#34;HOME&#34;) viper.SetConfigFile(filepath.Join(home,&#34;config&#34;,&#34;syncFile.yml&#34;)) viper.SetConfigType(&#34;yml&#34;) err := viper.ReadInConfig() checkErr(err) err = viper.Unmarshal(&amp;con) checkErr(err) fmt.Printf(&#34;config: %v\n&#34;, con) return con } func checkErr(err error){ if err != nil { panic(err) } }
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/bat%E8%84%9A%E6%9C%AC%E5%90%8E%E5%8F%B0%E8%BF%90%E8%A1%8Cexe/">bat脚本后台运行exe</a></h1>
                 </header>
                 
@@ -648,45 +687,6 @@
             </div>
         </article>
         
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E4%B8%AD%E7%9A%84bufferpoll%E4%B8%8Eredolog%E7%9A%84%E4%BD%9C%E7%94%A8/">MySQL中的BufferPool与RedoLog的作用</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/mysql%E4%B8%AD%E7%9A%84bufferpoll%E4%B8%8Eredolog%E7%9A%84%E4%BD%9C%E7%94%A8/" class="article-date">
-                        <time datetime='2022-08-07T17:16:46.000&#43;00:00' itemprop="datePublished">2022-08-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    介绍 BufferPool 之前，先抛出一个问题，每次更新，新增，删除的动作，都会去写磁盘吗？如果是，那样效率会不会很低，如果不是，怎么保证数据不会丢失？ 不会实时写入磁盘 如果每次对数据的操作都要实时同步到硬盘中,那么将要产
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/mysql">MySQL
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
 
         
 
@@ -753,6 +753,10 @@
     
     
     <a href="../../page/15/">15</a>
+    
+    
+    
+    <a href="../../page/16/">16</a>
     
     
 

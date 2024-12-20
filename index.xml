@@ -9,8 +9,15 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Wed, 11 Dec 2024 08:19:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Dec 2024 08:18:30 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网格组件</title>
+      <link>https://dccmmtop.github.io/posts/%E7%BD%91%E6%A0%BC%E7%BB%84%E4%BB%B6/</link>
+      <pubDate>Fri, 20 Dec 2024 08:18:30 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E7%BD%91%E6%A0%BC%E7%BB%84%E4%BB%B6/</guid>
+      <description>GridView.count 常用属性 crossAxisCount: 每一行（如果滚动方向是垂直的话）或每一列（如果滚动方向是水平的话）有多少个子组件。这是必须指定的参数。 childAspectRatio: 子组件宽高比，默认值为 1.0，即正方形。你可以通过调整这个值来改变子组件的大小。例如</description>
+    </item>
     <item>
       <title>列表组件</title>
       <link>https://dccmmtop.github.io/posts/%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6/</link>
