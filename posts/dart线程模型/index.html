@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dart 线程模型 // 超的博客</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    
+    
+    
+
+        <meta property="og:title" content="Dart 线程模型" />
+    <meta property="og:description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh" />
+    <meta property="og:url" content="https://dccmmtop.github.io/posts/dart%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" />
+    
+
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <link href="https://dccmmtop.github.io/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+    <link href="https://dccmmtop.github.io/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/style.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/custom.css">
+    <link rel="stylesheet" href=" https://dccmmtop.github.io/css/copy-to-clipboard.css">
+
+    <script src=" https://dccmmtop.github.io/js/fastsearch.js"></script>
+    <script src=" https://dccmmtop.github.io/js/fuse.js"></script>
+    <script src=" https://dccmmtop.github.io/js/custom.js"></script>
+    <script src=" https://dccmmtop.github.io/js/copy-to-clipboard.js"></script>
+    <script> var _hmt = _hmt || []; (function() { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?e0fe0b20745a9435509785b9f15eb32d"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })(); </script>
+
+    <meta name="google-site-verification" content="15Pa8fZ9IfDWw5gRPmi3YLNnHcciUc4a3Hv8cNKm-Ac" />
+    
+
+    <meta name="generator" content="Hugo 0.120.4">
+</head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div id="header-inner" class="inner">
+            <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+            <a id="logo" class="logo-text" href="https://dccmmtop.github.io/">超的博客</a>
+            <nav id="main-nav">
+                
+                <a class="main-nav-link" href="../../posts/">文章</a>
+                
+                <a class="main-nav-link" href="../../tags/">标签</a>
+                
+                <a class="main-nav-link" href="../../about/">我</a>
+                
+                <a class="main-nav-link" id="search" >
+                  <input id="inputSearch" placeholder="search">
+                  <svg t="1634282825021" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2401" width="15" height="15"><path d="M1005.312 914.752l-198.528-198.464A448 448 0 1 0 0 448a448 448 0 0 0 716.288 358.784l198.4 198.4a64 64 0 1 0 90.624-90.432zM448 767.936A320 320 0 1 1 448 128a320 320 0 0 1 0 640z" fill="#262626" p-id="2402"></path></svg></a>
+            </nav>
+            <nav id="sub-nav">
+                <div id="search-form-wrap">
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">搜索结果</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body searchResults">
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+        <section id="main" class="outer">
+            <article class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        <header class="article-header">
+            <h1 class="article-title" itemprop="name">Dart 线程模型</h1>
+        </header>
+        
+        <div class="article-meta">
+            <a href="../../posts/dart%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" class="article-date">
+                <time datetime='2025-04-18T08:08:20.000&#43;00:00' itemprop="datePublished">2025-04-18</time>
+            </a>
+            
+            
+            
+        </div>
+        <div class="article-entry" itemprop="articleBody">
+            <p>Flutter 的线程模型基于 Dart 语言的并发机制，与传统的多线程模型（如 Java/C++）有显著不同。理解 Flutter 的线程模型对优化性能和处理复杂任务至关重要。以下是 Flutter 线程模型的详细解析：</p>
+<h3 id="1-dart-的单线程模型">1. Dart 的单线程模型</h3>
+<p>Flutter 应用运行在 Dart 的单线程事件循环模型上：</p>
+<ul>
+<li>
+<p>主线程（UI 线程）：处理所有 UI 渲染、用户输入和事件回调。</p>
+</li>
+<li>
+<p>事件循环（Event Loop）：通过一个无限循环处理异步任务（如 Future、Stream、I/O 操作等）。</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() {
+</span></span><span style="display:flex;"><span>  runApp(MyApp()); <span style="color:#6272a4">// UI 初始化在主线程
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 异步任务通过事件循环调度
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Future.delayed(Duration(<span style="color:#8be9fd;font-style:italic">seconds:</span> <span style="color:#bd93f9">1</span>), () <span style="color:#ff79c6">=&gt;</span> print(<span style="color:#f1fa8c">&#39;Async task&#39;</span>));
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>关键特点</strong></p>
+<ul>
+<li>非阻塞式异步：通过 async/await 和 Future 处理异步操作，避免阻塞主线程。</li>
+<li>微任务队列（Microtask Queue）：优先级高于事件队列，用于处理需要立即执行的微任务（如 scheduleMicrotask）。</li>
+<li>事件队列（Event Queue）：处理 I/O、定时器、用户输入等异步事件。</li>
+</ul>
+<h3 id="2-isolatedart-的并发模型">2. Isolate：Dart 的并发模型</h3>
+<p>当需要执行 CPU 密集型或耗时操作时（如文件解析、复杂计算），使用 Isolate 实现并发：</p>
+<ul>
+<li>内存隔离：每个 Isolate 有自己的内存堆，不共享内存，通过消息传递通信。</li>
+<li>独立的 Event Loop：每个 Isolate 有自己的事件循环。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;dart:isolate&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() <span style="color:#8be9fd;font-style:italic">async</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> receivePort <span style="color:#ff79c6">=</span> ReceivePort();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 创建新 Isolate
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  Isolate.spawn(_isolateEntry, receivePort.sendPort);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 接收来自 Isolate 的消息
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  receivePort.listen((message) {
+</span></span><span style="display:flex;"><span>    print(<span style="color:#f1fa8c">&#39;Received: </span><span style="color:#f1fa8c">$</span>message<span style="color:#f1fa8c">&#39;</span>);
+</span></span><span style="display:flex;"><span>    receivePort.close();
+</span></span><span style="display:flex;"><span>  });
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> _isolateEntry(SendPort sendPort) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 在 Isolate 中执行耗时操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  sendPort.send(<span style="color:#f1fa8c">&#39;Result from Isolate&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="3-使用-compute-简化-isolate">3. 使用 compute 简化 Isolate</h3>
+<p>Flutter 提供了 compute 函数，简化 Isolate 的使用：</p>
+<ul>
+<li>自动封装：将函数和参数发送到新 Isolate 执行。</li>
+<li>同步式编码：类似 async/await 的语法。</li>
+</ul>
+<p><strong>使用示例：</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;package:flutter/foundation.dart&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> main() <span style="color:#8be9fd;font-style:italic">async</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">final</span> result <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">await</span> compute(_heavyTask, <span style="color:#bd93f9">100</span>);
+</span></span><span style="display:flex;"><span>  print(<span style="color:#f1fa8c">&#39;Result: </span><span style="color:#f1fa8c">$</span>result<span style="color:#f1fa8c">&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> _heavyTask(<span style="color:#8be9fd">int</span> param) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 模拟耗时计算
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> param <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>【注意】</strong><br>
+在 Flutter 中，compute 函数要求传入的函数必须是 <strong>静态方法</strong>  或 <strong>顶级函数</strong>，这是由 Dart 的 Isolate 机制决定的</p>
+<ol>
+<li>Isolate 的内存隔离机制<br>
+Dart 的 Isolate 之间不共享内存，每个 Isolate 有自己的内存堆：</li>
+</ol>
+<ul>
+<li>非静态方法（实例方法）隐式包含 this 指针，需要访问所属对象的实例成员</li>
+<li>实例对象可能包含大量关联状态，无法跨 Isolate 传递</li>
+<li>静态方法不依赖实例状态，只依赖传入参数，适合跨 Isolate 通信</li>
+</ul>
+<ol start="2">
+<li>数据序列化要求<br>
+compute 通过消息传递机制在 Isolate 间通信：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dart" data-lang="dart"><span style="display:flex;"><span><span style="color:#6272a4">// 内部实现简化示意
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>Isolate.spawn(_isolateEntry, {
+</span></span><span style="display:flex;"><span>  <span style="color:#f1fa8c">&#39;function&#39;</span><span style="color:#ff79c6">:</span> function,  <span style="color:#6272a4">// 需要传递函数引用
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#f1fa8c">&#39;params&#39;</span><span style="color:#ff79c6">:</span> params      <span style="color:#6272a4">// 需要传递参数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>});
+</span></span></code></pre></div><ul>
+<li>只有静态方法和顶级函数可以被序列化后传递到新 Isolate</li>
+<li>实例方法绑定特定对象上下文，无法被序列化</li>
+</ul>
+<h3 id="4-最佳实践">4. 最佳实践</h3>
+<ul>
+<li>
+<p>避免阻塞 UI 线程</p>
+<ol>
+<li>耗时操作：始终在 Isolate 或 compute 中执行。</li>
+<li>优化构建逻辑：避免在 build 方法中进行复杂计算。</li>
+<li>使用 ListView.builder：懒加载列表项，减少内存占用。</li>
+</ol>
+</li>
+<li>
+<p>高效使用 Isolate</p>
+<ol>
+<li>数据序列化：通过 SendPort 传递的数据必须可序列化（如基本类型、List、Map）。</li>
+<li>复用 Isolate：避免频繁创建/销毁，使用 IsolatePool 或第三方库（如 worker_manager）。</li>
+</ol>
+</li>
+<li>
+<p>调试工具</p>
+<ol>
+<li>性能面板（Performance Overlay）：检查 UI 线程的帧耗时。</li>
+<li>Dart DevTools：分析 Isolate 的 CPU 和内存使用。</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>联系方式：dccmmtop@foxmail.com</p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        
+        <footer class="article-footer">
+            <ul class="article-tag-list">
+                
+                <li class="article-tag-list-item">
+                    <a class="article-tag-list-link" href="https://dccmmtop.github.io/%20tags/flutter">flutter
+                    </a>
+                </li>
+                
+            </ul>
+        </footer>
+        
+    </div>
+    
+<nav id="article-nav">
+    
+    
+    <a href="../../posts/%E9%80%9A%E7%9F%A5android%E8%AE%BE%E5%A4%87%E5%88%B7%E6%96%B0%E5%AA%92%E4%BD%93%E5%BA%93/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">通知android设备刷新媒体库&nbsp;<span>&gt;</span></div>
+    </a>
+    
+</nav>
+
+
+</article>
+            
+        </section>
+
+        <div>
+            
+
+            <script src="https://utteranc.es/client.js" repo="dccmmtop/dccmmtop.github.io" issue-term="pathname"
+                label="Comment" theme="github-light" crossorigin="anonymous" async>
+                </script>
+            
+
+        </div>
+
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2025 dc
+            <br />
+            Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> with theme <a
+                href="https://github.com/carsonip/hugo-theme-minos" target="_blank">Minos</a>
+
+
+        </div>
+    </div>
+    
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/tomorrow-night.min.css"
+        integrity="sha256-2wL88NKUqvJi/ExflDzkzUumjUM73mcK2gBvBBeLvTk=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+        integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    <script>
+        document.getElementById('main-nav-toggle').addEventListener('click', function () {
+            var header = document.getElementById('header');
+            if (header.classList.contains('mobile-on')) {
+                header.classList.remove('mobile-on');
+            } else {
+                header.classList.add('mobile-on');
+            }
+        });
+    </script>
+    <style>
+        #footer-info {
+            line-height: 1.4em;
+            font-size: 10px;
+        }
+
+        .custom-blog-info {
+            font-family: 'Long Cang', cursive;
+            border-top: 1px dashed #333;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            line-height: 1.4em;
+        }
+    </style>
+</footer>
+
+    </div>
+</body>
+
+</html>

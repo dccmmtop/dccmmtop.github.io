@@ -9,8 +9,29 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Fri, 20 Dec 2024 08:18:30 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 18 Apr 2025 08:08:20 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dart 线程模型</title>
+      <link>https://dccmmtop.github.io/posts/dart%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</link>
+      <pubDate>Fri, 18 Apr 2025 08:08:20 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/dart%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</guid>
+      <description>Flutter 的线程模型基于 Dart 语言的并发机制，与传统的多线程模型（如 Java/C++）有显著不同。理解 Flutter 的线程模型对优化性能和处理复杂任务至关重要。以下是 Flutter 线程模型的详细解析： 1. Dart 的单线程模型 Flutter 应用运行在 Dart 的单线</description>
+    </item>
+    <item>
+      <title>通知android设备刷新媒体库</title>
+      <link>https://dccmmtop.github.io/posts/%E9%80%9A%E7%9F%A5android%E8%AE%BE%E5%A4%87%E5%88%B7%E6%96%B0%E5%AA%92%E4%BD%93%E5%BA%93/</link>
+      <pubDate>Fri, 18 Apr 2025 07:59:46 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E9%80%9A%E7%9F%A5android%E8%AE%BE%E5%A4%87%E5%88%B7%E6%96%B0%E5%AA%92%E4%BD%93%E5%BA%93/</guid>
+      <description>需求 将应用生成的、下载的文件立刻显示在文件管理器中 实现 media_scanner.dart import &amp;#39;dart:async&amp;#39;; import &amp;#39;package:flutter/services.dart&amp;#39;; class MediaScanner { /// Define Method Channel static const MethodChannel _channel = MethodChannel(&amp;#39;media_scanner&amp;#39;); /// Path : Path of Image/Video static Future&amp;lt;String?&amp;gt; loadMedia({String? path}) async =&amp;gt; await _channel.invokeMethod(&amp;#39;refreshGallery&amp;#39;, {&amp;#34;path&amp;#34;: path}); } 使用示例 Future&amp;lt;void&amp;gt; _notifyMediaScanner(String filePath) async { try { // 判断是不是android设备 if (Platform.isAndroid) { // 通知媒体库更新 await</description>
+    </item>
+    <item>
+      <title>弹框组件示例</title>
+      <link>https://dccmmtop.github.io/posts/%E5%BC%B9%E6%A1%86%E7%BB%84%E4%BB%B6%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Fri, 18 Apr 2025 07:57:53 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E5%BC%B9%E6%A1%86%E7%BB%84%E4%BB%B6%E7%A4%BA%E4%BE%8B/</guid>
+      <description>弹框 _showAlertDialog(String msg) { showDialog&amp;lt;bool&amp;gt;( context: context, builder: (BuildContext context) { return AlertDialog( title: Text(&amp;#34;提示&amp;#34;), content: Text(msg), actions: [ TextButton( onPressed: () { // 关闭弹框 Navigator.of(context).pop(true); }, child: Text(&amp;#34;确定&amp;#34;), ), ], ); }, ); return null; } 联系方式: dccmmtop@foxmail.com</description>
+    </item>
     <item>
       <title>网格组件</title>
       <link>https://dccmmtop.github.io/posts/%E7%BD%91%E6%A0%BC%E7%BB%84%E4%BB%B6/</link>

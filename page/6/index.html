@@ -102,6 +102,123 @@
                 
                 
                 <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">jvm内存模型</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" class="article-date">
+                        <time datetime='2022-08-22T07:58:28.000&#43;00:00' itemprop="datePublished">2022-08-22</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    线程共享 每个线程开启的时候都会划分几块内存空间，线程栈，程序计数器，本地方法栈。这几个内存空间是依附于线程的，线程结束后，这些空间也会释放 所有线程共享 除此之外还有堆，方法区，类加载子系统，字节码执行引
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%92%8C%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/">java中的类加载器和双亲委派机制</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/java%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%92%8C%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/" class="article-date">
+                        <time datetime='2022-08-14T14:03:08.000&#43;00:00' itemprop="datePublished">2022-08-14</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    类加载是什么 把磁盘中的java文件加载到内存中的过程叫做类加载 当我们用java命令运行某个类的main函数启动程序时，首先需要通过类加载器把主类加载到JVM. 有如下 User 类 package dc.dccmmtop; public Class User { public static void main(String[] args) { System.out.println(&#34;hello&#34;); } } 运
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
+                    <h1 itemprop="name"><a class="article-title" href="../../posts/finalize%E7%9A%84%E6%84%8F%E4%B9%89/">finalize的意义</a></h1>
+                </header>
+                
+                <div class="article-meta">
+                    <a href="../../posts/finalize%E7%9A%84%E6%84%8F%E4%B9%89/" class="article-date">
+                        <time datetime='2022-08-07T20:32:09.000&#43;00:00' itemprop="datePublished">2022-08-07</time>
+                    </a>
+                    
+                    
+                    
+                </div>
+                <div class="article-entry" itemprop="articleBody">
+                    <p>
+                        
+                    程序员都了解初始化的重要性，但是会常常忘记同样重要的清理工作，java有垃圾回收器负责回收无用对象占用的内存资源，但是也有特殊情况，你的对象获得了一块特殊的内存区域，并不是通过 new 方法，由于垃圾回收器只
+                    </p>
+                    
+                </div>
+
+                
+                <footer class="article-footer">
+                    <ul class="article-tag-list">
+                        
+                        <li class="article-tag-list-item">
+                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/java">java
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </footer>
+                
+            </div>
+        </article>
+        
+        <article class="article article-type-post" itemscope itemprop="blogPost">
+            <div class="article-inner">
+                
+                
+                <header class="article-header">
                     <h1 itemprop="name"><a class="article-title" href="../../posts/mysql%E4%B8%AD%E7%9A%84bufferpoll%E4%B8%8Eredolog%E7%9A%84%E4%BD%9C%E7%94%A8/">MySQL中的BufferPool与RedoLog的作用</a></h1>
                 </header>
                 
@@ -576,123 +693,6 @@
                         
                         <li class="article-tag-list-item">
                             <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/go">go
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rabbitmq%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E8%8A%82%E7%82%B9%E4%B8%8E%E7%A3%81%E7%9B%98%E8%8A%82%E7%82%B9/">RabbitMQ中的内存节点与磁盘节点</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rabbitmq%E4%B8%AD%E7%9A%84%E5%86%85%E5%AD%98%E8%8A%82%E7%82%B9%E4%B8%8E%E7%A3%81%E7%9B%98%E8%8A%82%E7%82%B9/" class="article-date">
-                        <time datetime='2022-07-07T23:08:21.000&#43;00:00' itemprop="datePublished">2022-07-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    每个RabbitMQ 节点只有两种类型，要么是内存节点，要么是磁盘节点 内存节点 内存节点将所有的队列、交换器、绑定、用户、权限和vhost的元数据定义都仅存储在内存中. 显而易见，内存节点拥有更出色的性能 磁
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/rabbitmq%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E4%BA%A4%E6%8D%A2%E5%99%A8/">RabbitMQ集群中的交换器</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/rabbitmq%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E4%BA%A4%E6%8D%A2%E5%99%A8/" class="article-date">
-                        <time datetime='2022-07-07T22:58:26.000&#43;00:00' itemprop="datePublished">2022-07-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    交换器不像队列那样有真实的进程， 它只是一张名称与队列进程PID的关系表 当你将消息发布到交换器时，实际上是由你所连接到的信道将消息上的路由键同交换器的绑定列表进行比较，然后路由消息。正是信道（chann
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
-                            </a>
-                        </li>
-                        
-                    </ul>
-                </footer>
-                
-            </div>
-        </article>
-        
-        <article class="article article-type-post" itemscope itemprop="blogPost">
-            <div class="article-inner">
-                
-                
-                <header class="article-header">
-                    <h1 itemprop="name"><a class="article-title" href="../../posts/%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97/">集群中的队列</a></h1>
-                </header>
-                
-                <div class="article-meta">
-                    <a href="../../posts/%E9%9B%86%E7%BE%A4%E4%B8%AD%E7%9A%84%E9%98%9F%E5%88%97/" class="article-date">
-                        <time datetime='2022-07-07T00:22:11.000&#43;00:00' itemprop="datePublished">2022-07-07</time>
-                    </a>
-                    
-                    
-                    
-                </div>
-                <div class="article-entry" itemprop="articleBody">
-                    <p>
-                        
-                    从直觉上来看,一说到集群，我们就联想到高可用，一个节点宕机了，不会影响整体服务，客户端会从其他节点拿数据。比如 ES, Redis, mongoDB 等的集群都是符合直觉的架构。 但是，事情到了rabbitMQ 这里，却完全不一样了。 在将
-                    </p>
-                    
-                </div>
-
-                
-                <footer class="article-footer">
-                    <ul class="article-tag-list">
-                        
-                        <li class="article-tag-list-item">
-                            <a class="article-tag-list-link" href="https://dccmmtop.github.io/tags/rabbitmq">rabbitMQ
                             </a>
                         </li>
                         
