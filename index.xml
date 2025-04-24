@@ -9,8 +9,15 @@
     <managingEditor>dccmmtop@foxmail.com (dc)</managingEditor>
     <webMaster>dccmmtop@foxmail.com (dc)</webMaster>
     <copyright>[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)</copyright>
-    <lastBuildDate>Fri, 18 Apr 2025 08:08:20 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 25 Apr 2025 07:28:47 +0000</lastBuildDate>
     <atom:link href="https://dccmmtop.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>估算工作量</title>
+      <link>https://dccmmtop.github.io/posts/%E4%BC%B0%E7%AE%97%E5%B7%A5%E4%BD%9C%E9%87%8F/</link>
+      <pubDate>Fri, 25 Apr 2025 07:28:47 +0000</pubDate><author>dccmmtop@foxmail.com (dc)</author>
+      <guid>https://dccmmtop.github.io/posts/%E4%BC%B0%E7%AE%97%E5%B7%A5%E4%BD%9C%E9%87%8F/</guid>
+      <description>简述下面几个步骤 充分理解需求 熟悉原功能 串通功能的所有流程 分解每一个流程 找出瓶颈 汇总 追踪估算能力 充分理解需求 任何估算的第一步都是对简历在对提问内容的理解 在这一步最重要的是 把握问题的范围，不要无休止的扩大</description>
+    </item>
     <item>
       <title>Dart 线程模型</title>
       <link>https://dccmmtop.github.io/posts/dart%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/</link>
